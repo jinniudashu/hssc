@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>血液检查</h4>
+
+<a href="{% url "classification_checklist_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for classification_checklist in classification_checklists %}
+		<a class="list-group-item" href="{% url "classification_checklist_detail_url" classification_checklist.slug %}">
+			{{ classification_checklist }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

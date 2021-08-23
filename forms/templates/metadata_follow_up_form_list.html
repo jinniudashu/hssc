@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>通用随访表</h4>
+
+<a href="{% url "metadata_follow_up_form_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for metadata_follow_up_form in metadata_follow_up_forms %}
+		<a class="list-group-item" href="{% url "metadata_follow_up_form_detail_url" metadata_follow_up_form.slug %}">
+			{{ metadata_follow_up_form }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

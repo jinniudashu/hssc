@@ -1,0 +1,25 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>表单目录</h4>
+
+<section class="list-group">
+	<a class="list-group-item" href="{% url "metadata_follow_up_form_list_url" %}">
+		通用随访表
+	</a>
+	<a class="list-group-item" href="{% url "classification_checklist_list_url" %}">
+		血液检查
+	</a>
+	<a class="list-group-item" href="{% url "routine_physical_examination_list_url" %}">
+		常规体格检查表
+	</a>
+	<a class="list-group-item" href="{% url "classification_survey_list_list_url" %}">
+		调查分类清单
+	</a>
+
+</section>
+
+{% endblock %}
