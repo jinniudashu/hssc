@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
-
 
 class Icpc1_register_logins(models.Model):
 	icpc_code = models.CharField(max_length=5, blank=True, null=True, verbose_name="icpc码")

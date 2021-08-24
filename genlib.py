@@ -34,7 +34,10 @@ def write_admin(model_name, fk_name, app):
     if fk_name:
         f.write(f'\n\tautocomplete_fields = ["{fk_name}"]')
     else:
+        f.write(f'\n\tlist_display = [field.name for field in Icpc._meta.fields]')
         f.write(f'\n\tsearch_fields=["iname", "pym"]')
+        f.write(f'\n\tordering = ["icpc_code"]')
+	
 
     f.write(f'\nadmin.site.register({model_name.capitalize()}, {modelAdmin_name})')
 
