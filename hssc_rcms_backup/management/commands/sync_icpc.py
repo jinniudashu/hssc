@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 
-from icpc.models import Icpc1_register_logins, Icpc2_reservation_investigations, Icpc3_symptoms_and_problems, Icpc4_physical_examination_and_tests, Icpc5_evaluation_and_diagnoses, Icpc6_prescribe_medicines, Icpc7_treatments, Icpc8_other_health_interventions, Icpc9_referral_consultations, Icpc10_test_results_and_statistics
+from icpc.models import Icpc, Icpc1_register_logins, Icpc2_reservation_investigations, Icpc3_symptoms_and_problems, Icpc4_physical_examination_and_tests, Icpc5_evaluation_and_diagnoses, Icpc6_prescribe_medicines, Icpc7_treatments, Icpc8_other_health_interventions, Icpc9_referral_consultations, Icpc10_test_results_and_statistics
 
 
 from hssc_rcms_backup.models import Icpcs, Icpc1S, Icpc2S, Icpc3S, Icpc4S, Icpc5S, Icpc6S, Icpc7S, Icpc8S, Icpc9S, Icpc10TestResultsAndStatistics
@@ -36,28 +36,55 @@ class Command(BaseCommand):
         print(f'{objs.count()}条记录正在导入：{icpc[num][1]}, {des_model}')
 
         i = 0
-        for obj in objs:
-            i += 1
-            try:
-                Icpcs.objects.create(
-                    icpc_code = obj.icpc_code,
-                    icode = obj.icode,
-                    iname = obj.iname,
-                    iename = obj.iename,
-                    include = obj.include,
-                    criteria = obj.criteria,
-                    exclude = obj.exclude,
-                    consider = obj.consider,
-                    icd10 = obj.icd10,
-                    icpc2 = obj.icpc2,
-                    note = obj.note,
-                    pym = obj.pym,
-                    subclass = num
-                )
-            except Exception as e:
-                print (f'{e}:{i}')
-            else:
-                print(i, obj.icpc_code)
+
+        # num=0, 导入总表
+        if num == 0:
+            for obj in objs:
+                i += 1
+                try:
+                    Icpcs.objects.create(
+                        icpc_code = obj.icpc_code,
+                        icode = obj.icode,
+                        iname = obj.iname,
+                        iename = obj.iename,
+                        include = obj.include,
+                        criteria = obj.criteria,
+                        exclude = obj.exclude,
+                        consider = obj.consider,
+                        icd10 = obj.icd10,
+                        icpc2 = obj.icpc2,
+                        note = obj.note,
+                        pym = obj.pym,
+                        subclass = num  #总表才有的字段
+                    )
+                except Exception as e:
+                    print (f'{e}:{i}')
+                else:
+                    print(i, obj.icpc_code)
+        # 导入子类表
+        else:
+            for obj in objs:
+                i += 1
+                try:
+                    des_model.objects.create(
+                        icpc_code = obj.icpc_code,
+                        icode = obj.icode,
+                        iname = obj.iname,
+                        iename = obj.iename,
+                        include = obj.include,
+                        criteria = obj.criteria,
+                        exclude = obj.exclude,
+                        consider = obj.consider,
+                        icd10 = obj.icd10,
+                        icpc2 = obj.icpc2,
+                        note = obj.note,
+                        pym = obj.pym,
+                    )
+                except Exception as e:
+                    print (f'{e}:{i}')
+                else:
+                    print(i, obj.icpc_code)
+
 
 
         print(f'成功导入{i}条记录')
@@ -70,7 +97,7 @@ class Command(BaseCommand):
         subclass = kwargs['subclass']
         
         # 单独导入1~10-icpc分类编码
-        if subclass > 0 and subclass < 11 :
+        if subclass < 11 :
             self.run_import(subclass)
 
         # 一次性导入1~10分类编码
