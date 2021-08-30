@@ -12,7 +12,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 from .router import *
+
 import django_heroku
+import environ
+
+# Initialise environment variables
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -94,11 +101,11 @@ DATABASES = {
     
     'rcms': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'ec2-44-196-170-156.compute-1.amazonaws.com',
-        'NAME': 'd3qqb37a3jgtbs',
-        'USER': 'rezkvunbrqbzkg',
-        'PASSWORD': '93ec55d8299878fe5e4c798b02e07de2579c98302ad8aebca0b67f24460eaa24',
-        'PORT': '5432',
+        'HOST': env('DATABASE_HOST'),
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
@@ -157,3 +164,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
