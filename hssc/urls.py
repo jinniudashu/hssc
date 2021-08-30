@@ -5,7 +5,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('icpc_update/', include('icpc.urls')),
+    path('icpc_update/', include('hssc_rcms_backup.urls')),
     # path('grappelli/', include('grappelli.urls')),
     path('', include('forms.urls')),
 ]

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'dictionaries',
     'icpc',
     'forms',
+    'hssc_rcms_backup',
+    'rcms',
     'hssc.apps.UniversalManagerApp',
 ]
 
@@ -89,13 +91,22 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
+    
+    'rcms': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'ec2-44-196-170-156.compute-1.amazonaws.com',
+        'NAME': 'd3qqb37a3jgtbs',
+        'USER': 'rezkvunbrqbzkg',
+        'PASSWORD': '93ec55d8299878fe5e4c798b02e07de2579c98302ad8aebca0b67f24460eaa24',
+        'PORT': '5432',
+    }
 }
 
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
-# DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
+DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
