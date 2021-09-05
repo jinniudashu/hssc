@@ -36,11 +36,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['hssc.herokuapp.com', '127.0.0.1']
 
+LOGIN_REDIRECT_URL = '/'
+SIMPLE_BACKEND_REDIRECT_URL = '/'
 
 # Application definition
 
 INSTALLED_APPS = [
     # 'grappelli',
+    # 'django.contrib.sites',
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -99,6 +103,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     
+    # 需求管理系统数据库
     'rcms': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': env('DATABASE_HOST'),
@@ -165,3 +170,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Activate Django-Heroku.
 django_heroku.settings(locals())
 
+# django-registration-redux
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.

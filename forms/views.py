@@ -18,165 +18,289 @@ def index_view(request):
 	return render(request, 'index.html')
 
 
-class Metadata_follow_up_form_ListView(ListView):
-	context_object_name = "metadata_follow_up_forms"
-	template_name = "metadata_follow_up_form_list.html"
+class User_registry_ListView(ListView):
+	context_object_name = "user_registrys"
+	template_name = "user_registry_list.html"
 
 	def get_queryset(self):
-		return Metadata_follow_up_form.objects.all()
+		return User_registry.objects.all()
 
 
-class Metadata_follow_up_form_CreateView(SuccessMessageMixin, CreateView):
-	template_name = "metadata_follow_up_form_edit.html"
-	form_class = Metadata_follow_up_form_ModelForm
+class User_registry_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "user_registry_edit.html"
+	form_class = User_registry_ModelForm
 	success_message = "保存成功！"
 
 
-class Metadata_follow_up_form_DetailView(DetailView):
-	model = Metadata_follow_up_form
-	context_object_name = "metadata_follow_up_form"
-	template_name = "metadata_follow_up_form_detail.html"
+class User_registry_DetailView(DetailView):
+	model = User_registry
+	context_object_name = "user_registry"
+	template_name = "user_registry_detail.html"
 
 	def get_object(self):
-		metadata_follow_up_form = super(Metadata_follow_up_form_DetailView, self).get_object()
-		form = Metadata_follow_up_form_ModelForm(instance=metadata_follow_up_form)
+		user_registry = super(User_registry_DetailView, self).get_object()
+		form = User_registry_ModelForm(instance=user_registry)
 		return form
 
 
-class Metadata_follow_up_form_UpdateView(SuccessMessageMixin, UpdateView):
-	template_name = "metadata_follow_up_form_edit.html"
-	form_class = Metadata_follow_up_form_ModelForm
+class User_registry_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "user_registry_edit.html"
+	form_class = User_registry_ModelForm
 	success_message = "保存成功！"
 
 	def get_queryset(self):
-		return Metadata_follow_up_form.objects.all()
+		return User_registry.objects.all()
 
 
-class Metadata_follow_up_form_DeleteView(DeleteObjectMixin, View):
-	model = Metadata_follow_up_form
-	template = "metadata_follow_up_form_delete.html"
-	redirect_url = "metadata_follow_up_form_list_url"
+class User_registry_DeleteView(DeleteObjectMixin, View):
+	model = User_registry
+	template = "user_registry_delete.html"
+	redirect_url = "user_registry_list_url"
 	raise_exception = True
 
 
-class Classification_checklist_ListView(ListView):
-	context_object_name = "classification_checklists"
-	template_name = "classification_checklist_list.html"
+class Doctor_login_ListView(ListView):
+	context_object_name = "doctor_logins"
+	template_name = "doctor_login_list.html"
 
 	def get_queryset(self):
-		return Classification_checklist.objects.all()
+		return Doctor_login.objects.all()
 
 
-class Classification_checklist_CreateView(SuccessMessageMixin, CreateView):
-	template_name = "classification_checklist_edit.html"
-	form_class = Classification_checklist_ModelForm
+class Doctor_login_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "doctor_login_edit.html"
+	form_class = Doctor_login_ModelForm
 	success_message = "保存成功！"
 
 
-class Classification_checklist_DetailView(DetailView):
-	model = Classification_checklist
-	context_object_name = "classification_checklist"
-	template_name = "classification_checklist_detail.html"
+class Doctor_login_DetailView(DetailView):
+	model = Doctor_login
+	context_object_name = "doctor_login"
+	template_name = "doctor_login_detail.html"
 
 	def get_object(self):
-		classification_checklist = super(Classification_checklist_DetailView, self).get_object()
-		form = Classification_checklist_ModelForm(instance=classification_checklist)
+		doctor_login = super(Doctor_login_DetailView, self).get_object()
+		form = Doctor_login_ModelForm(instance=doctor_login)
 		return form
 
 
-class Classification_checklist_UpdateView(SuccessMessageMixin, UpdateView):
-	template_name = "classification_checklist_edit.html"
-	form_class = Classification_checklist_ModelForm
+class Doctor_login_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "doctor_login_edit.html"
+	form_class = Doctor_login_ModelForm
 	success_message = "保存成功！"
 
 	def get_queryset(self):
-		return Classification_checklist.objects.all()
+		return Doctor_login.objects.all()
 
 
-class Classification_checklist_DeleteView(DeleteObjectMixin, View):
-	model = Classification_checklist
-	template = "classification_checklist_delete.html"
-	redirect_url = "classification_checklist_list_url"
+class Doctor_login_DeleteView(DeleteObjectMixin, View):
+	model = Doctor_login
+	template = "doctor_login_delete.html"
+	redirect_url = "doctor_login_list_url"
 	raise_exception = True
 
 
-class Routine_physical_examination_ListView(ListView):
-	context_object_name = "routine_physical_examinations"
-	template_name = "routine_physical_examination_list.html"
+class User_login_ListView(ListView):
+	context_object_name = "user_logins"
+	template_name = "user_login_list.html"
 
 	def get_queryset(self):
-		return Routine_physical_examination.objects.all()
+		return User_login.objects.all()
 
 
-class Routine_physical_examination_CreateView(SuccessMessageMixin, CreateView):
-	template_name = "routine_physical_examination_edit.html"
-	form_class = Routine_physical_examination_ModelForm
+class User_login_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "user_login_edit.html"
+	form_class = User_login_ModelForm
 	success_message = "保存成功！"
 
 
-class Routine_physical_examination_DetailView(DetailView):
-	model = Routine_physical_examination
-	context_object_name = "routine_physical_examination"
-	template_name = "routine_physical_examination_detail.html"
+class User_login_DetailView(DetailView):
+	model = User_login
+	context_object_name = "user_login"
+	template_name = "user_login_detail.html"
 
 	def get_object(self):
-		routine_physical_examination = super(Routine_physical_examination_DetailView, self).get_object()
-		form = Routine_physical_examination_ModelForm(instance=routine_physical_examination)
+		user_login = super(User_login_DetailView, self).get_object()
+		form = User_login_ModelForm(instance=user_login)
 		return form
 
 
-class Routine_physical_examination_UpdateView(SuccessMessageMixin, UpdateView):
-	template_name = "routine_physical_examination_edit.html"
-	form_class = Routine_physical_examination_ModelForm
+class User_login_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "user_login_edit.html"
+	form_class = User_login_ModelForm
 	success_message = "保存成功！"
 
 	def get_queryset(self):
-		return Routine_physical_examination.objects.all()
+		return User_login.objects.all()
 
 
-class Routine_physical_examination_DeleteView(DeleteObjectMixin, View):
-	model = Routine_physical_examination
-	template = "routine_physical_examination_delete.html"
-	redirect_url = "routine_physical_examination_list_url"
+class User_login_DeleteView(DeleteObjectMixin, View):
+	model = User_login
+	template = "user_login_delete.html"
+	redirect_url = "user_login_list_url"
 	raise_exception = True
 
 
-class Classification_survey_list_ListView(ListView):
-	context_object_name = "classification_survey_lists"
-	template_name = "classification_survey_list_list.html"
+class Doctor_registry_ListView(ListView):
+	context_object_name = "doctor_registrys"
+	template_name = "doctor_registry_list.html"
 
 	def get_queryset(self):
-		return Classification_survey_list.objects.all()
+		return Doctor_registry.objects.all()
 
 
-class Classification_survey_list_CreateView(SuccessMessageMixin, CreateView):
-	template_name = "classification_survey_list_edit.html"
-	form_class = Classification_survey_list_ModelForm
+class Doctor_registry_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "doctor_registry_edit.html"
+	form_class = Doctor_registry_ModelForm
 	success_message = "保存成功！"
 
 
-class Classification_survey_list_DetailView(DetailView):
-	model = Classification_survey_list
-	context_object_name = "classification_survey_list"
-	template_name = "classification_survey_list_detail.html"
+class Doctor_registry_DetailView(DetailView):
+	model = Doctor_registry
+	context_object_name = "doctor_registry"
+	template_name = "doctor_registry_detail.html"
 
 	def get_object(self):
-		classification_survey_list = super(Classification_survey_list_DetailView, self).get_object()
-		form = Classification_survey_list_ModelForm(instance=classification_survey_list)
+		doctor_registry = super(Doctor_registry_DetailView, self).get_object()
+		form = Doctor_registry_ModelForm(instance=doctor_registry)
 		return form
 
 
-class Classification_survey_list_UpdateView(SuccessMessageMixin, UpdateView):
-	template_name = "classification_survey_list_edit.html"
-	form_class = Classification_survey_list_ModelForm
+class Doctor_registry_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "doctor_registry_edit.html"
+	form_class = Doctor_registry_ModelForm
 	success_message = "保存成功！"
 
 	def get_queryset(self):
-		return Classification_survey_list.objects.all()
+		return Doctor_registry.objects.all()
 
 
-class Classification_survey_list_DeleteView(DeleteObjectMixin, View):
-	model = Classification_survey_list
-	template = "classification_survey_list_delete.html"
-	redirect_url = "classification_survey_list_list_url"
+class Doctor_registry_DeleteView(DeleteObjectMixin, View):
+	model = Doctor_registry
+	template = "doctor_registry_delete.html"
+	redirect_url = "doctor_registry_list_url"
+	raise_exception = True
+
+
+
+class Basic_personal_information_ListView(ListView):
+	context_object_name = "basic_personal_informations"
+	template_name = "basic_personal_information_list.html"
+
+	def get_queryset(self):
+		return Basic_personal_information.objects.all()
+
+
+class Basic_personal_information_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "basic_personal_information_edit.html"
+	form_class = Basic_personal_information_ModelForm
+	success_message = "保存成功！"
+
+
+class Basic_personal_information_DetailView(DetailView):
+	model = Basic_personal_information
+	context_object_name = "basic_personal_information"
+	template_name = "basic_personal_information_detail.html"
+
+	def get_object(self):
+		basic_personal_information = super(Basic_personal_information_DetailView, self).get_object()
+		form = Basic_personal_information_ModelForm(instance=basic_personal_information)
+		return form
+
+
+class Basic_personal_information_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "basic_personal_information_edit.html"
+	form_class = Basic_personal_information_ModelForm
+	success_message = "保存成功！"
+
+	def get_queryset(self):
+		return Basic_personal_information.objects.all()
+
+
+class Basic_personal_information_DeleteView(DeleteObjectMixin, View):
+	model = Basic_personal_information
+	template = "basic_personal_information_delete.html"
+	redirect_url = "basic_personal_information_list_url"
+	raise_exception = True
+
+
+class Family_history_ListView(ListView):
+	context_object_name = "family_historys"
+	template_name = "family_history_list.html"
+
+	def get_queryset(self):
+		return Family_history.objects.all()
+
+
+class Family_history_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "family_history_edit.html"
+	form_class = Family_history_ModelForm
+	success_message = "保存成功！"
+
+
+class Family_history_DetailView(DetailView):
+	model = Family_history
+	context_object_name = "family_history"
+	template_name = "family_history_detail.html"
+
+	def get_object(self):
+		family_history = super(Family_history_DetailView, self).get_object()
+		form = Family_history_ModelForm(instance=family_history)
+		return form
+
+
+class Family_history_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "family_history_edit.html"
+	form_class = Family_history_ModelForm
+	success_message = "保存成功！"
+
+	def get_queryset(self):
+		return Family_history.objects.all()
+
+
+class Family_history_DeleteView(DeleteObjectMixin, View):
+	model = Family_history
+	template = "family_history_delete.html"
+	redirect_url = "family_history_list_url"
+	raise_exception = True
+
+
+class History_of_infectious_diseases_ListView(ListView):
+	context_object_name = "history_of_infectious_diseasess"
+	template_name = "history_of_infectious_diseases_list.html"
+
+	def get_queryset(self):
+		return History_of_infectious_diseases.objects.all()
+
+
+class History_of_infectious_diseases_CreateView(SuccessMessageMixin, CreateView):
+	template_name = "history_of_infectious_diseases_edit.html"
+	form_class = History_of_infectious_diseases_ModelForm
+	success_message = "保存成功！"
+
+
+class History_of_infectious_diseases_DetailView(DetailView):
+	model = History_of_infectious_diseases
+	context_object_name = "history_of_infectious_diseases"
+	template_name = "history_of_infectious_diseases_detail.html"
+
+	def get_object(self):
+		history_of_infectious_diseases = super(History_of_infectious_diseases_DetailView, self).get_object()
+		form = History_of_infectious_diseases_ModelForm(instance=history_of_infectious_diseases)
+		return form
+
+
+class History_of_infectious_diseases_UpdateView(SuccessMessageMixin, UpdateView):
+	template_name = "history_of_infectious_diseases_edit.html"
+	form_class = History_of_infectious_diseases_ModelForm
+	success_message = "保存成功！"
+
+	def get_queryset(self):
+		return History_of_infectious_diseases.objects.all()
+
+
+class History_of_infectious_diseases_DeleteView(DeleteObjectMixin, View):
+	model = History_of_infectious_diseases
+	template = "history_of_infectious_diseases_delete.html"
+	redirect_url = "history_of_infectious_diseases_list_url"
 	raise_exception = True

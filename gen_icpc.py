@@ -3,7 +3,7 @@ from genlib import write_icpc_model
 
 # ***Create ICPC***
 app = 'icpc'
-url = 'https://hssc-rcms.herokuapp.com/icpc-lists'
+url = 'https://hssc-rcms.herokuapp.com/icpc-lists?_publicationState=preview'
 res = requests.get(url)
 res_json = res.json()
 for obj in res_json:

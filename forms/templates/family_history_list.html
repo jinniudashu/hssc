@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>家族病史</h4>
+
+<a href="{% url "family_history_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for family_history in family_historys %}
+		<a class="list-group-item" href="{% url "family_history_detail_url" family_history.slug %}">
+			{{ family_history }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

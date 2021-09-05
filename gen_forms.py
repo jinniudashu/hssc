@@ -3,7 +3,7 @@ from genlib import *
 
 # ***Create forms***
 app = 'forms'
-url = 'https://hssc-rcms.herokuapp.com/forms'
+url = 'https://hssc-rcms.herokuapp.com/forms?_publicationState=preview'
 res = requests.get(url)
 # print(res.status_code)
 # print(res.text)

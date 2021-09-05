@@ -44,12 +44,31 @@ def write_admin(model_name, fk_name, app):
     f.close
 
 
+# Create dictionary-data(Enum)
+def write_dictionary_enums(model, dict_data, app):
+
+    # 构造enum串
+    dict_str = ''
+    i= 0
+    for item in dict_data:
+        dict_str = dict_str + f'({i},"{item["value"]}"), '
+        i += 1
+
+    # 写入enums.py
+    path = f'.\\{app}\\enums.py'
+    f = open(path, 'a', encoding='utf-8')
+    print(dict_str)
+    f.write(f'\n\n{model}Enum = [{dict_str}]')
+    f.close
+
 # Create dictionaries.py
 def write_dictionary_model(obj, app):
-    # 从dictionaries里取字典表名创建字典Model
+
     model = obj['name'].strip().capitalize()
     label = obj['label'].strip()
+    dict_data = obj['dictionary_data']
 
+    # 从dictionaries里取字典表名创建字典Model
     path = f'.\\{app}\\models.py'
     f = open(path, 'a', encoding='utf-8')
     f.write(f'\n\n\nclass {model}(models.Model):')
@@ -75,13 +94,8 @@ def write_dictionary_model(obj, app):
     f.write(f'\n\nadmin.site.register({model})')
     f.close
 
-
-    # 在 main App里创建字典Enum
-    path = f'.\\{app}\\enums.py'
-    f = open(path, 'a', encoding='utf-8')
-    f.write(f'\n\n{model}Enum = []')
-    # f.write(f'\n\n{model}Enum = {model}.objects.all().values_list("id", "name", "score")')
-    f.close
+    # 在app里创建字典Enum
+    write_dictionary_enums(model, dict_data, app)
 
     return model
 
@@ -240,6 +254,7 @@ def write_forms(obj, app):
     f.write(f'\n\tclass Meta:')
     f.write(f'\n\t\tmodel = {model}')
     f.write(f'\n\t\tfields = {field_names}')
+    # Also can use: fields = '__all__'
 
     f.write(f'\n\n\t@property')
     f.write(f'\n\tdef helper(self):')

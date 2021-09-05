@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>个人基本情况</h4>
+
+<a href="{% url "basic_personal_information_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for basic_personal_information in basic_personal_informations %}
+		<a class="list-group-item" href="{% url "basic_personal_information_detail_url" basic_personal_information.slug %}">
+			{{ basic_personal_information }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

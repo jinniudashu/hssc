@@ -4,10 +4,11 @@ from django.urls import path, include
 # from .views import redirect_blog
 
 urlpatterns = [
+    path('', include('forms.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('registration.backends.simple.urls')),
     path('icpc_update/', include('hssc_rcms_backup.urls')),
     # path('grappelli/', include('grappelli.urls')),
-    path('', include('forms.urls')),
 ]
 
 admin.site.site_header = '智益医养服务供应链管理系统'

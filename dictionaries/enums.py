@@ -1,49 +1,29 @@
 
 
-NationEnum = []
+Service_roleEnum = [(0,"中医师"), (1,"护士"), (2,"医生"), (3,"质量管理"), (4,"医生助理"), (5,"健康管理师"), (6,"化验"), (7,"影像医师"), (8,"康复理疗师"), (9,"公卫"), (10,"药士"), (11,"药剂师"), (12,"管理者"), ]
 
-Diabetes_symptomsEnum = []
+GenderEnum = [(0,"男"), (1,"女"), ]
 
-PrescriptionEnum = []
+Marital_statusEnum = [(0,"已婚"), (1,"未婚"), (2,"丧偶"), (3,"离异"), ]
 
-Dorsal_artery_pulsationEnum = []
+EducationEnum = [(0,"硕士"), (1,"文盲或半文盲"), (2,"中专技校"), (3,"小学"), (4,"本科"), (5,"高中"), (6,"初中"), (7,"博士"), (8,"大专"), ]
 
-Diploma_levelEnum = []
+Occupational_statusEnum = [(0,"退休"), (1,"失业"), (2,"在职"), ]
 
-Adverse_reactionsEnum = []
+NationalityEnum = [(0,"少数民族"), (1,"汉族"), ]
 
-CareerEnum = []
+Medical_expenses_burdenEnum = [(0,"公费"), (1,"城镇居民医疗保险"), (2,"自费"), (3,"商业保险"), (4,"贫困救助"), (5,"职工医疗保险"), ]
 
-Complianc_behaviorEnum = []
+Type_of_residenceEnum = [(0,"非常住"), (1,"常住"), ]
 
-MarriageEnum = []
+Blood_typeEnum = [(0,"AB+型"), (1,"O+型"), (2,"B+型"), (3,"O型"), (4,"A型"), (5,"B-型"), (6,"A-型"), (7,"AB-型"), (8,"B型"), (9,"AB型"), (10,"A+型"), (11,"O-型"), (12,"不详"), ]
 
-Payment_methodEnum = []
+Contract_signatoryEnum = [(0,"是"), (1,"否"), ]
 
-Allergy_drugsEnum = []
+Genetic_diseaseEnum = [(0,"无"), (1,"有"), ]
 
-Follow_up_methodEnum = []
+Employee_listEnum = []
 
-Psychological_guidanceEnum = []
+Drug_listEnum = []
 
-Follow_up_classificationEnum = []
-
-Reason_previous_transfusionEnum = []
-
-KinshipEnum = []
-
-Hereditary_diseaseEnum = []
-
-Inspection_itemEnum = []
-
-Surver_itemsEnum = []
-
-ComplianceEnum = []
-
-Hypoglycemic_responseEnum = []
-
-Blood_groupEnum = []
-
-GenderEnum = []
-
-Resident_typeEnum = []
+Family_relationshipEnum = [(0,"户主"), (1,"配偶"), (2,"父母"), (3,"孙子女"), (4,"祖父母"), (5,"其他成员"), (6,"兄弟姐妹"), (7,"子女"), ]

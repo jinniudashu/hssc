@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>医生登陆</h4>
+
+<a href="{% url "doctor_login_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for doctor_login in doctor_logins %}
+		<a class="list-group-item" href="{% url "doctor_login_detail_url" doctor_login.slug %}">
+			{{ doctor_login }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}
