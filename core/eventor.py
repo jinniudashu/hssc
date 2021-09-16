@@ -1,29 +1,6 @@
 '''
-1. 把signal转换为预定义的业务事件EVENT
-
-2. 根据业务事件查询指令表，获得指令集
-
-3. 指令集包括以下指令：
-    （1）创建人工作业进程，状态：新建
-        a. 创建一个作业进程
-        b. 获得输入信息
-        c. 获得作业员id
-        c. 在相应表单Model中创建一条记录
-        d. 把update作业入口插入作业员队列
-
-    （2）变更人工作业进程状态：
-        新建 --> 就绪
-        就绪 --> 执行
-        执行 --> 挂起
-        挂起 --> 就绪
-        执行 --> 完成
-    
-    （3）路由到下个场景
-    （4）执行一个自动化作业
-
-4. 管理员录入服务定义表，系统生成指令表
-
-5. 
+事件发生器
+把Django表单Signals转为Icpc编码的业务事件
 
 '''
 
@@ -32,12 +9,46 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from registration.signals import user_registered, user_activated, user_approved
 from django.dispatch import receiver, Signal
 
+# 导入服务调度器
+from core.scheduler import service_scheduler
+
+# 从app forms里获取所有表单model的名字
+from django.apps import apps
+Forms_models = apps.get_app_config('forms').get_models()
+print('当前Forms:')
+for Model in Forms_models:
+    print(Model.__name__)
+
+
+# 从表单保存信号生成表单作业业务事件
+def form_post_save_handler(sender, **kwargs):
+    print("表单保存：form_post_save_handler")
+    print(sender)
+    print(kwargs)
+    print(kwargs['signal'])
+    print(kwargs['request'])
+    
+    # 获得Event编码
+    event = 'icpc_code'
+    # 把Event编码发给调度器
+    service_scheduler(event)
 
 # 把注册信号生成注册事件
 def user_registered_handler(sender, **kwargs):
     print("用户注册：user_registered_handler")
     print(sender)
     print(kwargs)
+    print(kwargs['signal'])
+    print(kwargs['request'])
+    print(kwargs['user'])
+    print('is_staff:', kwargs['user'].is_staff)
+    print('is_superuser:', kwargs['user'].is_superuser)
+    
+    # 获得Event编码
+    event = 'icpc_code'
+    # 把Event编码发给调度器
+    service_scheduler(event)
+
 
 
 # 把登录信号生成角色登录事件

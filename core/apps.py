@@ -7,8 +7,5 @@ class CoreConfig(AppConfig):
     name = 'core'
 
     def ready(self):
-        # 启动应用后导入业务信号发生器: event_generator
-        import core.event_generator
-
-
-
+        # 启动应用后导入业务信号发生器: eventor
+        import core.eventor
