@@ -17,14 +17,14 @@ tasks_dict = {
 }
 
 
-# 1、查找指令
+# 1. 查找指令
 def find_instructions(event):
     instructions = Instruction.objects.filter()
     print(instructions)
     return instructions
 
 
-# 2、发送任务指令
+# 2. 发送任务指令
 def send_instructions(instructions):
     for instruction in instructions:
         print(instruction)
@@ -34,7 +34,6 @@ def send_instructions(instructions):
         # 执行@task
         tasks_dict[instruction.oaction].delay(oid, ocode)
     return print('send_instructions')
-
 
 
 # 调度器

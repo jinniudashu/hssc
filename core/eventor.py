@@ -15,7 +15,7 @@ from core.scheduler import service_scheduler
 # 从app forms里获取所有表单model的名字
 from django.apps import apps
 Forms_models = apps.get_app_config('forms').get_models()
-print('当前Forms:')
+print('<来自eventor.py>当前Forms:')
 for Model in Forms_models:
     print(Model.__name__)
 

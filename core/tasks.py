@@ -9,7 +9,7 @@ from celery import shared_task
 # def operation_proc_create_task(x, y):
 #     logger.info('Create operation process ...')
 #     return operation_proc_create(x, y)
-
+from .models import Operation_proc
 
 # 操作码
 OPERATING_CODE = [
@@ -27,24 +27,33 @@ def maintenance_operation_proc(oid, ocode):
     print ('maintenance_operation_proc', oid, ocode)
     if ocode == 'cre':
         print(OPERATING_CODE[0][1])
+        Operation_proc.objects.create()
         return OPERATING_CODE[0][1]
-    elif ocode == 'ctr':
+
+    elif ocode == 'ctr': # CREATED TO READY
+        proc_ins = Operation_proc.objects.get()
         print(OPERATING_CODE[1][1])
         return OPERATING_CODE[1][1]
-    elif ocode == 'rtr':
+
+    elif ocode == 'rtr': # READY TO RUNNING
         print(OPERATING_CODE[2][1])
         return OPERATING_CODE[2][1]
-    elif ocode == 'rth':
+
+    elif ocode == 'rth': # RUNNING TO HANGUP
         print(OPERATING_CODE[3][1])
         return OPERATING_CODE[3][1]
-    elif ocode == 'htr':
+
+    elif ocode == 'htr': # HANGUP TO READY
         print(OPERATING_CODE[4][1])
         return OPERATING_CODE[4][1]
-    elif ocode == 'rtc':
+
+    elif ocode == 'rtc': # RUNNING TO COMPLETED
         print(OPERATING_CODE[5][1])
         return OPERATING_CODE[5][1]
-    else:
+
+    else: # 未匹配到操作码，出错了！
         print(f'ERROR: 未定义的操作码 ocode: {ocode}')
+        
     return f'ERROR: 未定义的操作码 ocode: {ocode}'
 
 @shared_task
