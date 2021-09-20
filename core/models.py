@@ -46,31 +46,16 @@ const operationMachine = createMachine<Context>({
 '''
 
 
-# 服务类型信息表
-class Service(models.Model):
-	name = models.CharField(max_length=255, verbose_name="服务类型名称")
-	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")	
-	init_operation = models.ForeignKey('Operation', on_delete=CASCADE, blank=True, null=True, related_name='init_oid', verbose_name="初始作业")
-
-	def __str__(self):
-		return self.name
-
-	class Meta:
-		verbose_name = "服务"
-		verbose_name_plural = "服务"
-		ordering = ['id']
-
-
 # 基础作业信息表
 class Operation(models.Model):
 	name = models.CharField(max_length=255, verbose_name="作业名称")
 	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
 	entry = models.CharField(max_length=250, blank=True, null=True, verbose_name="作业入口")
-	service = models.ManyToManyField(Service, verbose_name="服务类型")
+	# service = models.ManyToManyField(Service, verbose_name="服务类型")
 	group = models.ManyToManyField(Group, verbose_name="作业角色")
 
 	def __str__(self):
-		return self.name
+		return str(self.name)
 
 	class Meta:
 		verbose_name = "作业"
@@ -78,31 +63,37 @@ class Operation(models.Model):
 		ordering = ['id']
 
 
-# 业务事件字典
-class Event(models.Model):
-	name = models.CharField(max_length=255, verbose_name="事件名称")
-	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="事件来源")
+# 服务类型信息表
+class Service(models.Model):
+	name = models.CharField(max_length=255, verbose_name="服务名称")
+	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")	
+	Operation = models.ManyToManyField(Operation, verbose_name="作业")
 
 	def __str__(self):
-		return self.name
+		return str(self.name)
 
 	class Meta:
-		verbose_name = "业务事件"
-		verbose_name_plural = "业务事件"
+		verbose_name = "服务"
+		verbose_name_plural = "服务"
 		ordering = ['id']
 
 
-# 作业指令集
-class Instruction(models.Model):
-	service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务类型")
-	event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="事件代码")
-	next = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="下一项作业")
+# 事件指令表
+class Event_instruction(models.Model):
+	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="事件来源")
+	name = models.CharField(max_length=255, verbose_name="事件名称")
+	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
+	next = models.ManyToManyField(Operation, verbose_name="后续作业")
+	# next = models.ForeignKey(Operation, on_delete=models.CASCADE,  related_name='next_oid', verbose_name="下一项作业")
+
+	def __str__(self):
+		return str(self.name)
 
 	class Meta:
-		verbose_name = "作业指令"
-		verbose_name_plural = "作业指令"
+		verbose_name = "事件指令表"
+		verbose_name_plural = "事件指令表"
 		ordering = ['id']
+
 
 
 # 服务进程表 Service_proc
@@ -170,7 +161,7 @@ class Operation_proc(models.Model):
 	ppid = models.IntegerField(blank=True, null=True, verbose_name="父进程id")
 
 	def __str__(self):
-		# return 作业名称-操作员姓名-客户姓名
+	# 	# return 作业名称-操作员姓名-客户姓名
 		return f'{self.operation.name}-{self.user.username}-{self.customer.username}'
 
 	def get_absolute_url(self):

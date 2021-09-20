@@ -6,7 +6,7 @@
 '''
 
 # 导入指令表
-from .models import Instruction
+from .models import Event_instruction
 
 # 导入任务
 from .tasks import maintenance_operation_proc, operation_proc_create, operation_proc_update, operation_proc_delete, form_create, form_update
@@ -19,7 +19,7 @@ tasks_dict = {
 
 # 1. 查找指令
 def find_instructions(event):
-    instructions = Instruction.objects.filter()
+    instructions = Event_instruction.objects.filter()
     print(instructions)
     return instructions
 

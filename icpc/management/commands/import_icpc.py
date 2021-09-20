@@ -31,12 +31,17 @@ class Command(BaseCommand):
         print(f'{res.text}条记录正在导入：{url}')
 
         pages = math.ceil(int(res.text)/100)
+        
+        # print('6036条记录正在导入')
+        # pages = math.ceil(6036/100)
+
         page = 1
         i = 0
 
         # 每100条记录GET一次
         while page <= pages:
             res = requests.get(f'{url}?_start={(page-1)*100}')
+            # res = requests.get(f'https://hssc-rcms.herokuapp.com/icpcs?_publicationState=preview&_start={(page-1)*100}')
             res_json = res.json()
 
             # 从元组中把model名称转为 model class
@@ -58,8 +63,8 @@ class Command(BaseCommand):
                         note = obj['note'],
                         pym = obj['pym'],
                     )
-                except:
-                    print (f'Error:{i}')
+                except Exception as e:
+                    print (f'{e}:{i}')
                 else:
                     print (f'{i}')
 

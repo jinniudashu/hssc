@@ -1,38 +1,39 @@
 from django.contrib import admin
-from .models import Service, Operation, Event, Instruction
+from .models import Service, Operation, Event_instruction
 from .models import Service_proc, Operation_proc
 
 
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'icpc', 'init_operation', 'id']
-    list_display_links = ['name', 'icpc']
-    autocomplete_fields = ['icpc']
-    search_fields = ['name', 'icpc']
-    ordering = ['id']
-admin.site.register(Service, ServiceAdmin)
+class Event_instructionInline(admin.TabularInline):
+    model = Event_instruction
+    extra = 1
 
 class OperationAdmin(admin.ModelAdmin):
     list_display = ['name', 'icpc', 'entry', 'id']
     list_display_links = ['name', 'icpc']
     autocomplete_fields = ['icpc']
     search_fields = ['name', 'icpc']
+    # inlines = [Event_instructionInline]
     ordering = ['id']
 admin.site.register(Operation, OperationAdmin)
 
-class EventAdmin(admin.ModelAdmin):
-    list_display = ['name', 'icpc', 'operation', 'id']
+
+class Event_instructionAdmin(admin.ModelAdmin):
+    list_display = ['operation', 'name', 'icpc', 'id']
+    list_display_links = ['operation', 'name', 'icpc']
+    autocomplete_fields = ['icpc']
+    search_fields = ['name', 'icpc']
+    ordering = ['id']
+admin.site.register(Event_instruction, Event_instructionAdmin)
+
+
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'icpc', 'id']
     list_display_links = ['name', 'icpc']
     autocomplete_fields = ['icpc']
     search_fields = ['name', 'icpc']
     ordering = ['id']
-admin.site.register(Event, EventAdmin)
+admin.site.register(Service, ServiceAdmin)
 
-class InstructionAdmin(admin.ModelAdmin):
-    list_display = ['service', 'event', 'next', 'id']
-    list_display_links = ['service', 'event', 'next']
-    search_fields = ['service', 'event', 'next']
-    ordering = ['id']
-admin.site.register(Instruction, InstructionAdmin)
 
 # admin.site.register(Service_proc)
 # admin.site.register(Operation_proc)
