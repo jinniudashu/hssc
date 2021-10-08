@@ -53,7 +53,7 @@ class Form(models.Model):
 	style = models.PositiveSmallIntegerField(choices=input_style, default=0, verbose_name='风格')
 
 	def __str__(self):
-		return str(self.name)
+		return str(self.label)
 
 	class Meta:
 		verbose_name = "表单"

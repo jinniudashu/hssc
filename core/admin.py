@@ -76,5 +76,12 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 
 
+class Operation_procAdmin(admin.ModelAdmin):
+    list_display = ['id', 'operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    list_display_links = ['operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    ordering = ['id']
+admin.site.register(Operation_proc, Operation_procAdmin)
+
+
 admin.site.register(Service_proc)
-admin.site.register(Operation_proc)
+

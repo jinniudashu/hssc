@@ -29,5 +29,11 @@ for obj in res_json:
     #写入templates.html
     model = write_templates(obj, app)
 
+
+#写入form_list.py
+f = open(f'.\\{app}\\form_list.py', 'w', encoding='utf-8')
+f.write(f'form_list={models}')
+f.close
+
 #最后写入index.html
 write_index_html(models, app)
