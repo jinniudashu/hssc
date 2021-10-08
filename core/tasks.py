@@ -1,86 +1,85 @@
-# from __future__ import absolute_import, unicode_literals
+from django.contrib.auth.models import User
 
+# from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 # from celery.decorators import task
 # from celery.utils.log import get_task_logger
 # logger = get_task_logger(__name__)
 
-# @task(name='operation_proc_create_task')
-# def operation_proc_create_task(x, y):
-#     logger.info('Create operation process ...')
-#     return operation_proc_create(x, y)
-from .models import Operation_proc
+from core.models import Operation_proc, Operation, Service_proc
 
-# 操作码
-OPERATING_CODE = [
+'''
+指令字典
+    'cop': create_operation_proc,
+    'mop': update_operation_proc,
+    'cfi': create_form_instance,
+
+# 作业状态机操作码
     ('cre', 'CREATE'),
     ('ctr', 'CREATED TO READY'),
     ('rtr', 'READY TO RUNNING'),
     ('rth', 'RUNNING TO HANGUP'),
     ('htr', 'HANGUP TO READY'),
     ('rtc', 'RUNNING TO COMPLETED'),
-]
+'''
 
-@shared_task
-# 维护作业进程
-def maintenance_operation_proc(oid, ocode):
-    print ('maintenance_operation_proc', oid, ocode)
-    if ocode == 'cre':
-        print(OPERATING_CODE[0][1])
-        Operation_proc.objects.create()
-        return OPERATING_CODE[0][1]
 
-    elif ocode == 'ctr': # CREATED TO READY
-        proc_ins = Operation_proc.objects.get()
-        print(OPERATING_CODE[1][1])
-        return OPERATING_CODE[1][1]
-
-    elif ocode == 'rtr': # READY TO RUNNING
-        print(OPERATING_CODE[2][1])
-        return OPERATING_CODE[2][1]
-
-    elif ocode == 'rth': # RUNNING TO HANGUP
-        print(OPERATING_CODE[3][1])
-        return OPERATING_CODE[3][1]
-
-    elif ocode == 'htr': # HANGUP TO READY
-        print(OPERATING_CODE[4][1])
-        return OPERATING_CODE[4][1]
-
-    elif ocode == 'rtc': # RUNNING TO COMPLETED
-        print(OPERATING_CODE[5][1])
-        return OPERATING_CODE[5][1]
-
-    else: # 未匹配到操作码，出错了！
-        print(f'ERROR: 未定义的操作码 ocode: {ocode}')
-        
-    return f'ERROR: 未定义的操作码 ocode: {ocode}'
-
-@shared_task
 # 创建作业进程
-def operation_proc_create(x, y):
-    print ('operation_proc_create')
-    return x * y
+# @shared_task
+def create_operation_proc(task_params):
 
-@shared_task
-# 跟新作业进程状态
-def operation_proc_update(x, y):
-    print ('operation_proc_update')
-    return x + y
+    # 创建表单实例
+    # 获取作业表单
+    # forms = operation.forms
+    # print('forms:', forms)
+    # for form in forms:
+    #     Form = globals()[form]
+    #     form = Form.objects.create()
 
-@shared_task
-# 删除作业进程
-def operation_proc_delete(x, y):
-    print ('operation_proc_delete')
-    return x - y
+    # 获取表单实例入口
+    # entry = 
+
+    # 创建作业进程
+    operation = Operation.objects.get(id=task_params['oid'])
+    user = User.objects.get(id=task_params['uid'])
+    customer = User.objects.get(id=task_params['cid'])
+    try:
+        parent_operation_proc = Operation_proc.objects.get(id=task_params['ppid'])
+    except Operation_proc.DoesNotExist:
+        parent_operation_proc = None
+    # service_proc = Service_proc.objects.get(id=task_params['spid'])
+
+    proc=Operation_proc.objects.create(
+        operation=operation,
+        user=user,
+        customer=customer,
+        state=0,
+        ppid=parent_operation_proc,
+        # entry = entry
+        # service_proc=service_proc,
+    )
 
 
-@shared_task
-# 创建表单
-def form_create():    
-    return print('form_create')
+    return proc
 
-@shared_task
-# 修改表单
-def form_update():
-    return print('form_update')
+
+# 维护作业进程
+# @shared_task
+def update_operation_proc(opid, ocode):
+    print ('maintenance_operation_proc', opid, ocode)
+    proc = Operation_proc.objects.get(id=opid)
+
+    if ocode == 'ctr': # CREATED TO READY
+        proc.state=1
+    elif ocode == 'rtr': # READY TO RUNNING
+        proc.state=2
+    elif ocode == 'rth': # RUNNING TO HANGUP
+        proc.state=3
+    elif ocode == 'htr': # HANGUP TO READY
+        proc.state=2
+    elif ocode == 'rtc': # RUNNING TO COMPLETED
+        proc.state=4
+    else:
+        print(f'ERROR: 未定义的操作码 ocode: {ocode}')        
+        return f'ERROR: 未定义的操作码 ocode: {ocode}'
+    return proc.save()

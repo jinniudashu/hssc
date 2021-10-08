@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>个人心理综合素质调查</h4>
+
+<a href="{% url "personal_comprehensive_psychological_quality_survey_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for personal_comprehensive_psychological_quality_survey in personal_comprehensive_psychological_quality_surveys %}
+		<a class="list-group-item" href="{% url "personal_comprehensive_psychological_quality_survey_detail_url" personal_comprehensive_psychological_quality_survey.slug %}">
+			{{ personal_comprehensive_psychological_quality_survey }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

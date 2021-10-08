@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>社会环境评估</h4>
+
+<a href="{% url "social_environment_assessment_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for social_environment_assessment in social_environment_assessments %}
+		<a class="list-group-item" href="{% url "social_environment_assessment_detail_url" social_environment_assessment.slug %}">
+			{{ social_environment_assessment }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

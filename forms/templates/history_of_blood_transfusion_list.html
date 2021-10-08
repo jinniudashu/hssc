@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>输血史</h4>
+
+<a href="{% url "history_of_blood_transfusion_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for history_of_blood_transfusion in history_of_blood_transfusions %}
+		<a class="list-group-item" href="{% url "history_of_blood_transfusion_detail_url" history_of_blood_transfusion.slug %}">
+			{{ history_of_blood_transfusion }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>院外症状自述调查</h4>
+
+<a href="{% url "out_of_hospital_self_report_survey_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for out_of_hospital_self_report_survey in out_of_hospital_self_report_surveys %}
+		<a class="list-group-item" href="{% url "out_of_hospital_self_report_survey_detail_url" out_of_hospital_self_report_survey.slug %}">
+			{{ out_of_hospital_self_report_survey }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

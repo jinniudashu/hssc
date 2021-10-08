@@ -12,7 +12,7 @@ class Command(BaseCommand):
     # 只能导入100条以内的记录
     def run_import(self, dic):
         id = dic['id']
-        name = dic['name']
+        name = dic['name'].strip()
         label = dic['label']
         print(f'正在导入 {name} ...')
 
@@ -40,12 +40,12 @@ class Command(BaseCommand):
         # 如果data['dictionary_data']内有记录，导入
         if len(data['dictionary_data']) > 0:
             # 把name 转为 model class
-            dic_model= globals()[name.capitalize()]
+            Dic_model= globals()[name.capitalize()]
             i = 0
             for dic in data['dictionary_data']:
                 i += 1
                 try:
-                    dic_model.objects.create(
+                    Dic_model.objects.create(
                         name = dic['value'],
                         score = dic['score'],
                     )

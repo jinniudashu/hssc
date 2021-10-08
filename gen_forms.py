@@ -10,7 +10,16 @@ res = requests.get(url)
 res_json = res.json()
 models = []
 for obj in res_json:
-    models.append((obj['name'].strip().lower(), obj['label'].strip()))
+    
+    model_name = obj['name'].replace(' ', '').lower()   # 表单名称
+    model_label = obj['label'].replace(' ', '')         # 显示名称
+    if obj['style']=='List':                            # 输入风格
+        model_style = 1
+    else:
+        model_style = 0
+
+    models.append((model_name, model_label, model_style))
+
     #写入models.py & admin.py
     model = write_models(obj, app)
     #写入forms.py

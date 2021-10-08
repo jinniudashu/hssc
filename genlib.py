@@ -64,8 +64,8 @@ def write_dictionary_enums(model, dict_data, app):
 # Create dictionaries.py
 def write_dictionary_model(obj, app):
 
-    model = obj['name'].strip().capitalize()
-    label = obj['label'].strip()
+    model = obj['name'].replace(' ', '').capitalize()
+    label = obj['label'].replace(' ', '')
     dict_data = obj['dictionary_data']
 
     # 从dictionaries里取字典表名创建字典Model
@@ -102,8 +102,8 @@ def write_dictionary_model(obj, app):
 
 def write_icpc_model(obj, app):
     # 从icpc-lists里取icpc表名创建icpc Model
-    model = obj['name'].strip().capitalize()
-    label = obj['label'].strip()
+    model = obj['name'].replace(' ', '').capitalize()
+    label = obj['label'].replace(' ', '')
 
     path = f'.\\{app}\\models.py'
     f = open(path, 'a', encoding='utf-8')
@@ -158,11 +158,10 @@ def write_icpc_model(obj, app):
 # Create models.py 
 def write_models(obj, app):
     # ***待实现：表单Model与字典Model建立外键关联****
-
-    model = obj['name'].strip().capitalize()
-    model_label = obj['label'].strip()    
+    model = obj['name'].replace(' ', '').capitalize()
+    model_label = obj['label'].replace(' ', '')    
     fields = obj['fields']
-    title = fields[0]['name'].strip().lower()
+    title = fields[0]['name'].replace(' ', '').lower()
 
     path = f'.\\{app}\\models.py'
 
@@ -171,8 +170,8 @@ def write_models(obj, app):
     # 写入每个field
     for field in fields:
         # 构造field参数
-        name = field['name'].strip().lower()
-        label = field['label'].strip()
+        name = field['name'].replace(' ', '').lower()
+        label = field['label'].replace(' ', '')
         parameters = field['field_parameters']
         # group = field['group']
         # input_style = field['input_style']
@@ -239,13 +238,24 @@ def write_models(obj, app):
 
 # Create forms.py
 def write_forms(obj, app):
-    model = obj['name'].strip().capitalize()
+    model = obj['name'].replace(' ', '').capitalize()
     fields = obj['fields']
-    # 构造fields名称list
+    # 构造fields名称list, widgets
     field_names = []
+    widgets = ''
     for field in fields:
-        name = field['name'].strip().lower()
+        name = field['name'].replace(' ', '').lower()
         field_names.append(name)
+
+        # 如果是char-field,且icpc_list为空，且auxiliary_input非空,根据input_style 构造 widgets={}
+        if field['__component'] == 'fields.char-field' and field['icpc_list'] is None and field['auxiliary_input'] is not None:
+            if field['input_style'] == 'Dropdown_list':
+                widgets = f'{widgets}"{name}": Select(),'
+            elif field['input_style'] == 'Single_choice':
+                widgets = f'{widgets}"{name}": RadioSelect(),'
+            elif field['input_style'] == 'Multi_choice':
+                widgets = f'{widgets}"{name}": CheckboxSelectMultiple(),'
+
 
     path = f'.\\{app}\\forms.py'
 
@@ -254,6 +264,7 @@ def write_forms(obj, app):
     f.write(f'\n\tclass Meta:')
     f.write(f'\n\t\tmodel = {model}')
     f.write(f'\n\t\tfields = {field_names}')
+    f.write(f'\n\t\twidgets = {{{widgets}}}')
     # Also can use: fields = '__all__'
 
     f.write(f'\n\n\t@property')
@@ -281,7 +292,7 @@ def write_forms(obj, app):
 
 # Create views.py (Mixin)
 def write_views(obj, app):
-    model = obj['name'].strip().capitalize()
+    model = obj['name'].replace(' ', '').capitalize()
     
     path = f'.\\{app}\\views.py'
 
@@ -343,8 +354,8 @@ def write_views(obj, app):
 
 # Create templates/xxx.html
 def write_templates(obj, app):
-    model = obj['name'].strip().lower()
-    label = obj['label'].strip()    
+    model = obj['name'].replace(' ', '').lower()
+    label = obj['label'].replace(' ', '')    
 
     # Create list.html
     path = f'.\\{app}\\templates\\{model}_list.html'
@@ -412,6 +423,7 @@ def write_index_html(models, app):
     f.write(f'\n\n</section>')
     f.write(f'\n\n{{% endblock %}}')
     f.close
+
 
 # Create apps.py
 def write_apps():

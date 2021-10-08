@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>家庭情况调查</h4>
+
+<a href="{% url "family_survey_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for family_survey in family_surveys %}
+		<a class="list-group-item" href="{% url "family_survey_detail_url" family_survey.slug %}">
+			{{ family_survey }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

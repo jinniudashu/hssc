@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>重大生活事件调查</h4>
+
+<a href="{% url "major_life_events_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for major_life_events in major_life_eventss %}
+		<a class="list-group-item" href="{% url "major_life_events_detail_url" major_life_events.slug %}">
+			{{ major_life_events }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}
