@@ -2,6 +2,8 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
 
+from django.contrib.auth.models import User
+
 from time import time
 from django.utils import timezone
 
@@ -14,13 +16,15 @@ def gen_slug(s):
 
 
 class History_of_trauma(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_trauma_cid", verbose_name="作业人员")
 	choose = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="选择")
 	diseases_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="病名")
 	date = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="日期")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_trauma_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.choose
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "外伤史"
@@ -43,11 +47,13 @@ class History_of_trauma(models.Model):
 
 
 class Out_of_hospital_self_report_survey(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="out_of_hospital_self_report_survey_cid", verbose_name="作业人员")
 	symptom_list = models.TextField(max_length=1024, blank=True, null=True, verbose_name="症状")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="out_of_hospital_self_report_survey_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.symptom_list
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "院外症状自述调查"
@@ -70,12 +76,14 @@ class Out_of_hospital_self_report_survey(models.Model):
 
 
 class Personal_comprehensive_psychological_quality_survey(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_comprehensive_psychological_quality_survey_cid", verbose_name="作业人员")
 	personality_tendency = models.CharField(max_length=60, blank=True, null=True, verbose_name="性格倾向")
 	is_life_fun = models.CharField(max_length=60, blank=True, null=True, choices=FrequencyEnum, verbose_name="您觉得生活有乐趣吗")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_comprehensive_psychological_quality_survey_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.personality_tendency
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "个人心理综合素质调查"
@@ -98,11 +106,13 @@ class Personal_comprehensive_psychological_quality_survey(models.Model):
 
 
 class Personal_health_assessment(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_health_assessment_cid", verbose_name="作业人员")
 	do_you_feel_healthy = models.CharField(max_length=60, blank=True, null=True, choices=Degree_expressionEnum, verbose_name="觉得自己身体健康吗")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_health_assessment_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.do_you_feel_healthy
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "个人身体健康评估"
@@ -125,11 +135,13 @@ class Personal_health_assessment(models.Model):
 
 
 class Allergies_history(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="allergies_history_cid", verbose_name="作业人员")
 	drug_name = models.CharField(max_length=60, blank=True, null=True, choices=Drug_listEnum, verbose_name="药品名称")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="allergies_history_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.drug_name
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "过敏史"
@@ -152,6 +164,7 @@ class Allergies_history(models.Model):
 
 
 class Personal_health_behavior_survey(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_health_behavior_survey_cid", verbose_name="作业人员")
 	is_the_diet_regular = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="饮食是否规律")
 	is_the_diet_proportion_healthy = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="饮食比例是否健康")
 	whether_the_bowel_movements_are_regular = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="大便是否规律")
@@ -162,10 +175,11 @@ class Personal_health_behavior_survey(models.Model):
 	average_sleep_duration = models.CharField(max_length=60, blank=True, null=True, verbose_name="平均睡眠时长")
 	insomnia = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="有无失眠情况")
 	duration_of_insomnia = models.CharField(max_length=60, blank=True, null=True, verbose_name="持续失眠时间")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_health_behavior_survey_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.is_the_diet_regular
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "个人健康行为调查"
@@ -188,12 +202,14 @@ class Personal_health_behavior_survey(models.Model):
 
 
 class History_of_blood_transfusion(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_blood_transfusion_cid", verbose_name="作业人员")
 	date = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="日期")
 	blood_transfusion = models.SmallIntegerField(blank=True, null=True, verbose_name="输血量")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_blood_transfusion_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.date
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "输血史"
@@ -216,12 +232,14 @@ class History_of_blood_transfusion(models.Model):
 
 
 class Social_environment_assessment(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="social_environment_assessment_cid", verbose_name="作业人员")
 	is_the_living_environment_satisfactory = models.CharField(max_length=60, blank=True, null=True, choices=SatisfactionEnum, verbose_name="您对居住环境满意吗")
 	is_the_transportation_convenient = models.CharField(max_length=60, blank=True, null=True, choices=Degree_expressionEnum, verbose_name="您所在的社区交通方便吗")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="social_environment_assessment_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.is_the_living_environment_satisfactory
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "社会环境评估"
@@ -244,12 +262,14 @@ class Social_environment_assessment(models.Model):
 
 
 class Medical_history(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="medical_history_cid", verbose_name="作业人员")
 	disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="疾病名称")
 	time_of_diagnosis = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="确诊时间")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="medical_history_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.disease_name
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "疾病史"
@@ -272,12 +292,14 @@ class Medical_history(models.Model):
 
 
 class Major_life_events(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="major_life_events_cid", verbose_name="作业人员")
 	major_life = models.CharField(max_length=60, blank=True, null=True, choices=Life_eventEnum, verbose_name="生活事件")
 	date = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="日期")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="major_life_events_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.major_life
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "重大生活事件调查"
@@ -300,12 +322,14 @@ class Major_life_events(models.Model):
 
 
 class Family_survey(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="family_survey_cid", verbose_name="作业人员")
 	diseases = models.ForeignKey(Icpc5_evaluation_and_diagnoses, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="病名")
 	family_relationship = models.CharField(max_length=60, blank=True, null=True, choices=Family_relationshipEnum, verbose_name="家庭成员关系")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="family_survey_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.diseases
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "家庭情况调查"
@@ -328,12 +352,14 @@ class Family_survey(models.Model):
 
 
 class History_of_surgery(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_surgery_cid", verbose_name="作业人员")
 	name_of_operation = models.ForeignKey(Icpc7_treatments, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="手术名称")
 	date = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="日期")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_surgery_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.name_of_operation
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "手术史"
@@ -356,6 +382,7 @@ class History_of_surgery(models.Model):
 
 
 class User_registry(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="user_registry_cid", verbose_name="作业人员")
 	name = models.CharField(max_length=60, blank=True, null=True, verbose_name="姓名")
 	gender = models.CharField(max_length=60, blank=True, null=True, verbose_name="性别")
 	date_of_birth = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="出生日期")
@@ -365,10 +392,11 @@ class User_registry(models.Model):
 	contact_address = models.CharField(max_length=60, blank=True, null=True, verbose_name="联系地址")
 	password_setting = models.CharField(max_length=60, blank=True, null=True, verbose_name="密码设置")
 	confirm_password = models.CharField(max_length=60, blank=True, null=True, verbose_name="确认密码")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="user_registry_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.name
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "用户注册表"
@@ -391,6 +419,7 @@ class User_registry(models.Model):
 
 
 class Doctor_registry(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="doctor_registry_cid", verbose_name="作业人员")
 	name = models.CharField(max_length=60, blank=True, null=True, verbose_name="姓名")
 	gender = models.CharField(max_length=60, blank=True, null=True, verbose_name="性别")
 	age = models.CharField(max_length=60, blank=True, null=True, verbose_name="年龄")
@@ -405,10 +434,11 @@ class Doctor_registry(models.Model):
 	practice_time = models.CharField(max_length=60, blank=True, null=True, verbose_name="执业时间")
 	affiliation = models.CharField(max_length=60, blank=True, null=True, choices=Institutions_listEnum, verbose_name="所属机构")
 	date_of_birth = models.DateTimeField(blank=True, null=True, default=timezone.now, verbose_name="出生日期")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="doctor_registry_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.name
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "医生注册"
@@ -431,12 +461,14 @@ class Doctor_registry(models.Model):
 
 
 class User_login(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="user_login_cid", verbose_name="作业人员")
 	username = models.CharField(max_length=60, blank=True, null=True, verbose_name="用户名")
 	password = models.CharField(max_length=60, blank=True, null=True, verbose_name="密码")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="user_login_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.username
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "用户登录"
@@ -459,13 +491,15 @@ class User_login(models.Model):
 
 
 class Doctor_login(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="doctor_login_cid", verbose_name="作业人员")
 	service_role = models.CharField(max_length=60, blank=True, null=True, verbose_name="服务角色")
 	username = models.CharField(max_length=60, blank=True, null=True, verbose_name="用户名")
 	password = models.CharField(max_length=60, blank=True, null=True, verbose_name="密码")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="doctor_login_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.service_role
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "医生登陆"
@@ -488,6 +522,7 @@ class Doctor_login(models.Model):
 
 
 class Basic_personal_information(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="basic_personal_information_cid", verbose_name="作业人员")
 	family_id = models.ForeignKey(Icpc1_register_logins, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="家庭编号")
 	family_relationship = models.CharField(max_length=60, blank=True, null=True, choices=Family_relationshipEnum, verbose_name="家庭成员关系")
 	resident_file_number = models.CharField(max_length=60, blank=True, null=True, verbose_name="居民档案号")
@@ -507,10 +542,11 @@ class Basic_personal_information(models.Model):
 	blood_type = models.CharField(max_length=60, blank=True, null=True, choices=Blood_typeEnum, verbose_name="血型")
 	contract_signatory = models.CharField(max_length=60, blank=True, null=True, choices=Contract_signatoryEnum, verbose_name="合同签约户")
 	signed_family_doctor = models.CharField(max_length=60, blank=True, null=True, choices=Employee_listEnum, verbose_name="签约家庭医生")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="basic_personal_information_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.family_id
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "个人基本情况"
@@ -533,12 +569,14 @@ class Basic_personal_information(models.Model):
 
 
 class History_of_infectious_diseases(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_infectious_diseases_cid", verbose_name="作业人员")
 	diseases = models.ForeignKey(Icpc5_evaluation_and_diagnoses, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="病名")
 	family_relationship = models.CharField(max_length=60, blank=True, null=True, choices=Family_relationshipEnum, verbose_name="家庭成员关系")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_infectious_diseases_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.diseases
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "遗传病史"
@@ -561,14 +599,16 @@ class History_of_infectious_diseases(models.Model):
 
 
 class Personal_adaptability_assessment(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_adaptability_assessment_cid", verbose_name="作业人员")
 	do_you_feel_pressured_at_work = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="是否感觉到工作压力大")
 	do_you_often_work_overtime = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="是否经常加班")
 	working_hours_per_day = models.TextField(max_length=1024, blank=True, null=True, verbose_name="每天工作及工作往返总时长")
 	are_you_satisfied_with_the_job = models.CharField(max_length=60, blank=True, null=True, choices=SatisfactionEnum, verbose_name="对目前生活和工作满意吗")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_adaptability_assessment_uid", verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, unique=True, blank=True)
 
 	def __str__(self):
-		return self.do_you_feel_pressured_at_work
+		return str(self.customer)
 
 	class Meta:
 		verbose_name = "个人适应能力评估"

@@ -4,6 +4,7 @@ from django.urls import path, include
 # from .views import redirect_blog
 
 urlpatterns = [
+    # path('', include(('forms.urls', 'forms'), namespace='forms')),
     path('', include('forms.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.simple.urls')),

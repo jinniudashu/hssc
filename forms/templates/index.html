@@ -4,7 +4,20 @@
 
 {% block content %}
 
-<h4>表单目录</h4>
+<br>
+<h4>当前任务</h4>
+<section class="list-group">
+	{% for todo in todos %}
+		<a class="list-group-item" href="{% url todo.url todo.slug %}">
+			{{ todo.operation }}
+		</a>
+	{% endfor %}
+</section>
+<br>
+<hr>
+<br>
+
+<h4>已录入表单</h4>
 
 <section class="list-group">
 	<a class="list-group-item" href="{% url "history_of_trauma_list_url" %}">

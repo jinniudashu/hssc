@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404, HttpResponse
+from django.shortcuts import render, get_object_or_404, HttpResponse, redirect, resolve_url
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 from django.views.generic.detail import DetailView
 from django.contrib.messages.views import SuccessMessageMixin
+
+from core.models import Operation_proc
 
 from .utils import DetailObjectMixin, CreateObjectMixin, UpdateObjectMixin, DeleteObjectMixin
 
@@ -15,7 +17,18 @@ from .forms import *
 # 		return get_object_or_404(Test, slug=slug)
 
 def index_view(request):
-	return render(request, 'index.html')
+	# user = []
+	procs = Operation_proc.objects.exclude(state=4)
+	todos = []
+	for proc in procs:
+		todo = {}
+		todo['operation'] = proc.operation.label
+		todo['url'] = f'{proc.operation.name}_update_url'
+		todo['slug'] = proc.entry
+		todos.append(todo)
+
+	context = {"todos": todos}
+	return render(request, 'index.html', context)
 
 
 class History_of_trauma_ListView(ListView):
@@ -91,7 +104,7 @@ class Out_of_hospital_self_report_survey_UpdateView(SuccessMessageMixin, UpdateV
 
 	def get_queryset(self):
 		return Out_of_hospital_self_report_survey.objects.all()
-
+	
 
 class Out_of_hospital_self_report_survey_DeleteView(DeleteObjectMixin, View):
 	model = Out_of_hospital_self_report_survey

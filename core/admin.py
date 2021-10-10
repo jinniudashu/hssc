@@ -21,11 +21,11 @@ admin.site.register(Form, FormAdmin)
 
 
 class OperationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'icpc', 'entry', 'id']
-    list_display_links = ['name', 'icpc']
+    list_display = ['label', 'name', 'icpc', 'id']
+    list_display_links = ['label', 'name', 'icpc']
     fieldsets = (
         (None, {
-            'fields': (('name', 'icpc'), 'priority', ('forms', 'group'), 'suppliers',)
+            'fields': (('label', 'name', 'icpc'), 'priority', ('form', 'group'), 'suppliers',)
         }),
         ('作业管理', {
             'fields': ('not_suitable', 'time_limits', 'working_hours', 'cost', 'load_feedback')
@@ -33,19 +33,18 @@ class OperationAdmin(admin.ModelAdmin):
         ('资源配置', {
             'fields': ('resource_materials','resource_devices','resource_knowledge')
         }),
-        ('系统管理', {'fields': ('entry', )}),
     )
     autocomplete_fields = ['icpc']
-    search_fields = ['name', 'icpc']
+    search_fields = ['name', 'icpc', 'label']
     inlines = [EventInline]
     ordering = ['id']
 admin.site.register(Operation, OperationAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['name', 'operation', 'rule','id']
-    list_display_links = ['name', 'operation', 'rule']
-    search_fields = ['name']
+    list_display = ['label', 'name', 'operation', 'rule','id']
+    list_display_links = ['label', 'name', 'operation', 'rule']
+    search_fields = ['name', 'label']
     # inlines = [Event_instructionsInline]
     ordering = ['id']
 admin.site.register(Event, EventAdmin)
@@ -83,5 +82,5 @@ class Operation_procAdmin(admin.ModelAdmin):
 admin.site.register(Operation_proc, Operation_procAdmin)
 
 
-admin.site.register(Service_proc)
+# admin.site.register(Service_proc)
 

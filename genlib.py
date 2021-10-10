@@ -51,7 +51,7 @@ def write_dictionary_enums(model, dict_data, app):
     dict_str = ''
     i= 0
     for item in dict_data:
-        dict_str = dict_str + f'({i},"{item["value"]}"), '
+        dict_str = dict_str + f'("{i}","{item["value"]}"), '
         i += 1
 
     # 写入enums.py
@@ -167,6 +167,10 @@ def write_models(obj, app):
 
     f = open(path, 'a', encoding='utf-8')
     f.write(f'\n\n\nclass {model}(models.Model):')
+    
+    # 写入customer field
+    f.write(f'\n\tcustomer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_cid", verbose_name="作业人员")')
+
     # 写入每个field
     for field in fields:
         # 构造field参数
@@ -201,11 +205,13 @@ def write_models(obj, app):
         # 写入field信息
         f.write(f'\n\t{name} = models.{parameters}')
 
-    
+    # 写入user field
+    f.write(f'\n\tuser = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_uid", verbose_name="作业人员")')
+
     # 写入slug field
     f.write(f'\n\tslug = models.SlugField(max_length=150, unique=True, blank=True)')
     f.write('\n\n\tdef __str__(self):')
-    f.write(f'\n\t\treturn self.{title}')
+    f.write(f'\n\t\treturn str(self.customer)')
 
     # class Meta: model名称显示为中文, 排序
     f.write('\n\n\tclass Meta:')

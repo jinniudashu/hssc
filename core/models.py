@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from icpc.models import Icpc
@@ -64,6 +65,7 @@ class Form(models.Model):
 # 基础作业信息表
 class Operation(models.Model):
 	name = models.CharField(max_length=255, verbose_name="作业名称")
+	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
 	Operation_priority = [
 		(0, '0级'),
@@ -72,9 +74,8 @@ class Operation(models.Model):
 		(3, '一般'),
 	]
 	priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name='优先级')
-	forms = models.ManyToManyField(Form, verbose_name="表单")
-	entry = models.CharField(max_length=250, blank=True, null=True, verbose_name="作业入口")
-	group = models.ManyToManyField(Group, verbose_name="作业角色")
+	form = models.OneToOneField(Form, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
+	group = models.ManyToManyField(Group, blank=True, null=True, verbose_name="作业角色")
 	suppliers = models.CharField(max_length=255, blank=True, null=True, verbose_name="供应商")
 	not_suitable = models.CharField(max_length=255, blank=True, null=True, verbose_name='不适用对象')
 	time_limits = models.DurationField(blank=True, null=True, verbose_name='完成时限')
@@ -87,7 +88,13 @@ class Operation(models.Model):
 	resource_knowledge = models.CharField(max_length=255, blank=True, null=True, verbose_name='服务知识')
 
 	def __str__(self):
-		return str(self.name)
+		return str(self.label)
+
+	def get_event_name_operation_completed(self):
+		return f'{self.name}_operation_completed'
+
+	def get_event_label_operation_completed(self):
+		return f'{self.label}完成'
 
 	class Meta:
 		verbose_name = "作业"
@@ -111,14 +118,16 @@ class Service(models.Model):
 
 
 # 作业事件表
+# # 默认事件：xx作业完成--系统作业名+"_operation_completed"
 class Event(models.Model):
 	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="上道作业")
-	name = models.CharField(max_length=255, verbose_name="事件名称")
+	name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
+	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	next = models.ManyToManyField(Operation, verbose_name="后续作业")
 	rule = models.CharField(max_length=255, blank=True, null=True, verbose_name="规则描述")
 
 	def __str__(self):
-		return str(self.name)
+		return str(self.label)
 
 	class Meta:
 		verbose_name = "事件"
@@ -144,7 +153,7 @@ class Instruction(models.Model):
 
 # 事件指令程序表
 class Event_instructions(models.Model):
-	event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="事件")
+	event = models.ForeignKey(Event, on_delete=models.CASCADE, db_index=True, verbose_name="事件")
 	instruction = models.ForeignKey(Instruction, on_delete=models.CASCADE, verbose_name="指令")
 	order = models.PositiveSmallIntegerField(default=1, verbose_name="指令序号")
 	params = models.PositiveIntegerField(blank=True, null=True, verbose_name="创建作业")
@@ -195,13 +204,13 @@ class Operation_proc(models.Model):
 	# 作业进程id: pid
 	
 	# 作业id: oid
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业id")
+	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业")
 	
 	# 作业员id: uid
-	user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员id")
+	user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")
 	
 	# 客户id: cid
-	customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户id")
+	customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")
 	
 	# 作业状态: state
 	Operation_proc_state = [
@@ -214,22 +223,22 @@ class Operation_proc(models.Model):
 	state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
 	
 	# 作业入口
-	entry = models.CharField(max_length=250, blank=True, null=True, verbose_name="作业入口")
+	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")
 
 	# 父作业进程id: ppid
-	ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程id")
+	ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")
 
 	# 服务进程id: spid
-	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务id")
+	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
 	
 	def __str__(self):
 	# 	# return 作业名称-操作员姓名-客户姓名
 		# return f'{self.operation.name}-{self.user.username}-{self.customer.username}'
-		return "%s - %s - %s" %(self.operation.name, self.user.username, self.customer.username)
+		return "%s - %s - %s - %s" %(self.operation.label, self.operation.name, self.user.username, self.customer.username)
 
 	def get_absolute_url(self):
 		# 返回作业入口url
-		return self.operation.entry
+		return self.entry
 
 	class Meta:
 		verbose_name = "作业进程"
