@@ -16,22 +16,6 @@ from .forms import *
 # 		slug = self.kwargs.get('slug')
 # 		return get_object_or_404(Test, slug=slug)
 
-# !!!Change to CBV
-def index_view(request):
-	# user = []
-	procs = Operation_proc.objects.exclude(state=4)
-	todos = []
-	for proc in procs:
-		todo = {}
-		todo['operation'] = proc.operation.label
-		todo['url'] = f'{proc.operation.name}_update_url'
-		todo['slug'] = proc.entry
-		todos.append(todo)
-
-	context = {"todos": todos}
-	return render(request, 'index.html', context)
-
-
 class Index_view(ListView):
 	model = Operation_proc
 	template_name = 'index.html'
@@ -56,9 +40,8 @@ class Index_view(ListView):
 	# 	return Operation_proc.objects.exclude(state=4)
 
 
-
 class History_of_trauma_ListView(ListView):
-	model = "History_of_trauma"
+	model = History_of_trauma
 	context_object_name = "history_of_traumas"
 	template_name = "history_of_trauma_list.html"
 
@@ -98,7 +81,7 @@ class History_of_trauma_DeleteView(DeleteObjectMixin, View):
 
 
 class Out_of_hospital_self_report_survey_ListView(ListView):
-	model = "Out_of_hospital_self_report_survey"
+	model = Out_of_hospital_self_report_survey
 	context_object_name = "out_of_hospital_self_report_surveys"
 	template_name = "out_of_hospital_self_report_survey_list.html"
 
@@ -138,7 +121,7 @@ class Out_of_hospital_self_report_survey_DeleteView(DeleteObjectMixin, View):
 
 
 class Personal_comprehensive_psychological_quality_survey_ListView(ListView):
-	model = "Personal_comprehensive_psychological_quality_survey"
+	model = Personal_comprehensive_psychological_quality_survey
 	context_object_name = "personal_comprehensive_psychological_quality_surveys"
 	template_name = "personal_comprehensive_psychological_quality_survey_list.html"
 
@@ -178,7 +161,7 @@ class Personal_comprehensive_psychological_quality_survey_DeleteView(DeleteObjec
 
 
 class Personal_health_assessment_ListView(ListView):
-	model = "Personal_health_assessment"
+	model = Personal_health_assessment
 	context_object_name = "personal_health_assessments"
 	template_name = "personal_health_assessment_list.html"
 
@@ -218,7 +201,7 @@ class Personal_health_assessment_DeleteView(DeleteObjectMixin, View):
 
 
 class Allergies_history_ListView(ListView):
-	model = "Allergies_history"
+	model = Allergies_history
 	context_object_name = "allergies_historys"
 	template_name = "allergies_history_list.html"
 
@@ -258,7 +241,7 @@ class Allergies_history_DeleteView(DeleteObjectMixin, View):
 
 
 class Personal_health_behavior_survey_ListView(ListView):
-	model = "Personal_health_behavior_survey"
+	model = Personal_health_behavior_survey
 	context_object_name = "personal_health_behavior_surveys"
 	template_name = "personal_health_behavior_survey_list.html"
 
@@ -298,7 +281,7 @@ class Personal_health_behavior_survey_DeleteView(DeleteObjectMixin, View):
 
 
 class History_of_blood_transfusion_ListView(ListView):
-	model = "History_of_blood_transfusion"
+	model = History_of_blood_transfusion
 	context_object_name = "history_of_blood_transfusions"
 	template_name = "history_of_blood_transfusion_list.html"
 
@@ -338,7 +321,7 @@ class History_of_blood_transfusion_DeleteView(DeleteObjectMixin, View):
 
 
 class Social_environment_assessment_ListView(ListView):
-	model = "Social_environment_assessment"
+	model = Social_environment_assessment
 	context_object_name = "social_environment_assessments"
 	template_name = "social_environment_assessment_list.html"
 
@@ -378,7 +361,7 @@ class Social_environment_assessment_DeleteView(DeleteObjectMixin, View):
 
 
 class Medical_history_ListView(ListView):
-	model = "Medical_history"
+	model = Medical_history
 	context_object_name = "medical_historys"
 	template_name = "medical_history_list.html"
 
@@ -418,7 +401,7 @@ class Medical_history_DeleteView(DeleteObjectMixin, View):
 
 
 class Major_life_events_ListView(ListView):
-	model = "Major_life_events"
+	model = Major_life_events
 	context_object_name = "major_life_eventss"
 	template_name = "major_life_events_list.html"
 
@@ -458,7 +441,7 @@ class Major_life_events_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_vision_ListView(ListView):
-	model = "Physical_examination_vision"
+	model = Physical_examination_vision
 	context_object_name = "physical_examination_visions"
 	template_name = "physical_examination_vision_list.html"
 
@@ -498,7 +481,7 @@ class Physical_examination_vision_DeleteView(DeleteObjectMixin, View):
 
 
 class Family_survey_ListView(ListView):
-	model = "Family_survey"
+	model = Family_survey
 	context_object_name = "family_surveys"
 	template_name = "family_survey_list.html"
 
@@ -538,7 +521,7 @@ class Family_survey_DeleteView(DeleteObjectMixin, View):
 
 
 class History_of_surgery_ListView(ListView):
-	model = "History_of_surgery"
+	model = History_of_surgery
 	context_object_name = "history_of_surgerys"
 	template_name = "history_of_surgery_list.html"
 
@@ -578,7 +561,7 @@ class History_of_surgery_DeleteView(DeleteObjectMixin, View):
 
 
 class Blood_pressure_monitoring_ListView(ListView):
-	model = "Blood_pressure_monitoring"
+	model = Blood_pressure_monitoring
 	context_object_name = "blood_pressure_monitorings"
 	template_name = "blood_pressure_monitoring_list.html"
 
@@ -618,7 +601,7 @@ class Blood_pressure_monitoring_DeleteView(DeleteObjectMixin, View):
 
 
 class User_registry_ListView(ListView):
-	model = "User_registry"
+	model = User_registry
 	context_object_name = "user_registrys"
 	template_name = "user_registry_list.html"
 
@@ -658,7 +641,7 @@ class User_registry_DeleteView(DeleteObjectMixin, View):
 
 
 class Doctor_registry_ListView(ListView):
-	model = "Doctor_registry"
+	model = Doctor_registry
 	context_object_name = "doctor_registrys"
 	template_name = "doctor_registry_list.html"
 
@@ -698,7 +681,7 @@ class Doctor_registry_DeleteView(DeleteObjectMixin, View):
 
 
 class User_login_ListView(ListView):
-	model = "User_login"
+	model = User_login
 	context_object_name = "user_logins"
 	template_name = "user_login_list.html"
 
@@ -738,7 +721,7 @@ class User_login_DeleteView(DeleteObjectMixin, View):
 
 
 class Doctor_login_ListView(ListView):
-	model = "Doctor_login"
+	model = Doctor_login
 	context_object_name = "doctor_logins"
 	template_name = "doctor_login_list.html"
 
@@ -778,7 +761,7 @@ class Doctor_login_DeleteView(DeleteObjectMixin, View):
 
 
 class Vital_signs_check_ListView(ListView):
-	model = "Vital_signs_check"
+	model = Vital_signs_check
 	context_object_name = "vital_signs_checks"
 	template_name = "vital_signs_check_list.html"
 
@@ -818,7 +801,7 @@ class Vital_signs_check_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_hearing_ListView(ListView):
-	model = "Physical_examination_hearing"
+	model = Physical_examination_hearing
 	context_object_name = "physical_examination_hearings"
 	template_name = "physical_examination_hearing_list.html"
 
@@ -858,7 +841,7 @@ class Physical_examination_hearing_DeleteView(DeleteObjectMixin, View):
 
 
 class Basic_personal_information_ListView(ListView):
-	model = "Basic_personal_information"
+	model = Basic_personal_information
 	context_object_name = "basic_personal_informations"
 	template_name = "basic_personal_information_list.html"
 
@@ -898,7 +881,7 @@ class Basic_personal_information_DeleteView(DeleteObjectMixin, View):
 
 
 class History_of_infectious_diseases_ListView(ListView):
-	model = "History_of_infectious_diseases"
+	model = History_of_infectious_diseases
 	context_object_name = "history_of_infectious_diseasess"
 	template_name = "history_of_infectious_diseases_list.html"
 
@@ -938,7 +921,7 @@ class History_of_infectious_diseases_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_ListView(ListView):
-	model = "Physical_examination"
+	model = Physical_examination
 	context_object_name = "physical_examinations"
 	template_name = "physical_examination_list.html"
 
@@ -978,7 +961,7 @@ class Physical_examination_DeleteView(DeleteObjectMixin, View):
 
 
 class Personal_adaptability_assessment_ListView(ListView):
-	model = "Personal_adaptability_assessment"
+	model = Personal_adaptability_assessment
 	context_object_name = "personal_adaptability_assessments"
 	template_name = "personal_adaptability_assessment_list.html"
 
@@ -1018,7 +1001,7 @@ class Personal_adaptability_assessment_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_abdomen_ListView(ListView):
-	model = "Physical_examination_abdomen"
+	model = Physical_examination_abdomen
 	context_object_name = "physical_examination_abdomens"
 	template_name = "physical_examination_abdomen_list.html"
 
@@ -1058,7 +1041,7 @@ class Physical_examination_abdomen_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_athletic_ability_ListView(ListView):
-	model = "Physical_examination_athletic_ability"
+	model = Physical_examination_athletic_ability
 	context_object_name = "physical_examination_athletic_abilitys"
 	template_name = "physical_examination_athletic_ability_list.html"
 
@@ -1098,7 +1081,7 @@ class Physical_examination_athletic_ability_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_oral_cavity_ListView(ListView):
-	model = "Physical_examination_oral_cavity"
+	model = Physical_examination_oral_cavity
 	context_object_name = "physical_examination_oral_cavitys"
 	template_name = "physical_examination_oral_cavity_list.html"
 
@@ -1138,7 +1121,7 @@ class Physical_examination_oral_cavity_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_lungs_ListView(ListView):
-	model = "Physical_examination_lungs"
+	model = Physical_examination_lungs
 	context_object_name = "physical_examination_lungss"
 	template_name = "physical_examination_lungs_list.html"
 
@@ -1178,7 +1161,7 @@ class Physical_examination_lungs_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_limbs_ListView(ListView):
-	model = "Physical_examination_limbs"
+	model = Physical_examination_limbs
 	context_object_name = "physical_examination_limbss"
 	template_name = "physical_examination_limbs_list.html"
 
@@ -1218,7 +1201,7 @@ class Physical_examination_limbs_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_skin_ListView(ListView):
-	model = "Physical_examination_skin"
+	model = Physical_examination_skin
 	context_object_name = "physical_examination_skins"
 	template_name = "physical_examination_skin_list.html"
 
@@ -1258,7 +1241,7 @@ class Physical_examination_skin_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_sclera_ListView(ListView):
-	model = "Physical_examination_sclera"
+	model = Physical_examination_sclera
 	context_object_name = "physical_examination_scleras"
 	template_name = "physical_examination_sclera_list.html"
 
@@ -1298,7 +1281,7 @@ class Physical_examination_sclera_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_lymph_nodes_ListView(ListView):
-	model = "Physical_examination_lymph_nodes"
+	model = Physical_examination_lymph_nodes
 	context_object_name = "physical_examination_lymph_nodess"
 	template_name = "physical_examination_lymph_nodes_list.html"
 
@@ -1338,7 +1321,7 @@ class Physical_examination_lymph_nodes_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_spine_ListView(ListView):
-	model = "Physical_examination_spine"
+	model = Physical_examination_spine
 	context_object_name = "physical_examination_spines"
 	template_name = "physical_examination_spine_list.html"
 
@@ -1378,7 +1361,7 @@ class Physical_examination_spine_DeleteView(DeleteObjectMixin, View):
 
 
 class Physical_examination_diabetes_ListView(ListView):
-	model = "Physical_examination_diabetes"
+	model = Physical_examination_diabetes
 	context_object_name = "physical_examination_diabetess"
 	template_name = "physical_examination_diabetes_list.html"
 

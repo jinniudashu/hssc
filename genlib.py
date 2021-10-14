@@ -170,7 +170,7 @@ def write_models(obj, app):
     f.write(f'\n\n\nclass {model}(models.Model):')
     
     # 写入customer field
-    f.write(f'\n\tcustomer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_cid", verbose_name="作业人员")')
+    f.write(f'\n\tcustomer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_cid", verbose_name="客户")')
 
     # 写入每个field
     for field in fields:
@@ -312,7 +312,7 @@ def write_views(obj, app):
 
     # Create class ModelListView(ListView):
     f.write(f'\n\n\nclass {model}_ListView(ListView):')
-    f.write(f'\n\tmodel = "{model}"')
+    f.write(f'\n\tmodel = {model}')
     f.write(f'\n\tcontext_object_name = "{model.lower()}s"')
     f.write(f'\n\ttemplate_name = "{model.lower()}_list.html"')
 

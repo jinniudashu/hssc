@@ -131,8 +131,8 @@ def event_post_save_handler(sender, instance, created, **kwargs):
 @receiver(m2m_changed, sender=Event.next.through)
 def event_m2m_changed_handler(sender, instance, action, **kwargs):
 
-    # 设定指令为 create_operation_proc, 在指令表中id=1
-    instruction_create_operation_proc = Instruction.objects.get(id=1)
+    # 设定指令为 create_operation_proc
+    instruction_create_operation_proc = Instruction.objects.get(name='create_operation_proc')
 
     # 获取后续作业
     next_operations = []

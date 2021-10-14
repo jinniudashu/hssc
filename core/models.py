@@ -137,7 +137,8 @@ class Event(models.Model):
 
 # 指令表
 class Instruction(models.Model):
-	name = models.CharField(max_length=100, verbose_name="指令名称")
+	name = models.CharField(max_length=100, db_index=True, unique=True, verbose_name="指令名称")
+	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	code = models.CharField(max_length=10, verbose_name="指令代码")
 	func = models.CharField(max_length=100, verbose_name="操作函数")
 	description = models.CharField(max_length=255, blank=True, null=True, verbose_name="指令描述")

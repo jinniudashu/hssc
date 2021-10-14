@@ -12,7 +12,6 @@ from .models import *
 # 	role = forms.ModelChoiceField(queryset=Group.objects.all())
 
 
-
 class History_of_trauma_ModelForm(ModelForm):
 	class Meta:
 		model = History_of_trauma

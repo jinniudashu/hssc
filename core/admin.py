@@ -66,20 +66,20 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 
 
-# class Event_instructionsAdmin(admin.ModelAdmin):
-#     list_display = ['event', 'instruction', 'order', 'params', 'id']
-#     list_display_links = ['event', 'instruction', 'order', 'params']
-#     search_fields = ['event']
-#     ordering = ['id']
-# admin.site.register(Event_instructions, Event_instructionsAdmin)
+class Event_instructionsAdmin(admin.ModelAdmin):
+    list_display = ['event', 'instruction', 'order', 'params', 'id']
+    list_display_links = ['event', 'instruction', 'order', 'params']
+    search_fields = ['event']
+    ordering = ['id']
+admin.site.register(Event_instructions, Event_instructionsAdmin)
 
 
-# class InstructionAdmin(admin.ModelAdmin):
-#     list_display = ['name', 'code', 'func', 'description', 'id']
-#     list_display_links = ['name', 'code', 'func']
-#     search_fields = ['name']
-#     ordering = ['id']
-# admin.site.register(Instruction, InstructionAdmin)
+class InstructionAdmin(admin.ModelAdmin):
+    list_display = ['label', 'name', 'code', 'func', 'description', 'id']
+    list_display_links = ['label', 'name', 'code', 'func']
+    search_fields = ['name']
+    ordering = ['id']
+admin.site.register(Instruction, InstructionAdmin)
 
 
 # admin.site.register(Service_proc)
