@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>血压监测</h4>
+
+<a href="{% url "blood_pressure_monitoring_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for blood_pressure_monitoring in blood_pressure_monitorings %}
+		<a class="list-group-item" href="{% url "blood_pressure_monitoring_detail_url" blood_pressure_monitoring.slug %}">
+			{{ blood_pressure_monitoring }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

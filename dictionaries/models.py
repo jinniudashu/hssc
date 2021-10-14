@@ -133,6 +133,18 @@ class Type_of_residence(models.Model):
 		verbose_name_plural = "居住类型"
 
 
+class Lips(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "口唇"
+		verbose_name_plural = "口唇"
+
+
 class Blood_type(models.Model):
 	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
 	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
@@ -181,6 +193,18 @@ class Employee_list(models.Model):
 		verbose_name_plural = "职员表"
 
 
+class Dentition(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "齿列"
+		verbose_name_plural = "齿列"
+
+
 class Drug_list(models.Model):
 	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
 	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
@@ -191,6 +215,18 @@ class Drug_list(models.Model):
 	class Meta:
 		verbose_name = "药品清单"
 		verbose_name_plural = "药品清单"
+
+
+class Pharynx(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "咽部"
+		verbose_name_plural = "咽部"
 
 
 class Family_relationship(models.Model):
@@ -217,6 +253,18 @@ class Choose(models.Model):
 		verbose_name_plural = "选择"
 
 
+class Hearing(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "听力"
+		verbose_name_plural = "听力"
+
+
 class Life_event(models.Model):
 	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
 	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
@@ -241,6 +289,18 @@ class Frequency(models.Model):
 		verbose_name_plural = "频次"
 
 
+class Athletic_ability(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "运动能力"
+		verbose_name_plural = "运动能力"
+
+
 class Degree_expression(models.Model):
 	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
 	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
@@ -263,3 +323,15 @@ class Comparative_expression(models.Model):
 	class Meta:
 		verbose_name = "比较表达"
 		verbose_name_plural = "比较表达"
+
+
+class Dorsal_artery_pulsation(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "足背动脉搏动"
+		verbose_name_plural = "足背动脉搏动"

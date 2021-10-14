@@ -161,7 +161,8 @@ def write_models(obj, app):
     model = obj['name'].replace(' ', '').capitalize()
     model_label = obj['label'].replace(' ', '')    
     fields = obj['fields']
-    title = fields[0]['name'].replace(' ', '').lower()
+    print('write models:', model)
+    # title = fields[0]['name'].replace(' ', '').lower()
 
     path = f'.\\{app}\\models.py'
 
@@ -173,37 +174,41 @@ def write_models(obj, app):
 
     # 写入每个field
     for field in fields:
-        # 构造field参数
-        name = field['name'].replace(' ', '').lower()
-        label = field['label'].replace(' ', '')
-        parameters = field['field_parameters']
-        # group = field['group']
-        # input_style = field['input_style']
-        if 'CharField' in parameters:
-            # if field['auxiliary_input'] is not None:
-            if field['auxiliary_input']:
-                # 获得辅助输入代码表名
-                aux_name = field['auxiliary_input']['name'].strip().capitalize()
-                parameters = parameters + f'(max_length=60, blank=True, null=True, choices={aux_name}Enum, verbose_name="{label}")'
-            elif field['icpc_list']:
-                icpc_list = field['icpc_list']['name'].strip().capitalize()
-                parameters = f'ForeignKey({icpc_list}, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="{label}")'                
-                # 外键关系，向admin.py写入autocomplete_fields
-                write_admin(model, name, app)
+        if field['name']:
+            # 构造field参数
+            name = field['name'].replace(' ', '').lower()
+            if field['label']:
+                label = field['label'].replace(' ', '')
             else:
-                parameters = parameters + f'(max_length=60, blank=True, null=True, verbose_name="{label}")'
-        elif 'TextField' in parameters:
-            parameters = parameters + f'(max_length=1024, blank=True, null=True, verbose_name="{label}")'
-        elif 'SmallIntegerField' in parameters:
-            parameters = parameters + f'(blank=True, null=True, verbose_name="{label}")'
-        elif 'DecimalField' in parameters:
-            parameters = parameters + f'(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="{label}")'
-        elif 'FloatField' in parameters:
-            parameters = parameters + f'(blank=True, null=True, verbose_name="{label}")'
-        elif 'Date' in parameters:
-            parameters = parameters + f'(blank=True, null=True, default=timezone.now, verbose_name="{label}")'
-        # 写入field信息
-        f.write(f'\n\t{name} = models.{parameters}')
+                label = '无'
+            parameters = field['field_parameters']
+            # group = field['group']
+            # input_style = field['input_style']
+            if 'CharField' in parameters:
+                # if field['auxiliary_input'] is not None:
+                if field['auxiliary_input']:
+                    # 获得辅助输入代码表名
+                    aux_name = field['auxiliary_input']['name'].strip().capitalize()
+                    parameters = parameters + f'(max_length=60, blank=True, null=True, choices={aux_name}Enum, verbose_name="{label}")'
+                elif field['icpc_list']:
+                    icpc_list = field['icpc_list']['name'].strip().capitalize()
+                    parameters = f'ForeignKey({icpc_list}, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="{label}")'                
+                    # 外键关系，向admin.py写入autocomplete_fields
+                    write_admin(model, name, app)
+                else:
+                    parameters = parameters + f'(max_length=60, blank=True, null=True, verbose_name="{label}")'
+            elif 'TextField' in parameters:
+                parameters = parameters + f'(max_length=1024, blank=True, null=True, verbose_name="{label}")'
+            elif 'SmallIntegerField' in parameters:
+                parameters = parameters + f'(blank=True, null=True, verbose_name="{label}")'
+            elif 'DecimalField' in parameters:
+                parameters = parameters + f'(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="{label}")'
+            elif 'FloatField' in parameters:
+                parameters = parameters + f'(blank=True, null=True, verbose_name="{label}")'
+            elif 'Date' in parameters:
+                parameters = parameters + f'(blank=True, null=True, default=timezone.now, verbose_name="{label}")'
+            # 写入field信息
+            f.write(f'\n\t{name} = models.{parameters}')
 
     # 写入user field
     f.write(f'\n\tuser = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_uid", verbose_name="作业人员")')
@@ -250,17 +255,18 @@ def write_forms(obj, app):
     field_names = []
     widgets = ''
     for field in fields:
-        name = field['name'].replace(' ', '').lower()
-        field_names.append(name)
+        if field['name']:
+            name = field['name'].replace(' ', '').lower()
+            field_names.append(name)
 
-        # 如果是char-field,且icpc_list为空，且auxiliary_input非空,根据input_style 构造 widgets={}
-        if field['__component'] == 'fields.char-field' and field['icpc_list'] is None and field['auxiliary_input'] is not None:
-            if field['input_style'] == 'Dropdown_list':
-                widgets = f'{widgets}"{name}": Select(),'
-            elif field['input_style'] == 'Single_choice':
-                widgets = f'{widgets}"{name}": RadioSelect(),'
-            elif field['input_style'] == 'Multi_choice':
-                widgets = f'{widgets}"{name}": CheckboxSelectMultiple(),'
+            # 如果是char-field,且icpc_list为空，且auxiliary_input非空,根据input_style 构造 widgets={}
+            if field['__component'] == 'fields.char-field' and field['icpc_list'] is None and field['auxiliary_input'] is not None:
+                if field['input_style'] == 'Dropdown_list':
+                    widgets = f'{widgets}"{name}": Select(),'
+                elif field['input_style'] == 'Single_choice':
+                    widgets = f'{widgets}"{name}": RadioSelect(),'
+                elif field['input_style'] == 'Multi_choice':
+                    widgets = f'{widgets}"{name}": CheckboxSelectMultiple(),'
 
 
     path = f'.\\{app}\\forms.py'
@@ -306,10 +312,19 @@ def write_views(obj, app):
 
     # Create class ModelListView(ListView):
     f.write(f'\n\n\nclass {model}_ListView(ListView):')
+    f.write(f'\n\tmodel = "{model}"')
     f.write(f'\n\tcontext_object_name = "{model.lower()}s"')
     f.write(f'\n\ttemplate_name = "{model.lower()}_list.html"')
-    f.write(f'\n\n\tdef get_queryset(self):')
-    f.write(f'\n\t\treturn {model}.objects.all()')
+
+    # ******************
+    # 分页处理
+	# paginate_by = 10
+    # ******************
+
+	# queryset = {model}.objects.all()[:3]
+
+    # f.write(f'\n\n\tdef get_queryset(self):')
+    # f.write(f'\n\t\treturn {model}.objects.all()')
     # Create list url
     write_urls(model, 'list', app)
 
@@ -337,6 +352,7 @@ def write_views(obj, app):
     f.write(f'\n\n\nclass {model}_UpdateView(SuccessMessageMixin, UpdateView):')
     f.write(f'\n\ttemplate_name = "{model.lower()}_edit.html"')
     f.write(f'\n\tform_class = {model}_ModelForm')
+    f.write(f'\n\tsuccess_url = "/"')
     f.write(f'\n\tsuccess_message = "保存成功！"')
     f.write(f'\n\n\tdef get_queryset(self):')
     f.write(f'\n\t\treturn {model}.objects.all()')
@@ -381,6 +397,27 @@ def write_templates(obj, app):
     f.write(f'\n</section>')
     f.write(f'\n\n{{% endblock %}}')
     f.close
+    # ******************************************************************************
+    # 分页控制处理
+    # <div class="pagination">
+    #     <span class="step-links">
+    #         {% if page_obj.has_previous %}
+    #             <a href="?page=1">&laquo; first</a>
+    #             <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+    #         {% endif %}
+
+    #         <span class="current">
+    #             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    #         </span>
+
+    #         {% if page_obj.has_next %}
+    #             <a href="?page={{ page_obj.next_page_number }}">next</a>
+    #             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+    #         {% endif %}
+    #     </span>
+    # </div>
+    # ******************************************************************************
+
 
     # Create edit.html
     path = f'.\\{app}\\templates\\{model}_edit.html'
@@ -416,12 +453,24 @@ def write_index_html(models, app):
     f = open(path, 'w', encoding='utf-8')
     f.write(f'\n\n{{% extends "base.html" %}}')
     f.write(f'\n\n{{% block content %}}')
+
+    f.write(f'\n\n<br>')
+    f.write(f'\n\n<h4>当前任务</h4>')
+    f.write(f'\n\t<section class="list-group">')
+    f.write(f'\n\t{{% for todo in todos %}}')
+    f.write(f'\n\t\t<a class="list-group-item" href="{{% url todo.url todo.slug %}}">')
+    f.write(f'\n\t\t{{{{ todo.operation }}}}')
+    f.write(f'\n\t\t</a>')
+    f.write(f'\n\t{{% endfor %}}')
+    f.write(f'\n\t</section>')
+    f.write(f'\n\n<br>')
+    f.write(f'\n\n<hr>')
+    f.write(f'\n\n<br>')
+
     f.write(f'\n\n<h4>表单目录</h4>')
     f.write(f'\n\n<section class="list-group">')
 
     for model in models:
-        # model[0]: form name
-        # model[1]: form label
         f.write(f'\n\t<a class="list-group-item" href="{{% url "{model[0]}_list_url" %}}">')
         f.write(f'\n\t\t{model[1]}')
         f.write(f'\n\t</a>')
@@ -429,18 +478,3 @@ def write_index_html(models, app):
     f.write(f'\n\n</section>')
     f.write(f'\n\n{{% endblock %}}')
     f.close
-
-
-# Create apps.py
-def write_apps():
-    pass
-
-
-# Create init.py
-def write_init():
-    pass
-
-
-# Create signals.py
-def write_signals():
-    pass

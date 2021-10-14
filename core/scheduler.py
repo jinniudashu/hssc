@@ -31,13 +31,12 @@ from core.models import Form, Operation, Event, Event_instructions, Instruction,
 # 导入任务
 from core.tasks import create_operation_proc
 
-# 从app forms里获取所有表单model的名字
+# 从app forms里获取所有表单model的名字, 用以判断post_save的sender
 from django.apps import apps
 Forms_models = apps.get_app_config('forms').get_models()
 form_list = []
 for Model in Forms_models:
     form_list.append(Model.__name__)
-print('<来自eventor.py>当前Forms:', form_list)
 
 
 # 维护作业进程状态：
@@ -182,7 +181,7 @@ def event_post_delete_handler(sender, instance, **kwargs):
 @receiver(post_save, sender=Operation_proc)
 def new_operation_proc(instance, created, **kwargs):
     if created: # ctr
-        print ('###!!!!!!### New operation_proc:', instance)
+        print ('新作业进程被创建，进行资源请求...：new_operation_proc:', instance)
     else:
         if instance.state == 4:  # rtc            
             print('rtc状态, 查询表单完成事件，进行调度')
@@ -197,37 +196,33 @@ def new_operation_proc(instance, created, **kwargs):
             operation_scheduler(event[0], params)
 
 
-# rtc: 收到表单保存信号，更新作业进程状态: rtc
+# ******************************************
+# 业务事件处理：
+# 1. 保存业务表单
+# 2. 系统内置业务事件：注册，用户登录，用户退出
+# ******************************************
+# 收到表单保存信号，更新作业进程状态: rtc
 @receiver(post_save, sender=None, weak=True, dispatch_uid=None)
 def form_post_save_handler(sender, instance, created, **kwargs):
-    print("表单保存：form_post_save_handler")
-
     # 如果sender在Formlist里且非Created，更新作业进程状态
     if not created:
-        print('sender:', instance.__class__.__name__, instance.__class__.__name__ in form_list)
         if instance.__class__.__name__ in form_list:
             slug = instance.slug
             proc = Operation_proc.objects.filter(entry=slug)
             pid = proc[0].id
             ocode = 'rtc'
-            update_operation_proc(pid, ocode)
-            print('重定向', 'pid:', pid, 'ocode:', ocode)
-            # return redirect('http://127.0.0.1:8000/')
-            return redirect(reverse('forms:index'))
+            update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
+            print('form_post_save_handler => update_operation_proc', 'pid:', pid, 'ocode:', ocode)
 
-# rtr: 操作员get表单记录/操作员进入作业入口
+# 操作员get表单记录/操作员进入作业入口：rtr
 
 
-
-# ******************************************
-# 内置业务事件处理：注册，用户登录，用户退出
-# ******************************************
 # 系统内置事件(event_id, event_name)
-SYSTEM_EVENTS = {
-    'user_registered': 49,
-    'customer_logged_in': 51,
-    'staff_logged_in': 52,
-}
+SYSTEM_EVENTS = [
+    'user_registry_operation_completed',    # 用户注册
+    'user_login_operation_completed',       # 用户登录
+    'doctor_login_operation_completed',     # 医生注册
+]
 
 
 # 收到注册成功信号，生成用户注册事件
@@ -238,10 +233,10 @@ def user_registered_handler(sender, user, request, **kwargs):
     params={
         'uid': user.id,
         'cid': user.id,
-        'ppid': SYSTEM_EVENTS['user_registered']
+        'ppid': 0,
     }
     # 系统内置用户注册事件编码
-    event = Event.objects.get(id=SYSTEM_EVENTS['user_registered'])
+    event = Event.objects.get(name=SYSTEM_EVENTS[0])
 
     # 把Event和参数发给调度器
     operation_scheduler(event, params)
@@ -257,14 +252,14 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     }
     # 系统内置登录事件编码
     if user.is_staff:
-        event_id = SYSTEM_EVENTS['staff_logged_in']   # 职员登录
-        params['ppid'] = SYSTEM_EVENTS['staff_logged_in']
-        print('职员登录', user, event_id)
+        event_name = SYSTEM_EVENTS[2]   # 职员登录
+        params['ppid'] = 0
+        print('职员登录', user, event_name)
     else:
-        event_id = SYSTEM_EVENTS['customer_logged_in']   # 客户登录
-        params['ppid'] = SYSTEM_EVENTS['customer_logged_in']
+        event_name = SYSTEM_EVENTS[1]   # 客户登录
+        params['ppid'] = 0
 
-    event = Event.objects.get(id=event_id)
+    event = Event.objects.get(name=event_name)
     print('职员登录', user, event)
 
     # 把Event和参数发给调度器

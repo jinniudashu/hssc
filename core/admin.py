@@ -13,8 +13,8 @@ class EventInline(admin.TabularInline):
 
 
 class FormAdmin(admin.ModelAdmin):
-    list_display = ['name', 'label', 'id']
-    list_display_links = ['name', 'label', 'id']
+    list_display = ['label', 'name', 'id']
+    list_display_links = ['label', 'name', 'id']
     search_fields = ['name', 'label']
     ordering = ['id']
 admin.site.register(Form, FormAdmin)
@@ -50,20 +50,11 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
-class InstructionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'code', 'func', 'description', 'id']
-    list_display_links = ['name', 'code', 'func']
-    search_fields = ['name']
+class Operation_procAdmin(admin.ModelAdmin):
+    list_display = ['id', 'operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    list_display_links = ['operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
     ordering = ['id']
-admin.site.register(Instruction, InstructionAdmin)
-
-
-class Event_instructionsAdmin(admin.ModelAdmin):
-    list_display = ['event', 'instruction', 'order', 'params', 'id']
-    list_display_links = ['event', 'instruction', 'order', 'params']
-    search_fields = ['event']
-    ordering = ['id']
-admin.site.register(Event_instructions, Event_instructionsAdmin)
+admin.site.register(Operation_proc, Operation_procAdmin)
 
 
 class ServiceAdmin(admin.ModelAdmin):
@@ -75,11 +66,20 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 
 
-class Operation_procAdmin(admin.ModelAdmin):
-    list_display = ['id', 'operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
-    list_display_links = ['operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
-    ordering = ['id']
-admin.site.register(Operation_proc, Operation_procAdmin)
+# class Event_instructionsAdmin(admin.ModelAdmin):
+#     list_display = ['event', 'instruction', 'order', 'params', 'id']
+#     list_display_links = ['event', 'instruction', 'order', 'params']
+#     search_fields = ['event']
+#     ordering = ['id']
+# admin.site.register(Event_instructions, Event_instructionsAdmin)
+
+
+# class InstructionAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'code', 'func', 'description', 'id']
+#     list_display_links = ['name', 'code', 'func']
+#     search_fields = ['name']
+#     ordering = ['id']
+# admin.site.register(Instruction, InstructionAdmin)
 
 
 # admin.site.register(Service_proc)

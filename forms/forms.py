@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.forms import ModelForm, Form,  widgets, fields, RadioSelect, Select, CheckboxSelectMultiple, CheckboxInput, SelectMultiple, NullBooleanSelect
 from django.core.exceptions import ValidationError
 
@@ -5,6 +6,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, HTML, Submit
 
 from .models import *
+
+# class UserForm(ModelForm):
+# 	pasword = forms.CharField(widget=forms.PasswordInput)
+# 	role = forms.ModelChoiceField(queryset=Group.objects.all())
+
 
 
 class History_of_trauma_ModelForm(ModelForm):
@@ -247,6 +253,30 @@ class Major_life_events_ModelForm(ModelForm):
 		return new_slug
 
 
+class Physical_examination_vision_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_vision
+		fields = ['left_eye_vision', 'right_eye_vision']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
 class Family_survey_ModelForm(ModelForm):
 	class Meta:
 		model = Family_survey
@@ -275,6 +305,30 @@ class History_of_surgery_ModelForm(ModelForm):
 	class Meta:
 		model = History_of_surgery
 		fields = ['name_of_operation', 'date']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Blood_pressure_monitoring_ModelForm(ModelForm):
+	class Meta:
+		model = Blood_pressure_monitoring
+		fields = ['systolic_blood_pressure', 'diastolic_blood_pressure']
 		widgets = {}
 
 	@property
@@ -391,6 +445,54 @@ class Doctor_login_ModelForm(ModelForm):
 		return new_slug
 
 
+class Vital_signs_check_ModelForm(ModelForm):
+	class Meta:
+		model = Vital_signs_check
+		fields = ['body_temperature', 'pulse', 'respiratory_rate']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_hearing_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_hearing
+		fields = ['left_ear_hearing', 'rightearhearing']
+		widgets = {"left_ear_hearing": Select(),"rightearhearing": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
 class Basic_personal_information_ModelForm(ModelForm):
 	class Meta:
 		model = Basic_personal_information
@@ -439,11 +541,275 @@ class History_of_infectious_diseases_ModelForm(ModelForm):
 		return new_slug
 
 
+class Physical_examination_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination
+		fields = ['hight', 'weight', 'body_mass_index']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
 class Personal_adaptability_assessment_ModelForm(ModelForm):
 	class Meta:
 		model = Personal_adaptability_assessment
 		fields = ['do_you_feel_pressured_at_work', 'do_you_often_work_overtime', 'working_hours_per_day', 'are_you_satisfied_with_the_job']
 		widgets = {"do_you_feel_pressured_at_work": Select(),"do_you_often_work_overtime": Select(),"are_you_satisfied_with_the_job": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_abdomen_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_abdomen
+		fields = ['tenderness']
+		widgets = {"tenderness": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_athletic_ability_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_athletic_ability
+		fields = ['athletic_ability']
+		widgets = {"athletic_ability": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_oral_cavity_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_oral_cavity
+		fields = ['lips', 'dentition', 'pharynx']
+		widgets = {"lips": RadioSelect(),"dentition": RadioSelect(),"pharynx": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_lungs_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_lungs
+		fields = ['barrel_chest']
+		widgets = {"barrel_chest": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_limbs_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_limbs
+		fields = []
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_skin_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_skin
+		fields = ['skin']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_sclera_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_sclera
+		fields = ['sclera']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_lymph_nodes_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_lymph_nodes
+		fields = ['lymph_nodes']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_spine_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_spine
+		fields = []
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Physical_examination_diabetes_ModelForm(ModelForm):
+	class Meta:
+		model = Physical_examination_diabetes
+		fields = ['fundus', 'lower_extremity_edema', 'zbdm']
+		widgets = {"fundus": Select(),"zbdm": Select(),}
 
 	@property
 	def helper(self):

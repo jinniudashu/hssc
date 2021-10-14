@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>查体巩膜</h4>
+
+<a href="{% url "physical_examination_sclera_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for physical_examination_sclera in physical_examination_scleras %}
+		<a class="list-group-item" href="{% url "physical_examination_sclera_detail_url" physical_examination_sclera.slug %}">
+			{{ physical_examination_sclera }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

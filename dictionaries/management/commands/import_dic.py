@@ -41,6 +41,9 @@ class Command(BaseCommand):
         if len(data['dictionary_data']) > 0:
             # 把name 转为 model class
             Dic_model= globals()[name.capitalize()]
+            # 先删除原有字典数据
+            Dic_model.objects.all().delete()
+            # 写入新的字典数据
             i = 0
             for dic in data['dictionary_data']:
                 i += 1

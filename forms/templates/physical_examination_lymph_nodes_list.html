@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>查体淋巴结</h4>
+
+<a href="{% url "physical_examination_lymph_nodes_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for physical_examination_lymph_nodes in physical_examination_lymph_nodess %}
+		<a class="list-group-item" href="{% url "physical_examination_lymph_nodes_detail_url" physical_examination_lymph_nodes.slug %}">
+			{{ physical_examination_lymph_nodes }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>体格检查</h4>
+
+<a href="{% url "physical_examination_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for physical_examination in physical_examinations %}
+		<a class="list-group-item" href="{% url "physical_examination_detail_url" physical_examination.slug %}">
+			{{ physical_examination }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

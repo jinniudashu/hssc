@@ -15,6 +15,7 @@ def gen_slug(s):
     return slug + f'-{int(time())}'
 
 
+
 class History_of_trauma(models.Model):
 	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="history_of_trauma_cid", verbose_name="作业人员")
 	choose = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="选择")
@@ -321,6 +322,36 @@ class Major_life_events(models.Model):
 		super().save(*args, **kwargs)
 
 
+class Physical_examination_vision(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_vision_cid", verbose_name="作业人员")
+	left_eye_vision = models.CharField(max_length=60, blank=True, null=True, verbose_name="左眼视力")
+	right_eye_vision = models.CharField(max_length=60, blank=True, null=True, verbose_name="右眼视力")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_vision_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体视力"
+		verbose_name_plural = "查体视力"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_vision_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_vision_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_vision_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
 class Family_survey(models.Model):
 	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="family_survey_cid", verbose_name="作业人员")
 	diseases = models.ForeignKey(Icpc5_evaluation_and_diagnoses, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="病名")
@@ -374,6 +405,36 @@ class History_of_surgery(models.Model):
 
 	def get_delete_url(self):
 		return reverse("history_of_surgery_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Blood_pressure_monitoring(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="blood_pressure_monitoring_cid", verbose_name="作业人员")
+	systolic_blood_pressure = models.SmallIntegerField(blank=True, null=True, verbose_name="收缩压")
+	diastolic_blood_pressure = models.SmallIntegerField(blank=True, null=True, verbose_name="舒张压")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="blood_pressure_monitoring_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "血压监测"
+		verbose_name_plural = "血压监测"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("blood_pressure_monitoring_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("blood_pressure_monitoring_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("blood_pressure_monitoring_delete_url", kwargs={"slug":self.slug})
 
 	def save(self, *args, **kwargs):
 		if not self.id:
@@ -521,6 +582,67 @@ class Doctor_login(models.Model):
 		super().save(*args, **kwargs)
 
 
+class Vital_signs_check(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="vital_signs_check_cid", verbose_name="作业人员")
+	body_temperature = models.SmallIntegerField(blank=True, null=True, verbose_name="体温")
+	pulse = models.SmallIntegerField(blank=True, null=True, verbose_name="脉搏")
+	respiratory_rate = models.SmallIntegerField(blank=True, null=True, verbose_name="呼吸频率")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="vital_signs_check_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "生命体征检查"
+		verbose_name_plural = "生命体征检查"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("vital_signs_check_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("vital_signs_check_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("vital_signs_check_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_hearing(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_hearing_cid", verbose_name="作业人员")
+	left_ear_hearing = models.CharField(max_length=60, blank=True, null=True, choices=HearingEnum, verbose_name="左耳听力")
+	rightearhearing = models.CharField(max_length=60, blank=True, null=True, choices=HearingEnum, verbose_name="右耳听力")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_hearing_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体听力"
+		verbose_name_plural = "查体听力"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_hearing_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_hearing_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_hearing_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
 class Basic_personal_information(models.Model):
 	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="basic_personal_information_cid", verbose_name="作业人员")
 	family_id = models.ForeignKey(Icpc1_register_logins, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="家庭编号")
@@ -598,6 +720,37 @@ class History_of_infectious_diseases(models.Model):
 		super().save(*args, **kwargs)
 
 
+class Physical_examination(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_cid", verbose_name="作业人员")
+	hight = models.SmallIntegerField(blank=True, null=True, verbose_name="身高")
+	weight = models.SmallIntegerField(blank=True, null=True, verbose_name="体重")
+	body_mass_index = models.SmallIntegerField(blank=True, null=True, verbose_name="体质指数")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "体格检查"
+		verbose_name_plural = "体格检查"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
 class Personal_adaptability_assessment(models.Model):
 	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="personal_adaptability_assessment_cid", verbose_name="作业人员")
 	do_you_feel_pressured_at_work = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="是否感觉到工作压力大")
@@ -623,6 +776,298 @@ class Personal_adaptability_assessment(models.Model):
 
 	def get_delete_url(self):
 		return reverse("personal_adaptability_assessment_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_abdomen(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_abdomen_cid", verbose_name="作业人员")
+	tenderness = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="压痛")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_abdomen_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体腹部"
+		verbose_name_plural = "查体腹部"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_abdomen_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_abdomen_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_abdomen_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_athletic_ability(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_athletic_ability_cid", verbose_name="作业人员")
+	athletic_ability = models.CharField(max_length=60, blank=True, null=True, choices=Athletic_abilityEnum, verbose_name="运动能力")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_athletic_ability_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体运动能力"
+		verbose_name_plural = "查体运动能力"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_athletic_ability_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_athletic_ability_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_athletic_ability_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_oral_cavity(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_oral_cavity_cid", verbose_name="作业人员")
+	lips = models.CharField(max_length=60, blank=True, null=True, choices=LipsEnum, verbose_name="口唇")
+	dentition = models.CharField(max_length=60, blank=True, null=True, choices=DentitionEnum, verbose_name="齿列")
+	pharynx = models.CharField(max_length=60, blank=True, null=True, choices=PharynxEnum, verbose_name="咽部")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_oral_cavity_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体口腔"
+		verbose_name_plural = "查体口腔"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_oral_cavity_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_oral_cavity_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_oral_cavity_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_lungs(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_lungs_cid", verbose_name="作业人员")
+	barrel_chest = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="桶状胸")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_lungs_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体肺部"
+		verbose_name_plural = "查体肺部"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_lungs_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_lungs_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_lungs_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_limbs(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_limbs_cid", verbose_name="作业人员")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_limbs_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体四肢"
+		verbose_name_plural = "查体四肢"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_limbs_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_limbs_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_limbs_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_skin(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_skin_cid", verbose_name="作业人员")
+	skin = models.ForeignKey(Icpc3_symptoms_and_problems, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="皮肤")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_skin_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体皮肤"
+		verbose_name_plural = "查体皮肤"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_skin_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_skin_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_skin_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_sclera(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_sclera_cid", verbose_name="作业人员")
+	sclera = models.ForeignKey(Icpc3_symptoms_and_problems, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="巩膜")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_sclera_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体巩膜"
+		verbose_name_plural = "查体巩膜"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_sclera_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_sclera_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_sclera_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_lymph_nodes(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_lymph_nodes_cid", verbose_name="作业人员")
+	lymph_nodes = models.ForeignKey(Icpc3_symptoms_and_problems, db_column="icpc_code", null=True, on_delete=models.SET_NULL, verbose_name="淋巴结")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_lymph_nodes_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体淋巴结"
+		verbose_name_plural = "查体淋巴结"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_lymph_nodes_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_lymph_nodes_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_lymph_nodes_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_spine(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_spine_cid", verbose_name="作业人员")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_spine_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体脊柱"
+		verbose_name_plural = "查体脊柱"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_spine_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_spine_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_spine_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+
+class Physical_examination_diabetes(models.Model):
+	customer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_diabetes_cid", verbose_name="作业人员")
+	fundus = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="眼底")
+	lower_extremity_edema = models.CharField(max_length=60, blank=True, null=True, choices=ChooseEnum, verbose_name="下肢水肿")
+	zbdm = models.CharField(max_length=60, blank=True, null=True, choices=Dorsal_artery_pulsationEnum, verbose_name="足背动脉搏动")
+	user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="physical_examination_diabetes_uid", verbose_name="作业人员")
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.customer)
+
+	class Meta:
+		verbose_name = "查体糖尿病"
+		verbose_name_plural = "查体糖尿病"
+		ordering = []
+
+	def get_absolute_url(self):
+		return reverse("physical_examination_diabetes_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("physical_examination_diabetes_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("physical_examination_diabetes_delete_url", kwargs={"slug":self.slug})
 
 	def save(self, *args, **kwargs):
 		if not self.id:
