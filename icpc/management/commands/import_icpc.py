@@ -27,7 +27,7 @@ class Command(BaseCommand):
     def run_import(self, num):
         print('正在查询总记录数……')
         url = f'https://hssc-rcms.herokuapp.com/{icpc[num][1]}'
-        res = requests.get(f'{url}/count')
+        res = requests.get(f'{url}/count?_publicationState=preview')
         print(f'{res.text}条记录正在导入：{url}')
 
         pages = math.ceil(int(res.text)/100)
@@ -40,8 +40,7 @@ class Command(BaseCommand):
 
         # 每100条记录GET一次
         while page <= pages:
-            res = requests.get(f'{url}?_start={(page-1)*100}')
-            # res = requests.get(f'https://hssc-rcms.herokuapp.com/icpcs?_publicationState=preview&_start={(page-1)*100}')
+            res = requests.get(f'{url}?_publicationState=preview&_start={(page-1)*100}')
             res_json = res.json()
 
             # 从元组中把model名称转为 model class
