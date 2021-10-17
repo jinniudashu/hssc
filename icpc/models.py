@@ -60,7 +60,7 @@ class Icpc3_symptoms_and_problems(models.Model):
 	pym = models.CharField(max_length=25, blank=True, null=True, verbose_name="拼音码")
 
 	def __str__(self):
-		return self.iname
+		return self.iname or ""
 
 	class Meta:
 		verbose_name = "症状和问题"
@@ -104,7 +104,7 @@ class Icpc5_evaluation_and_diagnoses(models.Model):
 	pym = models.CharField(max_length=25, blank=True, null=True, verbose_name="拼音码")
 
 	def __str__(self):
-		return self.iname
+		return self.iname or ""
 
 	class Meta:
 		verbose_name = "评估和诊断"

@@ -140,7 +140,7 @@ def write_icpc_model(obj, app):
 
     # 实例名称显示为value
     f.write('\n\n\t' + 'def __str__(self):')
-    f.write(f'\n\t\treturn self.iname')
+    f.write(f'\n\t\treturn self.iname  or ""')
 
     # model名称显示为中文
     f.write('\n\n\t' + 'class Meta:')
