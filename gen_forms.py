@@ -18,7 +18,14 @@ for obj in res_json:
     else:
         model_style = 0
 
-    models.append((model_name, model_label, model_style))
+    model_fields = []
+    fields = obj['fields']
+    for field in fields:
+            if field['name']:
+                name = field['name'].replace(' ', '').lower()
+                model_fields.append(name)
+
+    models.append((model_name, model_label, model_style, model_fields))
 
     #写入models.py & admin.py
     model = write_models(obj, app)

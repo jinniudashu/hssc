@@ -11,7 +11,7 @@ class Command(BaseCommand):
     # def add_arguments(self, parser):
     #     parser.add_argument('--dic', type=str)
     def handle(self, *args, **kwargs):
-        # 删除原有昨夜进程，事件指令，事件，作业，表单
+        # 删除原有作业进程，事件指令，事件，作业，表单
         Operation_proc.objects.all().delete()
         Event_instructions.objects.all().delete()
         Event.objects.all().delete()
@@ -25,5 +25,5 @@ class Command(BaseCommand):
                 name=form[0],
                 label=form[1],
                 style=form[2],
+                fields_list=', '.join(form[3]),
             )
-    

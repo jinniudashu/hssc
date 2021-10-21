@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Form, Service, Operation, Event, Instruction, Event_instructions
+from .models import Form, Service, Operation, Event, Rule, Instruction, Event_instructions
 from .models import Service_proc, Operation_proc
 
 
@@ -50,6 +50,15 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
+class RuleAdmin(admin.ModelAdmin):
+    list_display = ['label', 'name', 'operation', 'event', 'expression','description','id']
+    list_display_links = ['label', 'name', 'operation', 'event', 'expression','description',]
+    search_fields = ['name', 'label']
+    ordering = ['operation', 'id']
+    readonly_fields = ['parameters', 'event', ]
+admin.site.register(Rule, RuleAdmin)
+
+
 class Operation_procAdmin(admin.ModelAdmin):
     list_display = ['id', 'operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
     list_display_links = ['operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
@@ -66,20 +75,20 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 
 
-# class Event_instructionsAdmin(admin.ModelAdmin):
-#     list_display = ['event', 'instruction', 'order', 'params', 'id']
-#     list_display_links = ['event', 'instruction', 'order', 'params']
-#     search_fields = ['event']
-#     ordering = ['id']
-# admin.site.register(Event_instructions, Event_instructionsAdmin)
+class Event_instructionsAdmin(admin.ModelAdmin):
+    list_display = ['event', 'instruction', 'order', 'params', 'id']
+    list_display_links = ['event', 'instruction', 'order', 'params']
+    search_fields = ['event']
+    ordering = ['id']
+admin.site.register(Event_instructions, Event_instructionsAdmin)
 
 
-# class InstructionAdmin(admin.ModelAdmin):
-#     list_display = ['label', 'name', 'code', 'func', 'description', 'id']
-#     list_display_links = ['label', 'name', 'code', 'func']
-#     search_fields = ['name']
-#     ordering = ['id']
-# admin.site.register(Instruction, InstructionAdmin)
+class InstructionAdmin(admin.ModelAdmin):
+    list_display = ['label', 'name', 'code', 'func', 'description', 'id']
+    list_display_links = ['label', 'name', 'code', 'func']
+    search_fields = ['name']
+    ordering = ['id']
+admin.site.register(Instruction, InstructionAdmin)
 
 
 # admin.site.register(Service_proc)

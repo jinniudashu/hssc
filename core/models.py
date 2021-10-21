@@ -4,44 +4,8 @@ from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
 from icpc.models import Icpc
 
-'''
-作业状态机：
-
-const operationMachine = createMachine<Context>({
-  id: "operation",
-  initial: "created",
-  context: {
-    retries: 0,
-  },
-  states: {
-    created: {
-      on: {
-        RESOURCES_AVAILABLE: "ready",
-      },
-    },
-    ready: {
-      on: {
-        USER_ENTERED: "running",
-      },
-    },
-    running: {
-      on: {
-        FORM_SAVED: "finished",
-        HANG_UP: "hangup",
-      },
-    },
-    hangup: {
-      on: {
-        RECOVER: "ready",
-      },
-    },
-    finished: {
-      type: "final",
-    },
-  },
-});
-
-'''
+import json
+from core.utils import keyword_search
 
 # 表单信息表
 class Form(models.Model):
@@ -52,6 +16,7 @@ class Form(models.Model):
 		(1, '列表'),
 	]
 	style = models.PositiveSmallIntegerField(choices=input_style, default=0, verbose_name='风格')
+	fields_list = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
 
 	def __str__(self):
 		return str(self.label)
@@ -75,7 +40,7 @@ class Operation(models.Model):
 	]
 	priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name='优先级')
 	form = models.OneToOneField(Form, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
-	group = models.ManyToManyField(Group, blank=True, null=True, verbose_name="作业角色")
+	group = models.ManyToManyField(Group, verbose_name="作业角色")
 	suppliers = models.CharField(max_length=255, blank=True, null=True, verbose_name="供应商")
 	not_suitable = models.CharField(max_length=255, blank=True, null=True, verbose_name='不适用对象')
 	time_limits = models.DurationField(blank=True, null=True, verbose_name='完成时限')
@@ -124,7 +89,7 @@ class Event(models.Model):
 	name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
 	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	next = models.ManyToManyField(Operation, verbose_name="后续作业")
-	rule = models.CharField(max_length=255, blank=True, null=True, verbose_name="规则描述")
+	description = models.CharField(max_length=255, blank=True, null=True, verbose_name="事件描述")
 
 	def __str__(self):
 		return str(self.label)
@@ -133,6 +98,45 @@ class Event(models.Model):
 		verbose_name = "事件"
 		verbose_name_plural = "事件"
 		ordering = ['id']
+
+
+# 业务规则表
+class Rule(models.Model):
+	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="所属作业")
+	name = models.CharField(max_length=255, verbose_name="规则名称")
+	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
+	description = models.TextField(max_length=1024, blank=True, null=True, verbose_name="规则描述")
+	expression = models.TextField(max_length=1024, verbose_name="表达式")
+	parameters = models.CharField(max_length=1024, null=True, verbose_name="检查字段")
+	event = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="事件名称")
+
+	def __str__(self):
+		return str(self.label)
+
+	class Meta:
+		verbose_name = "规则"
+		verbose_name_plural = "规则"
+		ordering = ['operation', 'id']
+
+	def save(self, *args, **kwargs):
+		# 生成规则对应事件
+		if self.event==None:
+			self.event = Event.objects.create(
+				operation = self.operation,
+				name = f'{self.name}_emit_event',
+				label = f'{self.label}-触发事件',
+			)
+
+		# 生成表达式参数列表
+		if self.expression:
+			s=self.expression
+			l=self.operation.form.fields_list.split(', ')
+			fields_list = keyword_search(s,l)
+			self.parameters = ', '.join(fields_list)
+			print('Parameters fields:', self.parameters)
+			# self.parameters = json.dumps(fields_list, ensure_ascii=False)	# 涉及中文时使用
+
+		super().save(*args, **kwargs)
 
 
 # 指令表

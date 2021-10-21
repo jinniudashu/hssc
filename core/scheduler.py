@@ -24,12 +24,15 @@ from django.dispatch import receiver, Signal
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from registration.signals import user_registered, user_activated, user_approved
+import json
 
 # 导入作业事件表、指令表
-from core.models import Form, Operation, Event, Event_instructions, Instruction, Operation_proc
+from core.models import Form, Operation, Event, Rule, Event_instructions, Instruction, Operation_proc
 
 # 导入任务
 from core.tasks import create_operation_proc
+
+from core.utils import calculate
 
 # 从app forms里获取所有表单model的名字, 用以判断post_save的sender
 from django.apps import apps
@@ -186,15 +189,6 @@ def new_operation_proc(instance, created, **kwargs):
         if instance.state == 4:  # rtc            
             print('rtc状态, 查询表单完成事件，进行调度')
 
-            params={
-                'uid': instance.user.id,
-                'cid': instance.customer.id,
-                'ppid': instance.id
-            }
-            event_name = instance.operation.get_event_name_operation_completed()
-            event = Event.objects.filter(name=event_name)
-            operation_scheduler(event[0], params)
-
 
 # ******************************************
 # 业务事件处理：
@@ -205,14 +199,54 @@ def new_operation_proc(instance, created, **kwargs):
 @receiver(post_save, sender=None, weak=True, dispatch_uid=None)
 def form_post_save_handler(sender, instance, created, **kwargs):
     # 如果sender在Formlist里且非Created，更新作业进程状态
-    if not created:
-        if instance.__class__.__name__ in form_list:
-            slug = instance.slug
-            proc = Operation_proc.objects.filter(entry=slug)
-            pid = proc[0].id
-            ocode = 'rtc'
-            update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
-            print('form_post_save_handler => update_operation_proc', 'pid:', pid, 'ocode:', ocode)
+    if not created and instance.__class__.__name__ in form_list:
+        slug = instance.slug
+        proc = Operation_proc.objects.get(entry=slug)
+        pid = proc.id
+        ocode = 'rtc'
+        update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
+        print('form_post_save_handler => update_operation_proc', 'pid:', pid, 'ocode:', ocode)
+
+        # 检查规则表，根据规则判断数据变更是否触发业务事件，决定后续作业
+        # 1. 检查规则表，判断当前作业有规定业务事件需要检查
+        rules = Rule.objects.filter(operation = proc.operation)
+        
+        # 2. 如有取出规则集，逐一检查表达式是否为真，触发业务事件
+        if rules:
+            for rule in rules:
+                # 提取表达式
+                expr = rule.expression
+                # 提取其中的表单字段名, 转换为数组
+                fields = rule.parameters.split(', ')
+
+                # 构造表达式参数赋值语句
+                assignments=''
+                # 获取相应参数表单字段值
+                for field in fields:
+                    field_value = instance.__dict__[field]
+                    print('value:', field, field_value)
+                    if isinstance(field_value, str):
+                        value = f'"{field_value}"'
+                    else:
+                        value = f'{field_value}'
+                    assignment=f'{field}={value}\n'
+                    assignments = assignments + assignment
+                print(assignments)
+
+                # 合成表达式
+                expr = assignments + expr
+
+                # 调用解释器执行表达式，如果结果为真，调度后续作业
+                if calculate(expr):
+                    # 构造参数，触发事件
+                    params={
+                        'uid': instance.user.id,
+                        'cid': instance.customer.id,
+                        'ppid': instance.id
+                    }
+                    print('rule.event', rule.event)
+                    operation_scheduler(rule.event, params)
+
 
 # 操作员get表单记录/操作员进入作业入口：rtr
 
