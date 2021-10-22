@@ -32,7 +32,8 @@ from core.models import Form, Operation, Event, Rule, Event_instructions, Instru
 # 导入任务
 from core.tasks import create_operation_proc
 
-from core.utils import calculate
+from core.utils import keyword_replace
+from core.interpreter import interpreter
 
 # 从app forms里获取所有表单model的名字, 用以判断post_save的sender
 from django.apps import apps
@@ -219,32 +220,31 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 # 提取其中的表单字段名, 转换为数组
                 fields = rule.parameters.split(', ')
 
-                # 构造表达式参数赋值语句
-                assignments=''
+                # 构造表达式参数字典
+                assignments={}
                 # 获取相应参数表单字段值
                 for field in fields:
                     field_value = instance.__dict__[field]
-                    print('value:', field, field_value)
                     if isinstance(field_value, str):
                         value = f'"{field_value}"'
                     else:
                         value = f'{field_value}'
-                    assignment=f'{field}={value}\n'
-                    assignments = assignments + assignment
+                    assignments[field]=value
+
                 print(assignments)
 
-                # 合成表达式
-                expr = assignments + expr
+                # 字段值传入表达式
+                expr_for_calcu = keyword_replace(expr, assignments)
 
                 # 调用解释器执行表达式，如果结果为真，调度后续作业
-                if calculate(expr):
+                if interpreter(expr_for_calcu):
                     # 构造参数，触发事件
                     params={
                         'uid': instance.user.id,
                         'cid': instance.customer.id,
                         'ppid': instance.id
                     }
-                    print('rule.event', rule.event)
+                    print('表达式为真，触发事件：', rule.event)
                     operation_scheduler(rule.event, params)
 
 

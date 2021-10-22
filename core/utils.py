@@ -1,8 +1,6 @@
-
-def calculate(expr):
-    # 调用Interpreter解析表达式
-    print('from calculate:\n', expr)
-    return True
+#####################
+# keyword_search
+#####################
 
 def keyword_search(s, keywords_list):
 
@@ -45,6 +43,55 @@ def keyword_search(s, keywords_list):
     keywords = sorted(set(match), key=match.index)
     return keywords
 
-s = f'symptom_list="AAA"'
-l = ['symptom_list']
-print(keyword_search(s,l))
+
+#####################
+# keyword_replace
+#####################
+import re
+
+def keyword_replace(s, replace_dict):
+
+    next = []
+    changed_str = s
+
+    def buildNext():
+        next.append(0)
+        x = 1
+        now = 0
+        while x < len(p):
+            if p[now] == p[x]:
+                now += 1
+                x += 1
+                next.append(now)
+            elif now:
+                now = next[now-1]
+            else:
+                next.append(0)
+                x += 1
+
+    def search(new_str):
+        tar = 0
+        pos = 0
+        while tar < len(s):
+            if s[tar] == p[pos]:
+                tar += 1
+                pos += 1
+            elif pos:
+                pos = next[pos-1]
+            else:
+                tar += 1
+            if pos == len(p):   # 匹配成功
+                next_str = re.sub(p, replace_dict[p], new_str)
+                pos = next[pos-1]
+                return next_str
+
+    for p in replace_dict:
+        buildNext()
+        changed_str = search(changed_str)
+
+    return changed_str
+
+# For founction test
+# s = 'symptom_list="AAA"'
+# d = {'symptom_list': '"AAA"'}
+# print(keyword_replace(s,d))
