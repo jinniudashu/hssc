@@ -117,20 +117,6 @@ def form_post_save_handler(sender, instance, created, **kwargs):
         print('create 作业：', instance.label)
 
 
-# 监视作业表Operation的新增作业时，同步新增事件表作业完成事件
-@receiver(post_save, sender=Operation)
-def event_post_save_handler(sender, instance, created, **kwargs):
-    if created:     # 新增Event表xx作业完成事件
-        name = instance.get_event_name_operation_completed()
-        label = instance.get_event_label_operation_completed()
-        Event.objects.create(
-            operation = instance,
-            name = name,
-            label = label,
-        )
-        print('create 事件：', label)
-
-
 # 监视事件表Event变更，变更事件后续作业时，同步变更事件指令表Event_instructions的内容
 @receiver(m2m_changed, sender=Event.next.through)
 def event_m2m_changed_handler(sender, instance, action, **kwargs):
@@ -217,35 +203,40 @@ def form_post_save_handler(sender, instance, created, **kwargs):
             for rule in rules:
                 # 提取表达式
                 expr = rule.expression
-                # 提取其中的表单字段名, 转换为数组
-                fields = rule.parameters.split(', ')
+                # 构造事件参数
+                event_params={
+                    'uid': instance.user.id,
+                    'cid': instance.customer.id,
+                    'ppid': pid
+                }
+                # 判断是否为保留事件“completed”
+                if rule.name == f'{rule.operation.name}_completed':
+                    print('保留事件：表单完成 ', rule.event)
+                    operation_scheduler(rule.event, event_params)
+                else:   # 检查表单事件
+                    # 提取其中的表单字段名, 转换为数组
+                    fields = rule.parameters.split(', ')
 
-                # 构造表达式参数字典
-                assignments={}
-                # 获取相应参数表单字段值
-                for field in fields:
-                    field_value = instance.__dict__[field]
-                    if isinstance(field_value, str):
-                        value = f'"{field_value}"'
-                    else:
-                        value = f'{field_value}'
-                    assignments[field]=value
+                    # 构造表达式参数字典
+                    assignments={}
+                    # 获取相应参数表单字段值
+                    for field in fields:
+                        field_value = instance.__dict__[field]
+                        if isinstance(field_value, str):
+                            value = f'"{field_value}"'
+                        else:
+                            value = f'{field_value}'
+                        assignments[field]=value
 
-                print(assignments)
+                    print(assignments)
 
-                # 字段值传入表达式
-                expr_for_calcu = keyword_replace(expr, assignments)
+                    # 字段值传入表达式
+                    expr_for_calcu = keyword_replace(expr, assignments)
 
-                # 调用解释器执行表达式，如果结果为真，调度后续作业
-                if interpreter(expr_for_calcu):
-                    # 构造参数，触发事件
-                    params={
-                        'uid': instance.user.id,
-                        'cid': instance.customer.id,
-                        'ppid': instance.id
-                    }
-                    print('表达式为真，触发事件：', rule.event)
-                    operation_scheduler(rule.event, params)
+                    # 调用解释器执行表达式，如果结果为真，调度后续作业
+                    if interpreter(expr_for_calcu):
+                        print('表达式为真，触发事件：', rule.event)
+                        operation_scheduler(rule.event, event_params)
 
 
 # 操作员get表单记录/操作员进入作业入口：rtr
@@ -253,9 +244,9 @@ def form_post_save_handler(sender, instance, created, **kwargs):
 
 # 系统内置事件(event_id, event_name)
 SYSTEM_EVENTS = [
-    'user_registry_operation_completed',    # 用户注册
-    'user_login_operation_completed',       # 用户登录
-    'doctor_login_operation_completed',     # 医生注册
+    'user_registry_completed_emit',    # 用户注册
+    'user_login_completed_emit',       # 用户登录
+    'doctor_login_completed_emit',     # 医生注册
 ]
 
 

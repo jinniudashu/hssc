@@ -7,9 +7,9 @@ class EventInline(admin.TabularInline):
     model = Event
     extra = 0
 
-# class Event_instructionsInline(admin.TabularInline):
-#     model = Event_instructions
-#     extra = 0
+class RuleInline(admin.StackedInline):
+    model = Rule
+    extra = 0
 
 
 class FormAdmin(admin.ModelAdmin):
@@ -36,7 +36,7 @@ class OperationAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ['icpc']
     search_fields = ['name', 'icpc', 'label']
-    inlines = [EventInline]
+    inlines = [RuleInline]
     ordering = ['id']
 admin.site.register(Operation, OperationAdmin)
 
@@ -45,14 +45,13 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['label', 'name', 'operation', 'rule','id']
     list_display_links = ['label', 'name', 'operation', 'rule']
     search_fields = ['name', 'label']
-    # inlines = [Event_instructionsInline]
     ordering = ['id']
 admin.site.register(Event, EventAdmin)
 
 
 class RuleAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'operation', 'event', 'expression','description','id']
-    list_display_links = ['label', 'name', 'operation', 'event', 'expression','description',]
+    list_display = ['operation', 'label', 'name', 'expression','description','id']
+    list_display_links = ['operation', 'label', 'name', 'expression','description',]
     search_fields = ['name', 'label']
     ordering = ['operation', 'id']
     readonly_fields = ['parameters', 'event', ]

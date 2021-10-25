@@ -55,12 +55,6 @@ class Operation(models.Model):
 	def __str__(self):
 		return str(self.label)
 
-	def get_event_name_operation_completed(self):
-		return f'{self.name}_operation_completed'
-
-	def get_event_label_operation_completed(self):
-		return f'{self.label}完成'
-
 	class Meta:
 		verbose_name = "作业"
 		verbose_name_plural = "作业"
@@ -106,8 +100,8 @@ class Rule(models.Model):
 	name = models.CharField(max_length=255, verbose_name="规则名称")
 	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	description = models.TextField(max_length=1024, blank=True, null=True, verbose_name="规则描述")
-	expression = models.TextField(max_length=1024, verbose_name="表达式")
-	parameters = models.CharField(max_length=1024, null=True, verbose_name="检查字段")
+	expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式")
+	parameters = models.CharField(max_length=1024, blank=True, null=True, verbose_name="检查字段")
 	event = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="事件名称")
 
 	def __str__(self):
@@ -119,22 +113,27 @@ class Rule(models.Model):
 		ordering = ['operation', 'id']
 
 	def save(self, *args, **kwargs):
+		if self.operation.name not in self.name:
+			self.name = f'{self.operation.name}_{self.name}'
+			# 保留字：作业完成事件
+			if self.name == f'{self.operation.name}_completed':
+				self.expression = 'completed'
+
 		# 生成规则对应事件
 		if self.event==None:
 			self.event = Event.objects.create(
 				operation = self.operation,
-				name = f'{self.name}_emit_event',
-				label = f'{self.label}-触发事件',
+				name = f'{self.name}_emit',
+				label = f'{self.operation.label}_{self.label}_发生',
 			)
 
 		# 生成表达式参数列表
-		if self.expression:
+		if self.expression and self.expression != 'completed':
 			s=self.expression
 			l=self.operation.form.fields_list.split(', ')
 			fields_list = keyword_search(s,l)
 			self.parameters = ', '.join(fields_list)
 			print('Parameters fields:', self.parameters)
-			# self.parameters = json.dumps(fields_list, ensure_ascii=False)	# 涉及中文时使用
 
 		super().save(*args, **kwargs)
 
