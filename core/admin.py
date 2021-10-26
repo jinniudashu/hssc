@@ -50,6 +50,7 @@ admin.site.register(Event, EventAdmin)
 
 
 class RuleAdmin(admin.ModelAdmin):
+    change_form_template = "core/templates/change_form.html"
     list_display = ['operation', 'label', 'name', 'expression','description','id']
     list_display_links = ['operation', 'label', 'name', 'expression','description',]
     search_fields = ['name', 'label']

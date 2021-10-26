@@ -100,7 +100,12 @@ class Rule(models.Model):
 	name = models.CharField(max_length=255, verbose_name="规则名称")
 	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	description = models.TextField(max_length=1024, blank=True, null=True, verbose_name="规则描述")
-	expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式")
+	expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式", 
+		help_text='''
+		说明：<br>
+		1. 表达式接受的逻辑运算符：or, and, not, in, >=, <=, >, <, ==, +, -, *, /, ^, ()<br>
+		2. 字段名只允许由小写字母a~z，数字0~9和下划线_组成；字段值接受数字和字符，字符需要放在双引号中，如"A0101"
+		''')
 	parameters = models.CharField(max_length=1024, blank=True, null=True, verbose_name="检查字段")
 	event = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="事件名称")
 
