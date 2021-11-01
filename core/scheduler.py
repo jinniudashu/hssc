@@ -261,10 +261,13 @@ def user_registered_handler(sender, user, request, **kwargs):
         'ppid': 0,
     }
     # 系统内置用户注册事件编码
-    event = Event.objects.get(name=SYSTEM_EVENTS[0])
+    try:
+        event = Event.objects.get(name=SYSTEM_EVENTS[0])
+        # 把Event和参数发给调度器
+        operation_scheduler(event, params)
+    except:
+        print('except: event DoesNotExist')
 
-    # 把Event和参数发给调度器
-    operation_scheduler(event, params)
 
 
 # 收到登录信号，生成用户/职员登录事件
@@ -284,8 +287,10 @@ def user_logged_in_handler(sender, user, request, **kwargs):
         event_name = SYSTEM_EVENTS[1]   # 客户登录
         params['ppid'] = 0
 
-    event = Event.objects.get(name=event_name)
-    print('职员登录', user, event)
-
-    # 把Event和参数发给调度器
-    operation_scheduler(event, params)
+    try:
+        event = Event.objects.get(name=event_name)
+        print('职员登录', user, event)
+        # 把Event和参数发给调度器
+        operation_scheduler(event, params)
+    except:
+        print('except: event DoesNotExist')
