@@ -42,8 +42,8 @@ admin.site.register(Operation, OperationAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'operation', 'rule','id']
-    list_display_links = ['label', 'name', 'operation', 'rule']
+    list_display = ['label', 'name', 'operation', 'id']
+    list_display_links = ['label', 'name', 'operation',]
     search_fields = ['name', 'label']
     ordering = ['id']
 admin.site.register(Event, EventAdmin)
