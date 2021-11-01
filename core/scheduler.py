@@ -223,7 +223,7 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                     for field in fields:
                         field_value = instance.__dict__[field]
                         if isinstance(field_value, str):
-                            value = f'"{field_value}"'
+                            value = f'"{field_value}"'.replace(' ', '')
                         else:
                             value = f'{field_value}'
                         assignments[field]=value

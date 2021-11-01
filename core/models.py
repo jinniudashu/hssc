@@ -76,24 +76,6 @@ class Service(models.Model):
 		ordering = ['id']
 
 
-# 作业事件表
-# # 默认事件：xx作业完成--系统作业名+"_operation_completed"
-class Event(models.Model):
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="上道作业")
-	name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
-	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
-	next = models.ManyToManyField(Operation, verbose_name="后续作业")
-	description = models.CharField(max_length=255, blank=True, null=True, verbose_name="事件描述")
-
-	def __str__(self):
-		return str(self.label)
-
-	class Meta:
-		verbose_name = "事件"
-		verbose_name_plural = "事件"
-		ordering = ['id']
-
-
 # 业务规则表
 class Rule(models.Model):
 	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="所属作业")
@@ -107,7 +89,7 @@ class Rule(models.Model):
 		2. 字段名只允许由小写字母a~z，数字0~9和下划线_组成；字段值接受数字和字符，字符需要放在双引号中，如"A0101"
 		''')
 	parameters = models.CharField(max_length=1024, blank=True, null=True, verbose_name="检查字段")
-	event = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="事件名称")
+	event = models.OneToOneField("Event", on_delete=models.SET_NULL, blank=True, null=True, verbose_name="规则")
 
 	def __str__(self):
 		return str(self.label)
@@ -130,6 +112,7 @@ class Rule(models.Model):
 				operation = self.operation,
 				name = f'{self.name}_emit',
 				label = f'{self.operation.label}_{self.label}_发生',
+				rule = self
 			)
 
 		# 生成表达式参数列表
@@ -141,6 +124,24 @@ class Rule(models.Model):
 			print('Parameters fields:', self.parameters)
 
 		super().save(*args, **kwargs)
+
+
+# 作业事件表
+# # 默认事件：xx作业完成--系统作业名+"_operation_completed"
+class Event(models.Model):
+	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="上道作业")
+	name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
+	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
+	next = models.ManyToManyField(Operation, verbose_name="后续作业")
+	description = models.CharField(max_length=255, blank=True, null=True, verbose_name="事件描述")
+
+	def __str__(self):
+		return str(self.label)
+
+	class Meta:
+		verbose_name = "事件"
+		verbose_name_plural = "事件"
+		ordering = ['id']
 
 
 # 指令表
