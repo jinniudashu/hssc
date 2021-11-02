@@ -27,7 +27,7 @@ from registration.signals import user_registered, user_activated, user_approved
 import json
 
 # 导入作业事件表、指令表
-from core.models import Form, Operation, Event, Rule, Event_instructions, Instruction, Operation_proc
+from core.models import Form, Operation, Event, Event_instructions, Instruction, Operation_proc
 
 # 导入任务
 from core.tasks import create_operation_proc
@@ -102,19 +102,36 @@ def operation_scheduler(event, params):
     return
 
 
+
+# 系统内置事件(form, event_name)
+SYSTEM_EVENTS = [
+    ('user_registry', 'user_registry_completed'),     # 用户注册
+    ('user_login', 'user_login_completed'),           # 用户登录
+    ('doctor_login', 'doctor_login_completed'),       # 医生注册
+]
+
 # ********************
 # 作业进程设置
 # ********************
-# 监视Form的新增条目，同步表单作业
+# 监视Form的新增条目，同步新增作业
 @receiver(post_save, sender=Form)
 def form_post_save_handler(sender, instance, created, **kwargs):
     if created:     # 新增Operation表xx表单作业
-        Operation.objects.create(
+        operation = Operation.objects.create(
             name = instance.name,
             label = f'{instance.label}作业',
             form = instance,
         )
         print('create 作业：', instance.label)
+
+        # 如果是系统保留作业，生成系统保留事件SYSTEM_EVENTS
+        if any(instance.name == fn[0] for fn in SYSTEM_EVENTS):
+            sys_event = Event.objects.create(
+                operation = operation,
+                name = f'{instance.name}_completed',
+                label = f'{instance.label}_完成',
+            )
+            print('生成系统保留事件：', sys_event)
 
 
 # 监视事件表Event变更，变更事件后续作业时，同步变更事件指令表Event_instructions的内容
@@ -196,13 +213,13 @@ def form_post_save_handler(sender, instance, created, **kwargs):
 
         # 检查规则表，根据规则判断数据变更是否触发业务事件，决定后续作业
         # 1. 检查规则表，判断当前作业有规定业务事件需要检查
-        rules = Rule.objects.filter(operation = proc.operation)
+        events = Event.objects.filter(operation = proc.operation)
         
         # 2. 如有取出规则集，逐一检查表达式是否为真，触发业务事件
-        if rules:
-            for rule in rules:
+        if events:
+            for event in events:
                 # 提取表达式
-                expr = rule.expression
+                expr = event.expression
                 # 构造事件参数
                 event_params={
                     'uid': instance.user.id,
@@ -210,12 +227,12 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                     'ppid': pid
                 }
                 # 判断是否为保留事件“completed”
-                if rule.name == f'{rule.operation.name}_completed':
-                    print('保留事件：表单完成 ', rule.event)
-                    operation_scheduler(rule.event, event_params)
+                if event.name == f'{event.operation.name}_completed':
+                    print('保留事件：表单完成 ', event)
+                    operation_scheduler(event, event_params)
                 else:   # 检查表单事件
                     # 提取其中的表单字段名, 转换为数组
-                    fields = rule.parameters.split(', ')
+                    fields = event.parameters.split(', ')
 
                     # 构造表达式参数字典
                     assignments={}
@@ -235,19 +252,12 @@ def form_post_save_handler(sender, instance, created, **kwargs):
 
                     # 调用解释器执行表达式，如果结果为真，调度后续作业
                     if interpreter(expr_for_calcu):
-                        print('表达式为真，触发事件：', rule.event)
-                        operation_scheduler(rule.event, event_params)
+                        print('表达式为真，触发事件：', event)
+                        operation_scheduler(event, event_params)
 
 
 # 操作员get表单记录/操作员进入作业入口：rtr
 
-
-# 系统内置事件(event_id, event_name)
-SYSTEM_EVENTS = [
-    'user_registry_completed_emit',    # 用户注册
-    'user_login_completed_emit',       # 用户登录
-    'doctor_login_completed_emit',     # 医生注册
-]
 
 
 # 收到注册成功信号，生成用户注册事件
@@ -262,11 +272,11 @@ def user_registered_handler(sender, user, request, **kwargs):
     }
     # 系统内置用户注册事件编码
     try:
-        event = Event.objects.get(name=SYSTEM_EVENTS[0])
+        event = Event.objects.get(name=SYSTEM_EVENTS[0][1])
         # 把Event和参数发给调度器
         operation_scheduler(event, params)
     except:
-        print('except: event DoesNotExist')
+        print('except: SYSTEM_EVENT: [user_registry_completed] DoesNotExist')
 
 
 
@@ -280,17 +290,17 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     }
     # 系统内置登录事件编码
     if user.is_staff:
-        event_name = SYSTEM_EVENTS[2]   # 职员登录
+        event_name = SYSTEM_EVENTS[2][1]   # 职员登录
         params['ppid'] = 0
         print('职员登录', user, event_name)
     else:
-        event_name = SYSTEM_EVENTS[1]   # 客户登录
+        event_name = SYSTEM_EVENTS[1][1]   # 客户登录
         params['ppid'] = 0
 
     try:
         event = Event.objects.get(name=event_name)
-        print('职员登录', user, event)
+        print('登录', user, event)
         # 把Event和参数发给调度器
         operation_scheduler(event, params)
     except:
-        print('except: event DoesNotExist')
+        print('except: SYSTEM_EVENT: [user_login_completed / doctor_login_completed] DoesNotExist')

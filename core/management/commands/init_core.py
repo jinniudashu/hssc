@@ -1,22 +1,25 @@
 from django.core.management import BaseCommand
+from core.models import Form, Operation, Event, Event_instructions, Operation_proc, Instruction
 from forms.form_list import form_list
-from core.models import Form, Operation, Event, Event_instructions, Operation_proc
 
 
 # python manage.py import_form_list
 
 class Command(BaseCommand):
-    help = '把form_list导入core.models.Form'
+    help = '1. 把form_list导入core.models.Form； 2. 在core.models.Instruction中创建指令'
 
     # def add_arguments(self, parser):
     #     parser.add_argument('--dic', type=str)
+
     def handle(self, *args, **kwargs):
-        # 删除原有作业进程，事件指令，事件，作业，表单
+
+        # 删除原有作业进程，事件指令，事件，作业，表单，指令
         Operation_proc.objects.all().delete()
         Event_instructions.objects.all().delete()
         Event.objects.all().delete()
         Operation.objects.all().delete()
         Form.objects.all().delete()
+        Instruction.objects.all().delete()
         
         # 导入新表单清单
         for form in form_list:
@@ -27,3 +30,14 @@ class Command(BaseCommand):
                 style=form[2],
                 fields_list=', '.join(form[3]),
             )
+
+        # 在core.models.Instruction中创建指令
+        instruction=Instruction.objects.create(
+            name='create_operation_proc',
+            label='创建作业进程',
+            code='cop',
+            func='create_operation_proc',
+            description='新建一个人工作业进程',
+        )
+        print('新建指令成功：', instruction)
+

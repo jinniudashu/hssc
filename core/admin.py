@@ -1,14 +1,10 @@
 from django.contrib import admin
-from .models import Form, Service, Operation, Event, Rule, Instruction, Event_instructions
+from .models import Form, Service, Operation, Event, Instruction, Event_instructions
 from .models import Service_proc, Operation_proc
 
 
 class EventInline(admin.TabularInline):
     model = Event
-    extra = 0
-
-class RuleInline(admin.StackedInline):
-    model = Rule
     extra = 0
 
 
@@ -36,27 +32,18 @@ class OperationAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ['icpc']
     search_fields = ['name', 'icpc', 'label']
-    inlines = [RuleInline]
+    inlines = [EventInline]
     ordering = ['id']
 admin.site.register(Operation, OperationAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):
+#     change_form_template = "core/templates/change_form.html"
     list_display = ['label', 'name', 'operation', 'id']
     list_display_links = ['label', 'name', 'operation',]
     search_fields = ['name', 'label']
     ordering = ['id']
 admin.site.register(Event, EventAdmin)
-
-
-class RuleAdmin(admin.ModelAdmin):
-    change_form_template = "core/templates/change_form.html"
-    list_display = ['operation', 'label', 'name', 'expression','description','id']
-    list_display_links = ['operation', 'label', 'name', 'expression','description',]
-    search_fields = ['name', 'label']
-    ordering = ['operation', 'id']
-    readonly_fields = ['parameters', 'event', ]
-admin.site.register(Rule, RuleAdmin)
 
 
 class Operation_procAdmin(admin.ModelAdmin):
