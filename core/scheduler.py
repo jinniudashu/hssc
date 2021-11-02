@@ -130,6 +130,7 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 operation = operation,
                 name = f'{instance.name}_completed',
                 label = f'{instance.label}_完成',
+                expression = 'completed',
             )
             print('生成系统保留事件：', sys_event)
 
