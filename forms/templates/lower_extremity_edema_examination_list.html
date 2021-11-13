@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>下肢水肿检查</h4>
+
+<a href="{% url "lower_extremity_edema_examination_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for lower_extremity_edema_examination in lower_extremity_edema_examinations %}
+		<a class="list-group-item" href="{% url "lower_extremity_edema_examination_detail_url" lower_extremity_edema_examination.slug %}">
+			{{ lower_extremity_edema_examination }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

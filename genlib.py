@@ -170,7 +170,7 @@ def write_models(obj, app):
     f.write(f'\n\n\nclass {model}(models.Model):')
     
     # 写入customer field
-    f.write(f'\n\tcustomer = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_cid", verbose_name="客户")')
+    f.write(f'\n\tcustomer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")')
 
     # 写入每个field
     for field in fields:
@@ -211,10 +211,10 @@ def write_models(obj, app):
             f.write(f'\n\t{name} = models.{parameters}')
 
     # 写入user field
-    f.write(f'\n\tuser = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="{model.lower()}_uid", verbose_name="作业人员")')
+    f.write(f'\n\toperator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")')
 
     # 写入slug field
-    f.write(f'\n\tslug = models.SlugField(max_length=150, unique=True, blank=True)')
+    f.write(f'\n\tslug = models.SlugField(max_length=150, blank=True)')
     f.write('\n\n\tdef __str__(self):')
     f.write(f'\n\t\treturn str(self.customer)')
 

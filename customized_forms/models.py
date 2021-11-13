@@ -1,6 +1,10 @@
 from django.db import models
+from core.models import Form
 
-# 组件
+from django.db.models.signals import post_save, post_delete, m2m_changed
+
+
+# 组件定义
 class Component(models.Model):
     # Base field type
     CHAR_FIELD = {}
@@ -34,17 +38,19 @@ class Component(models.Model):
         verbose_name_plural = "组件"
         ordering = ['id']
 
-# 子表单
+
+# 子表单定义
 class SubForm(models.Model):
     name = models.CharField(max_length=100, verbose_name="名称")
     label = models.CharField(max_length=100, verbose_name="子表单")
     # components: [component1, component2, ...]
     components = models.CharField(max_length=255, verbose_name="组件清单")
+    fields_list = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
     FORM_STYLE = [
 		('detail', '详情'),
 		('list', '列表'),
 	]
-    style = models.CharField(max_length=100, choices=FORM_STYLE, default='detail', verbose_name='风格')
+    style = models.CharField(max_length=50, choices=FORM_STYLE, default='detail', verbose_name='风格')
 
     def __str__(self):
         return str(self.label)
@@ -55,35 +61,26 @@ class SubForm(models.Model):
         ordering = ['id']
 
 
-# 作业表单
+# 作业表单定义
 class Operand_Form(models.Model):
     name = models.CharField(max_length=100, verbose_name="名称")
     label = models.CharField(max_length=100, blank=True, null=True, verbose_name="表单名称")
-    meta_form = models.ForeignKey(SubForm, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="元表单")
+    AXIS_TYPE = [
+        ('customer', '客户'),
+        ('staff', '员工'),
+        ('medicine', '药品'),
+        ('device', '设备'),
+    ]
+    axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="作业对象")
     # subforms list: [subform1, subform2, ...]
-    subforms = models.CharField(max_length=255, verbose_name="子表单集")
-    LAYOUT_STYLE = [
-		('monomer', '单体'),
-		('pagination', '分页'),
-	]
-    layout = models.CharField(max_length=100, choices=LAYOUT_STYLE, default='monomer', verbose_name='布局')
+    inquire_forms = models.ManyToManyField(SubForm, related_name="inquire_forms", verbose_name="查询子表单")
+    mutate_forms = models.ManyToManyField(SubForm, related_name="mutate_forms", verbose_name="变更子表单")
 
     def __str__(self):
         return str(self.label)
-
-    def save(self, *args, **kwargs):
-        
-        # create model
-
-        # create view
-
-        # create form
-        
-        # create template
-
-        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "作业表单"
         verbose_name_plural = "作业表单"
         ordering = ['id']
+

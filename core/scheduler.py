@@ -206,56 +206,58 @@ def form_post_save_handler(sender, instance, created, **kwargs):
     # 如果sender在Formlist里且非Created，更新作业进程状态
     if not created and instance.__class__.__name__ in form_list:
         slug = instance.slug
-        proc = Operation_proc.objects.get(entry=slug)
-        pid = proc.id
-        ocode = 'rtc'
-        update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
-        print('form_post_save_handler => update_operation_proc', 'pid:', pid, 'ocode:', ocode)
+        try:
+            proc = Operation_proc.objects.get(entry=slug)
+            pid = proc.id
+            ocode = 'rtc'
+            update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
+            print('form_post_save_handler => update_operation_proc', 'pid:', pid, 'ocode:', ocode)
 
-        # 检查规则表，根据规则判断数据变更是否触发业务事件，决定后续作业
-        # 1. 检查规则表，判断当前作业有规定业务事件需要检查
-        events = Event.objects.filter(operation = proc.operation)
-        
-        # 2. 如有取出规则集，逐一检查表达式是否为真，触发业务事件
-        if events:
-            for event in events:
-                # 提取表达式
-                expr = event.expression
-                # 构造事件参数
-                event_params={
-                    'uid': instance.user.id,
-                    'cid': instance.customer.id,
-                    'ppid': pid
-                }
-                # 判断是否为保留事件“completed”
-                if event.name == f'{event.operation.name}_completed':
-                    print('保留事件：表单完成 ', event)
-                    operation_scheduler(event, event_params)
-                else:   # 检查表单事件
-                    # 提取其中的表单字段名, 转换为数组
-                    fields = event.parameters.split(', ')
-
-                    # 构造表达式参数字典
-                    assignments={}
-                    # 获取相应参数表单字段值
-                    for field in fields:
-                        field_value = instance.__dict__[field]
-                        if isinstance(field_value, str):
-                            value = f'"{field_value}"'.replace(' ', '')
-                        else:
-                            value = f'{field_value}'
-                        assignments[field]=value
-
-                    print(assignments)
-
-                    # 字段值传入表达式
-                    expr_for_calcu = keyword_replace(expr, assignments)
-
-                    # 调用解释器执行表达式，如果结果为真，调度后续作业
-                    if interpreter(expr_for_calcu):
-                        print('表达式为真，触发事件：', event)
+            # 检查规则表，根据规则判断数据变更是否触发业务事件，决定后续作业
+            # 1. 检查规则表，判断当前作业有规定业务事件需要检查
+            events = Event.objects.filter(operation = proc.operation)
+            
+            # 2. 如有取出规则集，逐一检查表达式是否为真，触发业务事件
+            if events:
+                for event in events:
+                    # 提取表达式
+                    expr = event.expression
+                    # 构造事件参数
+                    event_params={
+                        'uid': instance.user.id,
+                        'cid': instance.customer.id,
+                        'ppid': pid
+                    }
+                    # 判断是否为保留事件“completed”
+                    if event.name == f'{event.operation.name}_completed':
+                        print('保留事件：表单完成 ', event)
                         operation_scheduler(event, event_params)
+                    else:   # 检查表单事件
+                        # 提取其中的表单字段名, 转换为数组
+                        fields = event.parameters.split(', ')
 
+                        # 构造表达式参数字典
+                        assignments={}
+                        # 获取相应参数表单字段值
+                        for field in fields:
+                            field_value = instance.__dict__[field]
+                            if isinstance(field_value, str):
+                                value = f'"{field_value}"'.replace(' ', '')
+                            else:
+                                value = f'{field_value}'
+                            assignments[field]=value
+
+                        print(assignments)
+
+                        # 字段值传入表达式
+                        expr_for_calcu = keyword_replace(expr, assignments)
+
+                        # 调用解释器执行表达式，如果结果为真，调度后续作业
+                        if interpreter(expr_for_calcu):
+                            print('表达式为真，触发事件：', event)
+                            operation_scheduler(event, event_params)
+        except:
+            print('form_post_save_handler => 无作业进程')
 
 # 操作员get表单记录/操作员进入作业入口：rtr
 

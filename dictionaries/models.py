@@ -1,6 +1,7 @@
 from django.db import models
 
 
+
 class Service_role(models.Model):
 	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
 	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
@@ -335,3 +336,27 @@ class Dorsal_artery_pulsation(models.Model):
 	class Meta:
 		verbose_name = "足背动脉搏动"
 		verbose_name_plural = "足背动脉搏动"
+
+
+class Normality(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "正常性判断"
+		verbose_name_plural = "正常性判断"
+
+
+class Edema(models.Model):
+	name = models.CharField(max_length=40, blank=True, null=True,  verbose_name="名称")
+	score = models.SmallIntegerField(blank=True, null=True, verbose_name="分值")
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "水肿情况"
+		verbose_name_plural = "水肿情况"

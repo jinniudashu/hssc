@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from core.models import Form, Operation, Event, Event_instructions, Operation_proc, Instruction
 from forms.form_list import form_list
-
+from customized_forms.models import SubForm
 
 # python manage.py import_form_list
 
@@ -28,6 +28,18 @@ class Command(BaseCommand):
                 name=form[0],
                 label=form[1],
                 style=form[2],
+                fields_list=', '.join(form[3]),
+            )
+
+            # 临时导入子表单定义项
+            if form[2] == 1:
+                style = 'list'
+            else:
+                style = 'detail'
+            SubForm.objects.create(
+                name=form[0],
+                label=form[1],
+                style=style,
                 fields_list=', '.join(form[3]),
             )
 

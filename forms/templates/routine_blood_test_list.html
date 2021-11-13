@@ -1,0 +1,21 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>血常规化验</h4>
+
+<a href="{% url "routine_blood_test_create_url" %}">
+			新增
+		</a>
+
+<section class="list-group">
+	{% for routine_blood_test in routine_blood_tests %}
+		<a class="list-group-item" href="{% url "routine_blood_test_detail_url" routine_blood_test.slug %}">
+			{{ routine_blood_test }}
+		</a>
+	{% endfor %}
+</section>
+
+{% endblock %}

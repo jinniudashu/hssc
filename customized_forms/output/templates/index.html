@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br>
+
+<h4>当前任务</h4>
+	<section class="list-group">
+	{% for todo in todos %}
+		<a class="list-group-item" href="{% url todo.url todo.slug %}">
+		{{ todo.operation }}
+		</a>
+	{% endfor %}
+	</section>
+
+<br>
+
+<hr>
+
+<br>
+
+<h4>表单目录</h4>
+
+<section class="list-group">
+<a class='list-group-item' href='{% url "test_operation_create_url" %}'>
+		作业表单1
+	</a>
+        <a class='list-group-item' href='{% url "test2_opera_create_url" %}'>
+		测试规则
+	</a>
+        
+</section>
+{{% endblock %}}

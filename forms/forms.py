@@ -12,6 +12,7 @@ from .models import *
 # 	role = forms.ModelChoiceField(queryset=Group.objects.all())
 
 
+
 class History_of_trauma_ModelForm(ModelForm):
 	class Meta:
 		model = History_of_trauma
@@ -804,11 +805,83 @@ class Physical_examination_spine_ModelForm(ModelForm):
 		return new_slug
 
 
-class Physical_examination_diabetes_ModelForm(ModelForm):
+class Dorsal_artery_pulsation_examination_ModelForm(ModelForm):
 	class Meta:
-		model = Physical_examination_diabetes
-		fields = ['fundus', 'lower_extremity_edema', 'zbdm']
-		widgets = {"fundus": Select(),"zbdm": Select(),}
+		model = Dorsal_artery_pulsation_examination
+		fields = ['left_foot', 'right_foot']
+		widgets = {"left_foot": RadioSelect(),"right_foot": RadioSelect(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Routine_blood_test_ModelForm(ModelForm):
+	class Meta:
+		model = Routine_blood_test
+		fields = ['wbc', 'rbc', 'hgb', 'hct', 'mcv', 'mch', 'mcmc', 'plt']
+		widgets = {}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Fundus_examination_ModelForm(ModelForm):
+	class Meta:
+		model = Fundus_examination
+		fields = ['fundus']
+		widgets = {"fundus": Select(),}
+
+	@property
+	def helper(self):
+		helper = FormHelper()
+		helper.layout = Layout(HTML("<hr />"))
+		for field in self.Meta().fields:
+			helper.layout.append(Field(field, wrapper_class="row"))
+		helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+		helper.field_class = "col-8"
+		helper.label_class = "col-2"
+		return helper
+
+	def clean_slug(self):
+		new_slug = self.cleaned_data.get("slug").lower()
+		if new_slug == "create":
+			raise ValidationError("Slug may not be create")
+		return new_slug
+
+
+class Lower_extremity_edema_examination_ModelForm(ModelForm):
+	class Meta:
+		model = Lower_extremity_edema_examination
+		fields = ['lower_extremity_edema']
+		widgets = {"lower_extremity_edema": RadioSelect(),}
 
 	@property
 	def helper(self):

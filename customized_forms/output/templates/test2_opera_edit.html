@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 'test2_opera_create_url' %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        {{ formset0.as_p }}
+        {{ form1.as_p }}
+        {{ form2.as_p }}
+        {{ form3.as_p }}
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}

@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import *
 
+admin.site.register(Staff)
+admin.site.register(Customer)
+
+
 class History_of_traumaAdmin(admin.ModelAdmin):
 	autocomplete_fields = ["diseases_name"]
 admin.site.register(History_of_trauma, History_of_traumaAdmin)

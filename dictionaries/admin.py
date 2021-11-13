@@ -56,3 +56,7 @@ admin.site.register(Degree_expression)
 admin.site.register(Comparative_expression)
 
 admin.site.register(Dorsal_artery_pulsation)
+
+admin.site.register(Normality)
+
+admin.site.register(Edema)
