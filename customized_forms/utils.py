@@ -1,87 +1,21 @@
+# 导入待生成脚本的文件头部设置
+from .files_head_setting import views_file_head, urls_file_head, index_html_file_head
+
 # 被customized_forms.admin调用
 def export_scripts(modeladmin, request, queryset):
 
-    # output_path = '.\\customized_forms\\output\\'   # views.py urls.py 导出路径
-    output_path = '.\\forms\\'   # views.py urls.py 导出路径
-
     def write_to_file(file_name, content, mode='w'):
-        f = open(f'{output_path}{file_name}', mode, encoding='utf-8')
-        f.write(content)
-        f.close
-        return f
-
-    # views.py文件头
-    vsh = f'''from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View, RedirectView, TemplateView
-from django.views.generic.detail import DetailView
-from django.contrib.auth.models import User
-from django.forms import modelformset_factory, inlineformset_factory
-from core.models import Operation_proc
-
-from forms.models import *
-from forms.forms import *
-
-class Index_view(ListView):
-	model = Operation_proc
-	template_name = 'index.html'
-
-	# def get(self, request, *args, **kwargs):
-	# 	self.object = self.get_object(queryset=Operation_proc.objects.exclude(state=4))
-
-	def get_context_data(self, **kwargs):
-		procs = Operation_proc.objects.exclude(state=4)
-		todos = []
-		for proc in procs:
-			todo = {{}}
-			todo['operation'] = proc.operation.label
-			todo['url'] = f'{{proc.operation.name}}_update_url'
-			todo['slug'] = proc.entry
-			todos.append(todo)
-		context = super().get_context_data(**kwargs)
-		context['todos'] = todos
-		return context
-
-'''
-
-    # urls.py文件头
-    ush = f'''
-from django.urls import path
-from .views import *
-
-urlpatterns = [
-	path('', Index_view.as_view(), name='index'),
-	path('index/', Index_view.as_view(), name='index'),'''
-
-    # index.html文件头
-    ihsh = f'''{{% extends "base.html" %}}
-
-{{% block content %}}
-
-<br>
-
-<h4>当前任务</h4>
-	<section class="list-group">
-	{{% for todo in todos %}}
-		<a class="list-group-item" href="{{% url todo.url todo.slug %}}">
-		{{{{ todo.operation }}}}
-		</a>
-	{{% endfor %}}
-	</section>
-
-<br>
-
-<hr>
-
-<br>
-
-<h4>表单目录</h4>
-
-<section class="list-group">
-'''
+        output_path = '.\\forms\\'   # views.py urls.py 导出路径
+        with open(f'{output_path}{file_name}', mode, encoding='utf-8') as f:
+            f.write(content)
+        return      
 
     views_script = urls_script = index_html_script = ''
 
     for obj in queryset:
+        ################################################################################
         # Insert into core.models.Form (Auto generate corresponding operation)
+        ################################################################################
 
         # create views.py, template.html, urls.py
         inquire_forms = [(f['name'], f['style'], f['label']) for f in list(obj.inquire_forms.all().values())]
@@ -100,11 +34,11 @@ urlpatterns = [
         index_html_script = index_html_script + ihs
 
     # add header to views.py
-    views_script = vsh + views_script
+    views_script = views_file_head + views_script
     # add header to urls.py
-    urls_script = ush + urls_script + '\n]'
+    urls_script = urls_file_head + urls_script + '\n]'
     # add header to index.html
-    index_html_script = ihsh + index_html_script + '\n</section>\n{% endblock %}'
+    index_html_script = index_html_file_head + index_html_script + '\n</section>\n{% endblock %}'
 
     # 写入views.py
     write_to_file('views.py', views_script)
@@ -113,22 +47,14 @@ urlpatterns = [
     # 写入index.html
     write_to_file('templates\\index.html', index_html_script)
 
+    ################################################################################
     # 写入作业库
+    ################################################################################
 
 export_scripts.short_description = '生成脚本'
 
 
 class CreateScripts:
-    operand_name = ''
-    operand_label = ''
-    axis_field = ''
-    inquire_forms = []
-    mutate_forms = []
-
-    view_name = ''
-    template_name = ''
-    success_url = ''
-    form_class = ''
 
     def __init__(self, operand_name, operand_label, axis_field, inquire_forms, mutate_forms):
         self.operand_name = operand_name
@@ -146,6 +72,7 @@ class CreateScripts:
 
     def create_script(self):
 
+        # 迭代获得各部分构造参数
         vs, hs = self.__iterate_forms()
 
         # views.py
@@ -156,7 +83,7 @@ class CreateScripts:
 
         # urls.py
         url_script = self.__construct_url_script()
-
+        
         # index.html
         index_html_script = self.__construct_index_html_script()
 
