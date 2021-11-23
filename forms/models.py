@@ -9,68 +9,12 @@ from django.utils import timezone
 
 from icpc.models import *
 from dictionaries.enums import *
+from core.models import Staff, Customer
+
 
 def gen_slug(s):
     slug = slugify(s, allow_unicode=True)
     return slug + f'-{int(time())}'
-
-class Staff(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff', verbose_name='员工')
-	name = models.CharField(max_length=50)
-	phone = models.CharField(max_length=20, blank=True, null=True)
-	email = models.EmailField(max_length=50)
-	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
-	group = models.CharField(max_length=50, blank=True, null=True, verbose_name='组别')
-	slug = models.SlugField(max_length=150, unique=True, blank=True)
-
-	def __str__(self):
-		return str(self.name)
-
-	class Meta:
-		verbose_name = "员工基本情况"
-		verbose_name_plural = "员工基本情况"
-
-	def get_absolute_url(self):
-		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
-
-	def get_update_url(self):
-		return reverse("Staff_update_url", kwargs={"slug":self.slug})
-
-	def get_delete_url(self):
-		return reverse("Staff_delete_url", kwargs={"slug":self.slug})
-
-	def save(self, *args, **kwargs):
-		if not self.id:
-			self.slug = gen_slug(self._meta.model_name)
-		super().save(*args, **kwargs)
-
-class Customer(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer', verbose_name='客户')
-	name = models.CharField(max_length=50)
-	phone = models.CharField(max_length=20, blank=True, null=True)
-	slug = models.SlugField(max_length=150, unique=True, blank=True)
-
-	def __str__(self):
-		return str(self.name)
-
-	class Meta:
-		verbose_name = "客户登记表"
-		verbose_name_plural = "客户登记表"
-
-	def get_absolute_url(self):
-		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
-
-	def get_update_url(self):
-		return reverse("Staff_update_url", kwargs={"slug":self.slug})
-
-	def get_delete_url(self):
-		return reverse("Staff_delete_url", kwargs={"slug":self.slug})
-
-	def save(self, *args, **kwargs):
-		if not self.id:
-			self.slug = gen_slug(self._meta.model_name)
-		super().save(*args, **kwargs)
-
 
 
 class History_of_trauma(models.Model):
@@ -194,7 +138,7 @@ class Personal_health_assessment(models.Model):
 
 class Allergies_history(models.Model):
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
-	drug_name = models.CharField(max_length=60, blank=True, null=True, verbose_name="药品名称")
+	drug_name = models.CharField(max_length=60, blank=True, null=True, choices=Drug_listEnum, verbose_name="药品名称")
 	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, blank=True)
 
@@ -720,7 +664,7 @@ class Basic_personal_information(models.Model):
 	type_of_residence = models.CharField(max_length=60, blank=True, null=True, choices=Type_of_residenceEnum, verbose_name="居住类型")
 	blood_type = models.CharField(max_length=60, blank=True, null=True, choices=Blood_typeEnum, verbose_name="血型")
 	contract_signatory = models.CharField(max_length=60, blank=True, null=True, choices=Contract_signatoryEnum, verbose_name="合同签约户")
-	signed_family_doctor = models.CharField(max_length=60, blank=True, null=True, verbose_name="签约家庭医生")
+	signed_family_doctor = models.CharField(max_length=60, blank=True, null=True, choices=Employee_listEnum, verbose_name="签约家庭医生")
 	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
 	slug = models.SlugField(max_length=150, blank=True)
 

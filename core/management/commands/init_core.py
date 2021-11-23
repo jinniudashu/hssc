@@ -53,3 +53,5 @@ class Command(BaseCommand):
         )
         print('新建指令成功：', instruction)
 
+        # 创建一个管理员用户
+

@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Form, Service, Operation, Event, Instruction, Event_instructions
+from .models import Staff, Customer, Form, Service, Operation, Event, Instruction, Event_instructions
 from .models import Service_proc, Operation_proc
 
+admin.site.register(Staff)
+admin.site.register(Customer)
 
 class EventInline(admin.TabularInline):
     model = Event

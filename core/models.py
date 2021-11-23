@@ -2,10 +2,77 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
+
+from time import time
+from django.utils.text import slugify
+
 from icpc.models import Icpc
 
 import json
 from core.utils import keyword_search
+
+
+def gen_slug(s):
+    slug = slugify(s, allow_unicode=True)
+    return slug + f'-{int(time())}'
+
+class Staff(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff', verbose_name='员工')
+	name = models.CharField(max_length=50)
+	phone = models.CharField(max_length=20, blank=True, null=True)
+	email = models.EmailField(max_length=50)
+	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
+	group = models.CharField(max_length=50, blank=True, null=True, verbose_name='组别')
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.name)
+
+	class Meta:
+		verbose_name = "员工基本情况"
+		verbose_name_plural = "员工基本情况"
+
+	def get_absolute_url(self):
+		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("Staff_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("Staff_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
+class Customer(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer', verbose_name='客户')
+	name = models.CharField(max_length=50)
+	phone = models.CharField(max_length=20, blank=True, null=True)
+	slug = models.SlugField(max_length=150, unique=True, blank=True)
+
+	def __str__(self):
+		return str(self.name)
+
+	class Meta:
+		verbose_name = "客户登记表"
+		verbose_name_plural = "客户登记表"
+
+	def get_absolute_url(self):
+		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
+
+	def get_update_url(self):
+		return reverse("Staff_update_url", kwargs={"slug":self.slug})
+
+	def get_delete_url(self):
+		return reverse("Staff_delete_url", kwargs={"slug":self.slug})
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+
 
 # 表单信息表
 class Form(models.Model):

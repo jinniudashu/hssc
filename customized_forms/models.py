@@ -1,8 +1,6 @@
 from django.db import models
 from core.models import Form
 
-from django.db.models.signals import post_save, post_delete, m2m_changed
-
 
 # 组件定义
 class Component(models.Model):
@@ -62,7 +60,7 @@ class SubForm(models.Model):
 
 
 # 作业表单定义
-class Operand_Form(models.Model):
+class Operand_View(models.Model):
     name = models.CharField(max_length=100, verbose_name="名称")
     label = models.CharField(max_length=100, blank=True, null=True, verbose_name="表单名称")
     AXIS_TYPE = [
@@ -71,7 +69,7 @@ class Operand_Form(models.Model):
         ('medicine', '药品'),
         ('device', '设备'),
     ]
-    axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="作业对象")
+    axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="关联字段")
     # subforms list: [subform1, subform2, ...]
     inquire_forms = models.ManyToManyField(SubForm, related_name="inquire_forms", verbose_name="查询子表单")
     mutate_forms = models.ManyToManyField(SubForm, related_name="mutate_forms", verbose_name="变更子表单")

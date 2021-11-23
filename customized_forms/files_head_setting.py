@@ -3,7 +3,7 @@ views_file_head = f'''from django.views.generic import ListView, CreateView, Upd
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory, inlineformset_factory
-from core.models import Operation_proc
+from core.models import Operation_proc, Staff, Customer
 
 from forms.models import *
 from forms.forms import *
