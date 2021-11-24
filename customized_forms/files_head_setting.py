@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.forms import modelformset_factory, inlineformset_factory
 from core.models import Operation_proc, Staff, Customer
 
+from django.contrib.messages.views import SuccessMessageMixin
+from forms.utils import *
+
 from forms.models import *
 from forms.forms import *
 

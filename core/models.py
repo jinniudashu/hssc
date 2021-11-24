@@ -23,14 +23,14 @@ class Staff(models.Model):
 	email = models.EmailField(max_length=50)
 	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
 	group = models.CharField(max_length=50, blank=True, null=True, verbose_name='组别')
-	slug = models.SlugField(max_length=150, unique=True, blank=True)
+	slug = models.SlugField(max_length=150, blank=True)
 
 	def __str__(self):
 		return str(self.name)
 
 	class Meta:
-		verbose_name = "员工基本情况"
-		verbose_name_plural = "员工基本情况"
+		verbose_name = "员工基本信息"
+		verbose_name_plural = "员工基本信息"
 
 	def get_absolute_url(self):
 		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
@@ -50,14 +50,14 @@ class Customer(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer', verbose_name='客户')
 	name = models.CharField(max_length=50)
 	phone = models.CharField(max_length=20, blank=True, null=True)
-	slug = models.SlugField(max_length=150, unique=True, blank=True)
+	slug = models.SlugField(max_length=150, blank=True)
 
 	def __str__(self):
 		return str(self.name)
 
 	class Meta:
-		verbose_name = "客户登记表"
-		verbose_name_plural = "客户登记表"
+		verbose_name = "客户注册信息"
+		verbose_name_plural = "客户注册信息"
 
 	def get_absolute_url(self):
 		return reverse("Staff_detail_url", kwargs={"slug":self.slug})

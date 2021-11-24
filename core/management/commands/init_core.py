@@ -1,7 +1,8 @@
 from django.core.management import BaseCommand
-from core.models import Form, Operation, Event, Event_instructions, Operation_proc, Instruction
+from core.models import Staff, Customer, Form, Operation, Event, Event_instructions, Operation_proc, Instruction
 from forms.form_list import form_list
 from customized_forms.models import SubForm
+from django.contrib.auth.models import User
 
 # python manage.py import_form_list
 
@@ -53,5 +54,20 @@ class Command(BaseCommand):
         )
         print('新建指令成功：', instruction)
 
-        # 创建一个管理员用户
+        admin = User.objects.get(username='admin')
+        # 创建一个管理员员工信息
+        staff = Staff.objects.create(
+            user = admin,
+            name='admin',
+            email='admin@test.com',
+        )
+        staff.save()
+        print('新建员工成功：', staff)
 
+        # 创建一个管理员客户注册信息
+        customer = Customer.objects.create(
+            user = admin,
+            name='admin',
+        )
+        customer.save()
+        print('新建客户成功：', customer)

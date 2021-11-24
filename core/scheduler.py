@@ -24,10 +24,15 @@ from django.dispatch import receiver, Signal
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from registration.signals import user_registered, user_activated, user_approved
+from django.core import serializers
 import json
 
 # 导入作业事件表、指令表
 from core.models import Form, Operation, Event, Event_instructions, Instruction, Operation_proc
+
+# 导入自定义表单models
+from django.contrib.contenttypes.models import ContentType
+from customized_forms.models import CharacterField, NumberField, DTField, ChoiceField, Component
 
 # 导入任务
 from core.tasks import create_operation_proc
@@ -203,6 +208,31 @@ def new_operation_proc(instance, created, **kwargs):
 # 收到表单保存信号，更新作业进程状态: rtc
 @receiver(post_save, sender=None, weak=True, dispatch_uid=None)
 def form_post_save_handler(sender, instance, created, **kwargs):
+
+    # 如果保存customized_forms的字段表，则更新Component表
+    if sender in [CharacterField, NumberField, DTField, ChoiceField]:
+        charfield_type = ContentType.objects.get(app_label='customized_forms', model=sender.__name__.lower())
+        if created:
+            Component.objects.create(
+                content_type = charfield_type, 
+                object_id = instance.id, 
+                name = instance.name, 
+                label = instance.label, 
+                # attribute = json.dumps(serializers.serialize('json',[instance])[1:-1]),
+                attribute = serializers.serialize('json',[instance])[1:-1],
+            )
+        else:
+            Component.objects.filter(content_type=charfield_type, object_id=instance.id).update(
+                name = instance.name, 
+                label = instance.label, 
+                # attribute = json.dumps(serializers.serialize('json',[instance])[1:-1]),
+                attribute = serializers.serialize('json',[instance])[1:-1],
+            )
+        
+        # j = serializers.serialize('json',[instance])[1:-1]
+        # print('json:', j['fields'])
+
+
     # 如果sender在Formlist里且非Created，更新作业进程状态
     if not created and instance.__class__.__name__ in form_list:
         slug = instance.slug

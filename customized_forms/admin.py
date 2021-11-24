@@ -1,11 +1,17 @@
 from django.contrib import admin
-from .models import Component, SubForm, Operand_View
+from .models import CharacterField, NumberField, DTField, ChoiceField, RelatedField, Component, BaseModel, SubForm, OperandView
 from .utils import export_scripts
 
 
-class Operand_ViewAdmin(admin.ModelAdmin):
+class OperandViewAdmin(admin.ModelAdmin):
     actions = [export_scripts]
 
+admin.site.register(CharacterField)
+admin.site.register(NumberField)
+admin.site.register(DTField)
+admin.site.register(ChoiceField)
+admin.site.register(RelatedField)
 admin.site.register(Component)
+admin.site.register(BaseModel)
 admin.site.register(SubForm)
-admin.site.register(Operand_View, Operand_ViewAdmin)
+admin.site.register(OperandView, OperandViewAdmin)
