@@ -32,7 +32,7 @@ from core.models import Form, Operation, Event, Event_instructions, Instruction,
 
 # 导入自定义表单models
 from django.contrib.contenttypes.models import ContentType
-from customized_forms.models import CharacterField, NumberField, DTField, ChoiceField, Component
+from customized_forms.models import CharacterField, NumberField, DTField, ChoiceField, RelatedField, Component
 
 # 导入任务
 from core.tasks import create_operation_proc
@@ -210,7 +210,7 @@ def new_operation_proc(instance, created, **kwargs):
 def form_post_save_handler(sender, instance, created, **kwargs):
 
     # 如果保存customized_forms的字段表，则更新Component表
-    if sender in [CharacterField, NumberField, DTField, ChoiceField]:
+    if sender in [CharacterField, NumberField, DTField, ChoiceField, RelatedField]:
         charfield_type = ContentType.objects.get(app_label='customized_forms', model=sender.__name__.lower())
         if created:
             Component.objects.create(
@@ -219,14 +219,12 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 name = instance.name, 
                 label = instance.label, 
                 # attribute = json.dumps(serializers.serialize('json',[instance])[1:-1]),
-                attribute = serializers.serialize('json',[instance])[1:-1],
             )
         else:
             Component.objects.filter(content_type=charfield_type, object_id=instance.id).update(
                 name = instance.name, 
                 label = instance.label, 
                 # attribute = json.dumps(serializers.serialize('json',[instance])[1:-1]),
-                attribute = serializers.serialize('json',[instance])[1:-1],
             )
         
         # j = serializers.serialize('json',[instance])[1:-1]
