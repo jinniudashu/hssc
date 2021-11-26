@@ -32,7 +32,7 @@ from core.models import Form, Operation, Event, Event_instructions, Instruction,
 
 # 导入自定义表单models
 from django.contrib.contenttypes.models import ContentType
-from customized_forms.models import CharacterField, NumberField, DTField, ChoiceField, RelatedField, Component
+from customized_forms.models import CharacterField, NumberField, DTField, ChoiceField, RelatedField, Component, BaseModel, BaseForm
 
 # 导入任务
 from core.tasks import create_operation_proc
@@ -218,17 +218,37 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 object_id = instance.id, 
                 name = instance.name, 
                 label = instance.label, 
-                # attribute = json.dumps(serializers.serialize('json',[instance])[1:-1]),
             )
         else:
             Component.objects.filter(content_type=charfield_type, object_id=instance.id).update(
                 name = instance.name, 
                 label = instance.label, 
-                # attribute = json.dumps(serializers.serialize('json',[instance])[1:-1]),
             )
-        
-        # j = serializers.serialize('json',[instance])[1:-1]
-        # print('json:', j['fields'])
+
+    # 如果保存的是BaseModel，则更新BaseForm表
+    if sender == BaseModel:
+        if created:
+            BaseForm.objects.create(
+                name = f'{instance.name}_baseform', 
+                label = instance.label, 
+                basemodel = instance,
+                is_inquiry = False,
+                style = 'detail',
+                display_fields = serializers.serialize('json',[instance])[1:-1]
+            )
+        else:
+            # for component in instance.components.all():
+            #     f = component.content_object.__dict__
+            #     f.pop('_state')
+            #     print('BaseModel更新：', f)
+            instance.baseform_set.update(
+                name = instance.name, 
+                label = instance.label, 
+                display_fields = serializers.serialize('json',[instance])[1:-1]
+            )
+        # t = ins.components.first().content_object.__dict__
+        # t.pop('_state')
+        # j = json.dumps(t, ensure_ascii=False)
 
 
     # 如果sender在Formlist里且非Created，更新作业进程状态

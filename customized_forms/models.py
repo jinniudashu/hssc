@@ -1,5 +1,6 @@
 from typing import Optional
 from django.db import models
+from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from core.models import Form
@@ -102,7 +103,16 @@ class ComputeField(models.Model):
 class Component(models.Model):
     name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
     label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+
+    q = Q(app_label='customized_forms') & (
+        Q(model = 'characterfield') | 
+        Q(model = 'numberfield') | 
+        Q(model = 'dtfield') | 
+        Q(model = 'choicefield') | 
+        Q(model = 'relatedfield') | 
+        Q(model = 'computefield')
+    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=q, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
@@ -136,12 +146,10 @@ class BaseForm(models.Model):
     name = models.CharField(max_length=100, verbose_name="名称")
     label = models.CharField(max_length=100, null=True, blank=True, verbose_name="视图名称")
     basemodel = models.ForeignKey(BaseModel, on_delete=models.CASCADE, verbose_name="基础表单")
-    display_fields = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
-    FORM_STYLE = [
-		('detail', '详情'),
-		('list', '列表'),
-	]
+    is_inquiry = models.BooleanField(default=False, verbose_name="仅用于查询")
+    FORM_STYLE = [('detail', '详情'),('list', '列表')]
     style = models.CharField(max_length=50, choices=FORM_STYLE, default='detail', verbose_name='风格')
+    display_fields = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
 
     def __str__(self):
         return str(self.label)
@@ -162,10 +170,9 @@ class OperandView(models.Model):
         ('medicine', '药品'),
         ('device', '设备'),
     ]
-    axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="关联字段")
-    # subforms list: [subform1, subform2, ...]
-    inquire_forms = models.ManyToManyField(BaseForm, related_name="inquire_forms", verbose_name="用于查询的基本视图")
-    mutate_forms = models.ManyToManyField(BaseForm, related_name="mutate_forms", verbose_name="用于变更的基本视图")
+    axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="业务主键")
+    inquire_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': True}, related_name="inquire_forms", verbose_name="用于查询的基本视图")
+    mutate_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': False}, related_name="mutate_forms", verbose_name="用于变更的基本视图")
 
     def __str__(self):
         return str(self.label)
