@@ -40,6 +40,10 @@ from core.tasks import create_operation_proc
 from core.utils import keyword_replace
 from core.interpreter import interpreter
 
+# 导入UserSession
+from analytics.models import UserSession
+from analytics.utils import get_client_ip
+
 # 从app forms里获取所有表单model的名字, 用以判断post_save的sender
 from django.apps import apps
 Forms_models = apps.get_app_config('forms').get_models()
@@ -209,6 +213,12 @@ def new_operation_proc(instance, created, **kwargs):
 @receiver(post_save, sender=None, weak=True, dispatch_uid=None)
 def form_post_save_handler(sender, instance, created, **kwargs):
 
+    # 如果用户登录，中止该用户其它会话
+    if sender == UserSession and created:
+        qs = UserSession.objects.filter(user=instance.user, ended=False).exclude(id=instance.id)
+        for s in qs:
+            s.end_session()
+
     # 如果保存customized_forms的字段表，则更新Component表
     if sender in [CharacterField, NumberField, DTField, ChoiceField, RelatedField]:
         charfield_type = ContentType.objects.get(app_label='customized_forms', model=sender.__name__.lower())
@@ -335,6 +345,16 @@ def user_registered_handler(sender, user, request, **kwargs):
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, user, request, **kwargs):
 
+    # 用户登录Session登记
+    ip_address = get_client_ip(request)
+    session_key = request.session.session_key
+    UserSession.objects.create(
+        user=user,
+        ip_address=ip_address,
+        session_key=session_key
+    )
+
+    # 登录事件调度
     params={
         'uid': user.id,
         'cid': user.id,

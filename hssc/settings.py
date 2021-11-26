@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    # our apps
+    'analytics',
     'core',
     'customized_forms',
     'dictionaries',
@@ -72,6 +74,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# AUTH_USER_MODEL = 'core.User'
 
 ROOT_URLCONF = 'hssc.urls'
 

@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from core.models import Form
 
-
 # 字段定义
 # 字符字段
 class CharacterField(models.Model):
