@@ -204,12 +204,21 @@ def new_operation_proc(instance, created, **kwargs):
             print('rtc状态, 查询表单完成事件，进行调度')
 
 
-# ******************************************
-# 业务事件处理：
-# 1. 保存业务表单
-# 2. 系统内置业务事件：注册，用户登录，用户退出
-# ******************************************
-# 收到表单保存信号，更新作业进程状态: rtc
+# BaseModel变更components内容，更新BaseForm内容
+@receiver(m2m_changed, sender=BaseModel.components.through)
+def basemodel_m2m_changed_handler(sender, instance, action, **kwargs):
+    display_fields = []
+    for component in instance.components.all():
+        f = component.content_object.__dict__['name']
+        # f.pop('_state')
+        display_fields.append(f)
+        # j = json.dumps(f, ensure_ascii=False)
+    display_fields = '\n'.join(display_fields)
+    print('BaseModel m2m更新：', action, display_fields.split('\n'))
+    instance.baseform_set.update(display_fields = display_fields)
+
+
+# 收到表单保存信号
 @receiver(post_save, sender=None, weak=True, dispatch_uid=None)
 def form_post_save_handler(sender, instance, created, **kwargs):
 
@@ -244,23 +253,22 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 basemodel = instance,
                 is_inquiry = False,
                 style = 'detail',
-                display_fields = serializers.serialize('json',[instance])[1:-1]
+                # display_fields字段是m2m, 由basemodel_m2m_changed_handler处理
             )
         else:
-            # for component in instance.components.all():
-            #     f = component.content_object.__dict__
-            #     f.pop('_state')
-            #     print('BaseModel更新：', f)
             instance.baseform_set.update(
-                name = instance.name, 
+                name = f'{instance.name}_baseform', 
                 label = instance.label, 
-                display_fields = serializers.serialize('json',[instance])[1:-1]
+                # display_fields字段是m2m, 由basemodel_m2m_changed_handler处理
             )
-        # t = ins.components.first().content_object.__dict__
-        # t.pop('_state')
-        # j = json.dumps(t, ensure_ascii=False)
 
 
+# ******************************************
+# 业务事件处理：
+# 1. 保存业务表单
+# 2. 系统内置业务事件：注册，用户登录，用户退出
+# ******************************************
+    # 收到表单保存信号，更新作业进程状态: rtc
     # 如果sender在Formlist里且非Created，更新作业进程状态
     if not created and instance.__class__.__name__ in form_list:
         slug = instance.slug

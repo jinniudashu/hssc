@@ -1,22 +1,28 @@
-from typing import Optional
 from django.db import models
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from core.models import Form
+from time import time
+from pypinyin import lazy_pinyin
 
 # 字段定义
 # 字符字段
 class CharacterField(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
-    label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
-    Char_Type = [('CharField', '单行文本'), ('TextField', '多行文本')]
-    type = models.CharField(max_length=50, choices=Char_Type, default='CharField', verbose_name="类型")
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
+    label = models.CharField(max_length=100, verbose_name="组件名称")
+    CHAR_TYPE = [('CharField', '单行文本'), ('TextField', '多行文本')]
+    type = models.CharField(max_length=50, choices=CHAR_TYPE, default='CharField', verbose_name="类型")
     length = models.PositiveSmallIntegerField(default=255, verbose_name="字符长度")
     # component = GenericRelation(to='Component')
 
     def __str__(self):
         return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "字符字段"
@@ -25,10 +31,10 @@ class CharacterField(models.Model):
 
 # 数值字段
 class NumberField(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
-    label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
-    Number_Type = [('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('FloatField', '浮点数')]
-    type = models.CharField(max_length=50, choices=Number_Type, default='IntegerField', verbose_name="类型")
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
+    label = models.CharField(max_length=100, verbose_name="组件名称")
+    NUMBER_TYPE = [('IntegerField', '整数'), ('DecimalField', '固定精度小数'), ('FloatField', '浮点数')]
+    type = models.CharField(max_length=50, choices=NUMBER_TYPE, default='IntegerField', verbose_name="类型")
     max_digits = models.PositiveSmallIntegerField(default=10, verbose_name="最大位数", null=True, blank=True)
     decimal_places = models.PositiveSmallIntegerField(default=2, verbose_name="小数位数", null=True, blank=True)
     standard_value = models.FloatField(null=True, blank=True, verbose_name="标准值")
@@ -40,6 +46,11 @@ class NumberField(models.Model):
     def __str__(self):
         return str(self.label)
 
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = "数值字段"
         verbose_name_plural = "数值字段"
@@ -47,13 +58,18 @@ class NumberField(models.Model):
 
 # 日期时间字段
 class DTField(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
-    label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
-    DT_Type = [('DateField', '日期'), ('DateTimeField', '日期时间')]
-    type = models.CharField(max_length=50, choices=DT_Type, default='DateField', verbose_name="类型")
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
+    label = models.CharField(max_length=100, verbose_name="组件名称")
+    DT_TYPE = [('DateField', '日期'), ('DateTimeField', '日期时间')]
+    type = models.CharField(max_length=50, choices=DT_TYPE, default='DateField', verbose_name="类型")
 
     def __str__(self):
         return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "日期字段"
@@ -62,35 +78,45 @@ class DTField(models.Model):
 
 # 选择字段
 class ChoiceField(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
-    label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
-    choice_type = [('ChoiceField', '单选'), ('MultipleChoiceField', '多选')]
-    type = models.CharField(max_length=50, choices=choice_type, default='ChoiceField', verbose_name="类型")
-    Options = models.CharField(max_length=255, null=True, blank=True, verbose_name="选项", help_text="选项之间用空格隔开")
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
+    label = models.CharField(max_length=100, verbose_name="组件名称")
+    CHOICE_TYPE = [('Select', '下拉单选'), ('RadioSelect', '单选按钮列表'), ('CheckboxSelectMultiple', '复选框列表'), ('SelectMultiple', '下拉多选')]
+    type = models.CharField(max_length=50, choices=CHOICE_TYPE, default='ChoiceField', verbose_name="类型")
+    options = models.TextField(max_length=1024, null=True, blank=True, verbose_name="选项", help_text="每行一个选项, 最多100个")
+    is_dic = models.BooleanField(default=False, verbose_name="是否字典")
     first_default = models.BooleanField(default=False, verbose_name="默认选中第一个")
 
     def __str__(self):
         return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "选择字段"
         verbose_name_plural = "选择字段"
 
 
-# 字典字段
+# 关联字段
 class RelatedField(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
-    label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
-    related_type = [('dic', '关联字典'), ('sys', '关联系统表')]
-    type = models.CharField(max_length=50, choices=related_type, default='dic', verbose_name="类型")
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
+    label = models.CharField(max_length=100, verbose_name="组件名称")
     related_content = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    related_field = models.CharField(max_length=100, null=True, blank=True, verbose_name="关联字段")
 
     def __str__(self):
         return str(self.label)
 
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
+
     class Meta:
-        verbose_name = "字典字段"
-        verbose_name_plural = "字典字段"
+        verbose_name = "关联字段"
+        verbose_name_plural = "关联字段"
 
 
 # 计算字段
@@ -100,7 +126,7 @@ class ComputeField(models.Model):
 
 # 组件清单
 class Component(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="名称")
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
     label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
 
     q = Q(app_label='customized_forms') & (
@@ -126,13 +152,18 @@ class Component(models.Model):
 
 # 基础表单定义
 class BaseModel(models.Model):
-    name = models.CharField(max_length=100, verbose_name="名称")
+    name = models.CharField(max_length=100, verbose_name="name")
     label = models.CharField(max_length=100, verbose_name="表单名称", null=True, blank=True)
     description = models.TextField(max_length=255, verbose_name="描述", null=True, blank=True)
     components = models.ManyToManyField(Component, verbose_name="组件清单")
 
     def __str__(self):
         return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "基础表单"
@@ -142,7 +173,7 @@ class BaseModel(models.Model):
 
 # 基础视图定义
 class BaseForm(models.Model):
-    name = models.CharField(max_length=100, verbose_name="名称")
+    name = models.CharField(max_length=100, verbose_name="name")
     label = models.CharField(max_length=100, null=True, blank=True, verbose_name="视图名称")
     basemodel = models.ForeignKey(BaseModel, on_delete=models.CASCADE, verbose_name="基础表单")
     is_inquiry = models.BooleanField(default=False, verbose_name="仅用于查询")
@@ -161,7 +192,7 @@ class BaseForm(models.Model):
 
 # 作业视图定义
 class OperandView(models.Model):
-    name = models.CharField(max_length=100, verbose_name="名称")
+    name = models.CharField(max_length=100, verbose_name="name")
     label = models.CharField(max_length=100, blank=True, null=True, verbose_name="表单名称")
     AXIS_TYPE = [
         ('customer', '客户'),
@@ -170,11 +201,16 @@ class OperandView(models.Model):
         ('device', '设备'),
     ]
     axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="业务主键")
-    inquire_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': True}, related_name="inquire_forms", verbose_name="用于查询的基本视图")
-    mutate_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': False}, related_name="mutate_forms", verbose_name="用于变更的基本视图")
+    inquire_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': True}, related_name="inquire_forms", verbose_name="查询视图")
+    mutate_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': False}, related_name="mutate_forms", verbose_name="变更视图")
 
     def __str__(self):
         return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "作业视图"
