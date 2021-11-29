@@ -2,7 +2,7 @@ from django.contrib import admin
 from time import time
 
 from .models import CharacterField, NumberField, DTField, ChoiceField, RelatedField, Component, BaseModel, BaseForm, OperandView
-from .utils import export_scripts
+from .utils import generate_models_forms_scripts, generate_views_urls_templates_scripts
 
 
 def copy_form(modeladmin, request, queryset):
@@ -40,6 +40,7 @@ class ComponentAdmin(admin.ModelAdmin):
 
 class BaseModelAdmin(admin.ModelAdmin):
     readonly_fields = ['name']
+    actions = [generate_models_forms_scripts]
 
 class BaseFormAdmin(admin.ModelAdmin):
     readonly_fields = ['name', 'basemodel']
@@ -47,7 +48,7 @@ class BaseFormAdmin(admin.ModelAdmin):
 
 class OperandViewAdmin(admin.ModelAdmin):
     readonly_fields = ['name']
-    actions = [export_scripts]
+    actions = [generate_views_urls_templates_scripts]
 
 admin.site.register(CharacterField, CharacterFieldAdmin)
 admin.site.register(NumberField, NumberFieldAdmin)

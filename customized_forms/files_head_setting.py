@@ -1,3 +1,29 @@
+# models.py文件头部设置
+models_file_head = '''from django.db import models
+from django.shortcuts import reverse
+from django.utils.text import slugify
+
+from time import time
+from datetime import date
+from django.utils import timezone
+
+from icpc.models import *
+from dictionaries.enums import *
+from core.models import Staff, Customer
+
+'''
+
+# forms.py文件头部设置
+forms_file_head = '''
+from django.forms import ModelForm, Form,  widgets, fields, RadioSelect, Select, CheckboxSelectMultiple, CheckboxInput, SelectMultiple, NullBooleanSelect
+from django.core.exceptions import ValidationError
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, HTML, Submit
+
+from .models import *
+'''
+
 # views.py文件头部设置
 views_file_head = f'''from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View, RedirectView, TemplateView
 from django.views.generic.detail import DetailView

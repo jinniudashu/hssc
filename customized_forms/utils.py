@@ -1,14 +1,208 @@
 # 导入待生成脚本的文件头部设置
-from .files_head_setting import views_file_head, urls_file_head, index_html_file_head
+from .files_head_setting import models_file_head, forms_file_head, views_file_head, urls_file_head, index_html_file_head
+
+
+# 写入文件
+def write_to_file(file_name, content, mode='w'):
+    output_path = '.\\forms\\'   # views.py urls.py 导出路径
+    with open(f'{output_path}{file_name}', mode, encoding='utf-8') as f:
+        f.write(content)
+    return      
+
 
 # 被customized_forms.admin调用
-def export_scripts(modeladmin, request, queryset):
+def generate_models_forms_scripts(modeladmin, request, queryset):
 
-    def write_to_file(file_name, content, mode='w'):
-        output_path = '.\\forms\\'   # views.py urls.py 导出路径
-        with open(f'{output_path}{file_name}', mode, encoding='utf-8') as f:
-            f.write(content)
-        return      
+    # 生成字符型字段定义脚本
+    def create_char_field_script(field):
+        if field['type'] == 'CharField':
+            f_type = 'CharField'
+        else:
+            f_type = 'TextField'
+
+        if field['required']:
+            f_required = ''
+        else:
+            f_required = 'null=True, blank=True, '
+
+        if field['default']:
+            f_default = f'default="{field["default"]}", '
+        else:
+            f_default = ''
+
+        return f'''
+    {field['name']} = models.{f_type}(max_length={field['length']}, {f_default}{f_required}verbose_name='{field['label']}')'''
+
+    # 生成数字型字段定义脚本
+    def create_number_field_script(field):
+        if field['type'] == 'IntegerField':
+            f_type = 'IntegerField'
+            f_dicimal = ''
+        elif field['type'] == 'DecimalField':
+            f_type = 'DecimalField'
+            f_dicimal = f'max_digits={field["max_digits"]}, decimal_places={field["decimal_places"]}, '
+        else:
+            f_type = 'FloatField'
+            f_dicimal = ''
+        
+        if field['standard_value']:
+            f_standard_value = f'default={field["standard_value"]}, '
+        else:
+            f_standard_value = ''
+        if field['up_limit']:
+            f_up_limit = f'default={field["up_limit"]}, '
+        else:
+            f_up_limit = ''
+        if field['down_limit']:
+            f_down_limit = f'default={field["down_limit"]}, '
+        else:
+            f_down_limit = ''
+
+        if field['default']:
+            f_default = f'default={field["default"]}, '
+        else:
+            f_default = ''
+
+        if field['required']:
+            f_required = ''
+        else:
+            f_required = 'null=True, blank=True, '
+
+        return f'''
+    {field['name']} = models.{f_type}({f_dicimal}{f_default}{f_required}verbose_name='{field['label']}')
+    {field['name']}_standard_value = models.{f_type}({f_standard_value}{f_required}verbose_name='{field['label']}标准值')
+    {field['name']}_up_limit = models.{f_type}({f_up_limit}{f_required}verbose_name='{field['label']}上限')
+    {field['name']}_down_limit = models.{f_type}({f_down_limit}{f_required}verbose_name='{field['label']}下限')'''
+    
+    # 生成日期型字段定义脚本
+    def create_datetime_field_script(field):
+        f_default = ''
+        if field['type'] == 'DateTimeField':
+            f_type = 'DateTimeField'
+            if field['default_now']: f_default = 'default=timezone.now(), '
+        else:
+            f_type = 'DateField'
+            if field['default_now']: f_default = 'default=date.today(), '
+        
+        if field['required']:
+            f_required = ''
+        else:
+            f_required = 'null=True, blank=True, '
+
+        return f'''
+    {field['name']} = models.{f_type}({f_default}{f_required}verbose_name='{field['label']}')'''
+
+    # 生成选择型字段定义脚本
+    def create_choice_field_script(field):
+        if field['type'] == 'Select':
+            f_type = 'Select'
+        elif field['type'] == 'RadioSelect':
+            f_type = 'RadioSelect'
+        elif field['type'] == 'CheckboxSelectMultiple':
+            f_type = 'CheckboxSelectMultiple'
+        else:
+            f_type = 'SelectMultiple'
+
+        f_enum = f'{field["name"].capitalize()}Enum'
+        f_choices = ''
+        for index, name in enumerate(field['options'].split('\r\n')):
+            f_choices=f_choices + (f'({index}, "{name}"),')
+
+        if field['default_first']:
+            f_default = 'default=0, '
+        else:
+            f_default = ''
+
+        if field['required']:
+            f_required = ''
+        else:
+            f_required = 'null=True, blank=True, '
+
+        return f'''
+    {f_enum} = [{f_choices}]
+    {field['name']} = models.PositiveSmallIntegerField({f_default}{f_required}choices={f_enum}, verbose_name='{field['label']}')'''
+
+    # 生成外键字段定义脚本
+    def create_related_field_script(field):
+        if field['type'] == 'Select':
+            f_type = 'Select'
+        elif field['type'] == 'RadioSelect':
+            f_type = 'RadioSelect'
+        elif field['type'] == 'CheckboxSelectMultiple':
+            f_type = 'CheckboxSelectMultiple'
+        else:
+            f_type = 'SelectMultiple'
+        
+        return f'''
+    {field['name']} = models.ForeignKey({field['foreign_key'].capitalize()}, on_delete=models.CASCADE, verbose_name='{field['label']}')'''
+
+    # generate model field script
+    def create_model_field_script(component):
+        field = component.content_object.__dict__
+        component_type = component.content_type.__dict__['model']
+        if component_type == 'characterfield':
+            script = create_char_field_script(field)
+        elif component_type == 'numberfield':
+            script = create_number_field_script(field)
+        elif component_type == 'dtfield':
+            script = create_datetime_field_script(field)
+        elif component_type == 'choicefield':
+            script = create_choice_field_script(field)
+        elif component_type == 'relatedfield':
+            field['foreign_key'] = component.content_object.related_content.model
+            script = create_related_field_script(field)
+        return script
+
+    # construct models script
+    models_script = ''
+    for obj in queryset:
+        model_name = obj.name
+        model_label = obj.label
+
+        # construct models script
+        model_head = f'class {model_name.capitalize()}(models.Model):'
+
+        model_fields = ''
+        for component in obj.components.all():
+            # construct fields script
+            script = create_model_field_script(component)
+            model_fields = model_fields + script
+
+        model_body = f'''
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        verbose_name = '{model_label}'
+        verbose_name_plural = '{model_label}'
+
+    def get_absolute_url(self):
+        return reverse('{model_name}_detail_url', kwargs={{'slug': self.slug}})
+
+    def get_update_url(self):
+        return reverse('{model_name}_update_url', kwargs={{'slug': self.slug}})
+
+    def get_delete_url(self):
+        return reverse('{model_name}_delete_url', kwargs={{'slug': self.slug}})
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{{int(time())}}'
+        super().save(*args, **kwargs)        
+        '''
+        model_script = f'{model_head}{model_fields}{model_body}\n\n'
+        models_script = models_script + model_script
+
+    # add header to models.py
+    models_script = models_file_head + models_script
+    write_to_file('model_test.py', models_script)
+
+generate_models_forms_scripts.short_description = '生成表单脚本'
+
+
+# 被customized_forms.admin调用
+def generate_views_urls_templates_scripts(modeladmin, request, queryset):
 
     views_script = urls_script = index_html_script = ''
 
@@ -21,7 +215,7 @@ def export_scripts(modeladmin, request, queryset):
         inquire_forms = [(f['name'], f['style'], f['label']) for f in list(obj.inquire_forms.all().values())]
         mutate_forms = [(f['name'], f['style'], f['label']) for f in list(obj.mutate_forms.all().values())]
 
-        s = CreateScripts(obj.name, obj.label, obj.axis_field, inquire_forms, mutate_forms)
+        s = CreateViewsScripts(obj.name, obj.label, obj.axis_field, inquire_forms, mutate_forms)
         vs, hs, us, ihs = s.create_script()
 
         # construct views script
@@ -51,10 +245,11 @@ def export_scripts(modeladmin, request, queryset):
     # 写入作业库
     ################################################################################
 
-export_scripts.short_description = '生成脚本'
+generate_views_urls_templates_scripts.short_description = '生成作业视图脚本'
 
 
-class CreateScripts:
+
+class CreateViewsScripts:
 
     def __init__(self, operand_name, operand_label, axis_field, inquire_forms, mutate_forms):
         self.operand_name = operand_name

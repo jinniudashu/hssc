@@ -14,6 +14,8 @@ class CharacterField(models.Model):
     CHAR_TYPE = [('CharField', '单行文本'), ('TextField', '多行文本')]
     type = models.CharField(max_length=50, choices=CHAR_TYPE, default='CharField', verbose_name="类型")
     length = models.PositiveSmallIntegerField(default=255, verbose_name="字符长度")
+    required = models.BooleanField(default=False, verbose_name="必填")
+    default = models.CharField(max_length=255, null=True, blank=True, verbose_name="默认值")
     # component = GenericRelation(to='Component')
 
     def __str__(self):
@@ -40,8 +42,9 @@ class NumberField(models.Model):
     standard_value = models.FloatField(null=True, blank=True, verbose_name="标准值")
     up_limit = models.FloatField(null=True, blank=True, verbose_name="上限")
     down_limit = models.FloatField(null=True, blank=True, verbose_name="下限")
-    display_unit = models.BooleanField(default=False, verbose_name="显示单位")
     unit = models.CharField(max_length=50, null=True, blank=True, verbose_name="单位")
+    default = models.FloatField(null=True, blank=True, verbose_name="默认值")
+    required = models.BooleanField(default=False, verbose_name="必填")
 
     def __str__(self):
         return str(self.label)
@@ -60,8 +63,10 @@ class NumberField(models.Model):
 class DTField(models.Model):
     name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
     label = models.CharField(max_length=100, verbose_name="组件名称")
-    DT_TYPE = [('DateField', '日期'), ('DateTimeField', '日期时间')]
-    type = models.CharField(max_length=50, choices=DT_TYPE, default='DateField', verbose_name="类型")
+    DT_TYPE = [('DateTimeField', '日期时间'), ('DateField', '日期')]
+    type = models.CharField(max_length=50, choices=DT_TYPE, default='DateTimeField', verbose_name="类型")
+    default_now = models.BooleanField(default=False, verbose_name="默认为当前时间")
+    required = models.BooleanField(default=False, verbose_name="必填")
 
     def __str__(self):
         return str(self.label)
@@ -83,8 +88,8 @@ class ChoiceField(models.Model):
     CHOICE_TYPE = [('Select', '下拉单选'), ('RadioSelect', '单选按钮列表'), ('CheckboxSelectMultiple', '复选框列表'), ('SelectMultiple', '下拉多选')]
     type = models.CharField(max_length=50, choices=CHOICE_TYPE, default='ChoiceField', verbose_name="类型")
     options = models.TextField(max_length=1024, null=True, blank=True, verbose_name="选项", help_text="每行一个选项, 最多100个")
-    is_dic = models.BooleanField(default=False, verbose_name="是否字典")
-    first_default = models.BooleanField(default=False, verbose_name="默认选中第一个")
+    default_first = models.BooleanField(default=False, verbose_name="默认选第一个")
+    required = models.BooleanField(default=False, verbose_name="必填")
 
     def __str__(self):
         return str(self.label)
@@ -103,6 +108,8 @@ class ChoiceField(models.Model):
 class RelatedField(models.Model):
     name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
     label = models.CharField(max_length=100, verbose_name="组件名称")
+    CHOICE_TYPE = [('Select', '下拉单选'), ('RadioSelect', '单选按钮列表'), ('CheckboxSelectMultiple', '复选框列表'), ('SelectMultiple', '下拉多选')]
+    type = models.CharField(max_length=50, choices=CHOICE_TYPE, default='ChoiceField', verbose_name="类型")
     related_content = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
     related_field = models.CharField(max_length=100, null=True, blank=True, verbose_name="关联字段")
 
@@ -111,7 +118,7 @@ class RelatedField(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.name:
-            self.name = f'{"_".join(lazy_pinyin(self.label))}_{int(time())}'
+            self.name = f'{"_".join(lazy_pinyin(self.label)).lower()}_{int(time())}'
         super().save(*args, **kwargs)
 
     class Meta:
@@ -201,7 +208,7 @@ class OperandView(models.Model):
         ('device', '设备'),
     ]
     axis_field = models.CharField(max_length=255, choices=AXIS_TYPE, default='customer', verbose_name="业务主键")
-    inquire_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': True}, related_name="inquire_forms", verbose_name="查询视图")
+    inquire_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': True}, related_name="inquire_forms", blank=True, null=True, verbose_name="查询视图")
     mutate_forms = models.ManyToManyField(BaseForm, limit_choices_to={'is_inquiry': False}, related_name="mutate_forms", verbose_name="变更视图")
 
     def __str__(self):
