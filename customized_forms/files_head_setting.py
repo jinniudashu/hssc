@@ -13,15 +13,38 @@ from core.models import Staff, Customer
 
 '''
 
+# admin.py文件头部设置
+admins_file_head = '''from django.contrib import admin
+from .models import *
+    '''
+
 # forms.py文件头部设置
-forms_file_head = '''
-from django.forms import ModelForm, Form,  widgets, fields, RadioSelect, Select, CheckboxSelectMultiple, CheckboxInput, SelectMultiple, NullBooleanSelect
+forms_file_head = '''from django.forms import ModelForm, Form,  widgets, fields, RadioSelect, Select, CheckboxSelectMultiple, CheckboxInput, SelectMultiple, NullBooleanSelect
 from django.core.exceptions import ValidationError
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, HTML, Submit
 
 from .models import *
+'''
+
+modelform_footer = '''
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
 '''
 
 # views.py文件头部设置

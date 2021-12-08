@@ -8,7 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.simple.urls')),
     path('icpc_update/', include('hssc_rcms_backup.urls')),
-    path('htmx/', include('core.urls'))
+    path('htmx/', include('core.urls')),
+    path('customized_forms/', include('customized_forms.urls')),
     # path('grappelli/', include('grappelli.urls')),
 ]
 

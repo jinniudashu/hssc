@@ -131,7 +131,7 @@ class ComputeField(models.Model):
     pass
 
 
-# 组件清单
+# 字段字典
 class Component(models.Model):
     name = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="name")
     label = models.CharField(max_length=100, verbose_name="组件名称", null=True, blank=True)
@@ -152,8 +152,8 @@ class Component(models.Model):
         return str(self.label)
 
     class Meta:
-        verbose_name = "组件清单"
-        verbose_name_plural = "组件清单"
+        verbose_name = "字段字典"
+        verbose_name_plural = "字段字典"
         ordering = ['id']
 
 
@@ -187,6 +187,8 @@ class BaseForm(models.Model):
     FORM_STYLE = [('detail', '详情'),('list', '列表')]
     style = models.CharField(max_length=50, choices=FORM_STYLE, default='detail', verbose_name='风格')
     display_fields = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
+    # q = Q(BaseModel.objects.get(id=basemodel).components.all())
+    components = models.ManyToManyField(Component, verbose_name="组件清单")
 
     def __str__(self):
         return str(self.label)
@@ -197,7 +199,7 @@ class BaseForm(models.Model):
         ordering = ['id']
 
 
-# 作业视图定义
+# 作业界面定义
 class OperandView(models.Model):
     name = models.CharField(max_length=100, verbose_name="name")
     label = models.CharField(max_length=100, blank=True, null=True, verbose_name="表单名称")
@@ -220,8 +222,8 @@ class OperandView(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = "作业视图"
-        verbose_name_plural = "作业视图"
+        verbose_name = "作业界面"
+        verbose_name_plural = "作业界面"
         ordering = ['id']
 
 # 把model转为JSON

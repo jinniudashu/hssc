@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 'ge_ren_ji_ben_xin_xi_diao_cha_1638065768_create_url' %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        <h5>个人基本信息调查</h5>
+        {{ form0.as_p }}
+        <hr>
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 'ce_shi_biao_dan_2_1638328821_create_url' %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        <h5>个人基本情况调查_查询视图_1638283003</h5>
+        {{ form0.as_p }}
+        <hr>
+        <h5>test</h5>
+        {{ form1.as_p }}
+        <hr>
+        <h5>test_auto_migrate</h5>
+        {{ form2.as_p }}
+        <hr>
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}

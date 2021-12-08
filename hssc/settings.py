@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'hssc_rcms_backup',
     'rcms',
     'hssc.apps.UniversalManagerApp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

@@ -204,18 +204,12 @@ def new_operation_proc(instance, created, **kwargs):
             print('rtc状态, 查询表单完成事件，进行调度')
 
 
-# BaseModel变更components内容，更新BaseForm内容
+# BaseModel变更components字段，更新相应BaseForm的components字段
 @receiver(m2m_changed, sender=BaseModel.components.through)
 def basemodel_m2m_changed_handler(sender, instance, action, **kwargs):
-    display_fields = []
-    for component in instance.components.all():
-        f = component.content_object.__dict__['name']
-        # f.pop('_state')
-        display_fields.append(f)
-        # j = json.dumps(f, ensure_ascii=False)
-    display_fields = '\n'.join(display_fields)
-    print('BaseModel m2m更新：', action, display_fields.split('\n'))
-    instance.baseform_set.update(display_fields = display_fields)
+    for baseform in instance.baseform_set.all():
+        baseform.components.add(*instance.components.all())
+        baseform.save()
 
 
 # 收到表单保存信号
@@ -244,7 +238,7 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 label = instance.label, 
             )
 
-    # 如果保存的是BaseModel，则更新BaseForm表
+    # 如果创建的是BaseModel，则同步创建BaseForm表
     if sender == BaseModel:
         if created:
             BaseForm.objects.create(
@@ -253,12 +247,6 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                 basemodel = instance,
                 is_inquiry = False,
                 style = 'detail',
-                # display_fields字段是m2m, 由basemodel_m2m_changed_handler处理
-            )
-        else:
-            instance.baseform_set.update(
-                name = f'{instance.name}_baseform', 
-                label = instance.label, 
                 # display_fields字段是m2m, 由basemodel_m2m_changed_handler处理
             )
 

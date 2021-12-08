@@ -8,7 +8,7 @@ from .utils import generate_models_forms_scripts, generate_views_urls_templates_
 def copy_form(modeladmin, request, queryset):
     for obj in queryset:
         t = int(time())
-        BaseForm.objects.create(
+        f = BaseForm.objects.create(
             name=f'{obj.name}_query_{t}',
             label=f'{obj.label}_查询视图_{t}',
             basemodel=obj.basemodel,
@@ -16,8 +16,10 @@ def copy_form(modeladmin, request, queryset):
             style=obj.style,
             display_fields=obj.display_fields,
         )
+        f.components.add(*obj.components.all())
+        f.save()
 
-copy_form.short_description = '生成查询视图'
+copy_form.short_description = '生成查询视图副本'
 
 
 class CharacterFieldAdmin(admin.ModelAdmin):
@@ -40,7 +42,6 @@ class ComponentAdmin(admin.ModelAdmin):
 
 class BaseModelAdmin(admin.ModelAdmin):
     readonly_fields = ['name']
-    actions = [generate_models_forms_scripts]
 
 class BaseFormAdmin(admin.ModelAdmin):
     readonly_fields = ['name', 'basemodel']

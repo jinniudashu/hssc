@@ -1,6 +1,8 @@
-# 导入待生成脚本的文件头部设置
-from .files_head_setting import models_file_head, forms_file_head, views_file_head, urls_file_head, index_html_file_head
+import os
 
+# 导入待生成脚本的文件头部设置
+from .files_head_setting import models_file_head, admins_file_head, forms_file_head, modelform_footer, views_file_head, urls_file_head, index_html_file_head
+from .models import BaseModel, BaseForm
 
 # 写入文件
 def write_to_file(file_name, content, mode='w'):
@@ -11,7 +13,7 @@ def write_to_file(file_name, content, mode='w'):
 
 
 # 被customized_forms.admin调用
-def generate_models_forms_scripts(modeladmin, request, queryset):
+def generate_models_forms_scripts():
 
     # 生成字符型字段定义脚本
     def create_char_field_script(field):
@@ -153,20 +155,27 @@ def generate_models_forms_scripts(modeladmin, request, queryset):
             script = create_related_field_script(field)
         return script
 
-    # construct models script
-    models_script = ''
-    for obj in queryset:
+    ####################################################################################################################
+    # construct models and admin script
+    ####################################################################################################################
+    models_script = admins_script =  ''
+    models = BaseModel.objects.all()
+    for obj in models:
         model_name = obj.name
         model_label = obj.label
 
         # construct models script
         model_head = f'class {model_name.capitalize()}(models.Model):'
 
-        model_fields = ''
+        model_fields = autocomplete_fields = ''
         for component in obj.components.all():
             # construct fields script
             script = create_model_field_script(component)
             model_fields = model_fields + script
+            
+            # construct admin autocomplete_fields script
+            if component.content_type.__dict__['model'] == 'relatedfield':
+                autocomplete_fields = autocomplete_fields + f'"{component.content_object.__dict__["name"]}", '
 
         model_body = f'''
 
@@ -194,18 +203,93 @@ def generate_models_forms_scripts(modeladmin, request, queryset):
         model_script = f'{model_head}{model_fields}{model_body}\n\n'
         models_script = models_script + model_script
 
+        # construct admin script
+        c_model_name = model_name.capitalize()
+        if autocomplete_fields != '':
+            admin_script = f'''
+class {c_model_name}Admin(admin.ModelAdmin):
+    autocomplete_fields = [{autocomplete_fields}]
+admin.site.register({c_model_name}, {c_model_name}Admin)
+'''
+        else:
+            admin_script = f'''
+admin.site.register({c_model_name})
+'''
+        
+        admins_script = admins_script + admin_script
+
     # add header to models.py
     models_script = models_file_head + models_script
-    write_to_file('model_test.py', models_script)
+    write_to_file('models.py', models_script)
 
-generate_models_forms_scripts.short_description = '生成表单脚本'
+    # generate admin script
+    admins_script = admins_file_head + admins_script
+    write_to_file('admin.py', admins_script)
+
+
+    ####################################################################################################################
+    # generate forms.py script
+    ####################################################################################################################
+    forms_script = ''
+    forms = BaseForm.objects.all()
+    for form in forms:
+        f_name = form.name.capitalize()
+        form_label = form.label
+        f_model = form.basemodel.name.capitalize()
+        form_style = form.style
+        f_fields = f_widgets = ''
+        for component in form.components.all():
+            field_name = component.content_object.__dict__['name']
+            # get fields
+            f_fields = f_fields + f'\'{field_name}\', '
+
+            # get widgets
+            if component.content_type.__dict__['model'] in ['choicefield', 'relatedfield']:
+                field_type = component.content_object.__dict__['type']
+                if field_type == 'Select':
+                    f_type = 'Select'
+                elif field_type == 'RadioSelect':
+                    f_type = 'RadioSelect'
+                elif field_type == 'CheckboxSelectMultiple':
+                    f_type = 'CheckboxSelectMultiple'
+                else:
+                    f_type = 'SelectMultiple'
+                f_widgets = f_widgets + f'\'{field_name}\': {f_type}, '
+
+        if f_widgets != '':
+            f_widgets = f'widgets = {{{f_widgets}}}'
+
+        # construct forms script
+        modelform_head = f'''
+class {f_name}_ModelForm(ModelForm):'''
+
+        modelform_body = f'''
+    class Meta:
+        model = {f_model}
+        fields = [{f_fields}]
+        {f_widgets}
+        '''
+
+        modelform_script = f'{modelform_head}{modelform_body}{modelform_footer}'
+        forms_script = forms_script + modelform_script
+    
+    # construct forms.py script
+    forms_script =  forms_file_head + forms_script
+    write_to_file('forms.py', forms_script)
+
 
 
 # 被customized_forms.admin调用
 def generate_views_urls_templates_scripts(modeladmin, request, queryset):
 
-    views_script = urls_script = index_html_script = ''
+    ####################################################################################################################
+    # Create models.py, admin.py, forms.py
+    ####################################################################################################################
+    print('生成models.py, admin.py, forms.py ...')
+    generate_models_forms_scripts()
 
+    print('生成views.py, urls.py, templates.html, index.html ...')
+    views_script = urls_script = index_html_script = ''
     for obj in queryset:
         ################################################################################
         # Insert into core.models.Form (Auto generate corresponding operation)
