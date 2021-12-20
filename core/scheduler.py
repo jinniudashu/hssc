@@ -32,7 +32,6 @@ from core.models import Form, Operation, Event, Event_instructions, Instruction,
 
 # 导入自定义表单models
 from django.contrib.contenttypes.models import ContentType
-from customized_forms.models import CharacterField, NumberField, DTField, ChoiceField, RelatedField, Component, BaseModel, BaseForm
 
 # 导入任务
 from core.tasks import create_operation_proc
@@ -204,14 +203,6 @@ def new_operation_proc(instance, created, **kwargs):
             print('rtc状态, 查询表单完成事件，进行调度')
 
 
-# BaseModel变更components字段，更新相应BaseForm的components字段
-@receiver(m2m_changed, sender=BaseModel.components.through)
-def basemodel_m2m_changed_handler(sender, instance, action, **kwargs):
-    for baseform in instance.baseform_set.all():
-        baseform.components.add(*instance.components.all())
-        baseform.save()
-
-
 # 收到表单保存信号
 @receiver(post_save, sender=None, weak=True, dispatch_uid=None)
 def form_post_save_handler(sender, instance, created, **kwargs):
@@ -221,34 +212,6 @@ def form_post_save_handler(sender, instance, created, **kwargs):
         qs = UserSession.objects.filter(user=instance.user, ended=False).exclude(id=instance.id)
         for s in qs:
             s.end_session()
-
-    # 如果保存customized_forms的字段表，则更新Component表
-    if sender in [CharacterField, NumberField, DTField, ChoiceField, RelatedField]:
-        charfield_type = ContentType.objects.get(app_label='customized_forms', model=sender.__name__.lower())
-        if created:
-            Component.objects.create(
-                content_type = charfield_type, 
-                object_id = instance.id, 
-                name = instance.name, 
-                label = instance.label, 
-            )
-        else:
-            Component.objects.filter(content_type=charfield_type, object_id=instance.id).update(
-                name = instance.name, 
-                label = instance.label, 
-            )
-
-    # 如果创建的是BaseModel，则同步创建BaseForm表
-    if sender == BaseModel:
-        if created:
-            BaseForm.objects.create(
-                name = f'{instance.name}_baseform', 
-                label = instance.label, 
-                basemodel = instance,
-                is_inquiry = False,
-                style = 'detail',
-                # display_fields字段是m2m, 由basemodel_m2m_changed_handler处理
-            )
 
 
 # ******************************************
