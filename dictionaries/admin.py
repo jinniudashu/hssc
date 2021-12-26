@@ -1,62 +1,119 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Service_role)
+class Drug_listAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Drug_list, Drug_listAdmin)
 
-admin.site.register(Gender)
+class CharacterAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Character, CharacterAdmin)
 
-admin.site.register(Time_period_expression)
+class SatisfactionAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Satisfaction, SatisfactionAdmin)
 
-admin.site.register(Marital_status)
+class FrequencyAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Frequency, FrequencyAdmin)
 
-admin.site.register(Education)
+class State_degreeAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(State_degree, State_degreeAdmin)
 
-admin.site.register(Institutions_list)
+class Comparative_expressionAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Comparative_expression, Comparative_expressionAdmin)
 
-admin.site.register(Occupational_status)
+class Sports_preferenceAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Sports_preference, Sports_preferenceAdmin)
 
-admin.site.register(Nationality)
+class Exercise_timeAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Exercise_time, Exercise_timeAdmin)
 
-admin.site.register(Satisfaction)
+class ConvenienceAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Convenience, ConvenienceAdmin)
 
-admin.site.register(Medical_expenses_burden)
+class Family_relationshipAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Family_relationship, Family_relationshipAdmin)
 
-admin.site.register(Type_of_residence)
+class NormalityAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Normality, NormalityAdmin)
 
-admin.site.register(Lips)
+class Service_roleAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Service_role, Service_roleAdmin)
 
-admin.site.register(Blood_type)
+class Institutions_listAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Institutions_list, Institutions_listAdmin)
 
-admin.site.register(Contract_signatory)
+class Dorsal_artery_pulsationAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Dorsal_artery_pulsation, Dorsal_artery_pulsationAdmin)
 
-admin.site.register(Genetic_disease)
+class HearingAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Hearing, HearingAdmin)
 
-admin.site.register(Employee_list)
+class LipsAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Lips, LipsAdmin)
 
-admin.site.register(Dentition)
+class DentitionAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Dentition, DentitionAdmin)
 
-admin.site.register(Drug_list)
+class PharynxAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Pharynx, PharynxAdmin)
 
-admin.site.register(Pharynx)
+class Life_eventAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Life_event, Life_eventAdmin)
 
-admin.site.register(Family_relationship)
+class EdemaAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Edema, EdemaAdmin)
 
-admin.site.register(Choose)
+class GenderAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Gender, GenderAdmin)
 
-admin.site.register(Hearing)
+class NationalityAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Nationality, NationalityAdmin)
 
-admin.site.register(Life_event)
+class Marital_statusAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Marital_status, Marital_statusAdmin)
 
-admin.site.register(Frequency)
+class EducationAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Education, EducationAdmin)
 
-admin.site.register(Athletic_ability)
+class Occupational_statusAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Occupational_status, Occupational_statusAdmin)
 
-admin.site.register(Degree_expression)
+class Medical_expenses_burdenAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Medical_expenses_burden, Medical_expenses_burdenAdmin)
 
-admin.site.register(Comparative_expression)
+class Type_of_residenceAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Type_of_residence, Type_of_residenceAdmin)
 
-admin.site.register(Dorsal_artery_pulsation)
+class Blood_typeAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Blood_type, Blood_typeAdmin)
 
-admin.site.register(Normality)
+class Employee_listAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Employee_list, Employee_listAdmin)
 
-admin.site.register(Edema)

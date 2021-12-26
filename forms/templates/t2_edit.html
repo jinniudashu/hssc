@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 't2_create_url' %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        <h5>院外症状自述调查</h5>
+        {{ form0.as_p }}
+        <hr>
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}

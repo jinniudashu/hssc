@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 'ju_min_jian_kang_dang_an_create_url' %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        <h5>过敏史</h5>
+        {{ form0.as_p }}
+        <hr>
+        <h5>个人心理综合素质调查</h5>
+        {{ form1.as_p }}
+        <hr>
+        <h5>个人适应能力评估</h5>
+        {{ form2.as_p }}
+        <hr>
+        <h5>个人健康行为调查</h5>
+        {{ form3.as_p }}
+        <hr>
+        <h5>个人身体健康评估</h5>
+        {{ form4.as_p }}
+        <hr>
+        <h5>社会环境评估</h5>
+        {{ form5.as_p }}
+        <hr>
+        <h5>家族病史</h5>
+        {{ form6.as_p }}
+        <hr>
+        <h5>输血史</h5>
+        {{ form7.as_p }}
+        <hr>
+        <h5>外伤史</h5>
+        {{ form8.as_p }}
+        <hr>
+        <h5>疾病史</h5>
+        {{ form9.as_p }}
+        <hr>
+        <h5>遗传病史</h5>
+        {{ form10.as_p }}
+        <hr>
+        <h5>手术史</h5>
+        {{ form11.as_p }}
+        <hr>
+        <h5>重大生活事件调查</h5>
+        {{ form12.as_p }}
+        <hr>
+        <h5>个人基本情况</h5>
+        {{ form13.as_p }}
+        <hr>
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}

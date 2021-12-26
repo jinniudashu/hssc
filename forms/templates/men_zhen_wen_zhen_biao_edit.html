@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 'men_zhen_wen_zhen_biao_create_url' %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        <h5>个人基本情况_查询（八项）</h5>
+        {{ form0.as_p }}
+        <hr>
+        <h5>过敏史</h5>
+        {{ form1.as_p }}
+        <hr>
+        <h5>院外症状自述调查</h5>
+        {{ form2.as_p }}
+        <hr>
+        <h5>家族病史</h5>
+        {{ form3.as_p }}
+        <hr>
+        <h5>疾病史</h5>
+        {{ form4.as_p }}
+        <hr>
+        <h5>遗传病史</h5>
+        {{ form5.as_p }}
+        <hr>
+        <h5>血压监测</h5>
+        {{ form6.as_p }}
+        <hr>
+        <h5>门诊问诊调查</h5>
+        {{ form7.as_p }}
+        <hr>
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}
