@@ -27,33 +27,6 @@ class Satisfaction(models.Model):
             verbose_name = "满意度"
             verbose_name_plural = "满意度"
             
-class Frequency(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "频次"
-            verbose_name_plural = "频次"
-            
-class State_degree(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "状态程度"
-            verbose_name_plural = "状态程度"
-            
-class Comparative_expression(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "比较表达"
-            verbose_name_plural = "比较表达"
-            
 class Sports_preference(models.Model):
         value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
         def __str__(self):
@@ -72,15 +45,6 @@ class Exercise_time(models.Model):
             verbose_name = "运动时长"
             verbose_name_plural = "运动时长"
             
-class Convenience(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "便捷程度"
-            verbose_name_plural = "便捷程度"
-            
 class Family_relationship(models.Model):
         value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
         def __str__(self):
@@ -89,15 +53,6 @@ class Family_relationship(models.Model):
         class Meta:
             verbose_name = "家庭成员关系"
             verbose_name_plural = "家庭成员关系"
-            
-class Normality(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "正常性判断"
-            verbose_name_plural = "正常性判断"
             
 class Service_role(models.Model):
         value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
@@ -180,24 +135,6 @@ class Edema(models.Model):
             verbose_name = "水肿情况"
             verbose_name_plural = "水肿情况"
             
-class Gender(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "性别"
-            verbose_name_plural = "性别"
-            
-class Nationality(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
-
-        class Meta:
-            verbose_name = "民族"
-            verbose_name_plural = "民族"
-            
 class Marital_status(models.Model):
         value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
         def __str__(self):
@@ -260,4 +197,67 @@ class Employee_list(models.Model):
         class Meta:
             verbose_name = "职员表"
             verbose_name_plural = "职员表"
+            
+class Gender(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "性别"
+            verbose_name_plural = "性别"
+            
+class Frequency(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "频次"
+            verbose_name_plural = "频次"
+            
+class Nationality(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "民族"
+            verbose_name_plural = "民族"
+            
+class Comparative_expression(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "比较表达"
+            verbose_name_plural = "比较表达"
+            
+class Normality(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "正常性判断"
+            verbose_name_plural = "正常性判断"
+            
+class Convenience(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "便捷程度"
+            verbose_name_plural = "便捷程度"
+            
+class State_degree(models.Model):
+        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
+        def __str__(self):
+            return self.value
+
+        class Meta:
+            verbose_name = "状态程度"
+            verbose_name_plural = "状态程度"
             

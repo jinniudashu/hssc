@@ -833,3 +833,72 @@ class Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(ModelForm):
         if new_slug == "create":
             raise ValidationError("Slug may not be create")
         return new_slug
+
+class Can_hou_2_xiao_shi_xue_tang_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Can_hou_2_xiao_shi_xue_tang
+        fields = ['numberfield_can_hou_2_xiao_shi_xue_tang', ]
+        
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Zhen_duan_biao_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Zhen_duan_biao
+        fields = ['relatedfield_zhen_duan', ]
+        widgets = {'relatedfield_zhen_duan': SelectMultiple, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Yong_yao_chu_fang_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Yong_yao_chu_fang
+        fields = ['relatedfield_drug_name', ]
+        widgets = {'relatedfield_drug_name': CheckboxSelectMultiple, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug

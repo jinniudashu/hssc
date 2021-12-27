@@ -671,3 +671,117 @@ class Tang_niao_bing_cha_ti_biao_CreateView(CreateView):
         return super(Tang_niao_bing_cha_ti_biao_CreateView, self).form_valid(form)
 
         
+class Can_hou_2_xiao_shi_xue_tang_jian_cha_biao_CreateView(CreateView):
+    template_name = 'can_hou_2_xiao_shi_xue_tang_jian_cha_biao_edit.html'
+    success_url = '/'
+    form_class = Can_hou_2_xiao_shi_xue_tang_baseform_ModelForm
+
+    user = User.objects.get(id=1)
+    customer = Customer.objects.get(user=user)
+    operator = Staff.objects.get(user=user)
+
+    def get_context_data(self, **kwargs):
+        context = super(Can_hou_2_xiao_shi_xue_tang_jian_cha_biao_CreateView, self).get_context_data(**kwargs)
+        
+        # inquire_forms
+        form0 = Basic_personal_information_baseform_query_1639620882_ModelForm(instance=self.customer, prefix="form0")
+        # mutate_formsets
+        # mutate_forms
+        if self.request.method == 'POST':
+            form1 = Can_hou_2_xiao_shi_xue_tang_baseform_ModelForm(self.request.POST, prefix="form1")
+        else:
+            form1 = Can_hou_2_xiao_shi_xue_tang_baseform_ModelForm(prefix="form1")
+        # context
+        context['form0'] = form0
+        context['form1'] = form1
+
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+
+        # form_valid
+        f = context['form1'].save(commit=False)
+        f.customer = self.customer
+        f.operator = self.operator
+        f.save()
+                
+        return super(Can_hou_2_xiao_shi_xue_tang_jian_cha_biao_CreateView, self).form_valid(form)
+
+        
+class Zhen_duan_biao_CreateView(CreateView):
+    template_name = 'zhen_duan_biao_edit.html'
+    success_url = '/'
+    form_class = Zhen_duan_biao_baseform_ModelForm
+
+    user = User.objects.get(id=1)
+    customer = Customer.objects.get(user=user)
+    operator = Staff.objects.get(user=user)
+
+    def get_context_data(self, **kwargs):
+        context = super(Zhen_duan_biao_CreateView, self).get_context_data(**kwargs)
+        
+        # inquire_forms
+        form0 = Basic_personal_information_baseform_query_1639620882_ModelForm(instance=self.customer, prefix="form0")
+        # mutate_formsets
+        # mutate_forms
+        if self.request.method == 'POST':
+            form1 = Zhen_duan_biao_baseform_ModelForm(self.request.POST, prefix="form1")
+        else:
+            form1 = Zhen_duan_biao_baseform_ModelForm(prefix="form1")
+        # context
+        context['form0'] = form0
+        context['form1'] = form1
+
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+
+        # form_valid
+        f = context['form1'].save(commit=False)
+        f.customer = self.customer
+        f.operator = self.operator
+        f.save()
+                
+        return super(Zhen_duan_biao_CreateView, self).form_valid(form)
+
+        
+class Yong_yao_chu_fang_biao_CreateView(CreateView):
+    template_name = 'yong_yao_chu_fang_biao_edit.html'
+    success_url = '/'
+    form_class = Yong_yao_chu_fang_baseform_ModelForm
+
+    user = User.objects.get(id=1)
+    customer = Customer.objects.get(user=user)
+    operator = Staff.objects.get(user=user)
+
+    def get_context_data(self, **kwargs):
+        context = super(Yong_yao_chu_fang_biao_CreateView, self).get_context_data(**kwargs)
+        
+        # inquire_forms
+        form0 = Basic_personal_information_baseform_query_1639620882_ModelForm(instance=self.customer, prefix="form0")
+        # mutate_formsets
+        # mutate_forms
+        if self.request.method == 'POST':
+            form1 = Yong_yao_chu_fang_baseform_ModelForm(self.request.POST, prefix="form1")
+        else:
+            form1 = Yong_yao_chu_fang_baseform_ModelForm(prefix="form1")
+        # context
+        context['form0'] = form0
+        context['form1'] = form1
+
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+
+        # form_valid
+        f = context['form1'].save(commit=False)
+        f.customer = self.customer
+        f.operator = self.operator
+        f.save()
+                
+        return super(Yong_yao_chu_fang_biao_CreateView, self).form_valid(form)
+
+        

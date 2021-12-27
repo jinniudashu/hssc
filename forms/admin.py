@@ -112,3 +112,13 @@ admin.site.register(Men_zhen_wen_zhen_diao_cha, Men_zhen_wen_zhen_diao_chaAdmin)
 admin.site.register(Kong_fu_xue_tang_jian_cha)
 
 admin.site.register(Tang_hua_xue_hong_dan_bai_jian_cha_biao)
+
+admin.site.register(Can_hou_2_xiao_shi_xue_tang)
+
+class Zhen_duan_biaoAdmin(admin.ModelAdmin):
+    autocomplete_fields = ["relatedfield_zhen_duan", ]
+admin.site.register(Zhen_duan_biao, Zhen_duan_biaoAdmin)
+
+class Yong_yao_chu_fangAdmin(admin.ModelAdmin):
+    autocomplete_fields = ["relatedfield_drug_name", ]
+admin.site.register(Yong_yao_chu_fang, Yong_yao_chu_fangAdmin)

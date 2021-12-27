@@ -13,18 +13,6 @@ class SatisfactionAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Satisfaction, SatisfactionAdmin)
 
-class FrequencyAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(Frequency, FrequencyAdmin)
-
-class State_degreeAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(State_degree, State_degreeAdmin)
-
-class Comparative_expressionAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(Comparative_expression, Comparative_expressionAdmin)
-
 class Sports_preferenceAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Sports_preference, Sports_preferenceAdmin)
@@ -33,17 +21,9 @@ class Exercise_timeAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Exercise_time, Exercise_timeAdmin)
 
-class ConvenienceAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(Convenience, ConvenienceAdmin)
-
 class Family_relationshipAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Family_relationship, Family_relationshipAdmin)
-
-class NormalityAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(Normality, NormalityAdmin)
 
 class Service_roleAdmin(admin.ModelAdmin):
     search_fields = ["value"]
@@ -81,14 +61,6 @@ class EdemaAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Edema, EdemaAdmin)
 
-class GenderAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(Gender, GenderAdmin)
-
-class NationalityAdmin(admin.ModelAdmin):
-    search_fields = ["value"]
-admin.site.register(Nationality, NationalityAdmin)
-
 class Marital_statusAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Marital_status, Marital_statusAdmin)
@@ -116,4 +88,32 @@ admin.site.register(Blood_type, Blood_typeAdmin)
 class Employee_listAdmin(admin.ModelAdmin):
     search_fields = ["value"]
 admin.site.register(Employee_list, Employee_listAdmin)
+
+class GenderAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Gender, GenderAdmin)
+
+class FrequencyAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Frequency, FrequencyAdmin)
+
+class NationalityAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Nationality, NationalityAdmin)
+
+class Comparative_expressionAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Comparative_expression, Comparative_expressionAdmin)
+
+class NormalityAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Normality, NormalityAdmin)
+
+class ConvenienceAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(Convenience, ConvenienceAdmin)
+
+class State_degreeAdmin(admin.ModelAdmin):
+    search_fields = ["value"]
+admin.site.register(State_degree, State_degreeAdmin)
 

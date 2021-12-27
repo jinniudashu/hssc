@@ -27,6 +27,8 @@ class Command(BaseCommand):
             elif key == 'dicts_admin':
                 self.write_file(f'.\\dictionaries\\admin.py', value)
                 print(key)
+            elif key == 'dicts_data':
+                print(value)
             else:
                 self.write_file(f'.\\forms\\{key}.py', value)
                 print(key)
@@ -36,15 +38,38 @@ class Command(BaseCommand):
             f.write(content)
 
 
-# forms.Kong_fu_xue_tang_jian_cha.numberfield_kong_fu_xue_tang_down_limit: (fields.E130) DecimalFields must define a 'decimal_places' attribute.
-# forms.Kong_fu_xue_tang_jian_cha.numberfield_kong_fu_xue_tang_down_limit: (fields.E132) DecimalFields must define a 'max_digits' attribute.
-# forms.Kong_fu_xue_tang_jian_cha.numberfield_kong_fu_xue_tang_standard_value: (fields.E130) DecimalFields must define a 'decimal_places' attribute.
-# forms.Kong_fu_xue_tang_jian_cha.numberfield_kong_fu_xue_tang_standard_value: (fields.E132) DecimalFields must define a 'max_digits' attribute.
-# forms.Kong_fu_xue_tang_jian_cha.numberfield_kong_fu_xue_tang_up_limit: (fields.E130) DecimalFields must define a 'decimal_places' attribute.
-# forms.Kong_fu_xue_tang_jian_cha.numberfield_kong_fu_xue_tang_up_limit: (fields.E132) DecimalFields must define a 'max_digits' attribute.
-# forms.Tang_hua_xue_hong_dan_bai_jian_cha_biao.numberfield_tang_hua_xue_hong_dan_bai_down_limit: (fields.E130) DecimalFields must define a 'decimal_places' attribute.
-# forms.Tang_hua_xue_hong_dan_bai_jian_cha_biao.numberfield_tang_hua_xue_hong_dan_bai_down_limit: (fields.E132) DecimalFields must define a 'max_digits' attribute.
-# forms.Tang_hua_xue_hong_dan_bai_jian_cha_biao.numberfield_tang_hua_xue_hong_dan_bai_standard_value: (fields.E130) DecimalFields must define a 'decimal_places' attribute.
-# forms.Tang_hua_xue_hong_dan_bai_jian_cha_biao.numberfield_tang_hua_xue_hong_dan_bai_standard_value: (fields.E132) DecimalFields must define a 'max_digits' attribute.
-# forms.Tang_hua_xue_hong_dan_bai_jian_cha_biao.numberfield_tang_hua_xue_hong_dan_bai_up_limit: (fields.E130) DecimalFields must define a 'decimal_places' attribute.
-# forms.Tang_hua_xue_hong_dan_bai_jian_cha_biao.numberfield_tang_hua_xue_hong_dan_bai_up_limit: (fields.E132) DecimalFields must define a 'max_digits' attribute.
+# form1 = Allergies_history_baseform_ModelForm(self.request.POST, prefix="form1")
+# form2 = Out_of_hospital_self_report_survey_baseform_ModelForm(self.request.POST, prefix="form2")
+# form3 = Family_history_of_illness_baseform_ModelForm(self.request.POST, prefix="form3")
+# form4 = Medical_history_baseform_ModelForm(self.request.POST, prefix="form4")
+# form5 = History_of_infectious_diseases_baseform_ModelForm(self.request.POST, prefix="form5")
+# form6 = Blood_pressure_monitoring_baseform_ModelForm(self.request.POST, prefix="form6")
+# form7 = Men_zhen_wen_zhen_diao_cha_baseform_ModelForm(self.request.POST, prefix="form7")
+
+# form1 = Out_of_hospital_self_report_survey_baseform_ModelForm(self.request.POST, prefix="form1")
+
+# form1 = Allergies_history_baseform_ModelForm(self.request.POST, prefix="form1")
+# form2 = Family_history_of_illness_baseform_ModelForm(self.request.POST, prefix="form2")
+# form3 = Medical_history_baseform_ModelForm(self.request.POST, prefix="form3")
+# form4 = History_of_infectious_diseases_baseform_ModelForm(self.request.POST, prefix="form4")
+
+# form0 = Allergies_history_baseform_ModelForm(self.request.POST, prefix="form0")
+# form1 = Personal_comprehensive_psychological_quality_survey_baseform_ModelForm(self.request.POST, prefix="form1")
+# form2 = Personal_adaptability_assessment_baseform_ModelForm(self.request.POST, prefix="form2")
+# form3 = Personal_health_behavior_survey_baseform_ModelForm(self.request.POST, prefix="form3")
+# form4 = Personal_health_assessment_baseform_ModelForm(self.request.POST, prefix="form4")
+# form5 = Social_environment_assessment_baseform_ModelForm(self.request.POST, prefix="form5")
+# form6 = Family_history_of_illness_baseform_ModelForm(self.request.POST, prefix="form6")
+# form7 = History_of_blood_transfusion_baseform_ModelForm(self.request.POST, prefix="form7")
+# form8 = History_of_trauma_baseform_ModelForm(self.request.POST, prefix="form8")
+# form9 = Medical_history_baseform_ModelForm(self.request.POST, prefix="form9")
+# form10 = History_of_infectious_diseases_baseform_ModelForm(self.request.POST, prefix="form10")
+# form11 = History_of_surgery_baseform_ModelForm(self.request.POST, prefix="form11")
+# form12 = Major_life_events_baseform_ModelForm(self.request.POST, prefix="form12")
+# form13 = Basic_personal_information_baseform_ModelForm(self.request.POST, prefix="form13")
+
+# form1 = Fundus_examination_baseform_ModelForm(self.request.POST, prefix="form1")
+# form2 = Dorsal_artery_pulsation_examination_baseform_ModelForm(self.request.POST, prefix="form2")
+
+# RadioSelect
+# CheckboxSelectMultiple
