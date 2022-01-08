@@ -1,20 +1,40 @@
 from django.core.management import BaseCommand
+from django.contrib.auth.models import User
 from core.models import Staff, Customer, Operation, Event, Event_instructions, Operation_proc, Instruction
 from core.models import SYSTEM_EVENTS, SOURCECODE_URL
-from django.contrib.auth.models import User
+from dictionaries.models import *
 import requests
 import json
 
-# python manage.py import_form_list
 
 class Command(BaseCommand):
-    help = '1. 把form_list导入core.models.Form； 2. 在core.models.Instruction中创建指令'
-
-    # def add_arguments(self, parser):
-    #     parser.add_argument('--dic', type=str)
+    help = '0. 从设计系统导入字典数据; 1. 把operand_views导入core.models.Operation; 2. 在core.models.Instruction中创建指令'
 
     def handle(self, *args, **kwargs):
 
+        res = requests.get(SOURCECODE_URL)
+        res_json = res.json()[0]
+
+        print('开始导入字典数据...')
+        dicts =eval(res_json['code'])['dicts_data']
+        for dict in dicts:
+            (key, value), = dict.items()
+            Dic_model= globals()[key]
+            # 先删除原有字典数据
+            Dic_model.objects.all().delete()
+            # 写入新的字典数据
+            for v in value.split('\n'):
+                d = Dic_model.objects.create(
+                    value = v
+                )
+                print(key, d, v)
+        print('导入字典数据完成')
+
+
+        #############################
+        # 导入作业目录
+        #############################
+        print('开始导入Operation...')
         # 删除原有作业进程，事件指令，事件，作业，表单，指令
         Operation_proc.objects.all().delete()
         Event_instructions.objects.all().delete()
@@ -22,12 +42,6 @@ class Command(BaseCommand):
         Operation.objects.all().delete()
         Instruction.objects.all().delete()
         
-        #############################
-        # 导入作业目录
-        #############################
-        print('开始导入Operation...')
-        res = requests.get(SOURCECODE_URL)
-        res_json = res.json()[0]
         operations =eval(res_json['code'])['operand_views']
         for _o in operations:
             operation = Operation.objects.create(
@@ -48,7 +62,9 @@ class Command(BaseCommand):
         print('导入Operation完成')
 
 
+        #############################
         # 在core.models.Instruction中创建指令
+        #############################
         instruction=Instruction.objects.create(
             name='create_operation_proc',
             label='创建作业进程',
@@ -57,6 +73,7 @@ class Command(BaseCommand):
             description='新建一个人工作业进程',
         )
         print('新建指令成功:', instruction)
+
 
         admin = User.objects.get(username='admin')
         # 创建一个管理员员工信息
