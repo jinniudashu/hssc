@@ -40,9 +40,10 @@ class Yuan_qian_zheng_zhuang_diao_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Yuan_qian_zheng_zhuang_diao_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -79,9 +80,10 @@ class Guo_min_shi_diao_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Guo_min_shi_diao_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -126,9 +128,10 @@ class Ge_ren_ji_bing_shi_diao_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Ge_ren_ji_bing_shi_diao_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -165,9 +168,10 @@ class Ge_ren_jian_kang_xing_wei_diao_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Ge_ren_jian_kang_xing_wei_diao_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -204,9 +208,10 @@ class Yuan_nei_wen_zhen_diao_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Yuan_nei_wen_zhen_diao_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -251,9 +256,10 @@ class Chang_gui_cha_ti_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Chang_gui_cha_ti_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -338,9 +344,10 @@ class Tang_niao_bing_cha_ti_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_cha_ti_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -385,9 +392,10 @@ class Xue_ya_jian_ce_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Xue_ya_jian_ce_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -424,9 +432,10 @@ class Kong_fu_xue_tang_jian_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Kong_fu_xue_tang_jian_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -463,9 +472,10 @@ class Tang_hua_xue_hong_dan_bai_jian_cha_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Tang_hua_xue_hong_dan_bai_jian_cha_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -502,9 +512,10 @@ class Men_zhen_zhen_duan_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Men_zhen_zhen_duan_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
@@ -541,9 +552,10 @@ class Yong_yao_chu_fang_biao_CreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(Yong_yao_chu_fang_biao_CreateView, self).get_context_data(**kwargs)
+        customer = Customer.objects.get(user=self.request.user)
         
         # inquire_forms
-        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=self.customer, prefix="form0")
+        form0 = Basic_personal_information_baseform_query_1641519651_ModelForm(instance=customer, prefix="form0")
         # mutate_formsets
         # mutate_forms
         if self.request.method == 'POST':
