@@ -16,6 +16,19 @@ def gen_slug(s):
     slug = slugify(s, allow_unicode=True)
     return slug + f'-{int(time())}'
 
+# 表单系统脚本源代码URL
+# SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
+SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
+
+
+# 系统内置事件(form, event_name)
+SYSTEM_EVENTS = [
+    ('user_registry', 'user_registry_completed'),     # 用户注册
+    ('user_login', 'user_login_completed'),           # 用户登录
+    ('doctor_login', 'doctor_login_completed'),       # 医生注册
+]
+
+
 class Staff(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff', verbose_name='员工')
 	name = models.CharField(max_length=50)
@@ -107,6 +120,7 @@ class Operation(models.Model):
 	]
 	priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name='优先级')
 	form = models.OneToOneField(Form, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
+	forms = models.JSONField(null=True, blank=True, verbose_name="视图元数据")
 	group = models.ManyToManyField(Group, verbose_name="作业角色")
 	suppliers = models.CharField(max_length=255, blank=True, null=True, verbose_name="供应商")
 	not_suitable = models.CharField(max_length=255, blank=True, null=True, verbose_name='不适用对象')
@@ -146,7 +160,7 @@ class Service(models.Model):
 # 作业事件表
 # # 默认事件：xx作业完成--系统作业名+"_operation_completed"
 class Event(models.Model):
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="上道作业")
+	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="所属作业")
 	name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
 	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
 	next = models.ManyToManyField(Operation, verbose_name="后续作业")
@@ -264,6 +278,16 @@ class Operation_proc(models.Model):
 	# 客户id: cid
 	customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")
 	
+	# 维护作业进程状态：
+	'''
+		作业状态机操作码
+		('cre', 'CREATE'),
+		('ctr', 'CREATED TO READY'),		= 1
+		('rtr', 'READY TO RUNNING'),		= 2
+		('rth', 'RUNNING TO HANGUP'),		= 3
+		('htr', 'HANGUP TO READY'),			= 2
+		('rtc', 'RUNNING TO COMPLETED'),	= 4
+	'''
 	# 作业状态: state
 	Operation_proc_state = [
 		(0, '创建'),
@@ -274,7 +298,7 @@ class Operation_proc(models.Model):
 	]
 	state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
 	
-	# 作业入口
+	# 作业入口: update_url /<str:slug>/update/
 	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")
 
 	# 父作业进程id: ppid
@@ -282,6 +306,9 @@ class Operation_proc(models.Model):
 
 	# 服务进程id: spid
 	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
+
+	# 表单索引
+	form_slugs = models.CharField(max_length=255, blank=True, null=True, verbose_name="表单索引")
 	
 	def __str__(self):
 	# 	# return 作业名称-操作员姓名-客户姓名

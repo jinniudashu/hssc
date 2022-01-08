@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 import requests
-
+from core.models import SOURCECODE_URL
 
 class Command(BaseCommand):
     help = '从设计系统导入forms脚本'
@@ -9,9 +9,7 @@ class Command(BaseCommand):
 
         # 获取脚本源码，创建文件
         print('开始导入forms脚本...')
-        # url = 'http://127.0.0.1:8000/define/source_codes_list/'
-        url = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
-        res = requests.get(url)
+        res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         code =eval(res_json['code'])
 
@@ -27,7 +25,7 @@ class Command(BaseCommand):
             elif key == 'dicts_admin':
                 self.write_file(f'.\\dictionaries\\admin.py', value)
                 print(key)
-            elif key == 'dicts_data':
+            elif key in ['dicts_data', 'operand_views']:
                 print(value)
             else:
                 self.write_file(f'.\\forms\\{key}.py', value)

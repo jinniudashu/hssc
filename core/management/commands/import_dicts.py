@@ -1,6 +1,7 @@
 from django.core.management import BaseCommand
 import requests
 from dictionaries.models import *
+from core.models import SOURCECODE_URL
 
 
 class Command(BaseCommand):
@@ -10,9 +11,7 @@ class Command(BaseCommand):
 
         # 获取脚本源码，创建文件
         print('开始导入字典数据...')
-        # url = 'http://127.0.0.1:8000/define/source_codes_list/'
-        url = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
-        res = requests.get(url)
+        res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         dicts =eval(res_json['code'])['dicts_data']
         for dict in dicts:
@@ -28,4 +27,3 @@ class Command(BaseCommand):
                 print(key, d, v)
 
         print('导入字典数据完成')
-

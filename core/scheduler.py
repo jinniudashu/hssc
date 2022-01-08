@@ -1,40 +1,27 @@
 '''
 服务调度器：
-1. 事件发生器: 把Django表单Signals转为Icpc编码的业务事件
-2. 调度器：根据Icpc业务事件查找任务指令，向Celery发送任务指令
+1. 事件发生器: 根据Signals参数生成业务事件
+2. 调度器：根据业务事件查找任务指令，向Celery发送任务指令
 
-业务事件命名规则: [form_name]_operation_completed
-
-事件参数: 
-task_params = {}
-oid, 
-uid, 
-cid, 
-ppid, 
-spid,
-pid, 
-ocode, 
-form
-
+业务完成事件命名规则: [form_name]_operation_completed
 '''
-from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.dispatch import receiver, Signal
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from registration.signals import user_registered, user_activated, user_approved
-from django.core import serializers
-import json
 
 # 导入作业事件表、指令表
-from core.models import Form, Operation, Event, Event_instructions, Instruction, Operation_proc
+from core.models import Operation, Event, Event_instructions, Instruction, Operation_proc
+from core.models import SYSTEM_EVENTS
 
 # 导入自定义表单models
 from django.contrib.contenttypes.models import ContentType
 
 # 导入任务
 from core.tasks import create_operation_proc
+
+# 导入作业完成信号
+from core.signals import operand_finished
 
 from core.utils import keyword_replace
 from core.interpreter import interpreter
@@ -52,15 +39,6 @@ for Model in Forms_models:
 
 
 # 维护作业进程状态：
-'''
-    作业状态机操作码
-    ('cre', 'CREATE'),
-    ('ctr', 'CREATED TO READY'),
-    ('rtr', 'READY TO RUNNING'),
-    ('rth', 'RUNNING TO HANGUP'),
-    ('htr', 'HANGUP TO READY'),
-    ('rtc', 'RUNNING TO COMPLETED'),
-'''
 def update_operation_proc(pid, ocode):
     print ('maintenance_operation_proc：', pid, ocode)
     proc = Operation_proc.objects.get(id=pid)
@@ -110,38 +88,9 @@ def operation_scheduler(event, params):
     return
 
 
-
-# 系统内置事件(form, event_name)
-SYSTEM_EVENTS = [
-    ('user_registry', 'user_registry_completed'),     # 用户注册
-    ('user_login', 'user_login_completed'),           # 用户登录
-    ('doctor_login', 'doctor_login_completed'),       # 医生注册
-]
-
 # ********************
 # 作业进程设置
 # ********************
-# 监视Form的新增条目，同步新增作业
-@receiver(post_save, sender=Form)
-def form_post_save_handler(sender, instance, created, **kwargs):
-    if created:     # 新增Operation表xx表单作业
-        operation = Operation.objects.create(
-            name = instance.name,
-            label = f'{instance.label}作业',
-            form = instance,
-        )
-        print('create 作业：', instance.label)
-
-        # 如果是系统保留作业，生成系统保留事件SYSTEM_EVENTS
-        if any(instance.name == fn[0] for fn in SYSTEM_EVENTS):
-            sys_event = Event.objects.create(
-                operation = operation,
-                name = f'{instance.name}_completed',
-                label = f'{instance.label}_完成',
-                expression = 'completed',
-            )
-            print('生成系统保留事件：', sys_event)
-
 
 # 监视事件表Event变更，变更事件后续作业时，同步变更事件指令表Event_instructions的内容
 @receiver(m2m_changed, sender=Event.next.through)
@@ -200,7 +149,70 @@ def new_operation_proc(instance, created, **kwargs):
         print ('新作业进程被创建，进行资源请求...：new_operation_proc:', instance)
     else:
         if instance.state == 4:  # rtc            
-            print('rtc状态, 查询表单完成事件，进行调度')
+            print('rtc状态, 作业完成事件，进行调度')
+
+
+# ******************************
+# 接收来自作业视图的自定义信号
+# ******************************
+@receiver(operand_finished)
+def operand_finished_handler(sender, **kwargs):
+    pid = kwargs['pid']
+    ocode = kwargs['ocode']
+    field_values = kwargs['field_values']
+
+    # 1. 更新作业进程状态: rtc
+    try:
+        print ('更新作业进程状态：', pid, ocode)
+        proc = Operation_proc.objects.get(id=pid)
+        if ocode == 'ctr': # CREATED TO READY
+            proc.state=1
+        elif ocode == 'rtr': # READY TO RUNNING
+            proc.state=2
+        elif ocode == 'rth': # RUNNING TO HANGUP
+            proc.state=3
+        elif ocode == 'htr': # HANGUP TO READY
+            proc.state=2
+        elif ocode == 'rtc': # RUNNING TO COMPLETED
+            proc.state=4
+        else:
+            print(f'ERROR: 未定义的操作码 ocode: {ocode}')        
+        proc.save()
+
+        # 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
+        events = Event.objects.filter(operation = proc.operation)
+        if events:
+            for event in events:
+                expr = event.expression     # 提取表达式
+                event_params={              # 构造事件参数
+                    'uid': proc.user.id,
+                    'cid': proc.customer.id,
+                    'ppid': proc.ppid
+                }
+                # 判断是否为作业完成事件“completed”（保留事件）
+                if event.name == f'{event.operation.name}_completed':
+                    operation_scheduler(event, event_params)
+
+                # 检查表单事件
+                else:   
+                    fields = event.parameters.split(', ')   # 提取其中的表单字段名, 转换为数组
+                    assignments={}                          # 构造表达式参数字典
+                    for field in fields:
+                        value = field_values[field]         # 获取相应参数表单字段值（form.field的值）
+                        if isinstance(value, str):          # 判断值类型，如果是字符串，则做去除空格处理
+                            assignments[field] = f'"{value}"'.replace(' ', '') # 去除字符串值的空格
+                        else:
+                            assignments[field] = f'{value}'
+
+                    print(assignments)
+                    expr_for_calcu = keyword_replace(expr, assignments) # 替换表达式中的参数
+
+                    if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
+                        print('表达式为真，触发事件：', event)
+                        operation_scheduler(event, event_params)
+
+    except:
+        print('operand_finished_handler => 无作业进程')
 
 
 # 收到表单保存信号
@@ -212,7 +224,6 @@ def form_post_save_handler(sender, instance, created, **kwargs):
         qs = UserSession.objects.filter(user=instance.user, ended=False).exclude(id=instance.id)
         for s in qs:
             s.end_session()
-
 
 # ******************************************
 # 业务事件处理：
@@ -228,35 +239,24 @@ def form_post_save_handler(sender, instance, created, **kwargs):
             pid = proc.id
             ocode = 'rtc'
             update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
-            print('form_post_save_handler => update_operation_proc', 'pid:', pid, 'ocode:', ocode)
 
-            # 检查规则表，根据规则判断数据变更是否触发业务事件，决定后续作业
-            # 1. 检查规则表，判断当前作业有规定业务事件需要检查
+            # 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
             events = Event.objects.filter(operation = proc.operation)
-            
-            # 2. 如有取出规则集，逐一检查表达式是否为真，触发业务事件
             if events:
                 for event in events:
-                    # 提取表达式
-                    expr = event.expression
-                    # 构造事件参数
-                    event_params={
+                    expr = event.expression     # 提取表达式
+                    event_params={              # 构造事件参数
                         'uid': instance.user.id,
                         'cid': instance.customer.id,
                         'ppid': pid
                     }
                     # 判断是否为保留事件“completed”
                     if event.name == f'{event.operation.name}_completed':
-                        print('保留事件：表单完成 ', event)
                         operation_scheduler(event, event_params)
                     else:   # 检查表单事件
-                        # 提取其中的表单字段名, 转换为数组
-                        fields = event.parameters.split(', ')
-
-                        # 构造表达式参数字典
-                        assignments={}
-                        # 获取相应参数表单字段值
-                        for field in fields:
+                        fields = event.parameters.split(', ')       # 提取其中的表单字段名, 转换为数组
+                        assignments={}                              # 构造表达式参数字典
+                        for field in fields:                        # 获取相应参数表单字段值
                             field_value = instance.__dict__[field]
                             if isinstance(field_value, str):
                                 value = f'"{field_value}"'.replace(' ', '')
@@ -265,19 +265,14 @@ def form_post_save_handler(sender, instance, created, **kwargs):
                             assignments[field]=value
 
                         print(assignments)
-
-                        # 字段值传入表达式
-                        expr_for_calcu = keyword_replace(expr, assignments)
-
-                        # 调用解释器执行表达式，如果结果为真，调度后续作业
-                        if interpreter(expr_for_calcu):
+                        expr_for_calcu = keyword_replace(expr, assignments) # 替换表达式中的参数
+                        if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
                             print('表达式为真，触发事件：', event)
                             operation_scheduler(event, event_params)
         except:
             print('form_post_save_handler => 无作业进程')
 
 # 操作员get表单记录/操作员进入作业入口：rtr
-
 
 
 # 收到注册成功信号，生成用户注册事件
@@ -297,7 +292,6 @@ def user_registered_handler(sender, user, request, **kwargs):
         operation_scheduler(event, params)
     except:
         print('except: SYSTEM_EVENT: [user_registry_completed] DoesNotExist')
-
 
 
 # 收到登录信号，生成用户/职员登录事件
@@ -334,3 +328,13 @@ def user_logged_in_handler(sender, user, request, **kwargs):
         operation_scheduler(event, params)
     except:
         print('except: SYSTEM_EVENT: [user_login_completed / doctor_login_completed] DoesNotExist')
+
+
+
+
+        # In views.py: 构造作业完成消息参数
+        # field_values = {}
+        # pid='T1_CreateView'
+        # ocode='rtc'
+        # operand_finished.send(sender=self, pid=pid, ocode=ocode, field_values=field_values)
+        
