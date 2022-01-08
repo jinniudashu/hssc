@@ -88,14 +88,11 @@ class Guo_min_shi_diao_cha_biao_CreateView(CreateView):
         # mutate_forms
         if self.request.method == 'POST':
             form1 = Allergies_history_baseform_ModelForm(self.request.POST, prefix="form1")
-            form2 = Out_of_hospital_self_report_survey_baseform_ModelForm(self.request.POST, prefix="form2")
         else:
             form1 = Allergies_history_baseform_ModelForm(prefix="form1")
-            form2 = Out_of_hospital_self_report_survey_baseform_ModelForm(prefix="form2")
         # context
         context['form0'] = form0
         context['form1'] = form1
-        context['form2'] = form2
 
         context['user'] = self.request.user
 
@@ -109,11 +106,6 @@ class Guo_min_shi_diao_cha_biao_CreateView(CreateView):
 
         # form_valid
         f = context['form1'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-                
-        f = context['form2'].save(commit=False)
         f.customer = customer
         f.operator = operator
         f.save()

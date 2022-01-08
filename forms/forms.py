@@ -33,7 +33,7 @@ class Out_of_hospital_self_report_survey_baseform_ModelForm(ModelForm):
     class Meta:
         model = Out_of_hospital_self_report_survey
         fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
-        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
     def helper(self):
@@ -700,7 +700,7 @@ class Men_zhen_wen_zhen_diao_cha_baseform_ModelForm(ModelForm):
     class Meta:
         model = Men_zhen_wen_zhen_diao_cha
         fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
-        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
     def helper(self):
