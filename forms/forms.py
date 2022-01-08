@@ -78,8 +78,8 @@ class Personal_comprehensive_psychological_quality_survey_baseform_ModelForm(Mod
 class Personal_adaptability_assessment_baseform_ModelForm(ModelForm):
     class Meta:
         model = Personal_adaptability_assessment
-        fields = ['boolfield_do_you_feel_pressured_at_work', 'boolfield_do_you_often_work_overtime', 'characterfield_working_hours_per_day', 'relatedfield_are_you_satisfied_with_the_job_and_life', 'relatedfield_are_you_satisfied_with_your_adaptability', 'relatedfield_can_you_get_encouragement_and_support_from_family_and_friends', ]
-        widgets = {'relatedfield_are_you_satisfied_with_the_job_and_life': Select, 'relatedfield_are_you_satisfied_with_your_adaptability': Select, 'relatedfield_can_you_get_encouragement_and_support_from_family_and_friends': Select, }
+        fields = ['boolfield_do_you_feel_pressured_at_work', 'boolfield_do_you_often_work_overtime', 'characterfield_working_hours_per_day', 'relatedfield_are_you_satisfied_with_the_job_and_life', 'relatedfield_are_you_satisfied_with_your_adaptability', ]
+        widgets = {'relatedfield_are_you_satisfied_with_the_job_and_life': Select, 'relatedfield_are_you_satisfied_with_your_adaptability': Select, }
         
     @property
     def helper(self):
