@@ -105,7 +105,6 @@ class Personal_adaptability_assessment(models.Model):
     characterfield_working_hours_per_day = models.TextField(max_length=255, null=True, blank=True, verbose_name='每天工作及工作往返总时长')
     relatedfield_are_you_satisfied_with_the_job_and_life = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_the_job_and_life_personal_adaptability_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对目前生活和工作满意吗')
     relatedfield_are_you_satisfied_with_your_adaptability = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_your_adaptability_personal_adaptability_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对自己的适应能力满意吗')
-    relatedfield_can_you_get_encouragement_and_support_from_family_and_friends = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_can_you_get_encouragement_and_support_from_family_and_friends_personal_adaptability_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否能得到家人朋友的鼓励和支持')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
