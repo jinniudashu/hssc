@@ -17,8 +17,8 @@ def gen_slug(s):
     return slug + f'-{int(time())}'
 
 # 表单系统脚本源代码URL
-SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
-# SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
+# SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
+SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
 
 
 # 系统保留事件(form, event_name)
