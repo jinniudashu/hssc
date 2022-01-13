@@ -9,6 +9,7 @@ from django.dispatch import receiver, Signal
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from registration.signals import user_registered, user_activated, user_approved
+import traceback
 
 # 导入作业事件表、指令表
 from core.models import Operation, Event, Event_instructions, Instruction, Operation_proc
@@ -78,6 +79,7 @@ def operation_scheduler(event, params):
         task_func = instruction.instruction.func
 
         # 调用函数执行指令
+        # 执行task.create_operation_proc
         print('send:', instruction.instruction.name, task_func)
         globals()[task_func](task_params)
 
@@ -161,6 +163,8 @@ def operand_finished_handler(sender, **kwargs):
     ocode = kwargs['ocode']
     field_values = kwargs['field_values']
 
+    print('收到作业完成消息：', pid, ocode, field_values)
+
     # 1. 更新作业进程状态: rtc
     try:
         print ('更新作业进程状态：', pid, ocode)
@@ -185,7 +189,7 @@ def operand_finished_handler(sender, **kwargs):
             for event in events:
                 expr = event.expression     # 提取表达式
                 event_params={              # 构造事件参数
-                    'uid': proc.user.id,
+                    'uid': proc.operator.id,
                     'cid': proc.customer.id,
                     'ppid': proc.ppid
                 }
@@ -196,16 +200,16 @@ def operand_finished_handler(sender, **kwargs):
                 # 检查表单事件
                 else:   
                     fields = event.parameters.split(', ')   # 提取其中的表单字段名, 转换为数组
-                    assignments={}                          # 构造表达式参数字典
+                    assignments={}                          # 构造表达式变量字典
                     for field in fields:
-                        value = field_values[field]         # 获取相应参数表单字段值（form.field的值）
+                        value = field_values[field]         # 获取相应变量的表单字段值（form.field的值）
                         if isinstance(value, str):          # 判断值类型，如果是字符串，则做去除空格处理
                             assignments[field] = f'"{value}"'.replace(' ', '') # 去除字符串值的空格
                         else:
                             assignments[field] = f'{value}'
 
-                    print(assignments)
-                    expr_for_calcu = keyword_replace(expr, assignments) # 替换表达式中的参数
+                    print('assignments', assignments)
+                    expr_for_calcu = keyword_replace(expr, assignments) # 把表达式中的变量替换为值
 
                     if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
                         print('表达式为真，触发事件：', event)
@@ -232,45 +236,45 @@ def form_post_save_handler(sender, instance, created, **kwargs):
 # ******************************************
     # 收到表单保存信号，更新作业进程状态: rtc
     # 如果sender在Formlist里且非Created，更新作业进程状态
-    if not created and instance.__class__.__name__ in form_list:
-        slug = instance.slug
-        try:
-            proc = Operation_proc.objects.get(entry=slug)
-            pid = proc.id
-            ocode = 'rtc'
-            update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
+    # if not created and instance.__class__.__name__ in form_list:
+    #     slug = instance.slug
+    #     try:
+    #         proc = Operation_proc.objects.get(entry=slug)
+    #         pid = proc.id
+    #         ocode = 'rtc'
+    #         update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
 
-            # 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
-            events = Event.objects.filter(operation = proc.operation)
-            if events:
-                for event in events:
-                    expr = event.expression     # 提取表达式
-                    event_params={              # 构造事件参数
-                        'uid': instance.user.id,
-                        'cid': instance.customer.id,
-                        'ppid': pid
-                    }
-                    # 判断是否为保留事件“completed”
-                    if event.name == f'{event.operation.name}_completed':
-                        operation_scheduler(event, event_params)
-                    else:   # 检查表单事件
-                        fields = event.parameters.split(', ')       # 提取其中的表单字段名, 转换为数组
-                        assignments={}                              # 构造表达式参数字典
-                        for field in fields:                        # 获取相应参数表单字段值
-                            field_value = instance.__dict__[field]
-                            if isinstance(field_value, str):
-                                value = f'"{field_value}"'.replace(' ', '')
-                            else:
-                                value = f'{field_value}'
-                            assignments[field]=value
+    #         # 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
+    #         events = Event.objects.filter(operation = proc.operation)
+    #         if events:
+    #             for event in events:
+    #                 expr = event.expression     # 提取表达式
+    #                 event_params={              # 构造事件参数
+    #                     'uid': instance.operator.id,
+    #                     'cid': instance.customer.id,
+    #                     'ppid': pid
+    #                 }
+    #                 # 判断是否为保留事件“completed”
+    #                 if event.name == f'{event.operation.name}_completed':
+    #                     operation_scheduler(event, event_params)
+    #                 else:   # 检查表单事件
+    #                     fields = event.parameters.split(', ')       # 提取其中的表单字段名, 转换为数组
+    #                     assignments={}                              # 构造表达式参数字典
+    #                     for field in fields:                        # 获取相应参数表单字段值
+    #                         field_value = instance.__dict__[field]
+    #                         if isinstance(field_value, str):
+    #                             value = f'"{field_value}"'.replace(' ', '')
+    #                         else:
+    #                             value = f'{field_value}'
+    #                         assignments[field]=value
 
-                        print(assignments)
-                        expr_for_calcu = keyword_replace(expr, assignments) # 替换表达式中的参数
-                        if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
-                            print('表达式为真，触发事件：', event)
-                            operation_scheduler(event, event_params)
-        except:
-            print('form_post_save_handler => 无作业进程')
+    #                     print(assignments)
+    #                     expr_for_calcu = keyword_replace(expr, assignments) # 替换表达式中的参数
+    #                     if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
+    #                         print('表达式为真，触发事件：', event)
+    #                         operation_scheduler(event, event_params)
+    #     except:
+    #         print('form_post_save_handler => 无作业进程')
 
 # 操作员get表单记录/操作员进入作业入口：rtr
 
@@ -326,15 +330,22 @@ def user_logged_in_handler(sender, user, request, **kwargs):
         print('登录', user, event)
         # 把Event和参数发给调度器
         operation_scheduler(event, params)
-    except:
-        print('except: SYSTEM_EVENT: [user_login_completed / doctor_login_completed] DoesNotExist')
+    except Exception as e:
+        traceback.print_exc()
+        print('except: user_logged_in_handler.operation_scheduler:', e)
 
 
-
-
-        # In views.py: 构造作业完成消息参数
-        # field_values = {}
-        # pid='T1_CreateView'
-        # ocode='rtc'
-        # operand_finished.send(sender=self, pid=pid, ocode=ocode, field_values=field_values)
+# In views.py: 构造作业完成消息参数
+# field_values = {}
+# pid='T1_CreateView'
+# ocode='rtc'
+# operand_finished.send(sender=self, pid=pid, ocode=ocode, field_values=field_values)
         
+
+# request.user会给你一个User对象，表示当前登录用户。
+# 如果用户当前未登录，request.user将被设置为AnonymousUser。
+# 可以用is_authenticated()：
+# if request.user.is_authenticated():
+#     # Do something for authenticated users.
+# else:
+#     # Do something for anonymous users.

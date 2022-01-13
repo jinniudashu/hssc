@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from django.contrib.auth.models import User
 from core.models import Staff, Customer, Operation, Event, Event_instructions, Operation_proc, Instruction
-from core.models import SYSTEM_EVENTS, SOURCECODE_URL
+from core.models import SYSTEM_EVENTS, SYSTEM_OPERAND, SOURCECODE_URL
 from dictionaries.models import *
 import requests
 import json
@@ -43,6 +43,10 @@ class Command(BaseCommand):
         Instruction.objects.all().delete()
         
         operations =eval(res_json['code'])['operand_views']
+        # 增加系统保留作业
+        operations.extend(SYSTEM_OPERAND)
+        print('operations:', operations)
+
         for _o in operations:
             operation = Operation.objects.create(
                 name = _o['name'],

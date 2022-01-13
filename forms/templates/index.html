@@ -4,10 +4,10 @@
 
 <br>
 
-<h4>当前任务</h4>
+<h5>当前任务</h5>
 	<section class="list-group">
 	{% for todo in todos %}
-		<a class="list-group-item" href="{% url todo.url todo.slug %}">
+		<a class="list-group-item" href="{% url todo.url todo.proc_id %}">
 		{{ todo.operation }}
 		</a>
 	{% endfor %}
@@ -19,44 +19,17 @@
 
 <br>
 
-<h4>表单目录</h4>
+<h5>系统菜单</h5>
 
 <section class="list-group">
-<a class='list-group-item' href='{% url "yuan_qian_zheng_zhuang_diao_cha_biao_create_url" %}'>
-		院前症状调查表
+<a class='list-group-item' href='{% url "test1_create_url" %}'>
+		test1
 	</a>
-        <a class='list-group-item' href='{% url "guo_min_shi_diao_cha_biao_create_url" %}'>
-		过敏史调查表
+        <a class='list-group-item' href='{% url "test2_create_url" %}'>
+		test2
 	</a>
-        <a class='list-group-item' href='{% url "ge_ren_ji_bing_shi_diao_cha_biao_create_url" %}'>
-		个人疾病史调查表
-	</a>
-        <a class='list-group-item' href='{% url "ge_ren_jian_kang_xing_wei_diao_cha_biao_create_url" %}'>
-		个人健康行为调查表
-	</a>
-        <a class='list-group-item' href='{% url "yuan_nei_wen_zhen_diao_cha_biao_create_url" %}'>
-		院内问诊调查表
-	</a>
-        <a class='list-group-item' href='{% url "chang_gui_cha_ti_biao_create_url" %}'>
-		常规查体表
-	</a>
-        <a class='list-group-item' href='{% url "tang_niao_bing_cha_ti_biao_create_url" %}'>
-		糖尿病查体表
-	</a>
-        <a class='list-group-item' href='{% url "xue_ya_jian_ce_biao_create_url" %}'>
-		血压监测表
-	</a>
-        <a class='list-group-item' href='{% url "kong_fu_xue_tang_jian_cha_biao_create_url" %}'>
-		空腹血糖检查表
-	</a>
-        <a class='list-group-item' href='{% url "tang_hua_xue_hong_dan_bai_jian_cha_biao_create_url" %}'>
-		糖化血红蛋白检查表
-	</a>
-        <a class='list-group-item' href='{% url "men_zhen_zhen_duan_biao_create_url" %}'>
-		门诊诊断表
-	</a>
-        <a class='list-group-item' href='{% url "yong_yao_chu_fang_biao_create_url" %}'>
-		用药处方表
+        <a class='list-group-item' href='{% url "test3_create_url" %}'>
+		test3
 	</a>
         
 </section>

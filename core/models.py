@@ -17,15 +17,21 @@ def gen_slug(s):
     return slug + f'-{int(time())}'
 
 # 表单系统脚本源代码URL
-# SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
-SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
+SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
+# SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
 
 
-# 系统内置事件(form, event_name)
+# 系统保留事件(form, event_name)
 SYSTEM_EVENTS = [
     ('user_registry', 'user_registry_completed'),     # 用户注册
     ('user_login', 'user_login_completed'),           # 用户登录
     ('doctor_login', 'doctor_login_completed'),       # 医生注册
+]
+# 系统保留作业
+SYSTEM_OPERAND = [
+	{'name': 'user_registry', 'label': '用户注册', 'forms': None},     # 用户注册
+	{'name': 'user_login', 'label': '用户登录', 'forms': None},        # 用户登录
+	{'name': 'doctor_login', 'label': '员工登录', 'forms': None},      # 员工登录
 ]
 
 
@@ -172,6 +178,7 @@ class Event(models.Model):
 		2. 字段名只允许由小写字母a~z，数字0~9和下划线_组成；字段值接受数字和字符，字符需要放在双引号中，如"A0101"
 		''')
 	parameters = models.CharField(max_length=1024, blank=True, null=True, verbose_name="检查字段")
+	fields = models.TextField(max_length=1024, blank=True, null=True, verbose_name="可用字段")
 
 	def __str__(self):
 		return str(self.label)
@@ -189,13 +196,27 @@ class Event(models.Model):
 			if self.name == f'{self.operation.name}_completed':
 				self.expression = 'completed'
 
-		# 生成表达式参数列表
-		if self.expression and self.expression != 'completed':
-			s=self.expression
-			l=self.operation.form.fields_list.split(', ')
-			fields_list = keyword_search(s,l)
-			self.parameters = ', '.join(fields_list)
-			print('Parameters fields:', self.parameters)
+		if self.operation.forms:
+			# 生成fields
+			forms = json.loads(self.operation.forms)
+			fields = []
+			field_names = []
+			for form in forms:
+				form_name = form['basemodel']
+				_fields = form['fields']
+				for _field in _fields:
+					field_name = form_name + '-' + _field['name']
+					field_label = _field['label']
+					field_type = _field['type']
+
+					field_names.append(field_name)
+					fields.append(str((field_name, field_label, field_type)))
+			self.fields = '\n'.join(fields)
+
+			# 生成表达式参数列表
+			if self.expression and self.expression != 'completed':
+				self.parameters = ', '.join(keyword_search(self.expression, field_names))
+				print('Parameters fields:', self.parameters)
 
 		super().save(*args, **kwargs)
 
@@ -242,10 +263,10 @@ class Service_proc(models.Model):
 	service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
 	
 	# 服务专员id: uid
-	user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_uid', verbose_name="服务专员")
+	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_uid', verbose_name="服务专员")
 	
 	# 客户id: cid
-	customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_cid', verbose_name="客户")
+	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_cid', verbose_name="客户")
 	
 	# 工作小组：workgroup
 	# workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工作组")
@@ -273,10 +294,10 @@ class Operation_proc(models.Model):
 	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业")
 	
 	# 作业员id: uid
-	user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")
+	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")
 	
 	# 客户id: cid
-	customer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")
+	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")
 	
 	# 维护作业进程状态：
 	'''
@@ -298,7 +319,7 @@ class Operation_proc(models.Model):
 	]
 	state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
 	
-	# 作业入口: update_url /<str:slug>/update/
+	# 作业入口: operand/<int:id>/update_view
 	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")
 
 	# 父作业进程id: ppid
@@ -308,12 +329,12 @@ class Operation_proc(models.Model):
 	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
 
 	# 表单索引
-	form_slugs = models.CharField(max_length=255, blank=True, null=True, verbose_name="表单索引")
+	form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
 	
 	def __str__(self):
 	# 	# return 作业名称-操作员姓名-客户姓名
 		# return f'{self.operation.name}-{self.user.username}-{self.customer.username}'
-		return "%s - %s - %s - %s" %(self.operation.label, self.operation.name, self.user.username, self.customer.username)
+		return "%s - %s - %s - %s - %s" %(self.id, self.operation.label, self.operation.name, self.operator.name, self.customer.name)
 
 	def get_absolute_url(self):
 		# 返回作业入口url

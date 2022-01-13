@@ -18,10 +18,12 @@ from core.models import Operation_proc, Operation, Service_proc
 # 创建作业进程
 # @shared_task
 def create_operation_proc(task_params):
-    oid = task_params['oid']
-    operation = Operation.objects.get(id=oid)
-    user = User.objects.get(id=task_params['uid'])
-    customer = User.objects.get(id=task_params['cid'])
+    operation = Operation.objects.get(id=task_params['oid'])
+    user_operater = User.objects.get(id=task_params['uid'])
+    user_customer = User.objects.get(id=task_params['cid'])
+
+    operator = Staff.objects.get(user=user_operater)
+    customer = Customer.objects.get(user=user_customer)
 
     # 创建作业进程
     try:
@@ -31,27 +33,31 @@ def create_operation_proc(task_params):
     # service_proc = Service_proc.objects.get(id=task_params['spid'])
     proc=Operation_proc.objects.create(
         operation=operation,
-        user=user,
+        operator=operator,
         customer=customer,
         state=0,
         ppid=parent_operation_proc,
         # service_proc=service_proc,
     )
 
-    # 根据Operation.forms创建相关表单实例
+    # 根据Operation.forms里的mutate类型的表单创建相关表单实例
     form_slugs = []
-    for form in json.loads(operation.forms):
-        form_class_name = form['name'].capitalize()
+    forms = filter(lambda s: s['mutate_or_inquiry']=='mutate', json.loads(operation.forms))
+    for form in forms:
+        form_class_name = form['basemodel'].capitalize()
         print('创建表单实例:', form_class_name)
-        form = globals()[form_class_name].objects.create(
-            user = user,
-            customer = customer,
-            pid = proc.id
-        )
-        form_slugs.append((form_class_name, form.slug))
+        try:
+            form = globals()[form_class_name].objects.create(
+                operator = operator,
+                customer = customer,
+                pid = proc
+            )
+            form_slugs.append({'form_name': form_class_name, 'slug': form.slug})
+        except Exception as e:
+            print('创建model失败:', form_class_name, e)
 
-    proc.entry = 'update_view<str:pid>'      # 更新视图URL路径？？？ 
-    proc.form_slugs = form_slugs    # 数组转字符串格式转换？？？
+    proc.entry = f'{operation.name}/{proc.id}/update_view'      # 更新作业URL路径 
+    proc.form_slugs = json.dumps(form_slugs, ensure_ascii=False, indent=4)
     proc.save()
 
     return proc

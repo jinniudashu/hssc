@@ -16,7 +16,7 @@ class OperationAdmin(admin.ModelAdmin):
     readonly_fields = ['forms']
     fieldsets = (
         (None, {
-            'fields': (('label', 'name', 'icpc'), 'priority', ('form', 'group'), 'suppliers',)
+            'fields': (('label', 'name', 'icpc'), 'priority', 'group',)
         }),
         ('作业管理', {
             'fields': ('not_suitable', 'time_limits', 'working_hours', 'cost', 'load_feedback')
@@ -40,13 +40,14 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['label', 'name', 'operation', 'id']
     list_display_links = ['label', 'name', 'operation',]
     search_fields = ['name', 'label']
+    readonly_fields = ['parameters']
     ordering = ['id']
 admin.site.register(Event, EventAdmin)
 
 
 class Operation_procAdmin(admin.ModelAdmin):
-    list_display = ['id', 'operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
-    list_display_links = ['operation', 'user', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    list_display = ['id', 'operation', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    list_display_links = ['operation', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
     ordering = ['id']
 admin.site.register(Operation_proc, Operation_procAdmin)
 

@@ -14,7 +14,7 @@ class Personal_comprehensive_psychological_quality_surveyAdmin(admin.ModelAdmin)
 admin.site.register(Personal_comprehensive_psychological_quality_survey, Personal_comprehensive_psychological_quality_surveyAdmin)
 
 class Personal_adaptability_assessmentAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", ]
+    autocomplete_fields = ["relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", "relatedfield_can_you_get_encouragement_and_support_from_family_and_friends", ]
 admin.site.register(Personal_adaptability_assessment, Personal_adaptability_assessmentAdmin)
 
 class Personal_health_behavior_surveyAdmin(admin.ModelAdmin):
@@ -100,19 +100,3 @@ class Physical_examination_athletic_abilityAdmin(admin.ModelAdmin):
 admin.site.register(Physical_examination_athletic_ability, Physical_examination_athletic_abilityAdmin)
 
 admin.site.register(User_registry)
-
-class Men_zhen_wen_zhen_diao_chaAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_symptom_list", ]
-admin.site.register(Men_zhen_wen_zhen_diao_cha, Men_zhen_wen_zhen_diao_chaAdmin)
-
-admin.site.register(Kong_fu_xue_tang_jian_cha)
-
-admin.site.register(Tang_hua_xue_hong_dan_bai_jian_cha)
-
-class Men_zhen_zhen_duanAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_disease_name", ]
-admin.site.register(Men_zhen_zhen_duan, Men_zhen_zhen_duanAdmin)
-
-class Yong_yao_chu_fangAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_drug_name", ]
-admin.site.register(Yong_yao_chu_fang, Yong_yao_chu_fangAdmin)
