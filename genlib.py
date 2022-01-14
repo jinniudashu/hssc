@@ -55,7 +55,7 @@ def write_dictionary_enums(model, dict_data, app):
         i += 1
 
     # 写入enums.py
-    path = f'.\\{app}\\enums.py'
+    path = f'.\\{app}\\enums.py'    # exemple: GenderEnum = [("0","女"), ("1","男"), ]
     f = open(path, 'a', encoding='utf-8')
     print(dict_str)
     f.write(f'\n\n{model}Enum = [{dict_str}]')

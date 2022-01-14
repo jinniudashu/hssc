@@ -231,53 +231,10 @@ def form_post_save_handler(sender, instance, created, **kwargs):
 
 # ******************************************
 # 业务事件处理：
-# 1. 保存业务表单
-# 2. 系统内置业务事件：注册，用户登录，用户退出
+# 系统内置业务事件：注册，用户登录，用户退出
 # ******************************************
-    # 收到表单保存信号，更新作业进程状态: rtc
-    # 如果sender在Formlist里且非Created，更新作业进程状态
-    # if not created and instance.__class__.__name__ in form_list:
-    #     slug = instance.slug
-    #     try:
-    #         proc = Operation_proc.objects.get(entry=slug)
-    #         pid = proc.id
-    #         ocode = 'rtc'
-    #         update_operation_proc(pid, ocode)   # 更新作业进程状态: rtc
-
-    #         # 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
-    #         events = Event.objects.filter(operation = proc.operation)
-    #         if events:
-    #             for event in events:
-    #                 expr = event.expression     # 提取表达式
-    #                 event_params={              # 构造事件参数
-    #                     'uid': instance.operator.id,
-    #                     'cid': instance.customer.id,
-    #                     'ppid': pid
-    #                 }
-    #                 # 判断是否为保留事件“completed”
-    #                 if event.name == f'{event.operation.name}_completed':
-    #                     operation_scheduler(event, event_params)
-    #                 else:   # 检查表单事件
-    #                     fields = event.parameters.split(', ')       # 提取其中的表单字段名, 转换为数组
-    #                     assignments={}                              # 构造表达式参数字典
-    #                     for field in fields:                        # 获取相应参数表单字段值
-    #                         field_value = instance.__dict__[field]
-    #                         if isinstance(field_value, str):
-    #                             value = f'"{field_value}"'.replace(' ', '')
-    #                         else:
-    #                             value = f'{field_value}'
-    #                         assignments[field]=value
-
-    #                     print(assignments)
-    #                     expr_for_calcu = keyword_replace(expr, assignments) # 替换表达式中的参数
-    #                     if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
-    #                         print('表达式为真，触发事件：', event)
-    #                         operation_scheduler(event, event_params)
-    #     except:
-    #         print('form_post_save_handler => 无作业进程')
 
 # 操作员get表单记录/操作员进入作业入口：rtr
-
 
 # 收到注册成功信号，生成用户注册事件
 # registration.signals.user_registered
@@ -334,13 +291,6 @@ def user_logged_in_handler(sender, user, request, **kwargs):
         traceback.print_exc()
         print('except: user_logged_in_handler.operation_scheduler:', e)
 
-
-# In views.py: 构造作业完成消息参数
-# field_values = {}
-# pid='T1_CreateView'
-# ocode='rtc'
-# operand_finished.send(sender=self, pid=pid, ocode=ocode, field_values=field_values)
-        
 
 # request.user会给你一个User对象，表示当前登录用户。
 # 如果用户当前未登录，request.user将被设置为AnonymousUser。

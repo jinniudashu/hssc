@@ -78,8 +78,8 @@ class Personal_comprehensive_psychological_quality_survey_baseform_ModelForm(Mod
 class Personal_adaptability_assessment_baseform_ModelForm(ModelForm):
     class Meta:
         model = Personal_adaptability_assessment
-        fields = ['boolfield_do_you_feel_pressured_at_work', 'boolfield_do_you_often_work_overtime', 'characterfield_working_hours_per_day', 'relatedfield_are_you_satisfied_with_the_job_and_life', 'relatedfield_are_you_satisfied_with_your_adaptability', ]
-        widgets = {'relatedfield_are_you_satisfied_with_the_job_and_life': Select, 'relatedfield_are_you_satisfied_with_your_adaptability': Select, }
+        fields = ['boolfield_do_you_feel_pressured_at_work', 'boolfield_do_you_often_work_overtime', 'characterfield_working_hours_per_day', 'relatedfield_are_you_satisfied_with_the_job_and_life', 'relatedfield_are_you_satisfied_with_your_adaptability', 'relatedfield_can_you_get_encouragement_and_support_from_family', ]
+        widgets = {'relatedfield_are_you_satisfied_with_the_job_and_life': Select, 'relatedfield_are_you_satisfied_with_your_adaptability': Select, 'relatedfield_can_you_get_encouragement_and_support_from_family': Select, }
         
     @property
     def helper(self):
@@ -262,8 +262,8 @@ class History_of_blood_transfusion_baseform_ModelForm(ModelForm):
 class History_of_trauma_baseform_ModelForm(ModelForm):
     class Meta:
         model = History_of_trauma
-        fields = ['datetimefield_date', 'relatedfield_diseases_name', ]
-        widgets = {'relatedfield_diseases_name': RadioSelect, }
+        fields = ['datetimefield_date', 'relatedfield_disease_name', ]
+        widgets = {'relatedfield_disease_name': Select, }
         
     @property
     def helper(self):
@@ -673,11 +673,103 @@ class User_registry_baseform_ModelForm(ModelForm):
             raise ValidationError("Slug may not be create")
         return new_slug
 
-class Basic_personal_information_baseform_query_1641894654_ModelForm(ModelForm):
+class Basic_personal_information_baseform_query_1642159528_ModelForm(ModelForm):
     class Meta:
         model = Basic_personal_information
-        fields = ['characterfield_name', 'datetimefield_date_of_birth', 'relatedfield_gender', 'relatedfield_blood_type', ]
-        widgets = {'relatedfield_gender': Select, 'relatedfield_blood_type': Select, }
+        fields = ['characterfield_name', 'datetimefield_date_of_birth', 'relatedfield_gender', 'characterfield_contact_number', ]
+        widgets = {'relatedfield_gender': Select, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Men_zhen_wen_zhen_diao_cha_biao
+        fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
+        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Kong_fu_xue_tang_jian_cha_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Kong_fu_xue_tang_jian_cha
+        fields = ['numberfield_kong_fu_xue_tang', ]
+        
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Tang_hua_xue_hong_dan_bai_jian_cha_biao
+        fields = ['numberfield_tang_hua_xue_hong_dan_bai', ]
+        
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Men_zhen_zhen_duan_biao_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Men_zhen_zhen_duan_biao
+        fields = ['relatedfield_disease_name', ]
+        widgets = {'relatedfield_disease_name': Select, }
         
     @property
     def helper(self):

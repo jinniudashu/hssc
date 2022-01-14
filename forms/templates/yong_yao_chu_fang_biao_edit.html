@@ -8,12 +8,12 @@
 		{% csrf_token %}
             
         <h5>个人基本情况_查询视图_1641519651</h5>
-        {% crispy form0 %}
+        {{ form0.as_p }}
         <hr>
         <h5>用药处方</h5>
-        {% crispy form1 %}
+        {{ form1.as_p }}
         <hr>
-		<!-- <input type="submit" value="提交" />  -->
+		<input type="submit" value="提交" /> 
 	</form>
 
 {% endblock %}

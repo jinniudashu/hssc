@@ -105,6 +105,7 @@ class Personal_adaptability_assessment(models.Model):
     characterfield_working_hours_per_day = models.TextField(max_length=255, null=True, blank=True, verbose_name='每天工作及工作往返总时长')
     relatedfield_are_you_satisfied_with_the_job_and_life = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_the_job_and_life_personal_adaptability_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对目前生活和工作满意吗')
     relatedfield_are_you_satisfied_with_your_adaptability = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_your_adaptability_personal_adaptability_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对自己的适应能力满意吗')
+    relatedfield_can_you_get_encouragement_and_support_from_family = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_can_you_get_encouragement_and_support_from_family_personal_adaptability_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否能得到家人朋友的鼓励和支持')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -384,7 +385,7 @@ class History_of_blood_transfusion(models.Model):
 
 class History_of_trauma(models.Model):
     datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
-    relatedfield_diseases_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_diseases_name_history_of_trauma', on_delete=models.CASCADE, null=True, blank=True, verbose_name='病名')
+    relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_history_of_trauma', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -956,6 +957,129 @@ class User_registry(models.Model):
 
     def get_delete_url(self):
         return reverse('user_registry_delete_url', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        super().save(*args, **kwargs)        
+        
+
+class Men_zhen_wen_zhen_diao_cha_biao(models.Model):
+    relatedfield_symptom_list = models.ForeignKey(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_wen_zhen_diao_cha_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='症状')
+    characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
+    operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
+    pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        verbose_name = '门诊问诊调查表'
+        verbose_name_plural = '门诊问诊调查表'
+
+    def get_absolute_url(self):
+        return reverse('men_zhen_wen_zhen_diao_cha_biao_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('men_zhen_wen_zhen_diao_cha_biao_update_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        return reverse('men_zhen_wen_zhen_diao_cha_biao_delete_url', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        super().save(*args, **kwargs)        
+        
+
+class Kong_fu_xue_tang_jian_cha(models.Model):
+    numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
+    numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
+    numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
+    numberfield_kong_fu_xue_tang_down_limit = models.DecimalField(max_digits=10, decimal_places=2, default=3.9, null=True, blank=True, verbose_name='空腹血糖下限')
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
+    operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
+    pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        verbose_name = '空腹血糖检查'
+        verbose_name_plural = '空腹血糖检查'
+
+    def get_absolute_url(self):
+        return reverse('kong_fu_xue_tang_jian_cha_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('kong_fu_xue_tang_jian_cha_update_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        return reverse('kong_fu_xue_tang_jian_cha_delete_url', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        super().save(*args, **kwargs)        
+        
+
+class Tang_hua_xue_hong_dan_bai_jian_cha_biao(models.Model):
+    numberfield_tang_hua_xue_hong_dan_bai = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白')
+    numberfield_tang_hua_xue_hong_dan_bai_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白标准值')
+    numberfield_tang_hua_xue_hong_dan_bai_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=6.0, null=True, blank=True, verbose_name='糖化血红蛋白上限')
+    numberfield_tang_hua_xue_hong_dan_bai_down_limit = models.DecimalField(max_digits=10, decimal_places=2, default=4.0, null=True, blank=True, verbose_name='糖化血红蛋白下限')
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
+    operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
+    pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        verbose_name = '糖化血红蛋白检查表'
+        verbose_name_plural = '糖化血红蛋白检查表'
+
+    def get_absolute_url(self):
+        return reverse('tang_hua_xue_hong_dan_bai_jian_cha_biao_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('tang_hua_xue_hong_dan_bai_jian_cha_biao_update_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        return reverse('tang_hua_xue_hong_dan_bai_jian_cha_biao_delete_url', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        super().save(*args, **kwargs)        
+        
+
+class Men_zhen_zhen_duan_biao(models.Model):
+    relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_men_zhen_zhen_duan_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
+    operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
+    pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        verbose_name = '门诊诊断表'
+        verbose_name_plural = '门诊诊断表'
+
+    def get_absolute_url(self):
+        return reverse('men_zhen_zhen_duan_biao_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('men_zhen_zhen_duan_biao_update_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        return reverse('men_zhen_zhen_duan_biao_delete_url', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         if not self.id:

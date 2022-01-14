@@ -34,199 +34,334 @@ class Index_view(ListView):
 		return context
 
 
-def test1_create(request):
+def yuan_qian_zheng_zhuang_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
     context = {}
     
     # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(request.POST, prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(request.POST, prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(request.POST, prefix="basic_personal_information")
-        if dorsal_artery_pulsation_examination.is_valid() and history_of_infectious_diseases.is_valid() and basic_personal_information.is_valid():
-            dorsal_artery_pulsation_examination.save()
-            history_of_infectious_diseases.save()
-            basic_personal_information.save()
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(request.POST, prefix="out_of_hospital_self_report_survey")
+        if out_of_hospital_self_report_survey.is_valid():
+            out_of_hospital_self_report_survey.save()
             return redirect(reverse('index'))
     else:
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(prefix="basic_personal_information")
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(prefix="out_of_hospital_self_report_survey")
     # context
-    context['dorsal_artery_pulsation_examination'] = dorsal_artery_pulsation_examination
-    context['history_of_infectious_diseases'] = history_of_infectious_diseases
     context['basic_personal_information'] = basic_personal_information
-    return render(request, 'test1_create.html', context)
+    context['out_of_hospital_self_report_survey'] = out_of_hospital_self_report_survey
+    return render(request, 'yuan_qian_zheng_zhuang_diao_cha_biao_create.html', context)
 
     
 
 
-def test1_update(request, *args, **kwargs):
+def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
     context = {}
     
-    proc_dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination.objects.get(pid=operation_proc)
-    proc_history_of_infectious_diseases = History_of_infectious_diseases.objects.get(pid=operation_proc)
-    proc_basic_personal_information = Basic_personal_information.objects.get(pid=operation_proc)
+    proc_out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey.objects.get(pid=operation_proc)
     # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(instance=proc_dorsal_artery_pulsation_examination, data=request.POST, prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(instance=proc_history_of_infectious_diseases, data=request.POST, prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(instance=proc_basic_personal_information, data=request.POST, prefix="basic_personal_information")
-        if dorsal_artery_pulsation_examination.is_valid() and history_of_infectious_diseases.is_valid() and basic_personal_information.is_valid():
-            dorsal_artery_pulsation_examination.save()
-            history_of_infectious_diseases.save()
-            basic_personal_information.save()
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=proc_out_of_hospital_self_report_survey, data=request.POST, prefix="out_of_hospital_self_report_survey")
+        if out_of_hospital_self_report_survey.is_valid():
+            out_of_hospital_self_report_survey.save()
             # 构造作业完成消息参数
             post_fields = request.POST.dict()
             post_fields.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=test1_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
             return redirect(reverse('index'))
     else:
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(instance=proc_dorsal_artery_pulsation_examination, prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(instance=proc_history_of_infectious_diseases, prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(instance=proc_basic_personal_information, prefix="basic_personal_information")
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=proc_out_of_hospital_self_report_survey, prefix="out_of_hospital_self_report_survey")
     # context
-    context['dorsal_artery_pulsation_examination'] = dorsal_artery_pulsation_examination
-    context['history_of_infectious_diseases'] = history_of_infectious_diseases
     context['basic_personal_information'] = basic_personal_information
+    context['out_of_hospital_self_report_survey'] = out_of_hospital_self_report_survey
     context['proc_id'] = kwargs['id']
-    return render(request, 'test1_update.html', context)
+    return render(request, 'yuan_qian_zheng_zhuang_diao_cha_biao_update.html', context)
 
     
-def test2_create(request):
+def men_zhen_wen_zhen_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
     context = {}
     
     # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        major_life_events = Major_life_events_baseform_ModelForm(request.POST, prefix="major_life_events")
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(request.POST, prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(request.POST, prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(request.POST, prefix="basic_personal_information")
-        if major_life_events.is_valid() and dorsal_artery_pulsation_examination.is_valid() and history_of_infectious_diseases.is_valid() and basic_personal_information.is_valid():
-            major_life_events.save()
-            dorsal_artery_pulsation_examination.save()
-            history_of_infectious_diseases.save()
-            basic_personal_information.save()
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(request.POST, prefix="out_of_hospital_self_report_survey")
+        men_zhen_wen_zhen_diao_cha_biao = Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(request.POST, prefix="men_zhen_wen_zhen_diao_cha_biao")
+        if out_of_hospital_self_report_survey.is_valid() and men_zhen_wen_zhen_diao_cha_biao.is_valid():
+            out_of_hospital_self_report_survey.save()
+            men_zhen_wen_zhen_diao_cha_biao.save()
             return redirect(reverse('index'))
     else:
-        major_life_events = Major_life_events_baseform_ModelForm(prefix="major_life_events")
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(prefix="basic_personal_information")
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(prefix="out_of_hospital_self_report_survey")
+        men_zhen_wen_zhen_diao_cha_biao = Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(prefix="men_zhen_wen_zhen_diao_cha_biao")
     # context
-    context['major_life_events'] = major_life_events
-    context['dorsal_artery_pulsation_examination'] = dorsal_artery_pulsation_examination
-    context['history_of_infectious_diseases'] = history_of_infectious_diseases
     context['basic_personal_information'] = basic_personal_information
-    return render(request, 'test2_create.html', context)
+    context['basic_personal_information'] = basic_personal_information
+    context['out_of_hospital_self_report_survey'] = out_of_hospital_self_report_survey
+    context['men_zhen_wen_zhen_diao_cha_biao'] = men_zhen_wen_zhen_diao_cha_biao
+    return render(request, 'men_zhen_wen_zhen_diao_cha_biao_create.html', context)
 
     
 
 
-def test2_update(request, *args, **kwargs):
+def men_zhen_wen_zhen_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
     context = {}
     
-    proc_major_life_events = Major_life_events.objects.get(pid=operation_proc)
-    proc_dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination.objects.get(pid=operation_proc)
-    proc_history_of_infectious_diseases = History_of_infectious_diseases.objects.get(pid=operation_proc)
-    proc_basic_personal_information = Basic_personal_information.objects.get(pid=operation_proc)
+    proc_out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey.objects.get(pid=operation_proc)
+    proc_men_zhen_wen_zhen_diao_cha_biao = Men_zhen_wen_zhen_diao_cha_biao.objects.get(pid=operation_proc)
     # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        major_life_events = Major_life_events_baseform_ModelForm(instance=proc_major_life_events, data=request.POST, prefix="major_life_events")
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(instance=proc_dorsal_artery_pulsation_examination, data=request.POST, prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(instance=proc_history_of_infectious_diseases, data=request.POST, prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(instance=proc_basic_personal_information, data=request.POST, prefix="basic_personal_information")
-        if major_life_events.is_valid() and dorsal_artery_pulsation_examination.is_valid() and history_of_infectious_diseases.is_valid() and basic_personal_information.is_valid():
-            major_life_events.save()
-            dorsal_artery_pulsation_examination.save()
-            history_of_infectious_diseases.save()
-            basic_personal_information.save()
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=proc_out_of_hospital_self_report_survey, data=request.POST, prefix="out_of_hospital_self_report_survey")
+        men_zhen_wen_zhen_diao_cha_biao = Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(instance=proc_men_zhen_wen_zhen_diao_cha_biao, data=request.POST, prefix="men_zhen_wen_zhen_diao_cha_biao")
+        if out_of_hospital_self_report_survey.is_valid() and men_zhen_wen_zhen_diao_cha_biao.is_valid():
+            out_of_hospital_self_report_survey.save()
+            men_zhen_wen_zhen_diao_cha_biao.save()
             # 构造作业完成消息参数
             post_fields = request.POST.dict()
             post_fields.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=test2_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            operand_finished.send(sender=men_zhen_wen_zhen_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
             return redirect(reverse('index'))
     else:
-        major_life_events = Major_life_events_baseform_ModelForm(instance=proc_major_life_events, prefix="major_life_events")
-        dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination_baseform_ModelForm(instance=proc_dorsal_artery_pulsation_examination, prefix="dorsal_artery_pulsation_examination")
-        history_of_infectious_diseases = History_of_infectious_diseases_baseform_ModelForm(instance=proc_history_of_infectious_diseases, prefix="history_of_infectious_diseases")
-        basic_personal_information = Basic_personal_information_baseform_ModelForm(instance=proc_basic_personal_information, prefix="basic_personal_information")
+        out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=proc_out_of_hospital_self_report_survey, prefix="out_of_hospital_self_report_survey")
+        men_zhen_wen_zhen_diao_cha_biao = Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(instance=proc_men_zhen_wen_zhen_diao_cha_biao, prefix="men_zhen_wen_zhen_diao_cha_biao")
     # context
-    context['major_life_events'] = major_life_events
-    context['dorsal_artery_pulsation_examination'] = dorsal_artery_pulsation_examination
-    context['history_of_infectious_diseases'] = history_of_infectious_diseases
     context['basic_personal_information'] = basic_personal_information
+    context['basic_personal_information'] = basic_personal_information
+    context['out_of_hospital_self_report_survey'] = out_of_hospital_self_report_survey
+    context['men_zhen_wen_zhen_diao_cha_biao'] = men_zhen_wen_zhen_diao_cha_biao
     context['proc_id'] = kwargs['id']
-    return render(request, 'test2_update.html', context)
+    return render(request, 'men_zhen_wen_zhen_diao_cha_biao_update.html', context)
 
     
-def test3_create(request):
+def ge_ren_ji_bing_shi_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1641894654_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        social_environment_assessment = Social_environment_assessment_baseform_ModelForm(request.POST, prefix="social_environment_assessment")
-        if social_environment_assessment.is_valid():
-            social_environment_assessment.save()
+        medical_history = Medical_history_baseform_ModelForm(request.POST, prefix="medical_history")
+        if medical_history.is_valid():
+            medical_history.save()
             return redirect(reverse('index'))
     else:
-        social_environment_assessment = Social_environment_assessment_baseform_ModelForm(prefix="social_environment_assessment")
+        medical_history = Medical_history_baseform_ModelForm(prefix="medical_history")
     # context
     context['basic_personal_information'] = basic_personal_information
-    context['social_environment_assessment'] = social_environment_assessment
-    return render(request, 'test3_create.html', context)
+    context['medical_history'] = medical_history
+    return render(request, 'ge_ren_ji_bing_shi_diao_cha_biao_create.html', context)
 
     
 
 
-def test3_update(request, *args, **kwargs):
+def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
     context = {}
     
-    proc_social_environment_assessment = Social_environment_assessment.objects.get(pid=operation_proc)
+    proc_medical_history = Medical_history.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1641894654_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        social_environment_assessment = Social_environment_assessment_baseform_ModelForm(instance=proc_social_environment_assessment, data=request.POST, prefix="social_environment_assessment")
-        if social_environment_assessment.is_valid():
-            social_environment_assessment.save()
+        medical_history = Medical_history_baseform_ModelForm(instance=proc_medical_history, data=request.POST, prefix="medical_history")
+        if medical_history.is_valid():
+            medical_history.save()
             # 构造作业完成消息参数
             post_fields = request.POST.dict()
             post_fields.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=test3_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            operand_finished.send(sender=ge_ren_ji_bing_shi_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
             return redirect(reverse('index'))
     else:
-        social_environment_assessment = Social_environment_assessment_baseform_ModelForm(instance=proc_social_environment_assessment, prefix="social_environment_assessment")
+        medical_history = Medical_history_baseform_ModelForm(instance=proc_medical_history, prefix="medical_history")
     # context
     context['basic_personal_information'] = basic_personal_information
-    context['social_environment_assessment'] = social_environment_assessment
+    context['medical_history'] = medical_history
     context['proc_id'] = kwargs['id']
-    return render(request, 'test3_update.html', context)
+    return render(request, 'ge_ren_ji_bing_shi_diao_cha_biao_update.html', context)
+
+    
+def kong_fu_xue_tang_jian_cha_biao_create(request):
+    customer = Customer.objects.get(user=request.user)
+    operator = Staff.objects.get(user=request.user)
+    context = {}
+    
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha_baseform_ModelForm(request.POST, prefix="kong_fu_xue_tang_jian_cha")
+        if kong_fu_xue_tang_jian_cha.is_valid():
+            kong_fu_xue_tang_jian_cha.save()
+            return redirect(reverse('index'))
+    else:
+        kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha_baseform_ModelForm(prefix="kong_fu_xue_tang_jian_cha")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['kong_fu_xue_tang_jian_cha'] = kong_fu_xue_tang_jian_cha
+    return render(request, 'kong_fu_xue_tang_jian_cha_biao_create.html', context)
+
+    
+
+
+def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
+    operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+    customer = operation_proc.customer
+    operator = operation_proc.operator
+    context = {}
+    
+    proc_kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha.objects.get(pid=operation_proc)
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha_baseform_ModelForm(instance=proc_kong_fu_xue_tang_jian_cha, data=request.POST, prefix="kong_fu_xue_tang_jian_cha")
+        if kong_fu_xue_tang_jian_cha.is_valid():
+            kong_fu_xue_tang_jian_cha.save()
+            # 构造作业完成消息参数
+            post_fields = request.POST.dict()
+            post_fields.pop('csrfmiddlewaretoken')
+            operand_finished.send(sender=kong_fu_xue_tang_jian_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            return redirect(reverse('index'))
+    else:
+        kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha_baseform_ModelForm(instance=proc_kong_fu_xue_tang_jian_cha, prefix="kong_fu_xue_tang_jian_cha")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['kong_fu_xue_tang_jian_cha'] = kong_fu_xue_tang_jian_cha
+    context['proc_id'] = kwargs['id']
+    return render(request, 'kong_fu_xue_tang_jian_cha_biao_update.html', context)
+
+    
+def men_zhen_zhen_duan_biao_create(request):
+    customer = Customer.objects.get(user=request.user)
+    operator = Staff.objects.get(user=request.user)
+    context = {}
+    
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao_baseform_ModelForm(request.POST, prefix="men_zhen_zhen_duan_biao")
+        if men_zhen_zhen_duan_biao.is_valid():
+            men_zhen_zhen_duan_biao.save()
+            return redirect(reverse('index'))
+    else:
+        men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao_baseform_ModelForm(prefix="men_zhen_zhen_duan_biao")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['men_zhen_zhen_duan_biao'] = men_zhen_zhen_duan_biao
+    return render(request, 'men_zhen_zhen_duan_biao_create.html', context)
+
+    
+
+
+def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
+    operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+    customer = operation_proc.customer
+    operator = operation_proc.operator
+    context = {}
+    
+    proc_men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao.objects.get(pid=operation_proc)
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao_baseform_ModelForm(instance=proc_men_zhen_zhen_duan_biao, data=request.POST, prefix="men_zhen_zhen_duan_biao")
+        if men_zhen_zhen_duan_biao.is_valid():
+            men_zhen_zhen_duan_biao.save()
+            # 构造作业完成消息参数
+            post_fields = request.POST.dict()
+            post_fields.pop('csrfmiddlewaretoken')
+            operand_finished.send(sender=men_zhen_zhen_duan_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            return redirect(reverse('index'))
+    else:
+        men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao_baseform_ModelForm(instance=proc_men_zhen_zhen_duan_biao, prefix="men_zhen_zhen_duan_biao")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['men_zhen_zhen_duan_biao'] = men_zhen_zhen_duan_biao
+    context['proc_id'] = kwargs['id']
+    return render(request, 'men_zhen_zhen_duan_biao_update.html', context)
+
+    
+def tang_hua_xue_hong_dan_bai_jian_cha_biao_create(request):
+    customer = Customer.objects.get(user=request.user)
+    operator = Staff.objects.get(user=request.user)
+    context = {}
+    
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(request.POST, prefix="tang_hua_xue_hong_dan_bai_jian_cha_biao")
+        if tang_hua_xue_hong_dan_bai_jian_cha_biao.is_valid():
+            tang_hua_xue_hong_dan_bai_jian_cha_biao.save()
+            return redirect(reverse('index'))
+    else:
+        tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(prefix="tang_hua_xue_hong_dan_bai_jian_cha_biao")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['tang_hua_xue_hong_dan_bai_jian_cha_biao'] = tang_hua_xue_hong_dan_bai_jian_cha_biao
+    return render(request, 'tang_hua_xue_hong_dan_bai_jian_cha_biao_create.html', context)
+
+    
+
+
+def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
+    operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+    customer = operation_proc.customer
+    operator = operation_proc.operator
+    context = {}
+    
+    proc_tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao.objects.get(pid=operation_proc)
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(instance=proc_tang_hua_xue_hong_dan_bai_jian_cha_biao, data=request.POST, prefix="tang_hua_xue_hong_dan_bai_jian_cha_biao")
+        if tang_hua_xue_hong_dan_bai_jian_cha_biao.is_valid():
+            tang_hua_xue_hong_dan_bai_jian_cha_biao.save()
+            # 构造作业完成消息参数
+            post_fields = request.POST.dict()
+            post_fields.pop('csrfmiddlewaretoken')
+            operand_finished.send(sender=tang_hua_xue_hong_dan_bai_jian_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            return redirect(reverse('index'))
+    else:
+        tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(instance=proc_tang_hua_xue_hong_dan_bai_jian_cha_biao, prefix="tang_hua_xue_hong_dan_bai_jian_cha_biao")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['tang_hua_xue_hong_dan_bai_jian_cha_biao'] = tang_hua_xue_hong_dan_bai_jian_cha_biao
+    context['proc_id'] = kwargs['id']
+    return render(request, 'tang_hua_xue_hong_dan_bai_jian_cha_biao_update.html', context)
 
     
