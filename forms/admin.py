@@ -14,7 +14,7 @@ class Personal_comprehensive_psychological_quality_surveyAdmin(admin.ModelAdmin)
 admin.site.register(Personal_comprehensive_psychological_quality_survey, Personal_comprehensive_psychological_quality_surveyAdmin)
 
 class Personal_adaptability_assessmentAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", "relatedfield_can_you_get_encouragement_and_support_from_family", ]
+    autocomplete_fields = ["relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", ]
 admin.site.register(Personal_adaptability_assessment, Personal_adaptability_assessmentAdmin)
 
 class Personal_health_behavior_surveyAdmin(admin.ModelAdmin):
