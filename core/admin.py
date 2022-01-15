@@ -25,7 +25,7 @@ class OperationAdmin(admin.ModelAdmin):
             'fields': ('resource_materials','resource_devices','resource_knowledge')
         }),
         ('元数据', {
-            'fields': ('forms',)
+            'fields': ('forms', )
         })
     )
     autocomplete_fields = ['icpc']

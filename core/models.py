@@ -202,6 +202,7 @@ class Event(models.Model):
 			forms = json.loads(self.operation.forms)
 			fields = []
 			field_names = []
+
 			for form in forms:
 				form_name = form['basemodel']
 				_fields = form['fields']
@@ -212,11 +213,13 @@ class Event(models.Model):
 
 					field_names.append(field_name)
 					fields.append(str((field_name, field_label, field_type)))
+
 			self.fields = '\n'.join(fields)
 
 			# 生成表达式参数列表
 			if self.expression and self.expression != 'completed':
-				self.parameters = ', '.join(keyword_search(self.expression, field_names))
+				_form_fields = keyword_search(self.expression, field_names)
+				self.parameters = ', '.join(_form_fields)
 				print('Parameters fields:', self.parameters)
 
 		super().save(*args, **kwargs)

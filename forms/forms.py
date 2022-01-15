@@ -787,3 +787,26 @@ class Men_zhen_zhen_duan_biao_baseform_ModelForm(ModelForm):
         if new_slug == "create":
             raise ValidationError("Slug may not be create")
         return new_slug
+
+class Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(ModelForm):
+    class Meta:
+        model = Out_of_hospital_self_report_survey
+        fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
+        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
