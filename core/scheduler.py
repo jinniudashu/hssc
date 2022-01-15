@@ -197,16 +197,17 @@ def operand_finished_handler(sender, **kwargs):
                 if event.name == f'{event.operation.name}_completed':
                     operation_scheduler(event, event_params)
 
-                # 检查表单事件
+                # 检查作业事件
                 else:   
                     fields = event.parameters.split(', ')   # 提取其中的表单字段名, 转换为数组
                     assignments={}                          # 构造表达式变量字典
                     for field in fields:
                         value = field_values[field]         # 获取相应变量的表单字段值（form.field的值）
-                        if isinstance(value, str):          # 判断值类型，如果是字符串，则做去除空格处理
-                            assignments[field] = f'"{value}"'.replace(' ', '') # 去除字符串值的空格
-                        else:
-                            assignments[field] = f'{value}'
+                        assignments[field] = f'{value}'.replace(' ', '') # 去除字符串值的空格
+                        # if isinstance(value, str):          # 判断值类型，如果是字符串，则做去除空格处理
+                        #     assignments[field] = f'"{value}"'.replace(' ', '') # 去除字符串值的空格
+                        # else:
+                        #     assignments[field] = f'{value}'
 
                     print('assignments', assignments)
                     expr_for_calcu = keyword_replace(expr, assignments) # 把表达式中的变量替换为值
