@@ -45,6 +45,9 @@ class Command(BaseCommand):
 
             # 从元组中把model名称转为 model class
             icpc_model= globals()[icpc[num][0]]
+            # 删除原有数据
+            icpc_model.objects.all().delete()
+            
             for obj in res_json:
                 i += 1
                 try:
