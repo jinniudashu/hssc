@@ -112,3 +112,7 @@ admin.site.register(Tang_hua_xue_hong_dan_bai_jian_cha_biao)
 class Men_zhen_zhen_duan_biaoAdmin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_disease_name", ]
 admin.site.register(Men_zhen_zhen_duan_biao, Men_zhen_zhen_duan_biaoAdmin)
+
+class Yong_yao_chu_fangAdmin(admin.ModelAdmin):
+    autocomplete_fields = ["relatedfield_drug_name", ]
+admin.site.register(Yong_yao_chu_fang, Yong_yao_chu_fangAdmin)

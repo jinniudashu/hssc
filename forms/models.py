@@ -1086,3 +1086,32 @@ class Men_zhen_zhen_duan_biao(models.Model):
         super().save(*args, **kwargs)        
         
 
+class Yong_yao_chu_fang(models.Model):
+    relatedfield_drug_name = models.ForeignKey(Drug_list, related_name='drug_list_for_relatedfield_drug_name_yong_yao_chu_fang', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品名称')
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
+    operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
+    pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        verbose_name = '用药处方'
+        verbose_name_plural = '用药处方'
+
+    def get_absolute_url(self):
+        return reverse('yong_yao_chu_fang_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('yong_yao_chu_fang_update_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        return reverse('yong_yao_chu_fang_delete_url', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        super().save(*args, **kwargs)        
+        
+

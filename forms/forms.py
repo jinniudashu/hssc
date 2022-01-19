@@ -10,7 +10,7 @@ class Allergies_history_baseform_ModelForm(ModelForm):
     class Meta:
         model = Allergies_history
         fields = ['relatedfield_drug_name', ]
-        widgets = {'relatedfield_drug_name': CheckboxSelectMultiple, }
+        widgets = {'relatedfield_drug_name': SelectMultiple, }
         
     @property
     def helper(self):
@@ -33,7 +33,7 @@ class Out_of_hospital_self_report_survey_baseform_ModelForm(ModelForm):
     class Meta:
         model = Out_of_hospital_self_report_survey
         fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
-        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
     def helper(self):
@@ -700,7 +700,7 @@ class Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(ModelForm):
     class Meta:
         model = Men_zhen_wen_zhen_diao_cha_biao
         fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
-        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
     def helper(self):
@@ -792,7 +792,30 @@ class Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(Mod
     class Meta:
         model = Out_of_hospital_self_report_survey
         fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
-        widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+        widgets = {'relatedfield_symptom_list': SelectMultiple, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Yong_yao_chu_fang_baseform_ModelForm(ModelForm):
+    class Meta:
+        model = Yong_yao_chu_fang
+        fields = ['relatedfield_drug_name', ]
+        widgets = {'relatedfield_drug_name': SelectMultiple, }
         
     @property
     def helper(self):

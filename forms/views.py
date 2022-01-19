@@ -70,7 +70,9 @@ def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
+        print('院前症状调查：',request.POST)
         out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=proc_out_of_hospital_self_report_survey, data=request.POST, prefix="out_of_hospital_self_report_survey")
+        print('院前症状调查：',out_of_hospital_self_report_survey.is_valid,out_of_hospital_self_report_survey.errors)
         if out_of_hospital_self_report_survey.is_valid():
             out_of_hospital_self_report_survey.save()
             # 构造作业完成消息参数
@@ -584,5 +586,58 @@ def men_zhen_wen_zhen_diao_cha_biao_update(request, *args, **kwargs):
     context['men_zhen_wen_zhen_diao_cha_biao'] = men_zhen_wen_zhen_diao_cha_biao
     context['proc_id'] = kwargs['id']
     return render(request, 'men_zhen_wen_zhen_diao_cha_biao_update.html', context)
+
+    
+def men_zhen_chu_fang_biao_create(request):
+    customer = Customer.objects.get(user=request.user)
+    operator = Staff.objects.get(user=request.user)
+    context = {}
+    
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        yong_yao_chu_fang = Yong_yao_chu_fang_baseform_ModelForm(request.POST, prefix="yong_yao_chu_fang")
+        if yong_yao_chu_fang.is_valid():
+            yong_yao_chu_fang.save()
+            return redirect(reverse('index'))
+    else:
+        yong_yao_chu_fang = Yong_yao_chu_fang_baseform_ModelForm(prefix="yong_yao_chu_fang")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['yong_yao_chu_fang'] = yong_yao_chu_fang
+    return render(request, 'men_zhen_chu_fang_biao_create.html', context)
+
+    
+
+
+def men_zhen_chu_fang_biao_update(request, *args, **kwargs):
+    operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+    customer = operation_proc.customer
+    operator = operation_proc.operator
+    context = {}
+    
+    proc_yong_yao_chu_fang = Yong_yao_chu_fang.objects.get(pid=operation_proc)
+    # inquire_forms
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    # mutate_formsets
+    # mutate_forms
+    if request.method == 'POST':
+        yong_yao_chu_fang = Yong_yao_chu_fang_baseform_ModelForm(instance=proc_yong_yao_chu_fang, data=request.POST, prefix="yong_yao_chu_fang")
+        if yong_yao_chu_fang.is_valid():
+            yong_yao_chu_fang.save()
+            # 构造作业完成消息参数
+            post_fields = request.POST.dict()
+            post_fields.pop('csrfmiddlewaretoken')
+            operand_finished.send(sender=men_zhen_chu_fang_biao_update, pid=kwargs['id'], ocode='rtc', field_values=post_fields)
+            return redirect(reverse('index'))
+    else:
+        yong_yao_chu_fang = Yong_yao_chu_fang_baseform_ModelForm(instance=proc_yong_yao_chu_fang, prefix="yong_yao_chu_fang")
+    # context
+    context['basic_personal_information'] = basic_personal_information
+    context['yong_yao_chu_fang'] = yong_yao_chu_fang
+    context['proc_id'] = kwargs['id']
+    return render(request, 'men_zhen_chu_fang_biao_update.html', context)
 
     
