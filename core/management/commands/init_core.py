@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from core.models import Staff, Customer, Operation, Event, Event_instructions, Operation_proc, Instruction
 from core.models import SYSTEM_EVENTS, SYSTEM_OPERAND, SOURCECODE_URL
 from dictionaries.models import *
+from forms.models import Basic_personal_information
 import requests
 import json
 
@@ -21,7 +22,10 @@ class Command(BaseCommand):
             (key, value), = dict.items()
             Dic_model= globals()[key]
             # 先删除原有字典数据
-            Dic_model.objects.all().delete()
+            try:
+                Dic_model.objects.all().delete()
+            except:
+                pass
             # 写入新的字典数据
             for v in value.split('\n'):
                 d = Dic_model.objects.create(
@@ -94,3 +98,7 @@ class Command(BaseCommand):
             name='admin',
         )
         print('新建客户成功：', customer)
+
+        # 创建一个管理员客户基本信息
+        personal = Basic_personal_information.objects.get_or_create(customer=customer[0], operator=staff[0], characterfield_name='admin')
+        print('新建个人基本信息成功：', personal)

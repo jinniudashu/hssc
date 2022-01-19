@@ -37,10 +37,11 @@ class Index_view(ListView):
 def yuan_qian_zheng_zhuang_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -62,17 +63,16 @@ def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
-        print('院前症状调查：',request.POST)
         out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=proc_out_of_hospital_self_report_survey, data=request.POST, prefix="out_of_hospital_self_report_survey")
-        print('院前症状调查：',out_of_hospital_self_report_survey.is_valid,out_of_hospital_self_report_survey.errors)
         if out_of_hospital_self_report_survey.is_valid():
             out_of_hospital_self_report_survey.save()
             # 构造作业完成消息参数
@@ -92,10 +92,11 @@ def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
 def ge_ren_ji_bing_shi_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -117,11 +118,12 @@ def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_medical_history = Medical_history.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -145,10 +147,11 @@ def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
 def kong_fu_xue_tang_jian_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -170,11 +173,12 @@ def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -198,10 +202,11 @@ def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
 def men_zhen_zhen_duan_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -223,11 +228,12 @@ def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -251,10 +257,11 @@ def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
 def tang_hua_xue_hong_dan_bai_jian_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -276,11 +283,12 @@ def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -304,10 +312,11 @@ def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
 def chang_gui_cha_ti_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -349,6 +358,7 @@ def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_vital_signs_check = Vital_signs_check.objects.get(pid=operation_proc)
@@ -358,7 +368,7 @@ def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
     proc_physical_examination_vision = Physical_examination_vision.objects.get(pid=operation_proc)
     proc_physical_examination_athletic_ability = Physical_examination_athletic_ability.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -402,10 +412,11 @@ def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
 def tang_niao_bing_cha_ti_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -431,12 +442,13 @@ def tang_niao_bing_cha_ti_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_fundus_examination = Fundus_examination.objects.get(pid=operation_proc)
     proc_dorsal_artery_pulsation_examination = Dorsal_artery_pulsation_examination.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -464,10 +476,11 @@ def tang_niao_bing_cha_ti_biao_update(request, *args, **kwargs):
 def ge_ren_guo_min_shi_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -489,11 +502,12 @@ def ge_ren_guo_min_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_allergies_history = Allergies_history.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -517,13 +531,14 @@ def ge_ren_guo_min_shi_diao_cha_biao_update(request, *args, **kwargs):
 def men_zhen_wen_zhen_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
-    out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(instance=customer, prefix="out_of_hospital_self_report_survey")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
+    out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(instance=basic_personal_information, prefix="out_of_hospital_self_report_survey")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -552,15 +567,16 @@ def men_zhen_wen_zhen_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey.objects.get(pid=operation_proc)
     proc_men_zhen_wen_zhen_diao_cha_biao = Men_zhen_wen_zhen_diao_cha_biao.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
-    out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(instance=customer, prefix="out_of_hospital_self_report_survey")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
+    out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(instance=basic_personal_information, prefix="out_of_hospital_self_report_survey")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -591,10 +607,11 @@ def men_zhen_wen_zhen_diao_cha_biao_update(request, *args, **kwargs):
 def men_zhen_chu_fang_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':
@@ -616,11 +633,12 @@ def men_zhen_chu_fang_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
     customer = operation_proc.customer
     operator = operation_proc.operator
+    basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
     proc_yong_yao_chu_fang = Yong_yao_chu_fang.objects.get(pid=operation_proc)
     # inquire_forms
-    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=customer, prefix="basic_personal_information")
+    basic_personal_information = Basic_personal_information_baseform_query_1642159528_ModelForm(instance=basic_personal_information, prefix="basic_personal_information")
     # mutate_formsets
     # mutate_forms
     if request.method == 'POST':

@@ -11,7 +11,7 @@ from dictionaries.models import *
 from core.models import Staff, Customer, Operation_proc
 
 class Allergies_history(models.Model):
-    relatedfield_drug_name = models.ForeignKey(Drug_list, related_name='drug_list_for_relatedfield_drug_name_allergies_history', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品名称')
+    relatedfield_drug_name = models.ManyToManyField(Drug_list, related_name='drug_list_for_relatedfield_drug_name_allergies_history', verbose_name='药品名称')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -40,7 +40,7 @@ class Allergies_history(models.Model):
         
 
 class Out_of_hospital_self_report_survey(models.Model):
-    relatedfield_symptom_list = models.ForeignKey(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_out_of_hospital_self_report_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_out_of_hospital_self_report_survey', verbose_name='症状')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
@@ -176,7 +176,7 @@ class Personal_health_assessment(models.Model):
     relatedfield_sports_preference = models.ForeignKey(Sports_preference, related_name='sports_preference_for_relatedfield_sports_preference_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动偏好')
     relatedfield_exercise_time = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_exercise_time_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动时长')
     boolfield_is_it_easy_to_get_sick = models.BooleanField(null=True, blank=True, verbose_name='是否比别人容易生病')
-    relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ForeignKey(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='近来有无身体不适症状')
+    relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_personal_health_assessment', verbose_name='近来有无身体不适症状')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -478,7 +478,7 @@ class Doctor_registry(models.Model):
     characterfield_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     characterfield_contact_information = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
-    relatedfield_service_role = models.ForeignKey(Service_role, related_name='service_role_for_relatedfield_service_role_doctor_registry', on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务角色')
+    relatedfield_service_role = models.ManyToManyField(Service_role, related_name='service_role_for_relatedfield_service_role_doctor_registry', verbose_name='服务角色')
     characterfield_practice_qualification = models.CharField(max_length=255, null=True, blank=True, verbose_name='执业资质')
     characterfield_password_setting = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码设置')
     characterfield_confirm_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='确认密码')
@@ -763,7 +763,7 @@ class Blood_pressure_monitoring(models.Model):
 
 class Major_life_events(models.Model):
     datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
-    relatedfield_major_life = models.ForeignKey(Life_event, related_name='life_event_for_relatedfield_major_life_major_life_events', on_delete=models.CASCADE, null=True, blank=True, verbose_name='生活事件')
+    relatedfield_major_life = models.ManyToManyField(Life_event, related_name='life_event_for_relatedfield_major_life_major_life_events', verbose_name='生活事件')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -865,7 +865,7 @@ class Basic_personal_information(models.Model):
     characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_medical_ic_card_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
-    relatedfield_medical_expenses_burden = models.ForeignKey(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='医疗费用负担')
+    relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_basic_personal_information', verbose_name='医疗费用负担')
     relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
     boolfield_contract_signatory = models.BooleanField(null=True, blank=True, verbose_name='合同签约户')
@@ -964,7 +964,7 @@ class User_registry(models.Model):
         
 
 class Men_zhen_wen_zhen_diao_cha_biao(models.Model):
-    relatedfield_symptom_list = models.ForeignKey(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_wen_zhen_diao_cha_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_wen_zhen_diao_cha_biao', verbose_name='症状')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
@@ -1087,7 +1087,7 @@ class Men_zhen_zhen_duan_biao(models.Model):
         
 
 class Yong_yao_chu_fang(models.Model):
-    relatedfield_drug_name = models.ForeignKey(Drug_list, related_name='drug_list_for_relatedfield_drug_name_yong_yao_chu_fang', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品名称')
+    relatedfield_drug_name = models.ManyToManyField(Drug_list, related_name='drug_list_for_relatedfield_drug_name_yong_yao_chu_fang', verbose_name='药品名称')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
