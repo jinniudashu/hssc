@@ -163,7 +163,7 @@ def operand_finished_handler(sender, **kwargs):
     ocode = kwargs['ocode']
     field_values = kwargs['field_values']
 
-    print('收到作业完成消息：', pid, ocode, field_values)
+    print('收到作业完成消息：', pid, ocode, field_values.getlist('out_of_hospital_self_report_survey-relatedfield_symptom_list'))
 
     # 1. 更新作业进程状态: rtc
     try:
@@ -181,7 +181,7 @@ def operand_finished_handler(sender, **kwargs):
             proc.state=4
         else:
             print(f'ERROR: 未定义的操作码 ocode: {ocode}')        
-        proc.save()
+        # proc.save()
 
         # 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
         events = Event.objects.filter(operation = proc.operation)
@@ -195,11 +195,21 @@ def operand_finished_handler(sender, **kwargs):
                 }
                 # 判断是否为作业完成事件“completed”（保留事件）
                 if event.name == f'{event.operation.name}_completed':
-                    operation_scheduler(event, event_params)
+                    pass
+                    # operation_scheduler(event, event_params)
                 # 检查作业事件
                 else:   
                     fields = event.parameters.split(', ')   # 提取其中的表单字段名, 转换为数组
                     assignments={}                          # 构造表达式变量字典
+
+                    i_fields = field_values.lists()
+                    while True:
+                        try:
+                            item = next(i_fields)
+                            print(item, len(item[1]))
+                        except StopIteration:
+                            break
+
                     for field in fields:
                         value = field_values[field]         # 获取相应变量的表单字段值（form.field的值）
                         assignments[field] = f'{value}'.replace(' ', '') # 去除字符串值的空格
@@ -208,7 +218,7 @@ def operand_finished_handler(sender, **kwargs):
 
                     if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
                         print('表达式为真，触发事件：', event)
-                        operation_scheduler(event, event_params)
+                        # operation_scheduler(event, event_params)
 
     except:
         print('operand_finished_handler => 无作业进程')
