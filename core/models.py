@@ -13,14 +13,9 @@ import json
 from core.utils import keyword_search
 
 
-def gen_slug(s):
-    slug = slugify(s, allow_unicode=True)
-    return slug + f'-{int(time())}'
-
 # 表单系统脚本源代码URL
 # SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
 SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
-
 
 # 系统保留事件(form, event_name)
 SYSTEM_EVENTS = [
@@ -28,12 +23,18 @@ SYSTEM_EVENTS = [
     ('user_login', 'user_login_completed'),           # 用户登录
     ('doctor_login', 'doctor_login_completed'),       # 医生注册
 ]
+
 # 系统保留作业
 SYSTEM_OPERAND = [
 	{'name': 'user_registry', 'label': '用户注册', 'forms': None},     # 用户注册
 	{'name': 'user_login', 'label': '用户登录', 'forms': None},        # 用户登录
 	{'name': 'doctor_login', 'label': '员工登录', 'forms': None},      # 员工登录
 ]
+
+
+def gen_slug(s):
+    slug = slugify(s, allow_unicode=True)
+    return slug + f'-{int(time())}'
 
 
 class Staff(models.Model):
@@ -65,6 +66,7 @@ class Staff(models.Model):
 		if not self.id:
 			self.slug = gen_slug(self._meta.model_name)
 		super().save(*args, **kwargs)
+
 
 class Customer(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer', verbose_name='客户')

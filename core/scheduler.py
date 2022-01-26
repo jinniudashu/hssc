@@ -194,7 +194,7 @@ def operand_finished_handler(sender, **kwargs):
                     'ppid': proc.ppid
                 }
                 # 判断是否为作业完成事件“completed”（保留事件）
-                if event.name == f'{event.operation.name}_completed':
+                if event.name.endswith('_completed'):
                     pass
                     # operation_scheduler(event, event_params)
                 # 检查作业事件
@@ -211,12 +211,12 @@ def operand_finished_handler(sender, **kwargs):
                             break
 
                     for field in fields:
-                        value = field_values[field]         # 获取相应变量的表单字段值（form.field的值）
-                        assignments[field] = f'{value}'.replace(' ', '') # 去除字符串值的空格
+                        value = field_values[field]  # 获取相应变量的表单字段值（form.field的值）
+                        assignments[field] = f'{value}'.replace(' ', '')  # 去除字符串值的空格
                     print('assignments', assignments)
-                    expr_for_calcu = keyword_replace(expr, assignments) # 把表达式中的变量替换为值
+                    expr_for_calcu = keyword_replace(expr, assignments)  # 把表达式中的变量替换为值
 
-                    if interpreter(expr_for_calcu):     # 调用解释器执行表达式，如果结果为真，调度后续作业
+                    if interpreter(expr_for_calcu):  # 调用解释器执行表达式，如果结果为真，调度后续作业
                         print('表达式为真，触发事件：', event)
                         # operation_scheduler(event, event_params)
 
