@@ -2,7 +2,6 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, V
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory, inlineformset_factory
-from django.http import HttpResponseRedirect
 import json
 
 from core.models import Operation_proc, Staff, Customer
@@ -57,8 +56,6 @@ def yuan_qian_zheng_zhuang_diao_cha_biao_create(request):
     context['form_out_of_hospital_self_report_survey'] = form_out_of_hospital_self_report_survey
     return render(request, 'yuan_qian_zheng_zhuang_diao_cha_biao_create.html', context)
 
-    
-
 
 def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -77,11 +74,8 @@ def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
         if form_out_of_hospital_self_report_survey.is_valid():
             form_out_of_hospital_self_report_survey.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            ocode='rtc'
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode=ocode, field_values=copy_post)
-            return HttpResponseRedirect(reverse('index'))
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            return redirect(reverse('index'))
     else:
         form_out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=out_of_hospital_self_report_survey, prefix="out_of_hospital_self_report_survey")
     # context
@@ -113,8 +107,6 @@ def ge_ren_ji_bing_shi_diao_cha_biao_create(request):
     context['form_medical_history'] = form_medical_history
     return render(request, 'ge_ren_ji_bing_shi_diao_cha_biao_create.html', context)
 
-    
-
 
 def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -133,9 +125,7 @@ def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
         if form_medical_history.is_valid():
             form_medical_history.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_medical_history = Medical_history_baseform_ModelForm(instance=medical_history, prefix="medical_history")
@@ -168,8 +158,6 @@ def kong_fu_xue_tang_jian_cha_biao_create(request):
     context['form_kong_fu_xue_tang_jian_cha'] = form_kong_fu_xue_tang_jian_cha
     return render(request, 'kong_fu_xue_tang_jian_cha_biao_create.html', context)
 
-    
-
 
 def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -188,9 +176,7 @@ def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
         if form_kong_fu_xue_tang_jian_cha.is_valid():
             form_kong_fu_xue_tang_jian_cha.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha_baseform_ModelForm(instance=kong_fu_xue_tang_jian_cha, prefix="kong_fu_xue_tang_jian_cha")
@@ -223,8 +209,6 @@ def men_zhen_zhen_duan_biao_create(request):
     context['form_men_zhen_zhen_duan_biao'] = form_men_zhen_zhen_duan_biao
     return render(request, 'men_zhen_zhen_duan_biao_create.html', context)
 
-    
-
 
 def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -243,9 +227,7 @@ def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
         if form_men_zhen_zhen_duan_biao.is_valid():
             form_men_zhen_zhen_duan_biao.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao_baseform_ModelForm(instance=men_zhen_zhen_duan_biao, prefix="men_zhen_zhen_duan_biao")
@@ -278,8 +260,6 @@ def tang_hua_xue_hong_dan_bai_jian_cha_biao_create(request):
     context['form_tang_hua_xue_hong_dan_bai_jian_cha_biao'] = form_tang_hua_xue_hong_dan_bai_jian_cha_biao
     return render(request, 'tang_hua_xue_hong_dan_bai_jian_cha_biao_create.html', context)
 
-    
-
 
 def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -298,9 +278,7 @@ def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
         if form_tang_hua_xue_hong_dan_bai_jian_cha_biao.is_valid():
             form_tang_hua_xue_hong_dan_bai_jian_cha_biao.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(instance=tang_hua_xue_hong_dan_bai_jian_cha_biao, prefix="tang_hua_xue_hong_dan_bai_jian_cha_biao")
@@ -353,8 +331,6 @@ def chang_gui_cha_ti_biao_create(request):
     context['form_physical_examination_athletic_ability'] = form_physical_examination_athletic_ability
     return render(request, 'chang_gui_cha_ti_biao_create.html', context)
 
-    
-
 
 def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -388,9 +364,7 @@ def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
             form_physical_examination_vision.save()
             form_physical_examination_athletic_ability.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_vital_signs_check = Vital_signs_check_baseform_ModelForm(instance=vital_signs_check, prefix="vital_signs_check")
@@ -437,8 +411,6 @@ def tang_niao_bing_cha_ti_biao_create(request):
     context['form_dorsal_artery_pulsation_examination'] = form_dorsal_artery_pulsation_examination
     return render(request, 'tang_niao_bing_cha_ti_biao_create.html', context)
 
-    
-
 
 def tang_niao_bing_cha_ti_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -460,9 +432,7 @@ def tang_niao_bing_cha_ti_biao_update(request, *args, **kwargs):
             form_fundus_examination.save()
             form_dorsal_artery_pulsation_examination.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_fundus_examination = Fundus_examination_baseform_ModelForm(instance=fundus_examination, prefix="fundus_examination")
@@ -497,8 +467,6 @@ def ge_ren_guo_min_shi_diao_cha_biao_create(request):
     context['form_allergies_history'] = form_allergies_history
     return render(request, 'ge_ren_guo_min_shi_diao_cha_biao_create.html', context)
 
-    
-
 
 def ge_ren_guo_min_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -517,9 +485,7 @@ def ge_ren_guo_min_shi_diao_cha_biao_update(request, *args, **kwargs):
         if form_allergies_history.is_valid():
             form_allergies_history.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_allergies_history = Allergies_history_baseform_ModelForm(instance=allergies_history, prefix="allergies_history")
@@ -562,8 +528,6 @@ def men_zhen_wen_zhen_diao_cha_biao_create(request):
     context['form_men_zhen_wen_zhen_diao_cha_biao'] = form_men_zhen_wen_zhen_diao_cha_biao
     return render(request, 'men_zhen_wen_zhen_diao_cha_biao_create.html', context)
 
-    
-
 
 def men_zhen_wen_zhen_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -588,9 +552,7 @@ def men_zhen_wen_zhen_diao_cha_biao_update(request, *args, **kwargs):
             form_out_of_hospital_self_report_survey.save()
             form_men_zhen_wen_zhen_diao_cha_biao.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_out_of_hospital_self_report_survey = Out_of_hospital_self_report_survey_baseform_ModelForm(instance=out_of_hospital_self_report_survey, prefix="out_of_hospital_self_report_survey")
@@ -628,8 +590,6 @@ def men_zhen_chu_fang_biao_create(request):
     context['form_yong_yao_chu_fang'] = form_yong_yao_chu_fang
     return render(request, 'men_zhen_chu_fang_biao_create.html', context)
 
-    
-
 
 def men_zhen_chu_fang_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
@@ -648,9 +608,7 @@ def men_zhen_chu_fang_biao_update(request, *args, **kwargs):
         if form_yong_yao_chu_fang.is_valid():
             form_yong_yao_chu_fang.save()
             # 构造作业完成消息参数
-            copy_post = request.POST.copy()
-            copy_post.pop('csrfmiddlewaretoken')
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=copy_post)
+            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_yong_yao_chu_fang = Yong_yao_chu_fang_baseform_ModelForm(instance=yong_yao_chu_fang, prefix="yong_yao_chu_fang")
