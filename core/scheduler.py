@@ -148,7 +148,7 @@ def is_event_happened_on_list_fields(list_fields, assignments, expression):
             (key, value), = key_list_pair.items()
             assignments[key] = value
 
-        if interpreter(keyword_replace(expression, assignments)):  # 把表达式中的变量替换为字典中对应的字段值，判断表达式是否成立
+        if eval(keyword_replace(expression, assignments)):  # 把表达式中的变量替换为字典中对应的字段值，判断表达式是否成立
             print(f'True assignments: {assignments}')
             return True  # 任一参数组合成立，则返回True
     
@@ -211,7 +211,7 @@ def operand_finished_handler(sender, **kwargs):
                             print('数组参数表达式为真，触发事件：', event)
                             operation_scheduler(event, event_params)
                     else:  # 栈为空，表示没有数组类型的字段，直接用assignments检查表达式                        
-                        if interpreter(keyword_replace(event.expression, assignments)):  # 把表达式中的变量替换为字典中对应的字段值，调用解释器执行，如果结果为真，说明业务事件发生，调度后续作业
+                        if eval(keyword_replace(event.expression, assignments)):  # 把表达式中的变量替换为字典中对应的字段值，调用解释器执行，如果结果为真，说明业务事件发生，调度后续作业
                             print('表达式为真，触发事件：', event)
                             operation_scheduler(event, event_params)
 
