@@ -48,7 +48,7 @@ class Command(BaseCommand):
         
         operations =eval(res_json['code'])['operand_views']
         # 增加系统保留作业
-        operations.extend(SYSTEM_OPERAND)
+        # operations.extend(SYSTEM_OPERAND)
         print('operations:', operations)
 
         for _o in operations:
@@ -57,15 +57,15 @@ class Command(BaseCommand):
                 label = _o['label'],
                 forms = _o['forms'],
             )
-            # 如果是系统保留作业，生成系统保留事件SYSTEM_EVENTS
-            if any(operation.name == fn[0] for fn in SYSTEM_EVENTS):
-                sys_event = Event.objects.create(
-                    operation = operation,
-                    name = f'{operation.name}_completed',
-                    label = f'{operation.label}_完成',
-                    expression = 'completed',
-                )
-                print('生成系统保留事件：', sys_event)
+            # # 如果是系统保留作业，生成系统保留事件SYSTEM_EVENTS
+            # if any(operation.name == fn[0] for fn in SYSTEM_EVENTS):
+            #     sys_event = Event.objects.create(
+            #         operation = operation,
+            #         name = f'{operation.name}_completed',
+            #         label = f'{operation.label}_完成',
+            #         expression = 'completed',
+            #     )
+            #     print('生成系统保留事件：', sys_event)
 
         print('导入Operation完成')
 

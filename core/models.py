@@ -14,8 +14,8 @@ from core.utils import keyword_search
 
 
 # 表单系统脚本源代码URL
-# SOURCECODE_URL = 'http://127.0.0.1:8000/define/source_codes_list/'
-SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define/source_codes_list/'
+SOURCECODE_URL = 'http://127.0.0.1:8000/define_operand/source_codes_list/'
+# SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_operand/source_codes_list/'
 
 # 系统保留事件(form, event_name)
 SYSTEM_EVENTS = [
@@ -97,30 +97,31 @@ class Customer(models.Model):
 
 
 # 表单信息表
-class Form(models.Model):
-	name = models.CharField(max_length=255, verbose_name="表单名称")
-	label = models.CharField(max_length=255, verbose_name="显示名称")
-	input_style = [
-		(0, '详情'),
-		(1, '列表'),
-	]
-	style = models.PositiveSmallIntegerField(choices=input_style, default=0, verbose_name='风格')
-	fields_list = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
+# class Form(models.Model):
+# 	name = models.CharField(max_length=255, verbose_name="表单名称")
+# 	label = models.CharField(max_length=255, verbose_name="显示名称")
+# 	input_style = [
+# 		(0, '详情'),
+# 		(1, '列表'),
+# 	]
+# 	style = models.PositiveSmallIntegerField(choices=input_style, default=0, verbose_name='风格')
+# 	fields_list = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
 
-	def __str__(self):
-		return str(self.label)
+# 	def __str__(self):
+# 		return str(self.label)
 
-	class Meta:
-		verbose_name = "表单"
-		verbose_name_plural = "表单"
-		ordering = ['id']
+# 	class Meta:
+# 		verbose_name = "表单"
+# 		verbose_name_plural = "表单"
+# 		ordering = ['id']
 
 
-# 基础作业信息表
+# 作业信息表
 class Operation(models.Model):
 	name = models.CharField(max_length=255, verbose_name="作业名称")
 	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
-	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
+	forms = models.JSONField(null=True, blank=True, verbose_name="视图元数据")
+	# icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
 	Operation_priority = [
 		(0, '0级'),
 		(1, '紧急'),
@@ -128,8 +129,6 @@ class Operation(models.Model):
 		(3, '一般'),
 	]
 	priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name='优先级')
-	form = models.OneToOneField(Form, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="表单")
-	forms = models.JSONField(null=True, blank=True, verbose_name="视图元数据")
 	group = models.ManyToManyField(Group, verbose_name="作业角色")
 	suppliers = models.CharField(max_length=255, blank=True, null=True, verbose_name="供应商")
 	not_suitable = models.CharField(max_length=255, blank=True, null=True, verbose_name='不适用对象')
@@ -153,127 +152,124 @@ class Operation(models.Model):
 
 # 服务类型信息表
 class Service(models.Model):
-	name = models.CharField(max_length=255, verbose_name="服务名称")
-	icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
-	first_operation = models.ForeignKey(Operation, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="起始作业")
+    name = models.CharField(max_length=255, unique=True, verbose_name="名称")
+    label = models.CharField(max_length=255, verbose_name="显示名称")
+    # icpc = models.OneToOneField(Icpc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="ICPC")
+    first_operation = models.ForeignKey(Operation, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="起始作业")
 	
-	def __str__(self):
-		return str(self.name)
+    def __str__(self):
+        return str(self.name)
 
-	class Meta:
-		verbose_name = "服务"
-		verbose_name_plural = "服务"
-		ordering = ['id']
+    class Meta:
+        verbose_name = "服务"
+        verbose_name_plural = "服务"
+        ordering = ['id']
 
 
 # 作业事件表
 # # 默认事件：xx作业完成--系统作业名+"_operation_completed"
 class Event(models.Model):
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="所属作业")
-	name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
-	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
-	next = models.ManyToManyField(Operation, verbose_name="后续作业")
-	description = models.CharField(max_length=255, blank=True, null=True, verbose_name="事件描述")
-	expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式", 
-		help_text='''
-		说明：<br>
-		1. 表达式接受的逻辑运算符：or, and, not, in, >=, <=, >, <, ==, +, -, *, /, ^, ()<br>
-		2. 字段名只允许由小写字母a~z，数字0~9和下划线_组成；字段值接受数字和字符，字符需要放在双引号中，如"A0101"
-		''')
-	parameters = models.CharField(max_length=1024, blank=True, null=True, verbose_name="检查字段")
-	fields = models.TextField(max_length=1024, blank=True, null=True, verbose_name="可用字段")
+    name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
+    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="所属作业")
+    next = models.ManyToManyField(Operation, verbose_name="后续作业")
+    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="事件描述")
+    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式", 
+        help_text='''
+        说明：<br>
+        1. 作业完成事件: completed<br>
+        2. 表达式接受的逻辑运算符：or, and, not, in, >=, <=, >, <, ==, +, -, *, /, ^, ()<br>
+        3. 字段名只允许由小写字母a~z，数字0~9和下划线_组成；字段值接受数字和字符，字符需要放在双引号中，如"A0101"
+        ''')
+    parameters = models.CharField(max_length=1024, blank=True, null=True, verbose_name="检查字段")
+    fields = models.TextField(max_length=1024, blank=True, null=True, verbose_name="可用字段")
 
-	def __str__(self):
-		return str(self.label)
+    def __str__(self):
+        return str(self.label)
 
-	class Meta:
-		verbose_name = "事件"
-		verbose_name_plural = "事件"
-		ordering = ['id']
+    class Meta:
+        verbose_name = "事件"
+        verbose_name_plural = "事件"
+        ordering = ['id']
 
-	def save(self, *args, **kwargs):
-		# 自动为事件名加作业名为前缀
-		if self.operation.name not in self.name:
-			self.name = f'{self.operation.name}_{self.name}'
-			# 保留字：作业完成事件，自动填充expression为'completed'
-			if self.name == f'{self.operation.name}_completed':
-				self.expression = 'completed'
+	# def save(self, *args, **kwargs):
+	# 	# 自动为事件名加作业名为前缀
+	# 	if self.operation.name not in self.name:
+	# 		self.name = f'{self.operation.name}_{self.name}'
+	# 		# 保留字：作业完成事件，自动填充expression为'completed'
+	# 		if self.name == f'{self.operation.name}_completed':
+	# 			self.expression = 'completed'
 
-		if self.operation.forms:
-			# 生成fields
-			forms = json.loads(self.operation.forms)
-			fields = []
-			field_names = []
+	# 	if self.operation.forms:
+	# 		# 生成fields
+	# 		forms = json.loads(self.operation.forms)
+	# 		fields = []
+	# 		field_names = []
 
-			for form in forms:
-				form_name = form['basemodel']
-				_fields = form['fields']
-				for _field in _fields:
-					field_name = form_name + '-' + _field['name']
-					field_label = _field['label']
-					field_type = _field['type']
+	# 		for form in forms:
+	# 			form_name = form['basemodel']
+	# 			_fields = form['fields']
+	# 			for _field in _fields:
+	# 				field_name = form_name + '-' + _field['name']
+	# 				field_label = _field['label']
+	# 				field_type = _field['type']
 
-					field_names.append(field_name)
-					fields.append(str((field_name, field_label, field_type)))
+	# 				field_names.append(field_name)
+	# 				fields.append(str((field_name, field_label, field_type)))
 
-			self.fields = '\n'.join(fields)
+	# 		self.fields = '\n'.join(fields)
 
-			# 生成表达式参数列表
-			if self.expression and self.expression != 'completed':
-				_form_fields = keyword_search(self.expression, field_names)
-				self.parameters = ', '.join(_form_fields)
-				print('Parameters fields:', self.parameters)
+	# 		# 生成表达式参数列表
+	# 		if self.expression and self.expression != 'completed':
+	# 			_form_fields = keyword_search(self.expression, field_names)
+	# 			self.parameters = ', '.join(_form_fields)
+	# 			print('Parameters fields:', self.parameters)
 
-		super().save(*args, **kwargs)
+	# 	super().save(*args, **kwargs)
 
 
 # 指令表
 class Instruction(models.Model):
-	name = models.CharField(max_length=100, db_index=True, unique=True, verbose_name="指令名称")
-	label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
-	code = models.CharField(max_length=10, verbose_name="指令代码")
-	func = models.CharField(max_length=100, verbose_name="操作函数")
-	description = models.CharField(max_length=255, blank=True, null=True, verbose_name="指令描述")
+    name = models.CharField(max_length=100, db_index=True, unique=True, verbose_name="指令名称")
+    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
+    code = models.CharField(max_length=10, verbose_name="指令代码")
+    func = models.CharField(max_length=100, verbose_name="操作函数")
+    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="指令描述")
 
-	def __str__(self):
-		return str(self.name)
+    def __str__(self):
+        return str(self.name)
 
-	class Meta:
-		verbose_name = "指令"
-		verbose_name_plural = "指令"
-		ordering = ['id']
+    class Meta:
+        verbose_name = "指令"
+        verbose_name_plural = "指令"
+        ordering = ['id']
 
 
 # 事件指令程序表
 class Event_instructions(models.Model):
-	event = models.ForeignKey(Event, on_delete=models.CASCADE, db_index=True, verbose_name="事件")
-	instruction = models.ForeignKey(Instruction, on_delete=models.CASCADE, verbose_name="指令")
-	order = models.PositiveSmallIntegerField(default=1, verbose_name="指令序号")
-	params = models.PositiveIntegerField(blank=True, null=True, verbose_name="创建作业")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, db_index=True, verbose_name="事件")
+    instruction = models.ForeignKey(Instruction, on_delete=models.CASCADE, verbose_name="指令")
+    order = models.PositiveSmallIntegerField(default=1, verbose_name="指令序号")
+    params = models.PositiveIntegerField(blank=True, null=True, verbose_name="创建作业")
 
-	def __str__(self):
-		return str(self.instruction.name)
+    def __str__(self):
+        return str(self.instruction.name)
 
-	class Meta:
-		verbose_name = "事件指令集"
-		verbose_name_plural = "事件指令集"
-		ordering = ['event', 'order']
+    class Meta:
+        verbose_name = "事件指令集"
+        verbose_name_plural = "事件指令集"
+        ordering = ['event', 'order']
 
 
 # 服务进程表 Service_proc
 class Service_proc(models.Model):
 	# 服务进程id: spid
-	# id 
-	
 	# 服务id: sid
 	service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-	
-	# 服务专员id: uid
+	# 作业人员id: uid
 	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_uid', verbose_name="服务专员")
-	
 	# 客户id: cid
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_cid', verbose_name="客户")
-	
 	# 工作小组：workgroup
 	# workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工作组")
 	
@@ -295,20 +291,17 @@ class Service_proc(models.Model):
 # 作业进程表 Operation_proc
 class Operation_proc(models.Model):
 	# 作业进程id: pid
-	
 	# 作业id: oid
 	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业")
-	
 	# 作业员id: uid
 	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")
-	
 	# 客户id: cid
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")
 	
 	# 维护作业进程状态：
 	'''
 		作业状态机操作码
-		('cre', 'CREATE'),
+		('cre', 'CREATE'),					= 0
 		('ctr', 'CREATED TO READY'),		= 1
 		('rtr', 'READY TO RUNNING'),		= 2
 		('rth', 'RUNNING TO HANGUP'),		= 3
@@ -324,16 +317,12 @@ class Operation_proc(models.Model):
 		(4, '结束'),
 	]
 	state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
-	
 	# 作业入口: operand/<int:id>/update_view
 	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")
-
 	# 父作业进程id: ppid
 	ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")
-
 	# 服务进程id: spid
 	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
-
 	# 表单索引
 	form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
 	

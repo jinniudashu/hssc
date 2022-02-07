@@ -32,7 +32,7 @@ class Allergies_history_baseform_ModelForm(ModelForm):
 class Out_of_hospital_self_report_survey_baseform_ModelForm(ModelForm):
     class Meta:
         model = Out_of_hospital_self_report_survey
-        fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
+        fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', ]
         widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
@@ -55,7 +55,7 @@ class Out_of_hospital_self_report_survey_baseform_ModelForm(ModelForm):
 class Personal_comprehensive_psychological_quality_survey_baseform_ModelForm(ModelForm):
     class Meta:
         model = Personal_comprehensive_psychological_quality_survey
-        fields = ['relatedfield_personality_tendency', 'boolfield_is_life_fun', ]
+        fields = ['boolfield_is_life_fun', 'relatedfield_personality_tendency', ]
         widgets = {'relatedfield_personality_tendency': RadioSelect, }
         
     @property
@@ -101,7 +101,7 @@ class Personal_adaptability_assessment_baseform_ModelForm(ModelForm):
 class Personal_health_behavior_survey_baseform_ModelForm(ModelForm):
     class Meta:
         model = Personal_health_behavior_survey
-        fields = ['boolfield_is_the_diet_regular', 'boolfield_is_the_diet_proportion_healthy', 'boolfield_whether_the_bowel_movements_are_regular', 'boolfield_whether_to_drink_alcohol', 'relatedfield_drinking_frequency', 'boolfield_do_you_smoke', 'relatedfield_smoking_frequency', 'characterfield_average_sleep_duration', 'boolfield_insomnia', 'characterfield_duration_of_insomnia', ]
+        fields = ['boolfield_is_the_diet_regular', 'boolfield_is_the_diet_proportion_healthy', 'boolfield_whether_the_bowel_movements_are_regular', 'boolfield_whether_to_drink_alcohol', 'boolfield_do_you_smoke', 'boolfield_insomnia', 'characterfield_average_sleep_duration', 'characterfield_duration_of_insomnia', 'relatedfield_drinking_frequency', 'relatedfield_smoking_frequency', ]
         widgets = {'relatedfield_drinking_frequency': RadioSelect, 'relatedfield_smoking_frequency': RadioSelect, }
         
     @property
@@ -124,7 +124,7 @@ class Personal_health_behavior_survey_baseform_ModelForm(ModelForm):
 class Personal_health_assessment_baseform_ModelForm(ModelForm):
     class Meta:
         model = Personal_health_assessment
-        fields = ['relatedfield_own_health', 'relatedfield_compared_to_last_year', 'relatedfield_sports_preference', 'relatedfield_exercise_time', 'boolfield_is_it_easy_to_get_sick', 'relatedfield_have_any_recent_symptoms_of_physical_discomfort', ]
+        fields = ['boolfield_is_it_easy_to_get_sick', 'relatedfield_own_health', 'relatedfield_compared_to_last_year', 'relatedfield_sports_preference', 'relatedfield_exercise_time', 'relatedfield_have_any_recent_symptoms_of_physical_discomfort', ]
         widgets = {'relatedfield_own_health': RadioSelect, 'relatedfield_compared_to_last_year': Select, 'relatedfield_sports_preference': Select, 'relatedfield_exercise_time': RadioSelect, 'relatedfield_have_any_recent_symptoms_of_physical_discomfort': CheckboxSelectMultiple, }
         
     @property
@@ -147,7 +147,7 @@ class Personal_health_assessment_baseform_ModelForm(ModelForm):
 class Social_environment_assessment_baseform_ModelForm(ModelForm):
     class Meta:
         model = Social_environment_assessment
-        fields = ['relatedfield_is_the_living_environment_satisfactory', 'relatedfield_is_the_transportation_convenient', 'boolfield_whether_the_living_environment_is_clean_and_hygienic', 'boolfield_is_drinking_water_healthy', 'boolfield_whether_there_is_noise_pollution', 'boolfield_whether_there_is_air_pollution', 'boolfield_whether_there_is_other_pollution', ]
+        fields = ['boolfield_whether_the_living_environment_is_clean_and_hygienic', 'boolfield_is_drinking_water_healthy', 'boolfield_whether_there_is_noise_pollution', 'boolfield_whether_there_is_air_pollution', 'boolfield_whether_there_is_other_pollution', 'relatedfield_is_the_living_environment_satisfactory', 'relatedfield_is_the_transportation_convenient', ]
         widgets = {'relatedfield_is_the_living_environment_satisfactory': Select, 'relatedfield_is_the_transportation_convenient': Select, }
         
     @property
@@ -239,7 +239,7 @@ class Physical_examination_baseform_ModelForm(ModelForm):
 class History_of_blood_transfusion_baseform_ModelForm(ModelForm):
     class Meta:
         model = History_of_blood_transfusion
-        fields = ['datetimefield_date', 'numberfield_blood_transfusion', ]
+        fields = ['numberfield_blood_transfusion', 'datetimefield_date', ]
         
         
     @property
@@ -308,7 +308,7 @@ class Fundus_examination_baseform_ModelForm(ModelForm):
 class Medical_history_baseform_ModelForm(ModelForm):
     class Meta:
         model = Medical_history
-        fields = ['relatedfield_disease_name', 'datetimefield_time_of_diagnosis', ]
+        fields = ['datetimefield_time_of_diagnosis', 'relatedfield_disease_name', ]
         widgets = {'relatedfield_disease_name': Select, }
         
     @property
@@ -331,7 +331,7 @@ class Medical_history_baseform_ModelForm(ModelForm):
 class Doctor_registry_baseform_ModelForm(ModelForm):
     class Meta:
         model = Doctor_registry
-        fields = ['characterfield_name', 'characterfield_gender', 'characterfield_age', 'characterfield_identification_number', 'characterfield_contact_information', 'characterfield_contact_address', 'relatedfield_service_role', 'characterfield_practice_qualification', 'characterfield_password_setting', 'characterfield_confirm_password', 'characterfield_expertise', 'characterfield_practice_time', 'relatedfield_affiliation', 'datetimefield_date_of_birth', ]
+        fields = ['characterfield_name', 'characterfield_gender', 'characterfield_age', 'characterfield_identification_number', 'characterfield_contact_information', 'characterfield_contact_address', 'characterfield_practice_qualification', 'characterfield_password_setting', 'characterfield_confirm_password', 'characterfield_expertise', 'characterfield_practice_time', 'datetimefield_date_of_birth', 'relatedfield_service_role', 'relatedfield_affiliation', ]
         widgets = {'relatedfield_service_role': CheckboxSelectMultiple, 'relatedfield_affiliation': RadioSelect, }
         
     @property
@@ -607,7 +607,7 @@ class Lower_extremity_edema_examination_baseform_ModelForm(ModelForm):
 class Basic_personal_information_baseform_ModelForm(ModelForm):
     class Meta:
         model = Basic_personal_information
-        fields = ['relatedfield_family_relationship', 'characterfield_name', 'characterfield_identification_number', 'datetimefield_date_of_birth', 'relatedfield_family_id', 'characterfield_resident_file_number', 'relatedfield_gender', 'relatedfield_nationality', 'relatedfield_marital_status', 'relatedfield_education', 'relatedfield_occupational_status', 'characterfield_family_address', 'characterfield_contact_number', 'characterfield_medical_ic_card_number', 'relatedfield_medical_expenses_burden', 'relatedfield_type_of_residence', 'relatedfield_blood_type', 'boolfield_contract_signatory', 'relatedfield_signed_family_doctor', ]
+        fields = ['boolfield_contract_signatory', 'characterfield_name', 'characterfield_identification_number', 'characterfield_resident_file_number', 'characterfield_family_address', 'characterfield_contact_number', 'characterfield_medical_ic_card_number', 'datetimefield_date_of_birth', 'relatedfield_family_relationship', 'relatedfield_family_id', 'relatedfield_gender', 'relatedfield_nationality', 'relatedfield_marital_status', 'relatedfield_education', 'relatedfield_occupational_status', 'relatedfield_medical_expenses_burden', 'relatedfield_type_of_residence', 'relatedfield_blood_type', 'relatedfield_signed_family_doctor', ]
         widgets = {'relatedfield_family_relationship': Select, 'relatedfield_family_id': Select, 'relatedfield_gender': Select, 'relatedfield_nationality': Select, 'relatedfield_marital_status': Select, 'relatedfield_education': Select, 'relatedfield_occupational_status': Select, 'relatedfield_medical_expenses_burden': CheckboxSelectMultiple, 'relatedfield_type_of_residence': Select, 'relatedfield_blood_type': Select, 'relatedfield_signed_family_doctor': Select, }
         
     @property
@@ -673,33 +673,10 @@ class User_registry_baseform_ModelForm(ModelForm):
             raise ValidationError("Slug may not be create")
         return new_slug
 
-class Basic_personal_information_baseform_query_1642159528_ModelForm(ModelForm):
-    class Meta:
-        model = Basic_personal_information
-        fields = ['characterfield_name', 'datetimefield_date_of_birth', 'relatedfield_gender', 'characterfield_contact_number', ]
-        widgets = {'relatedfield_gender': Select, }
-        
-    @property
-    def helper(self):
-        helper = FormHelper()
-        helper.layout = Layout(HTML("<hr />"))
-        for field in self.Meta().fields:
-            helper.layout.append(Field(field, wrapper_class="row"))
-        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
-        helper.field_class = "col-8"
-        helper.label_class = "col-2"
-        return helper
-
-    def clean_slug(self):
-        new_slug = self.cleaned_data.get("slug").lower()
-        if new_slug == "create":
-            raise ValidationError("Slug may not be create")
-        return new_slug
-
 class Men_zhen_wen_zhen_diao_cha_biao_baseform_ModelForm(ModelForm):
     class Meta:
         model = Men_zhen_wen_zhen_diao_cha_biao
-        fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
+        fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', ]
         widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
@@ -788,11 +765,11 @@ class Men_zhen_zhen_duan_biao_baseform_ModelForm(ModelForm):
             raise ValidationError("Slug may not be create")
         return new_slug
 
-class Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(ModelForm):
+class Yong_yao_chu_fang_baseform_ModelForm(ModelForm):
     class Meta:
-        model = Out_of_hospital_self_report_survey
-        fields = ['relatedfield_symptom_list', 'characterfield_supplementary_description_of_the_condition', ]
-        widgets = {'relatedfield_symptom_list': SelectMultiple, }
+        model = Yong_yao_chu_fang
+        fields = ['relatedfield_drug_name', ]
+        widgets = {'relatedfield_drug_name': SelectMultiple, }
         
     @property
     def helper(self):
@@ -811,11 +788,34 @@ class Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(Mod
             raise ValidationError("Slug may not be create")
         return new_slug
 
-class Yong_yao_chu_fang_baseform_ModelForm(ModelForm):
+class Basic_personal_information_baseform_query_1642159528_ModelForm(ModelForm):
     class Meta:
-        model = Yong_yao_chu_fang
-        fields = ['relatedfield_drug_name', ]
-        widgets = {'relatedfield_drug_name': SelectMultiple, }
+        model = Basic_personal_information
+        fields = ['characterfield_name', 'characterfield_contact_number', 'datetimefield_date_of_birth', 'relatedfield_gender', ]
+        widgets = {'relatedfield_gender': Select, }
+        
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout(HTML("<hr />"))
+        for field in self.Meta().fields:
+            helper.layout.append(Field(field, wrapper_class="row"))
+        helper.layout.append(Submit("submit", "保存", css_class="btn-success"))
+        helper.field_class = "col-8"
+        helper.label_class = "col-2"
+        return helper
+
+    def clean_slug(self):
+        new_slug = self.cleaned_data.get("slug").lower()
+        if new_slug == "create":
+            raise ValidationError("Slug may not be create")
+        return new_slug
+
+class Out_of_hospital_self_report_survey_baseform_query_1642212281_ModelForm(ModelForm):
+    class Meta:
+        model = Out_of_hospital_self_report_survey
+        fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', ]
+        widgets = {'relatedfield_symptom_list': SelectMultiple, }
         
     @property
     def helper(self):

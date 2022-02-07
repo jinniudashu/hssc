@@ -3,12 +3,12 @@ import requests
 from core.models import SOURCECODE_URL
 
 class Command(BaseCommand):
-    help = '从设计系统导入forms脚本'
+    help = '从设计系统导入脚本'
 
     def handle(self, *args, **kwargs):
 
         # 获取脚本源码，创建文件
-        print('开始导入forms脚本...')
+        print('开始导入脚本...')
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         code =eval(res_json['code'])

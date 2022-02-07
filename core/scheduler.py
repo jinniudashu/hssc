@@ -5,40 +5,32 @@
 
 业务完成事件命名规则: [form_name]_operation_completed
 '''
-from django.dispatch import receiver, Signal
-from django.db.models.signals import post_save, post_delete, m2m_changed
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from itertools import product
 import traceback
 
 # 导入自定义表单models
 from django.contrib.contenttypes.models import ContentType
-
 from registration.signals import user_registered, user_activated, user_approved
-
-# 导入作业事件表、指令表
-from core.models import Operation, Event, Event_instructions, Instruction, Operation_proc
-from core.models import SYSTEM_EVENTS
-
-# 导入任务
-from core.tasks import create_operation_proc
-
-# 导入作业完成信号
-from core.signals import operand_finished
-
-from core.utils import keyword_replace
-from core.interpreter import interpreter
 
 # 导入UserSession
 from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
-# 从app forms里获取所有表单model的名字, 用以判断post_save的sender
-# from django.apps import apps
-# Forms_models = apps.get_app_config('forms').get_models()
-# form_list = []
-# for Model in Forms_models:
-#     form_list.append(Model.__name__)
+# 导入作业事件表、指令表
+from core.models import Event, Event_instructions, Operation_proc
+from core.models import SYSTEM_EVENTS
+
+# 导入任务
+from core.tasks import create_operation_proc
+
+# 导入自定义作业完成信号
+from core.signals import operand_finished
+
+from core.utils import keyword_replace
+# from core.interpreter import interpreter
 
 
 # 作业调度器
@@ -51,7 +43,7 @@ def operation_scheduler(event, params):
     task_params={'uid': params['uid'], 'cid': params['cid'], 'ppid': params['ppid']}
 
     for instruction in instructions:
-        task_params['oid'] = instruction.params
+        task_params['oname'] = instruction.params
         task_func = instruction.instruction.func
 
         # 调用函数执行指令
@@ -66,57 +58,9 @@ def operation_scheduler(event, params):
 
 
 # ********************
-# 作业进程设置
-# ********************
-
-# 监视事件表Event变更，变更事件后续作业时，同步变更事件指令表Event_instructions的内容
-@receiver(m2m_changed, sender=Event.next.through)
-def event_m2m_changed_handler(sender, instance, action, **kwargs):
-
-    # 设定指令为 create_operation_proc
-    instruction_create_operation_proc = Instruction.objects.get(name='create_operation_proc')
-
-    # 获取后续作业
-    next_operations = []
-    if action == 'post_add':
-        next_operations = instance.next.all()
-        print('!!post_add:', next_operations)
-    elif action == 'post_remove':
-        next_operations = instance.next.all()
-        print('##post_remove:', next_operations)
-    
-    # 删除原有事件指令
-    Event_instructions.objects.filter(event=instance).delete()
-
-    # 新增事件指令
-    for operation in next_operations:
-        Event_instructions.objects.create(
-            event=instance,
-            instruction=instruction_create_operation_proc,
-            order=1,
-            params=operation.id,    # 用后续作业id作为指令参数
-        )
-
-
-# 监视事件表变更，管理员删除事件表Event时，同步删除事件指令表Event_instructions的内容
-@receiver(post_delete, sender=Event)
-def event_post_delete_handler(sender, instance, **kwargs):
-    Event_instructions.objects.filter(event=instance).delete()
-
-
-# ********************
 # 作业进程运行时
 # ********************
 # 维护作业进程状态
-'''
-作业状态机操作码
-    ('cre', 'CREATE'),
-    ('ctr', 'CREATED TO READY'),
-    ('rtr', 'READY TO RUNNING'),
-    ('rth', 'RUNNING TO HANGUP'),
-    ('htr', 'HANGUP TO READY'),
-    ('rtc', 'RUNNING TO COMPLETED'),
-'''
 # ctr: 作业进程被创建，资源检查
 # rtc: 表单作业完成，查询事件表，调度后续作业进程
 @receiver(post_save, sender=Operation_proc)
@@ -219,17 +163,6 @@ def operand_finished_handler(sender, **kwargs):
         print('operand_finished_handler => 无作业进程')
 
 
-# 收到表单保存信号
-@receiver(post_save, sender=None, weak=True, dispatch_uid=None)
-def form_post_save_handler(sender, instance, created, **kwargs):
-
-    # 如果用户登录，中止该用户其它会话
-    if sender == UserSession and created:
-        qs = UserSession.objects.filter(user=instance.user, ended=False).exclude(id=instance.id)
-        for s in qs:
-            s.end_session()
-
-
 # ******************************************
 # 业务事件处理：
 # 系统内置业务事件：注册，用户登录，用户退出
@@ -282,3 +215,11 @@ def user_logged_in_handler(sender, user, request, **kwargs):
 #     # Do something for authenticated users.
 # else:
 #     # Do something for anonymous users.
+
+
+# 从app forms里获取所有表单model的名字, 用以判断post_save的sender
+# from django.apps import apps
+# Forms_models = apps.get_app_config('forms').get_models()
+# form_list = []
+# for Model in Forms_models:
+#     form_list.append(Model.__name__)

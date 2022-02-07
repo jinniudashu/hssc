@@ -90,8 +90,3 @@ def keyword_replace(s, replace_dict):
         changed_str = search(changed_str)
 
     return changed_str
-
-# For founction test
-# s = 'symptom_list="AAA"'
-# d = {'symptom_list': '"AAA"'}
-# print(keyword_replace(s,d))

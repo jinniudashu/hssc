@@ -20,8 +20,6 @@ urlpatterns = [
     path('tang_niao_bing_cha_ti_biao/<int:id>/update', tang_niao_bing_cha_ti_biao_update, name='tang_niao_bing_cha_ti_biao_update_url'),
     path('ge_ren_guo_min_shi_diao_cha_biao/create', ge_ren_guo_min_shi_diao_cha_biao_create, name='ge_ren_guo_min_shi_diao_cha_biao_create_url'),
     path('ge_ren_guo_min_shi_diao_cha_biao/<int:id>/update', ge_ren_guo_min_shi_diao_cha_biao_update, name='ge_ren_guo_min_shi_diao_cha_biao_update_url'),
-    path('men_zhen_wen_zhen_diao_cha_biao/create', men_zhen_wen_zhen_diao_cha_biao_create, name='men_zhen_wen_zhen_diao_cha_biao_create_url'),
-    path('men_zhen_wen_zhen_diao_cha_biao/<int:id>/update', men_zhen_wen_zhen_diao_cha_biao_update, name='men_zhen_wen_zhen_diao_cha_biao_update_url'),
     path('men_zhen_chu_fang_biao/create', men_zhen_chu_fang_biao_create, name='men_zhen_chu_fang_biao_create_url'),
     path('men_zhen_chu_fang_biao/<int:id>/update', men_zhen_chu_fang_biao_update, name='men_zhen_chu_fang_biao_update_url'),
 ]

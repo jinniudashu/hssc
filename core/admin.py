@@ -11,12 +11,12 @@ class EventInline(admin.TabularInline):
 
 
 class OperationAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'icpc', 'id']
-    list_display_links = ['label', 'name', 'icpc']
+    list_display = ['label', 'name', 'id']
+    list_display_links = ['label', 'name']
     readonly_fields = ['forms']
     fieldsets = (
         (None, {
-            'fields': (('label', 'name', 'icpc'), 'priority', 'group',)
+            'fields': (('label', 'name', ), 'forms', 'priority', 'group',)
         }),
         ('作业管理', {
             'fields': ('not_suitable', 'time_limits', 'working_hours', 'cost', 'load_feedback')
@@ -24,12 +24,9 @@ class OperationAdmin(admin.ModelAdmin):
         ('资源配置', {
             'fields': ('resource_materials','resource_devices','resource_knowledge')
         }),
-        ('元数据', {
-            'fields': ('forms', )
-        })
     )
-    autocomplete_fields = ['icpc']
-    search_fields = ['name', 'icpc', 'label']
+    
+    search_fields = ['name', 'label']
     inlines = [EventInline]
     ordering = ['id']
 admin.site.register(Operation, OperationAdmin)
@@ -52,29 +49,28 @@ class Operation_procAdmin(admin.ModelAdmin):
 admin.site.register(Operation_proc, Operation_procAdmin)
 
 
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'icpc', 'id']
-    list_display_links = ['name', 'icpc']
-    autocomplete_fields = ['icpc']
-    search_fields = ['name', 'icpc']
-    ordering = ['id']
-admin.site.register(Service, ServiceAdmin)
+# class ServiceAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'id']
+#     list_display_links = ['name']
+#     search_fields = ['name']
+#     ordering = ['id']
+# admin.site.register(Service, ServiceAdmin)
 
 
-class Event_instructionsAdmin(admin.ModelAdmin):
-    list_display = ['event', 'instruction', 'order', 'params', 'id']
-    list_display_links = ['event', 'instruction', 'order', 'params']
-    search_fields = ['event']
-    ordering = ['id']
-admin.site.register(Event_instructions, Event_instructionsAdmin)
+# class Event_instructionsAdmin(admin.ModelAdmin):
+#     list_display = ['event', 'instruction', 'order', 'params', 'id']
+#     list_display_links = ['event', 'instruction', 'order', 'params']
+#     search_fields = ['event']
+#     ordering = ['id']
+# admin.site.register(Event_instructions, Event_instructionsAdmin)
 
 
-class InstructionAdmin(admin.ModelAdmin):
-    list_display = ['label', 'name', 'code', 'func', 'description', 'id']
-    list_display_links = ['label', 'name', 'code', 'func']
-    search_fields = ['name']
-    ordering = ['id']
-admin.site.register(Instruction, InstructionAdmin)
+# class InstructionAdmin(admin.ModelAdmin):
+#     list_display = ['label', 'name', 'code', 'func', 'description', 'id']
+#     list_display_links = ['label', 'name', 'code', 'func']
+#     search_fields = ['name']
+#     ordering = ['id']
+# admin.site.register(Instruction, InstructionAdmin)
 
 
 # admin.site.register(Service_proc)

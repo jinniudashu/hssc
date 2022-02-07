@@ -18,7 +18,7 @@ from core.models import Operation_proc, Operation, Service_proc
 # 创建作业进程
 # @shared_task
 def create_operation_proc(task_params):
-    operation = Operation.objects.get(id=task_params['oid'])
+    operation = Operation.objects.get(name=task_params['oname'])
     user_operater = User.objects.get(id=task_params['uid'])
     user_customer = User.objects.get(id=task_params['cid'])
 
@@ -42,7 +42,7 @@ def create_operation_proc(task_params):
 
     # 根据Operation.forms里的mutate类型的表单创建相关表单实例
     form_slugs = []
-    forms = filter(lambda s: s['mutate_or_inquiry']=='mutate', json.loads(operation.forms))
+    forms = filter(lambda s: s['mutate_or_inquiry']=='mutate', json.loads(operation.forms.meta_data))
     for form in forms:
         form_class_name = form['basemodel'].capitalize()
         print('创建表单实例:', form_class_name)

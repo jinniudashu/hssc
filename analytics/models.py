@@ -7,6 +7,7 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 
 from django.dispatch import receiver
+from django.db.models.signals import post_save
 from .signals import object_viewed_signal
 from .utils import get_client_ip
 
@@ -60,3 +61,15 @@ class UserSession(models.Model):
         except:
             pass
         return self.ended
+
+
+# 收到UserSession保存信号
+@receiver(post_save, sender=UserSession, weak=True, dispatch_uid=None)
+def form_post_save_handler(sender, instance, created, **kwargs):
+    # 如果用户登录，中止该用户其它会话
+    if created:
+        qs = sender.objects.filter(user=instance.user, ended=False).exclude(id=instance.id)
+        for s in qs:
+            s.end_session()
+
+

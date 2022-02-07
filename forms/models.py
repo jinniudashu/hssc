@@ -40,8 +40,8 @@ class Allergies_history(models.Model):
         
 
 class Out_of_hospital_self_report_survey(models.Model):
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_out_of_hospital_self_report_survey', verbose_name='症状')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_out_of_hospital_self_report_survey', verbose_name='症状')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -70,8 +70,8 @@ class Out_of_hospital_self_report_survey(models.Model):
         
 
 class Personal_comprehensive_psychological_quality_survey(models.Model):
-    relatedfield_personality_tendency = models.ForeignKey(Character, related_name='character_for_relatedfield_personality_tendency_personal_comprehensive_psychological_quality_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性格倾向')
     boolfield_is_life_fun = models.BooleanField(null=True, blank=True, verbose_name='您觉得生活是否有乐趣吗')
+    relatedfield_personality_tendency = models.ForeignKey(Character, related_name='character_for_relatedfield_personality_tendency_personal_comprehensive_psychological_quality_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性格倾向')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -137,12 +137,12 @@ class Personal_health_behavior_survey(models.Model):
     boolfield_is_the_diet_proportion_healthy = models.BooleanField(null=True, blank=True, verbose_name='饮食比例是否健康')
     boolfield_whether_the_bowel_movements_are_regular = models.BooleanField(null=True, blank=True, verbose_name='大便是否规律')
     boolfield_whether_to_drink_alcohol = models.BooleanField(null=True, blank=True, verbose_name='是否饮酒')
-    relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_personal_health_behavior_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
     boolfield_do_you_smoke = models.BooleanField(null=True, blank=True, verbose_name='是否吸烟')
-    relatedfield_smoking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_smoking_frequency_personal_health_behavior_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='吸烟频次')
-    characterfield_average_sleep_duration = models.CharField(max_length=255, null=True, blank=True, verbose_name='平均睡眠时长')
     boolfield_insomnia = models.BooleanField(null=True, blank=True, verbose_name='是否有失眠情况')
+    characterfield_average_sleep_duration = models.CharField(max_length=255, null=True, blank=True, verbose_name='平均睡眠时长')
     characterfield_duration_of_insomnia = models.CharField(max_length=255, null=True, blank=True, verbose_name='持续失眠时间')
+    relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_personal_health_behavior_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
+    relatedfield_smoking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_smoking_frequency_personal_health_behavior_survey', on_delete=models.CASCADE, null=True, blank=True, verbose_name='吸烟频次')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -171,11 +171,11 @@ class Personal_health_behavior_survey(models.Model):
         
 
 class Personal_health_assessment(models.Model):
+    boolfield_is_it_easy_to_get_sick = models.BooleanField(null=True, blank=True, verbose_name='是否比别人容易生病')
     relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='觉得自身健康状况如何')
     relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='较之过去一年状态如何')
     relatedfield_sports_preference = models.ForeignKey(Sports_preference, related_name='sports_preference_for_relatedfield_sports_preference_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动偏好')
     relatedfield_exercise_time = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_exercise_time_personal_health_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动时长')
-    boolfield_is_it_easy_to_get_sick = models.BooleanField(null=True, blank=True, verbose_name='是否比别人容易生病')
     relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_personal_health_assessment', verbose_name='近来有无身体不适症状')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
@@ -205,13 +205,13 @@ class Personal_health_assessment(models.Model):
         
 
 class Social_environment_assessment(models.Model):
-    relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_social_environment_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
-    relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_social_environment_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
     boolfield_whether_the_living_environment_is_clean_and_hygienic = models.BooleanField(null=True, blank=True, verbose_name='居住环境是否干净卫生')
     boolfield_is_drinking_water_healthy = models.BooleanField(null=True, blank=True, verbose_name='饮水是否健康')
     boolfield_whether_there_is_noise_pollution = models.BooleanField(null=True, blank=True, verbose_name='是否有噪声污染')
     boolfield_whether_there_is_air_pollution = models.BooleanField(null=True, blank=True, verbose_name='是否有空气污染')
     boolfield_whether_there_is_other_pollution = models.BooleanField(null=True, blank=True, verbose_name='是否有其他污染')
+    relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_social_environment_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
+    relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_social_environment_assessment', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -350,11 +350,11 @@ class Physical_examination(models.Model):
         
 
 class History_of_blood_transfusion(models.Model):
-    datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
     numberfield_blood_transfusion = models.IntegerField(null=True, blank=True, verbose_name='输血量')
     numberfield_blood_transfusion_standard_value = models.IntegerField(null=True, blank=True, verbose_name='输血量标准值')
     numberfield_blood_transfusion_up_limit = models.IntegerField(default=400.0, null=True, blank=True, verbose_name='输血量上限')
     numberfield_blood_transfusion_down_limit = models.IntegerField(null=True, blank=True, verbose_name='输血量下限')
+    datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -442,8 +442,8 @@ class Fundus_examination(models.Model):
         
 
 class Medical_history(models.Model):
-    relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_medical_history', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     datetimefield_time_of_diagnosis = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
+    relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_medical_history', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -478,14 +478,14 @@ class Doctor_registry(models.Model):
     characterfield_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     characterfield_contact_information = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
-    relatedfield_service_role = models.ManyToManyField(Service_role, related_name='service_role_for_relatedfield_service_role_doctor_registry', verbose_name='服务角色')
     characterfield_practice_qualification = models.CharField(max_length=255, null=True, blank=True, verbose_name='执业资质')
     characterfield_password_setting = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码设置')
     characterfield_confirm_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='确认密码')
     characterfield_expertise = models.CharField(max_length=255, null=True, blank=True, verbose_name='专长')
     characterfield_practice_time = models.CharField(max_length=255, null=True, blank=True, verbose_name='执业时间')
-    relatedfield_affiliation = models.ForeignKey(Institutions_list, related_name='institutions_list_for_relatedfield_affiliation_doctor_registry', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
     datetimefield_date_of_birth = models.DateTimeField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_service_role = models.ManyToManyField(Service_role, related_name='service_role_for_relatedfield_service_role_doctor_registry', verbose_name='服务角色')
+    relatedfield_affiliation = models.ForeignKey(Institutions_list, related_name='institutions_list_for_relatedfield_affiliation_doctor_registry', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
@@ -851,24 +851,24 @@ class Lower_extremity_edema_examination(models.Model):
         
 
 class Basic_personal_information(models.Model):
-    relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
+    boolfield_contract_signatory = models.BooleanField(null=True, blank=True, verbose_name='合同签约户')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     characterfield_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
-    datetimefield_date_of_birth = models.DateTimeField(null=True, blank=True, verbose_name='出生日期')
-    relatedfield_family_id = models.ForeignKey(Icpc1_register_logins, related_name='icpc1_register_logins_for_relatedfield_family_id_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭编号')
     characterfield_resident_file_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
+    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    characterfield_medical_ic_card_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
+    datetimefield_date_of_birth = models.DateTimeField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
+    relatedfield_family_id = models.ForeignKey(Icpc1_register_logins, related_name='icpc1_register_logins_for_relatedfield_family_id_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭编号')
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     relatedfield_nationality = models.ForeignKey(Nationality, related_name='nationality_for_relatedfield_nationality_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='民族')
     relatedfield_marital_status = models.ForeignKey(Marital_status, related_name='marital_status_for_relatedfield_marital_status_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='婚姻状况')
     relatedfield_education = models.ForeignKey(Education, related_name='education_for_relatedfield_education_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='文化程度')
     relatedfield_occupational_status = models.ForeignKey(Occupational_status, related_name='occupational_status_for_relatedfield_occupational_status_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='职业状况')
-    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
-    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    characterfield_medical_ic_card_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
     relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_basic_personal_information', verbose_name='医疗费用负担')
     relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
-    boolfield_contract_signatory = models.BooleanField(null=True, blank=True, verbose_name='合同签约户')
     relatedfield_signed_family_doctor = models.ForeignKey(Employee_list, related_name='employee_list_for_relatedfield_signed_family_doctor_basic_personal_information', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
@@ -964,8 +964,8 @@ class User_registry(models.Model):
         
 
 class Men_zhen_wen_zhen_diao_cha_biao(models.Model):
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_wen_zhen_diao_cha_biao', verbose_name='症状')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_wen_zhen_diao_cha_biao', verbose_name='症状')
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")
     operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业人员")
     pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
