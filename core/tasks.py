@@ -42,7 +42,7 @@ def create_operation_proc(task_params):
 
     # 根据Operation.forms里的mutate类型的表单创建相关表单实例
     form_slugs = []
-    forms = filter(lambda s: s['mutate_or_inquiry']=='mutate', json.loads(operation.forms.meta_data))
+    forms = filter(lambda _forms: _forms['mutate_or_inquiry']=='mutate', json.loads(operation.forms))
     for form in forms:
         form_class_name = form['basemodel'].capitalize()
         print('创建表单实例:', form_class_name)

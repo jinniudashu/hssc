@@ -13,10 +13,6 @@ import json
 from core.utils import keyword_search
 
 
-# 表单系统脚本源代码URL
-SOURCECODE_URL = 'http://127.0.0.1:8000/define_operand/source_codes_list/'
-# SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_operand/source_codes_list/'
-
 # 系统保留事件(form, event_name)
 SYSTEM_EVENTS = [
     ('user_registry', 'user_registry_completed'),     # 用户注册
@@ -142,7 +138,7 @@ class Operation(models.Model):
 	resource_knowledge = models.CharField(max_length=255, blank=True, null=True, verbose_name='服务知识')
 
 	def __str__(self):
-		return str(self.label)
+		return self.label
 
 	class Meta:
 		verbose_name = "作业"
@@ -158,7 +154,7 @@ class Service(models.Model):
     first_operation = models.ForeignKey(Operation, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="起始作业")
 	
     def __str__(self):
-        return str(self.name)
+        return self.label
 
     class Meta:
         verbose_name = "服务"
@@ -250,10 +246,10 @@ class Event_instructions(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, db_index=True, verbose_name="事件")
     instruction = models.ForeignKey(Instruction, on_delete=models.CASCADE, verbose_name="指令")
     order = models.PositiveSmallIntegerField(default=1, verbose_name="指令序号")
-    params = models.PositiveIntegerField(blank=True, null=True, verbose_name="创建作业")
+    params = models.CharField(max_length=255, blank=True, null=True, verbose_name="创建作业")
 
     def __str__(self):
-        return str(self.instruction.name)
+        return self.instruction.name
 
     class Meta:
         verbose_name = "事件指令集"
