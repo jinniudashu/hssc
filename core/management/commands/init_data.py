@@ -28,7 +28,9 @@ class Command(BaseCommand):
         print('开始导入字典数据...')
         res = requests.get(URL['dic_list'])
         res_json = res.json()
+        print(res_json)
         for _dict in res_json:
+            print(_dict)
             Dict =eval(_dict['name'].capitalize())
             values = _dict['content'].split('\n')
             print(Dict)
