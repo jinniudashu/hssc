@@ -18,8 +18,8 @@ import environ
 
 # Initialise environment variables
 
-env = environ.Env()
-environ.Env.read_env()
+# env = environ.Env()
+# environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -58,8 +58,6 @@ INSTALLED_APPS = [
     'dictionaries',
     'icpc',
     'forms',
-    'hssc_rcms_backup',
-    'rcms',
     'hssc.apps.UniversalManagerApp',
     'rest_framework',
 ]
@@ -109,15 +107,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     
-    # 需求管理系统数据库
-    'rcms': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': env('DATABASE_HOST'),
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'PORT': env('DATABASE_PORT'),
-    }
+    # # 需求管理系统数据库
+    # 'rcms': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'HOST': env('DATABASE_HOST'),
+    #     'NAME': env('DATABASE_NAME'),
+    #     'USER': env('DATABASE_USER'),
+    #     'PASSWORD': env('DATABASE_PASSWORD'),
+    #     'PORT': env('DATABASE_PORT'),
+    # }
 }
 
 import dj_database_url
