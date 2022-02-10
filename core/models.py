@@ -316,9 +316,9 @@ class Operation_proc(models.Model):
 	form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
 	
 	def __str__(self):
-	# 	# return 作业名称-操作员姓名-客户姓名
+	# 	# return 作业名称-客户姓名
 		# return f'{self.operation.name}-{self.user.username}-{self.customer.username}'
-		return "%s - %s - %s - %s - %s" %(self.id, self.operation.label, self.operation.name, self.operator.name, self.customer.name)
+		return "%s - %s - %s" %(self.id, self.operation.label, self.customer.name)
 
 	def get_absolute_url(self):
 		# 返回作业入口url

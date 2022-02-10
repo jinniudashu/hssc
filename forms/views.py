@@ -1,11 +1,12 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View, RedirectView, TemplateView
 from django.views.generic.detail import DetailView
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.db.models import Q
 from django.forms import modelformset_factory, inlineformset_factory
 import json
 
 from core.models import Operation_proc, Staff, Customer
-from core.signals import operand_finished
+from core.signals import operand_started, operand_finished
 
 from django.contrib.messages.views import SuccessMessageMixin
 from forms.utils import *
@@ -14,24 +15,29 @@ from forms.models import *
 from forms.forms import *
 
 class Index_view(ListView):
-	model = Operation_proc
-	template_name = 'index.html'
+    model = Operation_proc
+    template_name = 'index.html'
 
-	# def get(self, request, *args, **kwargs):
-	# 	self.object = self.get_object(queryset=Operation_proc.objects.exclude(state=4))
+    # def get(self, request, *args, **kwargs):
+    #     self.object = self.get_object(queryset=Operation_proc.objects.exclude(state=4))
 
-	def get_context_data(self, **kwargs):
-		procs = Operation_proc.objects.exclude(state=4)
-		todos = []
-		for proc in procs:
-			todo = {}
-			todo['operation'] = proc.operation.label
-			todo['url'] = f'{proc.operation.name}_update_url'
-			todo['proc_id'] = proc.id
-			todos.append(todo)
-		context = super().get_context_data(**kwargs)
-		context['todos'] = todos
-		return context
+    def get_context_data(self, **kwargs):
+        # 如果用户当前未登录，request.user将被设置为AnonymousUser。用user.is_authenticated()判断用户登录状态：
+        operator=Staff.objects.get(user=self.request.user)
+        group = Group.objects.filter(user=self.request.user)
+        # 获取当前用户所属角色组的所有作业进程
+        procs = Operation_proc.objects.exclude(state=4).filter(Q(group__in=group) | Q(operator=operator)).distinct()
+
+        todos = []
+        for proc in procs:
+            todo = {}
+            todo['operation'] = proc.operation.label
+            todo['url'] = f'{proc.operation.name}_update_url'
+            todo['proc_id'] = proc.id
+            todos.append(todo)
+        context = super().get_context_data(**kwargs)
+        context['todos'] = todos
+        return context
 
 
 def yuan_qian_zheng_zhuang_diao_cha_biao_create(request):
@@ -59,8 +65,14 @@ def yuan_qian_zheng_zhuang_diao_cha_biao_create(request):
 
 def yuan_qian_zheng_zhuang_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -110,8 +122,14 @@ def ge_ren_ji_bing_shi_diao_cha_biao_create(request):
 
 def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=ge_ren_ji_bing_shi_diao_cha_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -125,7 +143,7 @@ def ge_ren_ji_bing_shi_diao_cha_biao_update(request, *args, **kwargs):
         if form_medical_history.is_valid():
             form_medical_history.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=ge_ren_ji_bing_shi_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_medical_history = Medical_history_baseform_ModelForm(instance=medical_history, prefix="medical_history")
@@ -161,8 +179,14 @@ def kong_fu_xue_tang_jian_cha_biao_create(request):
 
 def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=kong_fu_xue_tang_jian_cha_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -176,7 +200,7 @@ def kong_fu_xue_tang_jian_cha_biao_update(request, *args, **kwargs):
         if form_kong_fu_xue_tang_jian_cha.is_valid():
             form_kong_fu_xue_tang_jian_cha.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=kong_fu_xue_tang_jian_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_kong_fu_xue_tang_jian_cha = Kong_fu_xue_tang_jian_cha_baseform_ModelForm(instance=kong_fu_xue_tang_jian_cha, prefix="kong_fu_xue_tang_jian_cha")
@@ -212,8 +236,14 @@ def men_zhen_zhen_duan_biao_create(request):
 
 def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=men_zhen_zhen_duan_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -227,7 +257,7 @@ def men_zhen_zhen_duan_biao_update(request, *args, **kwargs):
         if form_men_zhen_zhen_duan_biao.is_valid():
             form_men_zhen_zhen_duan_biao.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=men_zhen_zhen_duan_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_men_zhen_zhen_duan_biao = Men_zhen_zhen_duan_biao_baseform_ModelForm(instance=men_zhen_zhen_duan_biao, prefix="men_zhen_zhen_duan_biao")
@@ -263,8 +293,14 @@ def tang_hua_xue_hong_dan_bai_jian_cha_biao_create(request):
 
 def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=tang_hua_xue_hong_dan_bai_jian_cha_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -278,7 +314,7 @@ def tang_hua_xue_hong_dan_bai_jian_cha_biao_update(request, *args, **kwargs):
         if form_tang_hua_xue_hong_dan_bai_jian_cha_biao.is_valid():
             form_tang_hua_xue_hong_dan_bai_jian_cha_biao.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=tang_hua_xue_hong_dan_bai_jian_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_tang_hua_xue_hong_dan_bai_jian_cha_biao = Tang_hua_xue_hong_dan_bai_jian_cha_biao_baseform_ModelForm(instance=tang_hua_xue_hong_dan_bai_jian_cha_biao, prefix="tang_hua_xue_hong_dan_bai_jian_cha_biao")
@@ -334,8 +370,14 @@ def chang_gui_cha_ti_biao_create(request):
 
 def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=chang_gui_cha_ti_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -364,7 +406,7 @@ def chang_gui_cha_ti_biao_update(request, *args, **kwargs):
             form_physical_examination_vision.save()
             form_physical_examination_athletic_ability.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=chang_gui_cha_ti_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_vital_signs_check = Vital_signs_check_baseform_ModelForm(instance=vital_signs_check, prefix="vital_signs_check")
@@ -414,8 +456,14 @@ def tang_niao_bing_cha_ti_biao_create(request):
 
 def tang_niao_bing_cha_ti_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=tang_niao_bing_cha_ti_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -432,7 +480,7 @@ def tang_niao_bing_cha_ti_biao_update(request, *args, **kwargs):
             form_fundus_examination.save()
             form_dorsal_artery_pulsation_examination.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=tang_niao_bing_cha_ti_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_fundus_examination = Fundus_examination_baseform_ModelForm(instance=fundus_examination, prefix="fundus_examination")
@@ -470,8 +518,14 @@ def ge_ren_guo_min_shi_diao_cha_biao_create(request):
 
 def ge_ren_guo_min_shi_diao_cha_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=ge_ren_guo_min_shi_diao_cha_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -485,7 +539,7 @@ def ge_ren_guo_min_shi_diao_cha_biao_update(request, *args, **kwargs):
         if form_allergies_history.is_valid():
             form_allergies_history.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=ge_ren_guo_min_shi_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_allergies_history = Allergies_history_baseform_ModelForm(instance=allergies_history, prefix="allergies_history")
@@ -521,8 +575,14 @@ def men_zhen_chu_fang_biao_create(request):
 
 def men_zhen_chu_fang_biao_update(request, *args, **kwargs):
     operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+
+    if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+        return redirect(reverse('index'))
+    operation_proc.group.set([])  # 设置作业进程所属角色组为空
+    # 构造作业开始消息参数
+    operand_started.send(sender=men_zhen_chu_fang_biao_update, operation_proc=operation_proc, ocode='rtr', operator=request.user)
+
     customer = operation_proc.customer
-    operator = operation_proc.operator
     basic_personal_information = Basic_personal_information.objects.get(customer=customer)
     context = {}
     
@@ -536,7 +596,7 @@ def men_zhen_chu_fang_biao_update(request, *args, **kwargs):
         if form_yong_yao_chu_fang.is_valid():
             form_yong_yao_chu_fang.save()
             # 构造作业完成消息参数
-            operand_finished.send(sender=yuan_qian_zheng_zhuang_diao_cha_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
+            operand_finished.send(sender=men_zhen_chu_fang_biao_update, pid=kwargs['id'], ocode='rtc', field_values=request.POST)
             return redirect(reverse('index'))
     else:
         form_yong_yao_chu_fang = Yong_yao_chu_fang_baseform_ModelForm(instance=yong_yao_chu_fang, prefix="yong_yao_chu_fang")

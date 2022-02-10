@@ -21,14 +21,14 @@ from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
 # 导入作业事件表、指令表
-from core.models import Event, Event_instructions, Operation_proc, Operation
+from core.models import Staff, Event, Event_instructions, Operation_proc, Operation
 from core.models import SYSTEM_EVENTS
 
 # 导入任务
 from core.tasks import create_operation_proc
 
 # 导入自定义作业完成信号
-from core.signals import operand_finished
+from core.signals import operand_finished, operand_started
 
 from core.utils import keyword_replace
 # from core.interpreter import interpreter
@@ -75,8 +75,28 @@ def operation_scheduler(event, params):
 # 作业进程运行时
 # ********************
 # 维护作业进程状态
-# ctr: 作业进程被创建，资源检查
-# rtc: 表单作业完成，查询事件表，调度后续作业进程
+# 0: Created, 作业被创建，进行资源检查
+# ctr: Created to Ready, 作业准备就绪
+# rtr: Ready to Running，开始作业
+# rtc: Running to Completed, 表单作业完成，查询事件表，调度后续作业进程
+def update_operation_proc_state(proc, ocode):  # 更新作业进程状态
+    if ocode == 'ctr': # CREATED TO READY
+        proc.state=1
+    elif ocode == 'rtr': # READY TO RUNNING
+        proc.state=2
+    elif ocode == 'rth': # RUNNING TO HANGUP
+        proc.state=3
+    elif ocode == 'htr': # HANGUP TO READY
+        proc.state=2
+    elif ocode == 'rtc': # RUNNING TO COMPLETED
+        proc.state=4
+    else:
+        print(f'ERROR: 未定义的操作码 ocode: {ocode}')        
+
+    proc.save()
+    return
+
+# 本段代码用于跟踪调试作业进程状态更新
 @receiver(post_save, sender=Operation_proc)
 def new_operation_proc(instance, created, **kwargs):
     if created: # ctr
@@ -84,6 +104,17 @@ def new_operation_proc(instance, created, **kwargs):
     else:
         if instance.state == 4:  # rtc            
             print('rtc状态, 作业完成事件，进行调度')
+
+
+@receiver(operand_started)
+def operand_started_handler(sender, **kwargs):
+    operation_proc = kwargs['operation_proc']  # 作业进程
+    ocode = kwargs['ocode']
+    update_operation_proc_state(operation_proc, ocode)  # 更新作业进程操作码
+    
+    operator = kwargs['operator']  # 操作员
+    operation_proc.operator = Staff.objects.get(user=operator)  # 设置作业进程的操作员为当前用户
+    operation_proc.save()
 
 
 # ***********************************************************************
@@ -129,23 +160,11 @@ def operand_finished_handler(sender, **kwargs):
 
     proc = Operation_proc.objects.get(id=pid)  # 获取当前作业进程实例
 
-    try:
-        # 1. 更新作业进程状态: rtc
-        if ocode == 'ctr': # CREATED TO READY
-            proc.state=1
-        elif ocode == 'rtr': # READY TO RUNNING
-            proc.state=2
-        elif ocode == 'rth': # RUNNING TO HANGUP
-            proc.state=3
-        elif ocode == 'htr': # HANGUP TO READY
-            proc.state=2
-        elif ocode == 'rtc': # RUNNING TO COMPLETED
-            proc.state=4
-        else:
-            print(f'ERROR: 未定义的操作码 ocode: {ocode}')        
-        proc.save()
+    # 1. 更新作业进程状态: rtc
+    update_operation_proc_state(proc, ocode)  # 更新作业进程状态
 
-        # 2. 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
+    # 2. 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
+    try:
         events = Event.objects.filter(operation = proc.operation)
         if events:
             event_params={'uid': proc.operator.id, 'cid': proc.customer.id, 'ppid': proc.ppid}  # 构造事件参数
@@ -220,15 +239,6 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     except Exception as e:
         traceback.print_exc()
         print('except: user_logged_in_handler.operation_scheduler:', e)
-
-
-# request.user会给你一个User对象，表示当前登录用户。
-# 如果用户当前未登录，request.user将被设置为AnonymousUser。
-# 可以用is_authenticated()：
-# if request.user.is_authenticated():
-#     # Do something for authenticated users.
-# else:
-#     # Do something for anonymous users.
 
 
 # 从app forms里获取所有表单model的名字, 用以判断post_save的sender

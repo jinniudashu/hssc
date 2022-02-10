@@ -6,8 +6,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # 表单系统脚本源代码URL
-        # SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_operand/source_codes_list/'
-        SOURCECODE_URL = 'http://127.0.0.1:8000/define_operand/source_codes_list/'
+        SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_operand/source_codes_list/'
+        # SOURCECODE_URL = 'http://127.0.0.1:8000/define_operand/source_codes_list/'
 
         # 获取脚本源码，创建文件
         print('开始导入脚本...')

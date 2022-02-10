@@ -34,7 +34,7 @@ def create_operation_proc(task_params):
     # service_proc = Service_proc.objects.get(id=task_params['spid'])
     proc=Operation_proc.objects.create(
         operation=operation,
-        operator=operator,
+        operator=None,
         customer=customer,
         state=0,
         ppid=parent_operation_proc,
