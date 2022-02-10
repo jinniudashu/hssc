@@ -5,6 +5,7 @@
 
 业务完成事件命名规则: [form_name]_operation_completed
 '''
+from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in, user_logged_out
@@ -20,7 +21,7 @@ from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
 # 导入作业事件表、指令表
-from core.models import Event, Event_instructions, Operation_proc
+from core.models import Event, Event_instructions, Operation_proc, Operation
 from core.models import SYSTEM_EVENTS
 
 # 导入任务
@@ -36,19 +37,32 @@ from core.utils import keyword_replace
 # 作业调度器
 def operation_scheduler(event, params):
     # 查找指令集，发送任务指令
-    instructions = Event_instructions.objects.filter(event=event)
-    print('查找指令集，发送任务指令:', event, instructions)
+    event_instructions = Event_instructions.objects.filter(event=event)
+    print('查找指令集，发送任务指令:', event, event_instructions)
 
     # 指令参数
     task_params={'uid': params['uid'], 'cid': params['cid'], 'ppid': params['ppid']}
 
-    for instruction in instructions:
-        task_params['oname'] = instruction.params
-        task_func = instruction.instruction.func
+    for event_instruction in event_instructions:
+        task_params['oname'] = event_instruction.params  # 从事件指令参数中获取作业名称
+
+        # 根据每条事件指令和预定义的作业分配策略，确定作业任务的操作员
+        operation = Operation.objects.get(name=task_params['oname'])
+        task_params['groups'] = operation.group.all()
+        # group_ids = operation.group.all().values_list('id', flat=True)
+        # task_params['group_ids'] = group_ids
+        # print('group_ids:', task_params['group_ids'])
+
+        # 根据作业角色获取作业操作员列表
+        # operators = User.objects.filter(groups__in=operation.group.all()).distinct()
+        # operator_ids = [operator.id for operator in operators]
+        # task_params['uid'] = operator_ids
+
+        task_func = event_instruction.instruction.func  # 从事件指令中获取操作函数名
 
         # 调用函数执行指令
         # 执行task.create_operation_proc
-        print('send:', instruction.instruction.name, task_func)
+        print('send:', event_instruction.instruction.name, task_func)
         globals()[task_func](task_params)
 
         # 调用Celery @task执行指令

@@ -287,13 +287,10 @@ class Service_proc(models.Model):
 # 作业进程表 Operation_proc
 class Operation_proc(models.Model):
 	# 作业进程id: pid
-	# 作业id: oid
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业")
-	# 作业员id: uid
-	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")
-	# 客户id: cid
-	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")
-	
+	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业")  # 作业id: oid
+	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")  # 作业员id: uid
+	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")  # 客户id: cid
+	group = models.ManyToManyField(Group, blank=True, verbose_name="角色组")  # 角色组：workgroup
 	# 维护作业进程状态：
 	'''
 		作业状态机操作码
@@ -313,13 +310,9 @@ class Operation_proc(models.Model):
 		(4, '结束'),
 	]
 	state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
-	# 作业入口: operand/<int:id>/update_view
-	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")
-	# 父作业进程id: ppid
-	ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")
-	# 服务进程id: spid
-	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务")
-	# 表单索引
+	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")  # 作业入口: operand/<int:id>/update_view
+	ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
+	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程")  # 服务进程id: spid
 	form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
 	
 	def __str__(self):

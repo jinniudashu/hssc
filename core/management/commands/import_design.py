@@ -1,6 +1,5 @@
 from django.core.management import BaseCommand
 import requests
-from core.models import SOURCECODE_URL
 
 class Command(BaseCommand):
     help = '从设计系统导入脚本'
