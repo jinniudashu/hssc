@@ -48,15 +48,7 @@ def operation_scheduler(event, params):
 
         # 根据每条事件指令和预定义的作业分配策略，确定作业任务的操作员
         operation = Operation.objects.get(name=task_params['oname'])
-        task_params['groups'] = operation.group.all()
-        # group_ids = operation.group.all().values_list('id', flat=True)
-        # task_params['group_ids'] = group_ids
-        # print('group_ids:', task_params['group_ids'])
-
-        # 根据作业角色获取作业操作员列表
-        # operators = User.objects.filter(groups__in=operation.group.all()).distinct()
-        # operator_ids = [operator.id for operator in operators]
-        # task_params['uid'] = operator_ids
+        task_params['group'] = operation.group.all()
 
         task_func = event_instruction.instruction.func  # 从事件指令中获取操作函数名
 
@@ -91,8 +83,7 @@ def update_operation_proc_state(proc, ocode):  # 更新作业进程状态
     elif ocode == 'rtc': # RUNNING TO COMPLETED
         proc.state=4
     else:
-        print(f'ERROR: 未定义的操作码 ocode: {ocode}')        
-
+        print(f'ERROR: 未定义的操作码 ocode: {ocode}')
     proc.save()
     return
 

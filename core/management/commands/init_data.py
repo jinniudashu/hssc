@@ -83,7 +83,7 @@ class Command(BaseCommand):
             for _role in item['group']:
                 group = Group.objects.get(name=_role['label'])  # 使用角色中文名称查询角色
                 groups.append(group)
-            operation.group.set(groups)
+            operation.group.add(*groups)
             print(operation)
         print('导入作业数据完成')
 
@@ -123,7 +123,7 @@ class Command(BaseCommand):
             for _operation in item['next']:
                 operation = Operation.objects.get(name=_operation['name'])
                 next_operations.append(operation)
-            event.next.set(next_operations)
+            event.next.add(*next_operations)
             print(event)
         print('导入事件数据完成')
 

@@ -260,14 +260,10 @@ class Event_instructions(models.Model):
 # 服务进程表 Service_proc
 class Service_proc(models.Model):
 	# 服务进程id: spid
-	# 服务id: sid
-	service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")
-	# 作业人员id: uid
-	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_uid', verbose_name="服务专员")
-	# 客户id: cid
-	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_cid', verbose_name="客户")
-	# 工作小组：workgroup
-	# workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工作组")
+	service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")  # 服务id: sid
+	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_uid', verbose_name="服务专员")  # 作业人员id: uid
+	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_cid', verbose_name="客户")  # 客户id: cid
+	# workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工作组")  # 工作小组：workgroup
 	
 	def __str__(self):
 		# return 服务名称-服务进程号spid

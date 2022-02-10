@@ -21,7 +21,7 @@ def create_operation_proc(task_params):
     operation = Operation.objects.get(name=task_params['oname'])
     user_operater = User.objects.get(id=task_params['uid'])
     user_customer = User.objects.get(id=task_params['cid'])
-    operator_groups = task_params['groups']
+    operator_groups = task_params['group']
 
     operator = Staff.objects.get(user=user_operater)
     customer = Customer.objects.get(user=user_customer)
@@ -40,7 +40,7 @@ def create_operation_proc(task_params):
         ppid=parent_operation_proc,
         # service_proc=service_proc,
     )
-    proc.group.set(operator_groups)
+    proc.group.add(*operator_groups)
 
     # 根据Operation.forms里的mutate类型的表单创建相关表单实例
     form_slugs = []
