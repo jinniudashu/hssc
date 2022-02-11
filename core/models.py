@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 
 from time import time
 from django.utils.text import slugify
+from pypinyin import lazy_pinyin
 
 from icpc.models import Icpc
 
@@ -33,13 +34,40 @@ def gen_slug(s):
     return slug + f'-{int(time())}'
 
 
+class Workgroup(models.Model):
+    name = models.CharField(max_length=255, unique=True, verbose_name='名称')
+    label = models.CharField(max_length=255, verbose_name='服务小组名称')
+    group_leader = models.ForeignKey('Staff', on_delete=CASCADE, related_name='group_leader', verbose_name='组长')
+
+    def __str__(self):
+        return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}'
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "服务小组"
+        verbose_name_plural = "服务小组"
+        ordering = ['id']
+
+
 class Staff(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff', verbose_name='员工')
 	name = models.CharField(max_length=50)
-	phone = models.CharField(max_length=20, blank=True, null=True)
-	email = models.EmailField(max_length=50)
 	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
-	group = models.CharField(max_length=50, blank=True, null=True, verbose_name='组别')
+	email = models.EmailField(max_length=50)
+	Title = [(i, i) for i in ['主任医师', '副主任医师', '主治医师', '住院医师', '主任护师', '副主任护师', '主管护师', '护士长', '护士', '其他']]
+	title = models.PositiveSmallIntegerField(choices=Title, blank=True, null=True, verbose_name='职称')
+	assistant_physician = models.BooleanField(blank=True, null=True, verbose_name='助理医师')
+	resume = models.TextField(blank=True, null=True, verbose_name='简历')
+	Service_Lever = [(i, i) for i in ['低', '中', '高']]
+	service_lever = models.PositiveSmallIntegerField(choices=Service_Lever, blank=True, null=True, verbose_name='服务级别')
+	phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='电话')
+	workgroup = models.ManyToManyField(Workgroup, verbose_name='服务小组')
+	registration_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='挂号费')
+	standardized_workload = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='标化工作量')
 	slug = models.SlugField(max_length=150, blank=True)
 
 	def __str__(self):
@@ -90,26 +118,6 @@ class Customer(models.Model):
 		if not self.id:
 			self.slug = gen_slug(self._meta.model_name)
 		super().save(*args, **kwargs)
-
-
-# 表单信息表
-# class Form(models.Model):
-# 	name = models.CharField(max_length=255, verbose_name="表单名称")
-# 	label = models.CharField(max_length=255, verbose_name="显示名称")
-# 	input_style = [
-# 		(0, '详情'),
-# 		(1, '列表'),
-# 	]
-# 	style = models.PositiveSmallIntegerField(choices=input_style, default=0, verbose_name='风格')
-# 	fields_list = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表单字段")
-
-# 	def __str__(self):
-# 		return str(self.label)
-
-# 	class Meta:
-# 		verbose_name = "表单"
-# 		verbose_name_plural = "表单"
-# 		ordering = ['id']
 
 
 # 作业信息表
@@ -187,41 +195,6 @@ class Event(models.Model):
         verbose_name = "事件"
         verbose_name_plural = "事件"
         ordering = ['id']
-
-	# def save(self, *args, **kwargs):
-	# 	# 自动为事件名加作业名为前缀
-	# 	if self.operation.name not in self.name:
-	# 		self.name = f'{self.operation.name}_{self.name}'
-	# 		# 保留字：作业完成事件，自动填充expression为'completed'
-	# 		if self.name == f'{self.operation.name}_completed':
-	# 			self.expression = 'completed'
-
-	# 	if self.operation.forms:
-	# 		# 生成fields
-	# 		forms = json.loads(self.operation.forms)
-	# 		fields = []
-	# 		field_names = []
-
-	# 		for form in forms:
-	# 			form_name = form['basemodel']
-	# 			_fields = form['fields']
-	# 			for _field in _fields:
-	# 				field_name = form_name + '-' + _field['name']
-	# 				field_label = _field['label']
-	# 				field_type = _field['type']
-
-	# 				field_names.append(field_name)
-	# 				fields.append(str((field_name, field_label, field_type)))
-
-	# 		self.fields = '\n'.join(fields)
-
-	# 		# 生成表达式参数列表
-	# 		if self.expression and self.expression != 'completed':
-	# 			_form_fields = keyword_search(self.expression, field_names)
-	# 			self.parameters = ', '.join(_form_fields)
-	# 			print('Parameters fields:', self.parameters)
-
-	# 	super().save(*args, **kwargs)
 
 
 # 指令表

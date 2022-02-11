@@ -1,9 +1,14 @@
 from django.contrib import admin
-from .models import Staff, Customer, Service, Operation, Event, Instruction, Event_instructions
+from .models import Workgroup, Staff, Customer, Service, Operation, Event, Instruction, Event_instructions
 from .models import Service_proc, Operation_proc
 
 admin.site.register(Staff)
 admin.site.register(Customer)
+
+class WorkgroupAdmin(admin.ModelAdmin):
+    list_display = ('label', 'group_leader')
+    readonly_fields = ['name']
+admin.site.register(Workgroup, WorkgroupAdmin)
 
 class EventInline(admin.TabularInline):
     model = Event

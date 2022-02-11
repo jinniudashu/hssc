@@ -7,7 +7,7 @@
 '''
 from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed, post_delete
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from itertools import product
 import traceback
@@ -21,7 +21,7 @@ from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
 # 导入作业事件表、指令表
-from core.models import Staff, Event, Event_instructions, Operation_proc, Operation
+from core.models import Staff, Customer, Event, Event_instructions, Operation_proc, Operation
 from core.models import SYSTEM_EVENTS
 
 # 导入任务
@@ -230,6 +230,49 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     except Exception as e:
         traceback.print_exc()
         print('except: user_logged_in_handler.operation_scheduler:', e)
+
+
+@receiver(post_save, sender=User)
+def user_post_save_handler(sender, instance, created, **kwargs):
+    if not created:
+        if instance.is_staff:
+            if Staff.objects.filter(user=instance).exists():
+                print('更新员工信息', instance)            
+                instance.staff.name = instance.last_name+instance.first_name
+                instance.staff.email = instance.email
+                instance.staff.save()
+            else:
+                print('创建员工信息', instance)
+                Staff.objects.create(
+                    user=instance,
+                    name=instance.last_name+instance.first_name,
+                    email=instance.email,
+                )
+        else:
+            if Customer.objects.filter(user=instance).exists():
+                print('更新客户信息', instance)
+                instance.customer.name = instance.last_name+instance.first_name
+                instance.customer.save()
+            else:
+                print('创建客户信息', instance)
+                Customer.objects.create(
+                    user=instance,
+                    name=instance.last_name+instance.first_name,
+                )
+
+
+@receiver(m2m_changed, sender=User.groups.through)
+def user_m2m_changed_handler(sender, instance, **kwargs):
+    if instance.is_staff:
+        instance.staff.role.set(instance.groups.all())
+
+
+# @receiver(post_delete, sender=User)
+# def user_post_delete_handler(sender, instance, **kwargs):
+#     if instance.is_staff:
+#         instance.staff.delete()
+#     else:
+#         instance.customer.delete()
 
 
 # 从app forms里获取所有表单model的名字, 用以判断post_save的sender
