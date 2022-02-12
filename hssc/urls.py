@@ -7,6 +7,7 @@ urlpatterns = [
     path('', include('forms.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.simple.urls')),
+    # path('accounts/login/', include('django.contrib.auth.urls')),
     path('htmx/', include('core.urls')),
     # path('grappelli/', include('grappelli.urls')),
 ]

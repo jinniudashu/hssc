@@ -2,16 +2,12 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 from django.shortcuts import reverse
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.models import AbstractUser
 
 from time import time
 from django.utils.text import slugify
 from pypinyin import lazy_pinyin
 
-from icpc.models import Icpc
-
 import json
-from core.utils import keyword_search
 
 
 # 系统保留事件(form, event_name)
@@ -173,12 +169,12 @@ class Service(models.Model):
 # 作业事件表
 # # 默认事件：xx作业完成--系统作业名+"_operation_completed"
 class Event(models.Model):
-    name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="事件名")
-    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="显示名称")
+    name = models.CharField(max_length=255, db_index=True, unique=True, verbose_name="名称")
+    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="规则")
     operation = models.ForeignKey(Operation, on_delete=models.CASCADE, related_name='from_oid', verbose_name="所属作业")
     next = models.ManyToManyField(Operation, verbose_name="后续作业")
-    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="事件描述")
-    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="表达式", 
+    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="规则说明")
+    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="规则表达式", 
         help_text='''
         说明：<br>
         1. 作业完成事件: completed<br>
@@ -192,8 +188,8 @@ class Event(models.Model):
         return str(self.label)
 
     class Meta:
-        verbose_name = "事件"
-        verbose_name_plural = "事件"
+        verbose_name = "业务规则"
+        verbose_name_plural = "业务规则"
         ordering = ['id']
 
 

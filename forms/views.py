@@ -18,9 +18,6 @@ class Index_view(ListView):
     model = Operation_proc
     template_name = 'index.html'
 
-    # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object(queryset=Operation_proc.objects.exclude(state=4))
-
     def get_context_data(self, **kwargs):
         # 如果用户当前未登录，request.user将被设置为AnonymousUser。用user.is_authenticated()判断用户登录状态：
         # 如果不是员工，则跳转到客户页面
