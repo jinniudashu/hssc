@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>你好, {{ customer }}，欢迎光临！</div>
+<br>
+
+<h5>当前任务</h5>
+	<section class="list-group">
+	{% for todo in todos %}
+		<a class="list-group-item" href="{% url todo.url todo.proc_id %}">
+		{{ todo.operation }}
+		</a>
+	{% endfor %}
+	</section>
+
+<br>
+
+{% endblock %}
