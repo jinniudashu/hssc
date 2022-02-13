@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import Group
 from django.db.models import Q
 
-from core.models import Staff, Operation_proc
+from core.models import Staff, Customer, Operation_proc
 
 
 def htmx_test(request):
@@ -30,3 +30,22 @@ def index_staff(request):
     context['todos'] = todos
     return render(request, 'index_staff.html', context)
 
+
+def index_customer(request):
+    context = {}
+    customer = Customer.objects.get(user=request.user)
+    context ['customer'] = customer.name
+    print('customer:', customer)
+    # 获取当前用户所属的所有作业进程
+    procs = Operation_proc.objects.exclude(state=4).filter(customer=customer)
+    print('procs:', procs)
+    todos = []
+    for proc in procs:
+        todo = {}
+        todo['operation'] = proc.operation.label
+        todo['url'] = f'{proc.operation.name}_update_url'
+        todo['proc_id'] = proc.id
+        todos.append(todo)
+    context['todos'] = todos
+
+    return render(request, 'index_customer.html', context)

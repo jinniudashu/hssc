@@ -15,26 +15,6 @@ from forms.models import *
 from forms.forms import *
 
 
-def index_customer(request):
-    context = {}
-    customer = Customer.objects.get(user=request.user)
-    context ['customer'] = customer.name
-    print('customer:', customer)
-    # 获取当前用户所属的所有作业进程
-    procs = Operation_proc.objects.exclude(state=4).filter(customer=customer)
-    print('procs:', procs)
-    todos = []
-    for proc in procs:
-        todo = {}
-        todo['operation'] = proc.operation.label
-        todo['url'] = f'{proc.operation.name}_update_url'
-        todo['proc_id'] = proc.id
-        todos.append(todo)
-    context['todos'] = todos
-
-    return render(request, 'index_customer.html', context)
-
-
 def yuan_qian_zheng_zhuang_diao_cha_biao_create(request):
     customer = Customer.objects.get(user=request.user)
     operator = Staff.objects.get(user=request.user)
