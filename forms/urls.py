@@ -2,8 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-	path('', Index_view.as_view(), name='index'),
-	path('index/', Index_view.as_view(), name='index'),
+	path('index_customer/', index_customer, name='index_customer'),
     path('yuan_qian_zheng_zhuang_diao_cha_biao/create', yuan_qian_zheng_zhuang_diao_cha_biao_create, name='yuan_qian_zheng_zhuang_diao_cha_biao_create_url'),
     path('yuan_qian_zheng_zhuang_diao_cha_biao/<int:id>/update', yuan_qian_zheng_zhuang_diao_cha_biao_update, name='yuan_qian_zheng_zhuang_diao_cha_biao_update_url'),
     path('ge_ren_ji_bing_shi_diao_cha_biao/create', ge_ren_ji_bing_shi_diao_cha_biao_create, name='ge_ren_ji_bing_shi_diao_cha_biao_create_url'),

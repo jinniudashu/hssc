@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.urls import path, include
 
-# from .views import redirect_blog
+from .views import index
 
 urlpatterns = [
-    path('', include('forms.urls')),
-    path('admin/', admin.site.urls),
+    path('', index, name='index'),
     path('accounts/', include('registration.backends.simple.urls')),
-    # path('accounts/login/', include('django.contrib.auth.urls')),
-    path('htmx/', include('core.urls')),
+    path('admin/', admin.site.urls, name='admin'),
+    path('forms/', include('forms.urls')),
+    path('core/', include('core.urls')),
     # path('grappelli/', include('grappelli.urls')),
 ]
 
