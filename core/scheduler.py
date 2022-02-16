@@ -21,7 +21,7 @@ from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
 # 导入作业事件表、指令表
-from core.models import Staff, Customer, Event, Event_instructions, Operation_proc, Operation
+from core.models import Staff, Customer, Event, Event_instructions, Instruction, Operation_proc, Operation
 from core.models import SYSTEM_EVENTS
 
 # 导入任务
@@ -278,3 +278,38 @@ def user_m2m_changed_handler(sender, instance, **kwargs):
 # form_list = []
 # for Model in Forms_models:
 #     form_list.append(Model.__name__)
+
+
+# 监视事件表Event变更，变更事件后续作业时，同步变更事件指令表Event_instructions的内容
+@receiver(m2m_changed, sender=Event.next.through)
+def event_m2m_changed_handler(sender, instance, action, **kwargs):
+
+    # 设定指令为 create_operation_proc
+    instruction_create_operation_proc = Instruction.objects.get(name='create_operation_proc')
+
+    # 获取后续作业
+    next_operations = []
+    if action == 'post_add':
+        next_operations = instance.next.all()
+        print('!!post_add:', next_operations)
+    elif action == 'post_remove':
+        next_operations = instance.next.all()
+        print('##post_remove:', next_operations)
+    
+    # 删除原有事件指令
+    Event_instructions.objects.filter(event=instance).delete()
+
+    # 新增事件指令
+    for operation in next_operations:
+        Event_instructions.objects.create(
+            event=instance,
+            instruction=instruction_create_operation_proc,
+            order=1,
+            params=operation.name,    # 用后续作业name作为指令参数
+        )
+
+
+# 监视事件表变更，管理员删除事件表Event时，同步删除事件指令表Event_instructions的内容
+@receiver(post_delete, sender=Event)
+def event_post_delete_handler(sender, instance, **kwargs):
+    Event_instructions.objects.filter(event=instance).delete()
