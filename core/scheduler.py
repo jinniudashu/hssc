@@ -54,7 +54,7 @@ def operation_scheduler(event, params):
 
         # 调用函数执行指令
         # 执行task.create_operation_proc
-        print('send:', event_instruction.instruction.name, task_func)
+        print('send:', event_instruction.instruction.name, task_func, task_params)
         globals()[task_func](task_params)
 
         # 调用Celery @task执行指令
@@ -194,12 +194,9 @@ def operand_finished_handler(sender, **kwargs):
 # 收到注册成功信号，生成用户注册事件：registration.signals.user_registered
 @receiver(user_registered)
 def user_registered_handler(sender, user, request, **kwargs):
-    params={'uid': user.id, 'cid': user.id, 'ppid': 0}
-    try:
-        event = Event.objects.get(name=SYSTEM_EVENTS[0][1])  # 系统内置用户注册事件编码
-        operation_scheduler(event, params)  # 把Event和参数发给调度器
-    except:
-        print('except: SYSTEM_EVENT: [user_registry_completed] DoesNotExist')
+    params={'uid': None, 'cid': user.id, 'ppid': 0}
+    event = Event.objects.get(name=SYSTEM_EVENTS[0][1])  # 系统内置用户注册事件编码
+    operation_scheduler(event, params)  # 把Event和参数发给调度器
 
 
 # 收到登录信号，生成用户/职员登录事件

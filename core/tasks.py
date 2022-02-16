@@ -19,12 +19,18 @@ from core.models import Operation_proc, Operation, Service_proc
 # @shared_task
 def create_operation_proc(task_params):
     operation = Operation.objects.get(name=task_params['oname'])
-    user_operater = User.objects.get(id=task_params['uid'])
+    
+    if task_params['uid']:
+        user_operater = User.objects.get(id=task_params['uid'])
+        operator = Staff.objects.get(user=user_operater)
+    else:
+        operator = None
+
     user_customer = User.objects.get(id=task_params['cid'])
+    customer = Customer.objects.get(user=user_customer)
+    
     operator_groups = task_params['group']
 
-    operator = Staff.objects.get(user=user_operater)
-    customer = Customer.objects.get(user=user_customer)
 
     # 创建作业进程
     try:
