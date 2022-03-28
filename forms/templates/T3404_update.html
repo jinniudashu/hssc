@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    
+        <form action={% url 'T3404_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>T3404</h5>
+                        {{ T3404.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
+
+    {% endblock %}
+    

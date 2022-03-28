@@ -1,19 +1,17 @@
 {% extends "base.html" %}
 
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
 
-{% block content %}
+    {% block content %}
+    
+        <form action={% url 'men_zhen_chu_fang_biao_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>men_zhen_chu_fang_biao</h5>
+                        {{ men_zhen_chu_fang_biao.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
 
-	<form action={% url 'men_zhen_chu_fang_biao_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
-		{% csrf_token %}
-            
-        <h5>个人基本情况_查询视图_1642159528</h5>
-        {{ form_basic_personal_information.as_p }}
-        <hr>
-        <h5>用药处方</h5>
-        {{ form_yong_yao_chu_fang.as_p }}
-        <hr>
-		<input type="submit" value="提交" /> 
-	</form>
-
-{% endblock %}
+    {% endblock %}
+    

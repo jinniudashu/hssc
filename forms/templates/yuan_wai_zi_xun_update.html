@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<form action={% url 'yuan_wai_zi_xun_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+		{% csrf_token %}
+            
+        <h5>院外咨询表</h5>
+        {{ form_yuan_wai_zi_xun_biao.as_p }}
+        <hr>
+		<input type="submit" value="提交" /> 
+	</form>
+
+{% endblock %}

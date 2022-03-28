@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    
+        <form action={% url 'ge_ren_jian_kang_xing_wei_diao_cha_create_url' %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>ge_ren_jian_kang_xing_wei_diao_cha</h5>
+                        {{ ge_ren_jian_kang_xing_wei_diao_cha.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
+
+    {% endblock %}
+    

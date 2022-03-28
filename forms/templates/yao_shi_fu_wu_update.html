@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    
+        <form action={% url 'yao_shi_fu_wu_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>yao_shi_fu_wu</h5>
+                        {{ yao_shi_fu_wu.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
+
+    {% endblock %}
+    

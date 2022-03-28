@@ -89,18 +89,18 @@ class Command(BaseCommand):
 
 
         # 3. 导入服务数据
-        print('开始导入服务数据...')
-        res = requests.get(URL['service'])
-        res_json = res.json()
-        Service.objects.all().delete()  # 先删除原有服务数据
-        for item in res_json:  # 写入新的服务数据
-            service = Service.objects.create(
-                name=item['name'],
-                label=item['label'],
-                first_operation=Operation.objects.get(name=item['first_operation']['name']),
-            )
-            print(service)
-        print('导入服务数据完成')
+        # print('开始导入服务数据...')
+        # res = requests.get(URL['service'])
+        # res_json = res.json()
+        # Service.objects.all().delete()  # 先删除原有服务数据
+        # for item in res_json:  # 写入新的服务数据
+        #     service = Service.objects.create(
+        #         name=item['name'],
+        #         label=item['label'],
+        #         first_operation=Operation.objects.get(name=item['first_operation']['name']),
+        #     )
+        #     print(service)
+        # print('导入服务数据完成')
 
 
         # 4. 导入事件数据

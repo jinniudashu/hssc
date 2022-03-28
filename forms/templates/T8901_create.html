@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    
+        <form action={% url 'T8901_create_url' %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>T8901</h5>
+                        {{ T8901.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
+
+    {% endblock %}
+    

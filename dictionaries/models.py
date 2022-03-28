@@ -1,263 +1,280 @@
 from django.db import models
 
-class Drug_list(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "药品清单"
-            verbose_name_plural = "药品清单"
-            
-class Character(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class DictBase(models.Model):
+    label = models.CharField(max_length=255, null=True, verbose_name="名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="name")
+    hssc_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="hsscID")
+    value = models.CharField(max_length=255, null=True, blank=True, verbose_name="值")
+    icpc = models.CharField(max_length=5, null=True, blank=True, verbose_name="ICPC编码")
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
-        class Meta:
-            verbose_name = "性格"
-            verbose_name_plural = "性格"
-            
-class Satisfaction(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+    class Meta:
+        abstract = True
 
-        class Meta:
-            verbose_name = "满意度"
-            verbose_name_plural = "满意度"
-            
-class Frequency(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+    def __str__(self):
+        return self.value
 
-        class Meta:
-            verbose_name = "频次"
-            verbose_name_plural = "频次"
-            
-class State_degree(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "状态程度"
-            verbose_name_plural = "状态程度"
-            
-class Comparative_expression(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Character(DictBase):
+    class Meta:
+        verbose_name = '性格'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "比较表达"
-            verbose_name_plural = "比较表达"
-            
-class Sports_preference(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "运动类型"
-            verbose_name_plural = "运动类型"
-            
-class Exercise_time(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Satisfaction(DictBase):
+    class Meta:
+        verbose_name = '满意度'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "运动时长"
-            verbose_name_plural = "运动时长"
-            
-class Convenience(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "便捷程度"
-            verbose_name_plural = "便捷程度"
-            
-class Family_relationship(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Frequency(DictBase):
+    class Meta:
+        verbose_name = '频次'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "家庭成员关系"
-            verbose_name_plural = "家庭成员关系"
-            
-class Normality(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "正常性判断"
-            verbose_name_plural = "正常性判断"
-            
-class Service_role(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class State_degree(DictBase):
+    class Meta:
+        verbose_name = '状态程度'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "服务角色"
-            verbose_name_plural = "服务角色"
-            
-class Institutions_list(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "机构清单"
-            verbose_name_plural = "机构清单"
-            
-class Dorsal_artery_pulsation(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Comparative_expression(DictBase):
+    class Meta:
+        verbose_name = '比较表达'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "足背动脉搏动情况"
-            verbose_name_plural = "足背动脉搏动情况"
-            
-class Hearing(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "听力"
-            verbose_name_plural = "听力"
-            
-class Lips(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Sports_preference(DictBase):
+    class Meta:
+        verbose_name = '运动类型'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "口唇"
-            verbose_name_plural = "口唇"
-            
-class Dentition(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "齿列"
-            verbose_name_plural = "齿列"
-            
-class Pharynx(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Exercise_time(DictBase):
+    class Meta:
+        verbose_name = '运动时长'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "咽部"
-            verbose_name_plural = "咽部"
-            
-class Life_event(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "生活事件"
-            verbose_name_plural = "生活事件"
-            
-class Edema(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Convenience(DictBase):
+    class Meta:
+        verbose_name = '便捷程度'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "水肿情况"
-            verbose_name_plural = "水肿情况"
-            
-class Gender(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "性别"
-            verbose_name_plural = "性别"
-            
-class Nationality(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Family_relationship(DictBase):
+    class Meta:
+        verbose_name = '家庭成员关系'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "民族"
-            verbose_name_plural = "民族"
-            
-class Marital_status(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "婚姻状况"
-            verbose_name_plural = "婚姻状况"
-            
-class Education(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Normality(DictBase):
+    class Meta:
+        verbose_name = '正常性判断'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "文化程度"
-            verbose_name_plural = "文化程度"
-            
-class Occupational_status(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "职业状况"
-            verbose_name_plural = "职业状况"
-            
-class Medical_expenses_burden(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Dorsal_artery_pulsation(DictBase):
+    class Meta:
+        verbose_name = '足背动脉搏动情况'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "医疗费用负担"
-            verbose_name_plural = "医疗费用负担"
-            
-class Type_of_residence(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "居住类型"
-            verbose_name_plural = "居住类型"
-            
-class Blood_type(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
+class Hearing(DictBase):
+    class Meta:
+        verbose_name = '听力'
+        verbose_name_plural = verbose_name
 
-        class Meta:
-            verbose_name = "血型"
-            verbose_name_plural = "血型"
-            
-class Employee_list(models.Model):
-        value = models.CharField(max_length=60, null=True, blank=True, verbose_name="值")
-        def __str__(self):
-            return self.value
 
-        class Meta:
-            verbose_name = "职员表"
-            verbose_name_plural = "职员表"
-            
+class Lips(DictBase):
+    class Meta:
+        verbose_name = '口唇'
+        verbose_name_plural = verbose_name
+
+
+class Dentition(DictBase):
+    class Meta:
+        verbose_name = '齿列'
+        verbose_name_plural = verbose_name
+
+
+class Pharynx(DictBase):
+    class Meta:
+        verbose_name = '咽部'
+        verbose_name_plural = verbose_name
+
+
+class Life_event(DictBase):
+    class Meta:
+        verbose_name = '生活事件'
+        verbose_name_plural = verbose_name
+
+
+class Edema(DictBase):
+    class Meta:
+        verbose_name = '水肿情况'
+        verbose_name_plural = verbose_name
+
+
+class Gender(DictBase):
+    class Meta:
+        verbose_name = '性别'
+        verbose_name_plural = verbose_name
+
+
+class Nationality(DictBase):
+    class Meta:
+        verbose_name = '民族'
+        verbose_name_plural = verbose_name
+
+
+class Marital_status(DictBase):
+    class Meta:
+        verbose_name = '婚姻状况'
+        verbose_name_plural = verbose_name
+
+
+class Education(DictBase):
+    class Meta:
+        verbose_name = '文化程度'
+        verbose_name_plural = verbose_name
+
+
+class Occupational_status(DictBase):
+    class Meta:
+        verbose_name = '职业状况'
+        verbose_name_plural = verbose_name
+
+
+class Medical_expenses_burden(DictBase):
+    class Meta:
+        verbose_name = '医疗费用负担'
+        verbose_name_plural = verbose_name
+
+
+class Type_of_residence(DictBase):
+    class Meta:
+        verbose_name = '居住类型'
+        verbose_name_plural = verbose_name
+
+
+class Blood_type(DictBase):
+    class Meta:
+        verbose_name = '血型'
+        verbose_name_plural = verbose_name
+
+
+class Chang_yong_zheng_zhuang(DictBase):
+    class Meta:
+        verbose_name = '常用症状'
+        verbose_name_plural = verbose_name
+
+
+class Tang_niao_bing_zheng_zhuang(DictBase):
+    class Meta:
+        verbose_name = '糖尿病症状'
+        verbose_name_plural = verbose_name
+
+
+class Xi_yan_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '吸烟情况'
+        verbose_name_plural = verbose_name
+
+
+class Yin_jiu_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '饮酒情况'
+        verbose_name_plural = verbose_name
+
+
+class Qian_dao_que_ren(DictBase):
+    class Meta:
+        verbose_name = '签到确认'
+        verbose_name_plural = verbose_name
+
+
+class Shi_mian_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '失眠情况'
+        verbose_name_plural = verbose_name
+
+
+class Da_bian_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '大便情况'
+        verbose_name_plural = verbose_name
+
+
+class Ya_li_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '压力情况'
+        verbose_name_plural = verbose_name
+
+
+class Kong_qi_wu_ran_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '空气污染情况'
+        verbose_name_plural = verbose_name
+
+
+class Zao_sheng_wu_ran_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '噪声污染情况'
+        verbose_name_plural = verbose_name
+
+
+class Shi_pin_he_yin_shui_an_quan_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '食品和饮水安全情况'
+        verbose_name_plural = verbose_name
+
+
+class Yin_shi_gui_lv_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '饮食规律情况'
+        verbose_name_plural = verbose_name
+
+
+class Qi_ta_huan_jing_wu_ran_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '其他环境污染情况'
+        verbose_name_plural = verbose_name
+
+
+class Ji_xu_shi_yong_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '继续使用情况'
+        verbose_name_plural = verbose_name
+
+
+class Qian_yue_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '签约情况'
+        verbose_name_plural = verbose_name
+
+
+class Man_bing_diao_cha(DictBase):
+    class Meta:
+        verbose_name = '慢病调查'
+        verbose_name_plural = verbose_name
+
+
+class Jian_kang_zi_wo_ping_jia(DictBase):
+    class Meta:
+        verbose_name = '健康自我评价'
+        verbose_name_plural = verbose_name
+
+
+class Qian_yue_que_ren(DictBase):
+    class Meta:
+        verbose_name = '签约确认'
+        verbose_name_plural = verbose_name
+
+
+class Sui_fang_ping_gu(DictBase):
+    class Meta:
+        verbose_name = '监测评估'
+        verbose_name_plural = verbose_name

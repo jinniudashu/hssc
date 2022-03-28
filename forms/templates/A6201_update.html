@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    
+        <form action={% url 'A6201_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>A6201</h5>
+                        {{ A6201.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
+
+    {% endblock %}
+    

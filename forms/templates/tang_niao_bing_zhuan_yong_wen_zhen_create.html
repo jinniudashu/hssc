@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    
+        <form action={% url 'tang_niao_bing_zhuan_yong_wen_zhen_create_url' %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>tang_niao_bing_zhuan_yong_wen_zhen</h5>
+                        {{ tang_niao_bing_zhuan_yong_wen_zhen.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
+
+    {% endblock %}
+    

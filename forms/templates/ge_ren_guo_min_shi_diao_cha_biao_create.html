@@ -1,19 +1,17 @@
 {% extends "base.html" %}
 
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
 
-{% block content %}
+    {% block content %}
+    
+        <form action={% url 'ge_ren_guo_min_shi_diao_cha_biao_create_url' %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                        <h5>ge_ren_guo_min_shi_diao_cha_biao</h5>
+                        {{ ge_ren_guo_min_shi_diao_cha_biao.as_p }}
+                        <hr>
+            <input type="submit" value="提交" /> 
+        </form>
 
-	<form action={% url 'ge_ren_guo_min_shi_diao_cha_biao_create_url' %} method='POST' enctype='multipart/form-data'> 
-		{% csrf_token %}
-            
-        <h5>个人基本情况_查询视图_1642159528</h5>
-        {{ form_basic_personal_information.as_p }}
-        <hr>
-        <h5>过敏史</h5>
-        {{ form_allergies_history.as_p }}
-        <hr>
-		<input type="submit" value="提交" /> 
-	</form>
-
-{% endblock %}
+    {% endblock %}
+    
