@@ -1,34 +1,17 @@
 {% extends "base.html" %}
 
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
 
-{% block content %}
+    {% block content %}
+    
+        <form action={% url 'chang_gui_cha_ti_biao_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}
+                
+                    <h5>chang_gui_cha_ti_biao</h5>
+                    {{ chang_gui_cha_ti_biao.as_p }}
+                    <hr>
+            <input type="submit" value="提交" /> 
+        </form>
 
-	<form action={% url 'chang_gui_cha_ti_biao_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
-		{% csrf_token %}
-            
-        <h5>个人基本情况_查询视图_1642159528</h5>
-        {{ form_basic_personal_information.as_p }}
-        <hr>
-        <h5>生命体征检查</h5>
-        {{ form_vital_signs_check.as_p }}
-        <hr>
-        <h5>体格检查</h5>
-        {{ form_physical_examination.as_p }}
-        <hr>
-        <h5>查体听力</h5>
-        {{ form_physical_examination_hearing.as_p }}
-        <hr>
-        <h5>查体口腔</h5>
-        {{ form_physical_examination_oral_cavity.as_p }}
-        <hr>
-        <h5>查体视力</h5>
-        {{ form_physical_examination_vision.as_p }}
-        <hr>
-        <h5>查体运动能力</h5>
-        {{ form_physical_examination_athletic_ability.as_p }}
-        <hr>
-		<input type="submit" value="提交" /> 
-	</form>
-
-{% endblock %}
+    {% endblock %}
+    

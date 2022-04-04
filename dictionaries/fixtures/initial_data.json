@@ -1791,5 +1791,71 @@
             "value": "控制没有到达预期",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Tong_ti",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "60bf820a-b091-11ec-9cae-5ed0e34457d3",
+            "pym": null,
+            "value": "阴性",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Tong_ti",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "60bfc6d4-b091-11ec-9cae-5ed0e34457d3",
+            "pym": null,
+            "value": "阳性",
+            "icpc": "U9810"
+        }
+    },
+    {
+        "model": "dictionaries.Niao_tang",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "9a816094-b091-11ec-9cae-5ed0e34457d3",
+            "pym": null,
+            "value": "阴性",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Niao_tang",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "9a818c4a-b091-11ec-9cae-5ed0e34457d3",
+            "pym": null,
+            "value": "阳性",
+            "icpc": "U9804"
+        }
+    },
+    {
+        "model": "dictionaries.Dan_bai_zhi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "bf11abee-b091-11ec-b42a-5ed0e34457d3",
+            "pym": null,
+            "value": "阴性",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Dan_bai_zhi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "bf11f400-b091-11ec-b42a-5ed0e34457d3",
+            "pym": null,
+            "value": "阳性",
+            "icpc": "U9802"
+        }
     }
 ]

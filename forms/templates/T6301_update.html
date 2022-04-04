@@ -7,9 +7,9 @@
         <form action={% url 'T6301_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}
                 
-                        <h5>T6301</h5>
-                        {{ T6301.as_p }}
-                        <hr>
+                    <h5>T6301</h5>
+                    {{ T6301.as_p }}
+                    <hr>
             <input type="submit" value="提交" /> 
         </form>
 

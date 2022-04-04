@@ -7,9 +7,9 @@
         <form action={% url 'yuan_nei_fu_zhu_wen_zhen_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}
                 
-                        <h5>yuan_nei_fu_zhu_wen_zhen</h5>
-                        {{ yuan_nei_fu_zhu_wen_zhen.as_p }}
-                        <hr>
+                    <h5>yuan_nei_fu_zhu_wen_zhen</h5>
+                    {{ yuan_nei_fu_zhu_wen_zhen.as_p }}
+                    <hr>
             <input type="submit" value="提交" /> 
         </form>
 

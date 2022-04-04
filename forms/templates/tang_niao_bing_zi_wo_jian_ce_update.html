@@ -7,9 +7,9 @@
         <form action={% url 'tang_niao_bing_zi_wo_jian_ce_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}
                 
-                        <h5>tang_niao_bing_zi_wo_jian_ce</h5>
-                        {{ tang_niao_bing_zi_wo_jian_ce.as_p }}
-                        <hr>
+                    <h5>tang_niao_bing_zi_wo_jian_ce</h5>
+                    {{ tang_niao_bing_zi_wo_jian_ce.as_p }}
+                    <hr>
             <input type="submit" value="提交" /> 
         </form>
 

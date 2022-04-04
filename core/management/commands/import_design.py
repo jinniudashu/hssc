@@ -20,26 +20,26 @@ class Command(BaseCommand):
             if key == 'templates':
                 for item in value:
                     (k, v), = item.items()
-                    self.write_file(f'.\\forms\\templates\\{k}', v)
+                    self.write_file(f'./forms/templates/{k}', v)
                     print(k)
             elif key == 'dict_models':
-                self.write_file(f'.\\dictionaries\\models.py', value)
+                self.write_file('./dictionaries/models.py', value)
                 print(key)
             elif key == 'dict_admin':
-                self.write_file(f'.\\dictionaries\\admin.py', value)
+                self.write_file('./dictionaries/admin.py', value)
                 print(key)
             elif key == 'dict_data':
-                self.write_file(f'.\\dictionaries\\fixtures\\initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))
+                self.write_file('./dictionaries/fixtures/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))
             elif key == 'icpc_models':
-                self.write_file(f'.\\icpc\\models.py', value)
+                self.write_file('./icpc/models.py', value)
                 print(key)
             elif key == 'icpc_admin':
-                self.write_file(f'.\\icpc\\admin.py', value)
+                self.write_file('./icpc/admin.py', value)
                 print(key)
             elif key == 'icpc_data':
-                self.write_file(f'.\\icpc\\fixtures\\initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))                
+                self.write_file('./icpc/fixtures/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))                
             else:
-                self.write_file(f'.\\forms\\{key}.py', value)
+                self.write_file(f'./forms/{key}.py', value)
                 print(key)
 
     def write_file(self, file_name, content):

@@ -264,3 +264,21 @@ class Qian_yue_que_renAdmin(admin.ModelAdmin):
 class Sui_fang_ping_guAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
     list_display = ["value"]
+
+
+@admin.register(Tong_ti)
+class Tong_tiAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+
+@admin.register(Niao_tang)
+class Niao_tangAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+
+@admin.register(Dan_bai_zhi)
+class Dan_bai_zhiAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]

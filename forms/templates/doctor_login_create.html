@@ -4,11 +4,11 @@
 
     {% block content %}
     
-        <form action={% url 'A6202_update_url' proc_id %} method='POST' enctype='multipart/form-data'> 
+        <form action={% url 'doctor_login_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}
                 
-                    <h5>A6202</h5>
-                    {{ A6202.as_p }}
+                    <h5>doctor_login</h5>
+                    {{ doctor_login.as_p }}
                     <hr>
             <input type="submit" value="提交" /> 
         </form>

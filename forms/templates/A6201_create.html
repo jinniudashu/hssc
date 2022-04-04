@@ -7,9 +7,9 @@
         <form action={% url 'A6201_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}
                 
-                        <h5>A6201</h5>
-                        {{ A6201.as_p }}
-                        <hr>
+                    <h5>A6201</h5>
+                    {{ A6201.as_p }}
+                    <hr>
             <input type="submit" value="提交" /> 
         </form>
 

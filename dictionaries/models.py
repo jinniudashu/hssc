@@ -278,3 +278,21 @@ class Sui_fang_ping_gu(DictBase):
     class Meta:
         verbose_name = '监测评估'
         verbose_name_plural = verbose_name
+
+
+class Tong_ti(DictBase):
+    class Meta:
+        verbose_name = '酮体'
+        verbose_name_plural = verbose_name
+
+
+class Niao_tang(DictBase):
+    class Meta:
+        verbose_name = '尿糖'
+        verbose_name_plural = verbose_name
+
+
+class Dan_bai_zhi(DictBase):
+    class Meta:
+        verbose_name = '蛋白质'
+        verbose_name_plural = verbose_name
