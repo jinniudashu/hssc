@@ -50,7 +50,7 @@ class Workgroup(models.Model):
 
 
 class Staff(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff', verbose_name='员工')
+	user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='员工')
 	name = models.CharField(max_length=50)
 	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
 	email = models.EmailField(max_length=50)
@@ -89,7 +89,7 @@ class Staff(models.Model):
 
 
 class Customer(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer', verbose_name='客户')
+	user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='客户')
 	name = models.CharField(max_length=50)
 	phone = models.CharField(max_length=20, blank=True, null=True)
 	slug = models.SlugField(max_length=150, blank=True)

@@ -2,8 +2,16 @@ from django.contrib import admin
 from .models import Workgroup, Staff, Customer, Service, Operation, Event, Instruction, Event_instructions
 from .models import Service_proc, Operation_proc
 
-admin.site.register(Staff)
-admin.site.register(Customer)
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    search_fields = ['name', 'phone']
+
+
+@admin.register(Staff)
+class StaffAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
 
 class WorkgroupAdmin(admin.ModelAdmin):
     list_display = ('label', 'group_leader')
