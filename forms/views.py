@@ -38,22 +38,25 @@ class Index_view(ListView):
 
 
 class Chang_gui_cha_ti_biao_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'chang_gui_cha_ti_biao_create.html'
     form_class = A3110_ModelForm # the first form ModelForm class
     model = A3110
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Chang_gui_cha_ti_biao_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A3110_ModelForm(self.request.POST, prefix="attribute_form0")
             attribute_form1 = A3109_ModelForm(self.request.POST, prefix="attribute_form1")
             attribute_form2 = A3108_ModelForm(self.request.POST, prefix="attribute_form2")
             attribute_form3 = A6502_ModelForm(self.request.POST, prefix="attribute_form3")
             attribute_form4 = A3001_ModelForm(self.request.POST, prefix="attribute_form4")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A3110_ModelForm(prefix="attribute_form0")
             attribute_form1 = A3109_ModelForm(prefix="attribute_form1")
             attribute_form2 = A3108_ModelForm(prefix="attribute_form2")
@@ -99,8 +102,8 @@ class Chang_gui_cha_ti_biao_CreateView(CreateView):
 
 
 class Chang_gui_cha_ti_biao_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'chang_gui_cha_ti_biao_update.html'
     form_class = A3110_ModelForm # the first form ModelForm class
     model = A3110
 
@@ -171,18 +174,21 @@ class Chang_gui_cha_ti_biao_UpdateView(UpdateView):
         return super(Chang_gui_cha_ti_biao_CreateView, self).form_valid(form)
 
 class Tang_niao_bing_cha_ti_biao_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_cha_ti_biao_create.html'
     form_class = Tang_niao_bing_cha_ti_biao_ModelForm # the first form ModelForm class
     model = Tang_niao_bing_cha_ti_biao
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_cha_ti_biao_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = Tang_niao_bing_cha_ti_biao_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = Tang_niao_bing_cha_ti_biao_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -204,8 +210,8 @@ class Tang_niao_bing_cha_ti_biao_CreateView(CreateView):
 
 
 class Tang_niao_bing_cha_ti_biao_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_cha_ti_biao_update.html'
     form_class = Tang_niao_bing_cha_ti_biao_ModelForm # the first form ModelForm class
     model = Tang_niao_bing_cha_ti_biao
 
@@ -248,18 +254,21 @@ class Tang_niao_bing_cha_ti_biao_UpdateView(UpdateView):
         return super(Tang_niao_bing_cha_ti_biao_CreateView, self).form_valid(form)
 
 class Men_zhen_chu_fang_biao_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'men_zhen_chu_fang_biao_create.html'
     form_class = A5001_ModelForm # the first form ModelForm class
     model = A5001
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Men_zhen_chu_fang_biao_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A5001_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A5001_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -281,8 +290,8 @@ class Men_zhen_chu_fang_biao_CreateView(CreateView):
 
 
 class Men_zhen_chu_fang_biao_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'men_zhen_chu_fang_biao_update.html'
     form_class = A5001_ModelForm # the first form ModelForm class
     model = A5001
 
@@ -325,18 +334,21 @@ class Men_zhen_chu_fang_biao_UpdateView(UpdateView):
         return super(Men_zhen_chu_fang_biao_CreateView, self).form_valid(form)
 
 class User_registry_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'user_registry_create.html'
     form_class = Z6201_ModelForm # the first form ModelForm class
     model = Z6201
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(User_registry_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = Z6201_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = Z6201_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -358,8 +370,8 @@ class User_registry_CreateView(CreateView):
 
 
 class User_registry_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'user_registry_update.html'
     form_class = Z6201_ModelForm # the first form ModelForm class
     model = Z6201
 
@@ -402,18 +414,21 @@ class User_registry_UpdateView(UpdateView):
         return super(User_registry_CreateView, self).form_valid(form)
 
 class User_login_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'user_login_create.html'
     form_class = Z6230_ModelForm # the first form ModelForm class
     model = Z6230
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(User_login_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = Z6230_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = Z6230_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -435,8 +450,8 @@ class User_login_CreateView(CreateView):
 
 
 class User_login_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'user_login_update.html'
     form_class = Z6230_ModelForm # the first form ModelForm class
     model = Z6230
 
@@ -479,18 +494,21 @@ class User_login_UpdateView(UpdateView):
         return super(User_login_CreateView, self).form_valid(form)
 
 class Doctor_login_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'doctor_login_create.html'
     form_class = Z6230_ModelForm # the first form ModelForm class
     model = Z6230
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Doctor_login_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = Z6230_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = Z6230_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -512,8 +530,8 @@ class Doctor_login_CreateView(CreateView):
 
 
 class Doctor_login_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'doctor_login_update.html'
     form_class = Z6230_ModelForm # the first form ModelForm class
     model = Z6230
 
@@ -556,18 +574,21 @@ class Doctor_login_UpdateView(UpdateView):
         return super(Doctor_login_CreateView, self).form_valid(form)
 
 class A6501_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6501_create.html'
     form_class = A6501_ModelForm # the first form ModelForm class
     model = A6501
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(A6501_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6501_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6501_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -589,8 +610,8 @@ class A6501_CreateView(CreateView):
 
 
 class A6501_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6501_update.html'
     form_class = A6501_ModelForm # the first form ModelForm class
     model = A6501
 
@@ -633,18 +654,21 @@ class A6501_UpdateView(UpdateView):
         return super(A6501_CreateView, self).form_valid(form)
 
 class Men_zhen_fu_zhu_jian_cha_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'men_zhen_fu_zhu_jian_cha_create.html'
     form_class = A3001_ModelForm # the first form ModelForm class
     model = A3001
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Men_zhen_fu_zhu_jian_cha_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A3001_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A3001_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -666,8 +690,8 @@ class Men_zhen_fu_zhu_jian_cha_CreateView(CreateView):
 
 
 class Men_zhen_fu_zhu_jian_cha_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'men_zhen_fu_zhu_jian_cha_update.html'
     form_class = A3001_ModelForm # the first form ModelForm class
     model = A3001
 
@@ -710,18 +734,21 @@ class Men_zhen_fu_zhu_jian_cha_UpdateView(UpdateView):
         return super(Men_zhen_fu_zhu_jian_cha_CreateView, self).form_valid(form)
 
 class Tang_niao_bing_zhuan_yong_wen_zhen_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_zhuan_yong_wen_zhen_create.html'
     form_class = A6219_ModelForm # the first form ModelForm class
     model = A6219
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_zhuan_yong_wen_zhen_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6219_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6219_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -743,8 +770,8 @@ class Tang_niao_bing_zhuan_yong_wen_zhen_CreateView(CreateView):
 
 
 class Tang_niao_bing_zhuan_yong_wen_zhen_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_zhuan_yong_wen_zhen_update.html'
     form_class = A6219_ModelForm # the first form ModelForm class
     model = A6219
 
@@ -787,18 +814,21 @@ class Tang_niao_bing_zhuan_yong_wen_zhen_UpdateView(UpdateView):
         return super(Tang_niao_bing_zhuan_yong_wen_zhen_CreateView, self).form_valid(form)
 
 class Yao_shi_fu_wu_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'yao_shi_fu_wu_create.html'
     form_class = A5002_ModelForm # the first form ModelForm class
     model = A5002
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Yao_shi_fu_wu_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A5002_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A5002_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -820,8 +850,8 @@ class Yao_shi_fu_wu_CreateView(CreateView):
 
 
 class Yao_shi_fu_wu_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'yao_shi_fu_wu_update.html'
     form_class = A5002_ModelForm # the first form ModelForm class
     model = A5002
 
@@ -864,18 +894,21 @@ class Yao_shi_fu_wu_UpdateView(UpdateView):
         return super(Yao_shi_fu_wu_CreateView, self).form_valid(form)
 
 class Tang_niao_bing_zi_wo_jian_ce_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_zi_wo_jian_ce_create.html'
     form_class = T4505_ModelForm # the first form ModelForm class
     model = T4505
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_zi_wo_jian_ce_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = T4505_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = T4505_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -897,8 +930,8 @@ class Tang_niao_bing_zi_wo_jian_ce_CreateView(CreateView):
 
 
 class Tang_niao_bing_zi_wo_jian_ce_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_zi_wo_jian_ce_update.html'
     form_class = T4505_ModelForm # the first form ModelForm class
     model = T4505
 
@@ -941,18 +974,21 @@ class Tang_niao_bing_zi_wo_jian_ce_UpdateView(UpdateView):
         return super(Tang_niao_bing_zi_wo_jian_ce_CreateView, self).form_valid(form)
 
 class Yuan_nei_fu_zhu_wen_zhen_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'yuan_nei_fu_zhu_wen_zhen_create.html'
     form_class = A6217_ModelForm # the first form ModelForm class
     model = A6217
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Yuan_nei_fu_zhu_wen_zhen_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6217_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6217_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -974,8 +1010,8 @@ class Yuan_nei_fu_zhu_wen_zhen_CreateView(CreateView):
 
 
 class Yuan_nei_fu_zhu_wen_zhen_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'yuan_nei_fu_zhu_wen_zhen_update.html'
     form_class = A6217_ModelForm # the first form ModelForm class
     model = A6217
 
@@ -1018,18 +1054,21 @@ class Yuan_nei_fu_zhu_wen_zhen_UpdateView(UpdateView):
         return super(Yuan_nei_fu_zhu_wen_zhen_CreateView, self).form_valid(form)
 
 class A6201_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6201_create.html'
     form_class = A6201_ModelForm # the first form ModelForm class
     model = A6201
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(A6201_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6201_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6201_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1051,8 +1090,8 @@ class A6201_CreateView(CreateView):
 
 
 class A6201_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6201_update.html'
     form_class = A6201_ModelForm # the first form ModelForm class
     model = A6201
 
@@ -1095,18 +1134,21 @@ class A6201_UpdateView(UpdateView):
         return super(A6201_CreateView, self).form_valid(form)
 
 class Men_zhen_yi_sheng_wen_zhen_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'men_zhen_yi_sheng_wen_zhen_create.html'
     form_class = A6218_ModelForm # the first form ModelForm class
     model = A6218
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(Men_zhen_yi_sheng_wen_zhen_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6218_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6218_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1128,8 +1170,8 @@ class Men_zhen_yi_sheng_wen_zhen_CreateView(CreateView):
 
 
 class Men_zhen_yi_sheng_wen_zhen_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'men_zhen_yi_sheng_wen_zhen_update.html'
     form_class = A6218_ModelForm # the first form ModelForm class
     model = A6218
 
@@ -1172,18 +1214,21 @@ class Men_zhen_yi_sheng_wen_zhen_UpdateView(UpdateView):
         return super(Men_zhen_yi_sheng_wen_zhen_CreateView, self).form_valid(form)
 
 class T8901_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'T8901_create.html'
     form_class = Tang_niao_bing_zhen_duan_biao_ModelForm # the first form ModelForm class
     model = Tang_niao_bing_zhen_duan_biao
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(T8901_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = Tang_niao_bing_zhen_duan_biao_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = Tang_niao_bing_zhen_duan_biao_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1205,8 +1250,8 @@ class T8901_CreateView(CreateView):
 
 
 class T8901_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'T8901_update.html'
     form_class = Tang_niao_bing_zhen_duan_biao_ModelForm # the first form ModelForm class
     model = Tang_niao_bing_zhen_duan_biao
 
@@ -1249,18 +1294,21 @@ class T8901_UpdateView(UpdateView):
         return super(T8901_CreateView, self).form_valid(form)
 
 class T6301_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'T6301_create.html'
     form_class = T6301_ModelForm # the first form ModelForm class
     model = T6301
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(T6301_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = T6301_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = T6301_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1282,8 +1330,8 @@ class T6301_CreateView(CreateView):
 
 
 class T6301_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'T6301_update.html'
     form_class = T6301_ModelForm # the first form ModelForm class
     model = T6301
 
@@ -1326,18 +1374,21 @@ class T6301_UpdateView(UpdateView):
         return super(T6301_CreateView, self).form_valid(form)
 
 class A6202_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6202_create.html'
     form_class = A6202_ModelForm # the first form ModelForm class
     model = A6202
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(A6202_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6202_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6202_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1359,8 +1410,8 @@ class A6202_CreateView(CreateView):
 
 
 class A6202_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6202_update.html'
     form_class = A6202_ModelForm # the first form ModelForm class
     model = A6202
 
@@ -1403,18 +1454,21 @@ class A6202_UpdateView(UpdateView):
         return super(A6202_CreateView, self).form_valid(form)
 
 class A6220_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6220_create.html'
     form_class = A6220_ModelForm # the first form ModelForm class
     model = A6220
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(A6220_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6220_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6220_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1436,8 +1490,8 @@ class A6220_CreateView(CreateView):
 
 
 class A6220_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6220_update.html'
     form_class = A6220_ModelForm # the first form ModelForm class
     model = A6220
 
@@ -1480,16 +1534,17 @@ class A6220_UpdateView(UpdateView):
         return super(A6220_CreateView, self).form_valid(form)
 
 class A6299_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6299_create.html'
     form_class = A6203_ModelForm # the first form ModelForm class
     model = A6203
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(A6299_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A6203_ModelForm(self.request.POST, prefix="attribute_form0")
             attribute_form1 = A6210_ModelForm(self.request.POST, prefix="attribute_form1")
             attribute_form2 = A6207_ModelForm(self.request.POST, prefix="attribute_form2")
@@ -1504,6 +1559,8 @@ class A6299_CreateView(CreateView):
             attribute_form11 = A6212_ModelForm(self.request.POST, prefix="attribute_form11")
             attribute_form12 = A6216_ModelForm(self.request.POST, prefix="attribute_form12")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A6203_ModelForm(prefix="attribute_form0")
             attribute_form1 = A6210_ModelForm(prefix="attribute_form1")
             attribute_form2 = A6207_ModelForm(prefix="attribute_form2")
@@ -1597,8 +1654,8 @@ class A6299_CreateView(CreateView):
 
 
 class A6299_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A6299_update.html'
     form_class = A6203_ModelForm # the first form ModelForm class
     model = A6203
 
@@ -1725,18 +1782,21 @@ class A6299_UpdateView(UpdateView):
         return super(A6299_CreateView, self).form_valid(form)
 
 class A3502_CreateView(CreateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A3502_create.html'
     form_class = A3502_ModelForm # the first form ModelForm class
     model = A3502
     context = {}
 
     def get_context_data(self, **kwargs):
         context = super(A3502_CreateView, self).get_context_data(**kwargs)
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
             attribute_form0 = A3502_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
             attribute_form0 = A3502_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
@@ -1758,8 +1818,8 @@ class A3502_CreateView(CreateView):
 
 
 class A3502_UpdateView(UpdateView):
-    # success_url
-    # template_name
+    success_url = 'forms/'
+    template_name = 'A3502_update.html'
     form_class = A3502_ModelForm # the first form ModelForm class
     model = A3502
 
