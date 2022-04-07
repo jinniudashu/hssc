@@ -6,6 +6,18 @@ from crispy_forms.layout import Layout, Field, HTML, Submit
 
 from .models import *
 
+class A5001_ModelForm(ModelForm):
+    class Meta:
+        model = A5001
+        fields = ['relatedfield_drug_name', ]
+        widgets = {'relatedfield_drug_name': SelectMultiple, }
+    
+class A6211_ModelForm(ModelForm):
+    class Meta:
+        model = A6211
+        fields = ['datetimefield_date', 'relatedfield_major_life', ]
+        widgets = {'relatedfield_major_life': CheckboxSelectMultiple, }
+    
 class T4505_ModelForm(ModelForm):
     class Meta:
         model = T4505
@@ -96,6 +108,12 @@ class T4501_ModelForm(ModelForm):
         fields = ['T4501', ]
         widgets = {'T4501': SelectMultiple, }
     
+class Z6201_ModelForm(ModelForm):
+    class Meta:
+        model = Z6201
+        fields = ['characterfield_name', 'characterfield_gender', 'characterfield_age', 'characterhssc_identification_number', 'characterfield_contact_information', 'characterfield_contact_address', 'characterfield_password_setting', 'characterfield_confirm_password', 'datetimefield_date_of_birth', ]
+        
+    
 class A3110_ModelForm(ModelForm):
     class Meta:
         model = A3110
@@ -143,6 +161,12 @@ class A6218_ModelForm(ModelForm):
         model = A6218
         fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', ]
         widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
+    
+class A6216_ModelForm(ModelForm):
+    class Meta:
+        model = A6216
+        fields = ['relatedfield_is_the_living_environment_satisfactory', 'relatedfield_is_the_transportation_convenient', ]
+        widgets = {'relatedfield_is_the_living_environment_satisfactory': Select, 'relatedfield_is_the_transportation_convenient': Select, }
     
 class A6205_ModelForm(ModelForm):
     class Meta:
@@ -210,12 +234,6 @@ class A6208_ModelForm(ModelForm):
         fields = ['numberfield_blood_transfusion', 'datetimefield_date', ]
         
     
-class A5001_ModelForm(ModelForm):
-    class Meta:
-        model = A5001
-        fields = ['relatedfield_drug_name', ]
-        widgets = {'relatedfield_drug_name': SelectMultiple, }
-    
 class Yong_yao_diao_cha_biao_ModelForm(ModelForm):
     class Meta:
         model = Yong_yao_diao_cha_biao
@@ -239,12 +257,6 @@ class A6219_ModelForm(ModelForm):
         model = A6219
         fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', ]
         widgets = {'relatedfield_symptom_list': CheckboxSelectMultiple, }
-    
-class Z6201_ModelForm(ModelForm):
-    class Meta:
-        model = Z6201
-        fields = ['characterfield_name', 'characterfield_gender', 'characterfield_age', 'characterhssc_identification_number', 'characterfield_contact_information', 'characterfield_contact_address', 'characterfield_password_setting', 'characterfield_confirm_password', 'datetimefield_date_of_birth', ]
-        
     
 class T3405_ModelForm(ModelForm):
     class Meta:
@@ -282,12 +294,6 @@ class A6212_ModelForm(ModelForm):
         fields = ['characterfield_average_sleep_duration', 'characterfield_duration_of_insomnia', 'relatedfield_drinking_frequency', 'relatedfield_smoking_frequency', ]
         widgets = {'relatedfield_drinking_frequency': RadioSelect, 'relatedfield_smoking_frequency': RadioSelect, }
     
-class A6216_ModelForm(ModelForm):
-    class Meta:
-        model = A6216
-        fields = ['relatedfield_is_the_living_environment_satisfactory', 'relatedfield_is_the_transportation_convenient', ]
-        widgets = {'relatedfield_is_the_living_environment_satisfactory': Select, 'relatedfield_is_the_transportation_convenient': Select, }
-    
 class A5002_ModelForm(ModelForm):
     class Meta:
         model = A5002
@@ -305,12 +311,6 @@ class T6301_ModelForm(ModelForm):
         model = T6301
         fields = ['characterfield_average_sleep_duration', 'characterfield_duration_of_insomnia', 'characterfield_name', 'characterhssc_identification_number', 'characterfield_resident_file_number', 'characterfield_family_address', 'characterfield_contact_number', 'characterfield_medical_ic_card_number', 'characterfield_yong_yao_ji_liang', 'numberfield_systolic_blood_pressure', 'numberfield_diastolic_blood_pressure', 'datetimefield_date_of_birth', 'relatedfield_drug_name', 'relatedfield_family_id', 'relatedfield_gender', 'relatedfield_nationality', 'relatedfield_marital_status', 'relatedfield_education', 'relatedfield_occupational_status', 'relatedfield_medical_expenses_burden', 'relatedfield_type_of_residence', 'relatedfield_blood_type', 'relatedfield_signed_family_doctor', 'relatedfield_drinking_frequency', 'relatedfield_smoking_frequency', 'relatedfield_family_relationship', 'relatedfield_fundus', 'relatedfield_left_foot', 'relatedfield_right_foot', ]
         widgets = {'relatedfield_drug_name': SelectMultiple, 'relatedfield_family_id': Select, 'relatedfield_gender': Select, 'relatedfield_nationality': Select, 'relatedfield_marital_status': Select, 'relatedfield_education': Select, 'relatedfield_occupational_status': Select, 'relatedfield_medical_expenses_burden': CheckboxSelectMultiple, 'relatedfield_type_of_residence': Select, 'relatedfield_blood_type': Select, 'relatedfield_signed_family_doctor': Select, 'relatedfield_drinking_frequency': RadioSelect, 'relatedfield_smoking_frequency': RadioSelect, 'relatedfield_family_relationship': Select, 'relatedfield_fundus': Select, 'relatedfield_left_foot': RadioSelect, 'relatedfield_right_foot': RadioSelect, }
-    
-class A6211_ModelForm(ModelForm):
-    class Meta:
-        model = A6211
-        fields = ['datetimefield_date', 'relatedfield_major_life', ]
-        widgets = {'relatedfield_major_life': CheckboxSelectMultiple, }
     
 class Z6261_ModelForm(ModelForm):
     class Meta:

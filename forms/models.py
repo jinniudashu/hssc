@@ -35,6 +35,33 @@ class HsscBuessinessFormBase(models.Model):
         super().save(*args, **kwargs)
 
 
+class A5001(HsscBuessinessFormBase):
+    relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_A5001', verbose_name='药品名称')
+    class Meta:
+        verbose_name = '药物/处方/新治疗/注射'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('A5001_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('A5001_update_url', kwargs={'slug': self.slug})
+        
+
+class A6211(HsscBuessinessFormBase):
+    datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
+    relatedfield_major_life = models.ManyToManyField(Life_event, related_name='life_event_for_relatedfield_major_life_A6211', verbose_name='生活事件')
+    class Meta:
+        verbose_name = '重大生活事件调查'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('A6211_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('A6211_update_url', kwargs={'slug': self.slug})
+        
+
 class T4505(HsscBuessinessFormBase):
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
     numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
@@ -262,6 +289,27 @@ class T4501(HsscBuessinessFormBase):
         return reverse('T4501_update_url', kwargs={'slug': self.slug})
         
 
+class Z6201(HsscBuessinessFormBase):
+    characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
+    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
+    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
+    characterfield_contact_information = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_password_setting = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码设置')
+    characterfield_confirm_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='确认密码')
+    datetimefield_date_of_birth = models.DateTimeField(null=True, blank=True, verbose_name='出生日期')
+    class Meta:
+        verbose_name = '用户注册'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('Z6201_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('Z6201_update_url', kwargs={'slug': self.slug})
+        
+
 class A3110(HsscBuessinessFormBase):
     relatedfield_left_ear_hearing = models.ForeignKey(Hearing, related_name='hearing_for_relatedfield_left_ear_hearing_A3110', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左耳听力')
     relatedfield_right_ear_hearing = models.ForeignKey(Hearing, related_name='hearing_for_relatedfield_right_ear_hearing_A3110', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右耳听力')
@@ -387,6 +435,20 @@ class A6218(HsscBuessinessFormBase):
 
     def get_update_url(self):
         return reverse('A6218_update_url', kwargs={'slug': self.slug})
+        
+
+class A6216(HsscBuessinessFormBase):
+    relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_A6216', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
+    relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_A6216', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
+    class Meta:
+        verbose_name = '社会环境评估'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('A6216_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('A6216_update_url', kwargs={'slug': self.slug})
         
 
 class A6205(HsscBuessinessFormBase):
@@ -557,19 +619,6 @@ class A6208(HsscBuessinessFormBase):
         return reverse('A6208_update_url', kwargs={'slug': self.slug})
         
 
-class A5001(HsscBuessinessFormBase):
-    relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_A5001', verbose_name='药品名称')
-    class Meta:
-        verbose_name = '药物/处方/新治疗/注射'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A5001_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A5001_update_url', kwargs={'slug': self.slug})
-        
-
 class Yong_yao_diao_cha_biao(HsscBuessinessFormBase):
     characterfield_yong_yao_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药剂量')
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_yong_yao_diao_cha_biao', verbose_name='药品名称')
@@ -672,27 +721,6 @@ class A6219(HsscBuessinessFormBase):
         return reverse('A6219_update_url', kwargs={'slug': self.slug})
         
 
-class Z6201(HsscBuessinessFormBase):
-    characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
-    characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
-    characterfield_contact_information = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
-    characterfield_password_setting = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码设置')
-    characterfield_confirm_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='确认密码')
-    datetimefield_date_of_birth = models.DateTimeField(null=True, blank=True, verbose_name='出生日期')
-    class Meta:
-        verbose_name = '用户注册'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('Z6201_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('Z6201_update_url', kwargs={'slug': self.slug})
-        
-
 class T3405(HsscBuessinessFormBase):
     numberfield_tang_hua_xue_hong_dan_bai = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白')
     numberfield_tang_hua_xue_hong_dan_bai_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白标准值')
@@ -780,20 +808,6 @@ class A6212(HsscBuessinessFormBase):
         return reverse('A6212_update_url', kwargs={'slug': self.slug})
         
 
-class A6216(HsscBuessinessFormBase):
-    relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_A6216', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
-    relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_A6216', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
-    class Meta:
-        verbose_name = '社会环境评估'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6216_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6216_update_url', kwargs={'slug': self.slug})
-        
-
 class A5002(HsscBuessinessFormBase):
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_A5002', verbose_name='药品名称')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_A5002', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
@@ -869,20 +883,6 @@ class T6301(HsscBuessinessFormBase):
 
     def get_update_url(self):
         return reverse('T6301_update_url', kwargs={'slug': self.slug})
-        
-
-class A6211(HsscBuessinessFormBase):
-    datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
-    relatedfield_major_life = models.ManyToManyField(Life_event, related_name='life_event_for_relatedfield_major_life_A6211', verbose_name='生活事件')
-    class Meta:
-        verbose_name = '重大生活事件调查'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6211_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6211_update_url', kwargs={'slug': self.slug})
         
 
 class Z6261(HsscBuessinessFormBase):

@@ -1,6 +1,14 @@
 from django.contrib import admin
 from .models import *
     
+@admin.register(A5001)
+class A5001Admin(admin.ModelAdmin):
+    autocomplete_fields = ["relatedfield_drug_name", ]
+
+@admin.register(A6211)
+class A6211Admin(admin.ModelAdmin):
+    autocomplete_fields = ["relatedfield_major_life", ]
+
 admin.site.register(T4505)
 
 @admin.register(T3003)
@@ -55,6 +63,8 @@ class A6201Admin(admin.ModelAdmin):
 class T4501Admin(admin.ModelAdmin):
     autocomplete_fields = ["T4501", ]
 
+admin.site.register(Z6201)
+
 @admin.register(A3110)
 class A3110Admin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_left_ear_hearing", "relatedfield_right_ear_hearing", ]
@@ -82,6 +92,10 @@ class T4502Admin(admin.ModelAdmin):
 @admin.register(A6218)
 class A6218Admin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_symptom_list", ]
+
+@admin.register(A6216)
+class A6216Admin(admin.ModelAdmin):
+    autocomplete_fields = ["relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", ]
 
 @admin.register(A6205)
 class A6205Admin(admin.ModelAdmin):
@@ -119,10 +133,6 @@ class T3002Admin(admin.ModelAdmin):
 
 admin.site.register(A6208)
 
-@admin.register(A5001)
-class A5001Admin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_drug_name", ]
-
 @admin.register(Yong_yao_diao_cha_biao)
 class Yong_yao_diao_cha_biaoAdmin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_drug_name", ]
@@ -138,8 +148,6 @@ class A6203Admin(admin.ModelAdmin):
 @admin.register(A6219)
 class A6219Admin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_symptom_list", ]
-
-admin.site.register(Z6201)
 
 admin.site.register(T3405)
 
@@ -161,10 +169,6 @@ class Physical_examination_athletic_abilityAdmin(admin.ModelAdmin):
 class A6212Admin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_drinking_frequency", "relatedfield_smoking_frequency", ]
 
-@admin.register(A6216)
-class A6216Admin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", ]
-
 @admin.register(A5002)
 class A5002Admin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_drug_name", "relatedfield_disease_name", "boolfield_shi_fou_ji_xu_shi_yong", ]
@@ -176,10 +180,6 @@ class A6213Admin(admin.ModelAdmin):
 @admin.register(T6301)
 class T6301Admin(admin.ModelAdmin):
     autocomplete_fields = ["relatedfield_drug_name", "relatedfield_family_id", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "relatedfield_family_relationship", "relatedfield_fundus", "relatedfield_left_foot", "relatedfield_right_foot", ]
-
-@admin.register(A6211)
-class A6211Admin(admin.ModelAdmin):
-    autocomplete_fields = ["relatedfield_major_life", ]
 
 @admin.register(Z6261)
 class Z6261Admin(admin.ModelAdmin):
