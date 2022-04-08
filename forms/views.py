@@ -37,226 +37,10 @@ class Index_view(ListView):
         return context
 
 
-class Chang_gui_cha_ti_biao_CreateView(CreateView):
-    success_url = 'forms/'
-    template_name = 'chang_gui_cha_ti_biao_create.html'
-    form_class = A3110_ModelForm # the first form ModelForm class
-    model = A3110
-    context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super(Chang_gui_cha_ti_biao_CreateView, self).get_context_data(**kwargs)
-        if self.request.method == 'POST':
-            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
-
-            attribute_form0 = A3110_ModelForm(self.request.POST, prefix="attribute_form0")
-            attribute_form1 = A3109_ModelForm(self.request.POST, prefix="attribute_form1")
-            attribute_form2 = A3108_ModelForm(self.request.POST, prefix="attribute_form2")
-            attribute_form3 = A6502_ModelForm(self.request.POST, prefix="attribute_form3")
-            attribute_form4 = A3001_ModelForm(self.request.POST, prefix="attribute_form4")
-        else:
-            base_form = A6203_ModelForm(prefix="base_form")
-
-            attribute_form0 = A3110_ModelForm(prefix="attribute_form0")
-            attribute_form1 = A3109_ModelForm(prefix="attribute_form1")
-            attribute_form2 = A3108_ModelForm(prefix="attribute_form2")
-            attribute_form3 = A6502_ModelForm(prefix="attribute_form3")
-            attribute_form4 = A3001_ModelForm(prefix="attribute_form4")
-        # context
-        context['base_form'] = base_form
-        context['attribute_form0'] = attribute_form0
-        context['attribute_form1'] = attribute_form1
-        context['attribute_form2'] = attribute_form2
-        context['attribute_form3'] = attribute_form3
-        context['attribute_form4'] = attribute_form4
-        context['user'] = self.request.user
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        customer = Customer.objects.get(user=context['user'])
-        operator = Staff.objects.get(user=context['user'])
-        # form_valid
-        f = context['attribute_form0'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form1'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form2'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form3'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form4'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        return super(Chang_gui_cha_ti_biao_CreateView, self).form_valid(form)
-
-
-
-class Chang_gui_cha_ti_biao_UpdateView(UpdateView):
-    success_url = 'forms/'
-    template_name = 'chang_gui_cha_ti_biao_update.html'
-    form_class = A3110_ModelForm # the first form ModelForm class
-    model = A3110
-
-    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
-    #     return redirect(reverse('index'))
-    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
-
-    # # 构造作业开始消息参数
-    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
-
-    context = {}
-        
-    def get_context_data(self, **kwargs):
-        context = super(Chang_gui_cha_ti_biao_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
-        customer = operation_proc.customer
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
-        if self.request.method == 'POST':
-            attribute_form0 = A3110_ModelForm(self.request.POST, prefix="attribute_form0")
-            attribute_form1 = A3109_ModelForm(self.request.POST, prefix="attribute_form1")
-            attribute_form2 = A3108_ModelForm(self.request.POST, prefix="attribute_form2")
-            attribute_form3 = A6502_ModelForm(self.request.POST, prefix="attribute_form3")
-            attribute_form4 = A3001_ModelForm(self.request.POST, prefix="attribute_form4")
-            # 构造作业完成消息参数
-            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
-            return redirect(reverse('index'))
-        else:
-            attribute_form0 = A3110_ModelForm(instance=A3110.objects.get(pid=kwargs['id']), prefix="attribute_form0")
-            attribute_form1 = A3109_ModelForm(instance=A3109.objects.get(pid=kwargs['id']), prefix="attribute_form1")
-            attribute_form2 = A3108_ModelForm(instance=A3108.objects.get(pid=kwargs['id']), prefix="attribute_form2")
-            attribute_form3 = A6502_ModelForm(instance=A6502.objects.get(pid=kwargs['id']), prefix="attribute_form3")
-            attribute_form4 = A3001_ModelForm(instance=A3001.objects.get(pid=kwargs['id']), prefix="attribute_form4")
-        # context
-        context['base_form'] = base_form
-        context['attribute_form0'] = attribute_form0
-        context['attribute_form1'] = attribute_form1
-        context['attribute_form2'] = attribute_form2
-        context['attribute_form3'] = attribute_form3
-        context['attribute_form4'] = attribute_form4
-        context['user'] = self.request.user
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        customer = Customer.objects.get(user=context['user'])
-        operator = Staff.objects.get(user=context['user'])
-        # form_valid
-        f = context['attribute_form0'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form1'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form2'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form3'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        f = context['attribute_form4'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        return super(Chang_gui_cha_ti_biao_CreateView, self).form_valid(form)
-
-class Tang_niao_bing_cha_ti_biao_CreateView(CreateView):
-    success_url = 'forms/'
-    template_name = 'tang_niao_bing_cha_ti_biao_create.html'
-    form_class = Tang_niao_bing_cha_ti_biao_ModelForm # the first form ModelForm class
-    model = Tang_niao_bing_cha_ti_biao
-    context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super(Tang_niao_bing_cha_ti_biao_CreateView, self).get_context_data(**kwargs)
-        if self.request.method == 'POST':
-            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
-
-            attribute_form0 = Tang_niao_bing_cha_ti_biao_ModelForm(self.request.POST, prefix="attribute_form0")
-        else:
-            base_form = A6203_ModelForm(prefix="base_form")
-
-            attribute_form0 = Tang_niao_bing_cha_ti_biao_ModelForm(prefix="attribute_form0")
-        # context
-        context['base_form'] = base_form
-        context['attribute_form0'] = attribute_form0
-        context['user'] = self.request.user
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        customer = Customer.objects.get(user=context['user'])
-        operator = Staff.objects.get(user=context['user'])
-        # form_valid
-        f = context['attribute_form0'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        return super(Tang_niao_bing_cha_ti_biao_CreateView, self).form_valid(form)
-
-
-
-class Tang_niao_bing_cha_ti_biao_UpdateView(UpdateView):
-    success_url = 'forms/'
-    template_name = 'tang_niao_bing_cha_ti_biao_update.html'
-    form_class = Tang_niao_bing_cha_ti_biao_ModelForm # the first form ModelForm class
-    model = Tang_niao_bing_cha_ti_biao
-
-    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
-    #     return redirect(reverse('index'))
-    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
-
-    # # 构造作业开始消息参数
-    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
-
-    context = {}
-        
-    def get_context_data(self, **kwargs):
-        context = super(Tang_niao_bing_cha_ti_biao_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
-        customer = operation_proc.customer
-        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
-        if self.request.method == 'POST':
-            attribute_form0 = Tang_niao_bing_cha_ti_biao_ModelForm(self.request.POST, prefix="attribute_form0")
-            # 构造作业完成消息参数
-            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
-            return redirect(reverse('index'))
-        else:
-            attribute_form0 = Tang_niao_bing_cha_ti_biao_ModelForm(instance=Tang_niao_bing_cha_ti_biao.objects.get(pid=kwargs['id']), prefix="attribute_form0")
-        # context
-        context['base_form'] = base_form
-        context['attribute_form0'] = attribute_form0
-        context['user'] = self.request.user
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        customer = Customer.objects.get(user=context['user'])
-        operator = Staff.objects.get(user=context['user'])
-        # form_valid
-        f = context['attribute_form0'].save(commit=False)
-        f.customer = customer
-        f.operator = operator
-        f.save()
-        return super(Tang_niao_bing_cha_ti_biao_CreateView, self).form_valid(form)
-
 class Men_zhen_chu_fang_biao_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'men_zhen_chu_fang_biao_create.html'
-    form_class = A5001_ModelForm # the first form ModelForm class
+    form_class = A5001_ModelForm  # the first form ModelForm class
     model = A5001
     context = {}
 
@@ -333,15 +117,15 @@ class Men_zhen_chu_fang_biao_UpdateView(UpdateView):
         f.save()
         return super(Men_zhen_chu_fang_biao_CreateView, self).form_valid(form)
 
-class User_registry_CreateView(CreateView):
+class Z6201_CreateView(CreateView):
     success_url = 'forms/'
-    template_name = 'user_registry_create.html'
-    form_class = Z6201_ModelForm # the first form ModelForm class
+    template_name = 'Z6201_create.html'
+    form_class = Z6201_ModelForm  # the first form ModelForm class
     model = Z6201
     context = {}
 
     def get_context_data(self, **kwargs):
-        context = super(User_registry_CreateView, self).get_context_data(**kwargs)
+        context = super(Z6201_CreateView, self).get_context_data(**kwargs)
         if self.request.method == 'POST':
             base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
 
@@ -365,13 +149,13 @@ class User_registry_CreateView(CreateView):
         f.customer = customer
         f.operator = operator
         f.save()
-        return super(User_registry_CreateView, self).form_valid(form)
+        return super(Z6201_CreateView, self).form_valid(form)
 
 
 
-class User_registry_UpdateView(UpdateView):
+class Z6201_UpdateView(UpdateView):
     success_url = 'forms/'
-    template_name = 'user_registry_update.html'
+    template_name = 'Z6201_update.html'
     form_class = Z6201_ModelForm # the first form ModelForm class
     model = Z6201
 
@@ -385,7 +169,7 @@ class User_registry_UpdateView(UpdateView):
     context = {}
         
     def get_context_data(self, **kwargs):
-        context = super(User_registry_UpdateView, self).get_context_data(**kwargs)
+        context = super(Z6201_UpdateView, self).get_context_data(**kwargs)
         operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
@@ -411,12 +195,12 @@ class User_registry_UpdateView(UpdateView):
         f.customer = customer
         f.operator = operator
         f.save()
-        return super(User_registry_CreateView, self).form_valid(form)
+        return super(Z6201_CreateView, self).form_valid(form)
 
 class User_login_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'user_login_create.html'
-    form_class = Z6230_ModelForm # the first form ModelForm class
+    form_class = Z6230_ModelForm  # the first form ModelForm class
     model = Z6230
     context = {}
 
@@ -496,7 +280,7 @@ class User_login_UpdateView(UpdateView):
 class Doctor_login_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'doctor_login_create.html'
-    form_class = Z6230_ModelForm # the first form ModelForm class
+    form_class = Z6230_ModelForm  # the first form ModelForm class
     model = Z6230
     context = {}
 
@@ -576,7 +360,7 @@ class Doctor_login_UpdateView(UpdateView):
 class A6501_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A6501_create.html'
-    form_class = A6501_ModelForm # the first form ModelForm class
+    form_class = A6501_ModelForm  # the first form ModelForm class
     model = A6501
     context = {}
 
@@ -653,10 +437,90 @@ class A6501_UpdateView(UpdateView):
         f.save()
         return super(A6501_CreateView, self).form_valid(form)
 
+class A6502_CreateView(CreateView):
+    success_url = 'forms/'
+    template_name = 'A6502_create.html'
+    form_class = A6502_ModelForm  # the first form ModelForm class
+    model = A6502
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(A6502_CreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
+            attribute_form0 = A6502_ModelForm(self.request.POST, prefix="attribute_form0")
+        else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
+            attribute_form0 = A6502_ModelForm(prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(A6502_CreateView, self).form_valid(form)
+
+
+
+class A6502_UpdateView(UpdateView):
+    success_url = 'forms/'
+    template_name = 'A6502_update.html'
+    form_class = A6502_ModelForm # the first form ModelForm class
+    model = A6502
+
+    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+    #     return redirect(reverse('index'))
+    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
+
+    # # 构造作业开始消息参数
+    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
+
+    context = {}
+        
+    def get_context_data(self, **kwargs):
+        context = super(A6502_UpdateView, self).get_context_data(**kwargs)
+        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        customer = operation_proc.customer
+        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
+        if self.request.method == 'POST':
+            attribute_form0 = A6502_ModelForm(self.request.POST, prefix="attribute_form0")
+            # 构造作业完成消息参数
+            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
+            return redirect(reverse('index'))
+        else:
+            attribute_form0 = A6502_ModelForm(instance=A6502.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(A6502_CreateView, self).form_valid(form)
+
 class Men_zhen_fu_zhu_jian_cha_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'men_zhen_fu_zhu_jian_cha_create.html'
-    form_class = A3001_ModelForm # the first form ModelForm class
+    form_class = A3001_ModelForm  # the first form ModelForm class
     model = A3001
     context = {}
 
@@ -736,7 +600,7 @@ class Men_zhen_fu_zhu_jian_cha_UpdateView(UpdateView):
 class Tang_niao_bing_zhuan_yong_wen_zhen_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'tang_niao_bing_zhuan_yong_wen_zhen_create.html'
-    form_class = A6219_ModelForm # the first form ModelForm class
+    form_class = A6219_ModelForm  # the first form ModelForm class
     model = A6219
     context = {}
 
@@ -816,7 +680,7 @@ class Tang_niao_bing_zhuan_yong_wen_zhen_UpdateView(UpdateView):
 class Yao_shi_fu_wu_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'yao_shi_fu_wu_create.html'
-    form_class = A5002_ModelForm # the first form ModelForm class
+    form_class = A5002_ModelForm  # the first form ModelForm class
     model = A5002
     context = {}
 
@@ -896,7 +760,7 @@ class Yao_shi_fu_wu_UpdateView(UpdateView):
 class Tang_niao_bing_zi_wo_jian_ce_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'tang_niao_bing_zi_wo_jian_ce_create.html'
-    form_class = T4505_ModelForm # the first form ModelForm class
+    form_class = T4505_ModelForm  # the first form ModelForm class
     model = T4505
     context = {}
 
@@ -973,15 +837,15 @@ class Tang_niao_bing_zi_wo_jian_ce_UpdateView(UpdateView):
         f.save()
         return super(Tang_niao_bing_zi_wo_jian_ce_CreateView, self).form_valid(form)
 
-class Yuan_nei_fu_zhu_wen_zhen_CreateView(CreateView):
+class A6217_CreateView(CreateView):
     success_url = 'forms/'
-    template_name = 'yuan_nei_fu_zhu_wen_zhen_create.html'
-    form_class = A6217_ModelForm # the first form ModelForm class
+    template_name = 'A6217_create.html'
+    form_class = A6217_ModelForm  # the first form ModelForm class
     model = A6217
     context = {}
 
     def get_context_data(self, **kwargs):
-        context = super(Yuan_nei_fu_zhu_wen_zhen_CreateView, self).get_context_data(**kwargs)
+        context = super(A6217_CreateView, self).get_context_data(**kwargs)
         if self.request.method == 'POST':
             base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
 
@@ -1005,13 +869,13 @@ class Yuan_nei_fu_zhu_wen_zhen_CreateView(CreateView):
         f.customer = customer
         f.operator = operator
         f.save()
-        return super(Yuan_nei_fu_zhu_wen_zhen_CreateView, self).form_valid(form)
+        return super(A6217_CreateView, self).form_valid(form)
 
 
 
-class Yuan_nei_fu_zhu_wen_zhen_UpdateView(UpdateView):
+class A6217_UpdateView(UpdateView):
     success_url = 'forms/'
-    template_name = 'yuan_nei_fu_zhu_wen_zhen_update.html'
+    template_name = 'A6217_update.html'
     form_class = A6217_ModelForm # the first form ModelForm class
     model = A6217
 
@@ -1025,7 +889,7 @@ class Yuan_nei_fu_zhu_wen_zhen_UpdateView(UpdateView):
     context = {}
         
     def get_context_data(self, **kwargs):
-        context = super(Yuan_nei_fu_zhu_wen_zhen_UpdateView, self).get_context_data(**kwargs)
+        context = super(A6217_UpdateView, self).get_context_data(**kwargs)
         operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
@@ -1051,12 +915,12 @@ class Yuan_nei_fu_zhu_wen_zhen_UpdateView(UpdateView):
         f.customer = customer
         f.operator = operator
         f.save()
-        return super(Yuan_nei_fu_zhu_wen_zhen_CreateView, self).form_valid(form)
+        return super(A6217_CreateView, self).form_valid(form)
 
 class A6201_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A6201_create.html'
-    form_class = A6201_ModelForm # the first form ModelForm class
+    form_class = A6201_ModelForm  # the first form ModelForm class
     model = A6201
     context = {}
 
@@ -1133,15 +997,15 @@ class A6201_UpdateView(UpdateView):
         f.save()
         return super(A6201_CreateView, self).form_valid(form)
 
-class Men_zhen_yi_sheng_wen_zhen_CreateView(CreateView):
+class A6218_CreateView(CreateView):
     success_url = 'forms/'
-    template_name = 'men_zhen_yi_sheng_wen_zhen_create.html'
-    form_class = A6218_ModelForm # the first form ModelForm class
+    template_name = 'A6218_create.html'
+    form_class = A6218_ModelForm  # the first form ModelForm class
     model = A6218
     context = {}
 
     def get_context_data(self, **kwargs):
-        context = super(Men_zhen_yi_sheng_wen_zhen_CreateView, self).get_context_data(**kwargs)
+        context = super(A6218_CreateView, self).get_context_data(**kwargs)
         if self.request.method == 'POST':
             base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
 
@@ -1165,13 +1029,13 @@ class Men_zhen_yi_sheng_wen_zhen_CreateView(CreateView):
         f.customer = customer
         f.operator = operator
         f.save()
-        return super(Men_zhen_yi_sheng_wen_zhen_CreateView, self).form_valid(form)
+        return super(A6218_CreateView, self).form_valid(form)
 
 
 
-class Men_zhen_yi_sheng_wen_zhen_UpdateView(UpdateView):
+class A6218_UpdateView(UpdateView):
     success_url = 'forms/'
-    template_name = 'men_zhen_yi_sheng_wen_zhen_update.html'
+    template_name = 'A6218_update.html'
     form_class = A6218_ModelForm # the first form ModelForm class
     model = A6218
 
@@ -1185,7 +1049,7 @@ class Men_zhen_yi_sheng_wen_zhen_UpdateView(UpdateView):
     context = {}
         
     def get_context_data(self, **kwargs):
-        context = super(Men_zhen_yi_sheng_wen_zhen_UpdateView, self).get_context_data(**kwargs)
+        context = super(A6218_UpdateView, self).get_context_data(**kwargs)
         operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
@@ -1211,13 +1075,13 @@ class Men_zhen_yi_sheng_wen_zhen_UpdateView(UpdateView):
         f.customer = customer
         f.operator = operator
         f.save()
-        return super(Men_zhen_yi_sheng_wen_zhen_CreateView, self).form_valid(form)
+        return super(A6218_CreateView, self).form_valid(form)
 
 class T8901_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'T8901_create.html'
-    form_class = Tang_niao_bing_zhen_duan_biao_ModelForm # the first form ModelForm class
-    model = Tang_niao_bing_zhen_duan_biao
+    form_class = T9001_ModelForm  # the first form ModelForm class
+    model = T9001
     context = {}
 
     def get_context_data(self, **kwargs):
@@ -1225,11 +1089,11 @@ class T8901_CreateView(CreateView):
         if self.request.method == 'POST':
             base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
 
-            attribute_form0 = Tang_niao_bing_zhen_duan_biao_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form0 = T9001_ModelForm(self.request.POST, prefix="attribute_form0")
         else:
             base_form = A6203_ModelForm(prefix="base_form")
 
-            attribute_form0 = Tang_niao_bing_zhen_duan_biao_ModelForm(prefix="attribute_form0")
+            attribute_form0 = T9001_ModelForm(prefix="attribute_form0")
         # context
         context['base_form'] = base_form
         context['attribute_form0'] = attribute_form0
@@ -1252,8 +1116,8 @@ class T8901_CreateView(CreateView):
 class T8901_UpdateView(UpdateView):
     success_url = 'forms/'
     template_name = 'T8901_update.html'
-    form_class = Tang_niao_bing_zhen_duan_biao_ModelForm # the first form ModelForm class
-    model = Tang_niao_bing_zhen_duan_biao
+    form_class = T9001_ModelForm # the first form ModelForm class
+    model = T9001
 
     # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
     #     return redirect(reverse('index'))
@@ -1270,12 +1134,12 @@ class T8901_UpdateView(UpdateView):
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
-            attribute_form0 = Tang_niao_bing_zhen_duan_biao_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form0 = T9001_ModelForm(self.request.POST, prefix="attribute_form0")
             # 构造作业完成消息参数
             operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
             return redirect(reverse('index'))
         else:
-            attribute_form0 = Tang_niao_bing_zhen_duan_biao_ModelForm(instance=Tang_niao_bing_zhen_duan_biao.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+            attribute_form0 = T9001_ModelForm(instance=T9001.objects.get(pid=kwargs['id']), prefix="attribute_form0")
         # context
         context['base_form'] = base_form
         context['attribute_form0'] = attribute_form0
@@ -1296,7 +1160,7 @@ class T8901_UpdateView(UpdateView):
 class T6301_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'T6301_create.html'
-    form_class = T6301_ModelForm # the first form ModelForm class
+    form_class = T6301_ModelForm  # the first form ModelForm class
     model = T6301
     context = {}
 
@@ -1376,7 +1240,7 @@ class T6301_UpdateView(UpdateView):
 class A6202_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A6202_create.html'
-    form_class = A6202_ModelForm # the first form ModelForm class
+    form_class = A6202_ModelForm  # the first form ModelForm class
     model = A6202
     context = {}
 
@@ -1456,7 +1320,7 @@ class A6202_UpdateView(UpdateView):
 class A6220_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A6220_create.html'
-    form_class = A6220_ModelForm # the first form ModelForm class
+    form_class = A6220_ModelForm  # the first form ModelForm class
     model = A6220
     context = {}
 
@@ -1536,8 +1400,8 @@ class A6220_UpdateView(UpdateView):
 class A6299_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A6299_create.html'
-    form_class = A6203_ModelForm # the first form ModelForm class
-    model = A6203
+    form_class = A6207_ModelForm  # the first form ModelForm class
+    model = A6207
     context = {}
 
     def get_context_data(self, **kwargs):
@@ -1545,35 +1409,35 @@ class A6299_CreateView(CreateView):
         if self.request.method == 'POST':
             base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
 
-            attribute_form0 = A6203_ModelForm(self.request.POST, prefix="attribute_form0")
-            attribute_form1 = A6210_ModelForm(self.request.POST, prefix="attribute_form1")
-            attribute_form2 = A6207_ModelForm(self.request.POST, prefix="attribute_form2")
-            attribute_form3 = A6209_ModelForm(self.request.POST, prefix="attribute_form3")
-            attribute_form4 = A6205_ModelForm(self.request.POST, prefix="attribute_form4")
+            attribute_form0 = A6207_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form1 = A6212_ModelForm(self.request.POST, prefix="attribute_form1")
+            attribute_form2 = A6209_ModelForm(self.request.POST, prefix="attribute_form2")
+            attribute_form3 = A6213_ModelForm(self.request.POST, prefix="attribute_form3")
+            attribute_form4 = A6215_ModelForm(self.request.POST, prefix="attribute_form4")
             attribute_form5 = A6204_ModelForm(self.request.POST, prefix="attribute_form5")
-            attribute_form6 = A6206_ModelForm(self.request.POST, prefix="attribute_form6")
-            attribute_form7 = A6208_ModelForm(self.request.POST, prefix="attribute_form7")
-            attribute_form8 = A6213_ModelForm(self.request.POST, prefix="attribute_form8")
-            attribute_form9 = A6215_ModelForm(self.request.POST, prefix="attribute_form9")
-            attribute_form10 = A6214_ModelForm(self.request.POST, prefix="attribute_form10")
-            attribute_form11 = A6212_ModelForm(self.request.POST, prefix="attribute_form11")
-            attribute_form12 = A6216_ModelForm(self.request.POST, prefix="attribute_form12")
+            attribute_form6 = A6216_ModelForm(self.request.POST, prefix="attribute_form6")
+            attribute_form7 = A6205_ModelForm(self.request.POST, prefix="attribute_form7")
+            attribute_form8 = A6214_ModelForm(self.request.POST, prefix="attribute_form8")
+            attribute_form9 = A6206_ModelForm(self.request.POST, prefix="attribute_form9")
+            attribute_form10 = A6208_ModelForm(self.request.POST, prefix="attribute_form10")
+            attribute_form11 = A6203_ModelForm(self.request.POST, prefix="attribute_form11")
+            attribute_form12 = A6210_ModelForm(self.request.POST, prefix="attribute_form12")
         else:
             base_form = A6203_ModelForm(prefix="base_form")
 
-            attribute_form0 = A6203_ModelForm(prefix="attribute_form0")
-            attribute_form1 = A6210_ModelForm(prefix="attribute_form1")
-            attribute_form2 = A6207_ModelForm(prefix="attribute_form2")
-            attribute_form3 = A6209_ModelForm(prefix="attribute_form3")
-            attribute_form4 = A6205_ModelForm(prefix="attribute_form4")
+            attribute_form0 = A6207_ModelForm(prefix="attribute_form0")
+            attribute_form1 = A6212_ModelForm(prefix="attribute_form1")
+            attribute_form2 = A6209_ModelForm(prefix="attribute_form2")
+            attribute_form3 = A6213_ModelForm(prefix="attribute_form3")
+            attribute_form4 = A6215_ModelForm(prefix="attribute_form4")
             attribute_form5 = A6204_ModelForm(prefix="attribute_form5")
-            attribute_form6 = A6206_ModelForm(prefix="attribute_form6")
-            attribute_form7 = A6208_ModelForm(prefix="attribute_form7")
-            attribute_form8 = A6213_ModelForm(prefix="attribute_form8")
-            attribute_form9 = A6215_ModelForm(prefix="attribute_form9")
-            attribute_form10 = A6214_ModelForm(prefix="attribute_form10")
-            attribute_form11 = A6212_ModelForm(prefix="attribute_form11")
-            attribute_form12 = A6216_ModelForm(prefix="attribute_form12")
+            attribute_form6 = A6216_ModelForm(prefix="attribute_form6")
+            attribute_form7 = A6205_ModelForm(prefix="attribute_form7")
+            attribute_form8 = A6214_ModelForm(prefix="attribute_form8")
+            attribute_form9 = A6206_ModelForm(prefix="attribute_form9")
+            attribute_form10 = A6208_ModelForm(prefix="attribute_form10")
+            attribute_form11 = A6203_ModelForm(prefix="attribute_form11")
+            attribute_form12 = A6210_ModelForm(prefix="attribute_form12")
         # context
         context['base_form'] = base_form
         context['attribute_form0'] = attribute_form0
@@ -1656,8 +1520,8 @@ class A6299_CreateView(CreateView):
 class A6299_UpdateView(UpdateView):
     success_url = 'forms/'
     template_name = 'A6299_update.html'
-    form_class = A6203_ModelForm # the first form ModelForm class
-    model = A6203
+    form_class = A6207_ModelForm # the first form ModelForm class
+    model = A6207
 
     # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
     #     return redirect(reverse('index'))
@@ -1674,36 +1538,36 @@ class A6299_UpdateView(UpdateView):
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
-            attribute_form0 = A6203_ModelForm(self.request.POST, prefix="attribute_form0")
-            attribute_form1 = A6210_ModelForm(self.request.POST, prefix="attribute_form1")
-            attribute_form2 = A6207_ModelForm(self.request.POST, prefix="attribute_form2")
-            attribute_form3 = A6209_ModelForm(self.request.POST, prefix="attribute_form3")
-            attribute_form4 = A6205_ModelForm(self.request.POST, prefix="attribute_form4")
+            attribute_form0 = A6207_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form1 = A6212_ModelForm(self.request.POST, prefix="attribute_form1")
+            attribute_form2 = A6209_ModelForm(self.request.POST, prefix="attribute_form2")
+            attribute_form3 = A6213_ModelForm(self.request.POST, prefix="attribute_form3")
+            attribute_form4 = A6215_ModelForm(self.request.POST, prefix="attribute_form4")
             attribute_form5 = A6204_ModelForm(self.request.POST, prefix="attribute_form5")
-            attribute_form6 = A6206_ModelForm(self.request.POST, prefix="attribute_form6")
-            attribute_form7 = A6208_ModelForm(self.request.POST, prefix="attribute_form7")
-            attribute_form8 = A6213_ModelForm(self.request.POST, prefix="attribute_form8")
-            attribute_form9 = A6215_ModelForm(self.request.POST, prefix="attribute_form9")
-            attribute_form10 = A6214_ModelForm(self.request.POST, prefix="attribute_form10")
-            attribute_form11 = A6212_ModelForm(self.request.POST, prefix="attribute_form11")
-            attribute_form12 = A6216_ModelForm(self.request.POST, prefix="attribute_form12")
+            attribute_form6 = A6216_ModelForm(self.request.POST, prefix="attribute_form6")
+            attribute_form7 = A6205_ModelForm(self.request.POST, prefix="attribute_form7")
+            attribute_form8 = A6214_ModelForm(self.request.POST, prefix="attribute_form8")
+            attribute_form9 = A6206_ModelForm(self.request.POST, prefix="attribute_form9")
+            attribute_form10 = A6208_ModelForm(self.request.POST, prefix="attribute_form10")
+            attribute_form11 = A6203_ModelForm(self.request.POST, prefix="attribute_form11")
+            attribute_form12 = A6210_ModelForm(self.request.POST, prefix="attribute_form12")
             # 构造作业完成消息参数
             operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
             return redirect(reverse('index'))
         else:
-            attribute_form0 = A6203_ModelForm(instance=A6203.objects.get(pid=kwargs['id']), prefix="attribute_form0")
-            attribute_form1 = A6210_ModelForm(instance=A6210.objects.get(pid=kwargs['id']), prefix="attribute_form1")
-            attribute_form2 = A6207_ModelForm(instance=A6207.objects.get(pid=kwargs['id']), prefix="attribute_form2")
-            attribute_form3 = A6209_ModelForm(instance=A6209.objects.get(pid=kwargs['id']), prefix="attribute_form3")
-            attribute_form4 = A6205_ModelForm(instance=A6205.objects.get(pid=kwargs['id']), prefix="attribute_form4")
+            attribute_form0 = A6207_ModelForm(instance=A6207.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+            attribute_form1 = A6212_ModelForm(instance=A6212.objects.get(pid=kwargs['id']), prefix="attribute_form1")
+            attribute_form2 = A6209_ModelForm(instance=A6209.objects.get(pid=kwargs['id']), prefix="attribute_form2")
+            attribute_form3 = A6213_ModelForm(instance=A6213.objects.get(pid=kwargs['id']), prefix="attribute_form3")
+            attribute_form4 = A6215_ModelForm(instance=A6215.objects.get(pid=kwargs['id']), prefix="attribute_form4")
             attribute_form5 = A6204_ModelForm(instance=A6204.objects.get(pid=kwargs['id']), prefix="attribute_form5")
-            attribute_form6 = A6206_ModelForm(instance=A6206.objects.get(pid=kwargs['id']), prefix="attribute_form6")
-            attribute_form7 = A6208_ModelForm(instance=A6208.objects.get(pid=kwargs['id']), prefix="attribute_form7")
-            attribute_form8 = A6213_ModelForm(instance=A6213.objects.get(pid=kwargs['id']), prefix="attribute_form8")
-            attribute_form9 = A6215_ModelForm(instance=A6215.objects.get(pid=kwargs['id']), prefix="attribute_form9")
-            attribute_form10 = A6214_ModelForm(instance=A6214.objects.get(pid=kwargs['id']), prefix="attribute_form10")
-            attribute_form11 = A6212_ModelForm(instance=A6212.objects.get(pid=kwargs['id']), prefix="attribute_form11")
-            attribute_form12 = A6216_ModelForm(instance=A6216.objects.get(pid=kwargs['id']), prefix="attribute_form12")
+            attribute_form6 = A6216_ModelForm(instance=A6216.objects.get(pid=kwargs['id']), prefix="attribute_form6")
+            attribute_form7 = A6205_ModelForm(instance=A6205.objects.get(pid=kwargs['id']), prefix="attribute_form7")
+            attribute_form8 = A6214_ModelForm(instance=A6214.objects.get(pid=kwargs['id']), prefix="attribute_form8")
+            attribute_form9 = A6206_ModelForm(instance=A6206.objects.get(pid=kwargs['id']), prefix="attribute_form9")
+            attribute_form10 = A6208_ModelForm(instance=A6208.objects.get(pid=kwargs['id']), prefix="attribute_form10")
+            attribute_form11 = A6203_ModelForm(instance=A6203.objects.get(pid=kwargs['id']), prefix="attribute_form11")
+            attribute_form12 = A6210_ModelForm(instance=A6210.objects.get(pid=kwargs['id']), prefix="attribute_form12")
         # context
         context['base_form'] = base_form
         context['attribute_form0'] = attribute_form0
@@ -1784,7 +1648,7 @@ class A6299_UpdateView(UpdateView):
 class A3502_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A3502_create.html'
-    form_class = A3502_ModelForm # the first form ModelForm class
+    form_class = A3502_ModelForm  # the first form ModelForm class
     model = A3502
     context = {}
 
@@ -1860,3 +1724,417 @@ class A3502_UpdateView(UpdateView):
         f.operator = operator
         f.save()
         return super(A3502_CreateView, self).form_valid(form)
+
+class Tang_niao_bing_cha_ti_CreateView(CreateView):
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_cha_ti_create.html'
+    form_class = T3003_ModelForm  # the first form ModelForm class
+    model = T3003
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(Tang_niao_bing_cha_ti_CreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
+            attribute_form0 = T3003_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form1 = T3002_ModelForm(self.request.POST, prefix="attribute_form1")
+        else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
+            attribute_form0 = T3003_ModelForm(prefix="attribute_form0")
+            attribute_form1 = T3002_ModelForm(prefix="attribute_form1")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['attribute_form1'] = attribute_form1
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        f = context['attribute_form1'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Tang_niao_bing_cha_ti_CreateView, self).form_valid(form)
+
+
+
+class Tang_niao_bing_cha_ti_UpdateView(UpdateView):
+    success_url = 'forms/'
+    template_name = 'tang_niao_bing_cha_ti_update.html'
+    form_class = T3003_ModelForm # the first form ModelForm class
+    model = T3003
+
+    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+    #     return redirect(reverse('index'))
+    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
+
+    # # 构造作业开始消息参数
+    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
+
+    context = {}
+        
+    def get_context_data(self, **kwargs):
+        context = super(Tang_niao_bing_cha_ti_UpdateView, self).get_context_data(**kwargs)
+        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        customer = operation_proc.customer
+        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
+        if self.request.method == 'POST':
+            attribute_form0 = T3003_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form1 = T3002_ModelForm(self.request.POST, prefix="attribute_form1")
+            # 构造作业完成消息参数
+            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
+            return redirect(reverse('index'))
+        else:
+            attribute_form0 = T3003_ModelForm(instance=T3003.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+            attribute_form1 = T3002_ModelForm(instance=T3002.objects.get(pid=kwargs['id']), prefix="attribute_form1")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['attribute_form1'] = attribute_form1
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        f = context['attribute_form1'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Tang_niao_bing_cha_ti_CreateView, self).form_valid(form)
+
+class Xue_ya_jian_ce_CreateView(CreateView):
+    success_url = 'forms/'
+    template_name = 'xue_ya_jian_ce_create.html'
+    form_class = A3105_ModelForm  # the first form ModelForm class
+    model = A3105
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(Xue_ya_jian_ce_CreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
+            attribute_form0 = A3105_ModelForm(self.request.POST, prefix="attribute_form0")
+        else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
+            attribute_form0 = A3105_ModelForm(prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Xue_ya_jian_ce_CreateView, self).form_valid(form)
+
+
+
+class Xue_ya_jian_ce_UpdateView(UpdateView):
+    success_url = 'forms/'
+    template_name = 'xue_ya_jian_ce_update.html'
+    form_class = A3105_ModelForm # the first form ModelForm class
+    model = A3105
+
+    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+    #     return redirect(reverse('index'))
+    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
+
+    # # 构造作业开始消息参数
+    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
+
+    context = {}
+        
+    def get_context_data(self, **kwargs):
+        context = super(Xue_ya_jian_ce_UpdateView, self).get_context_data(**kwargs)
+        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        customer = operation_proc.customer
+        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
+        if self.request.method == 'POST':
+            attribute_form0 = A3105_ModelForm(self.request.POST, prefix="attribute_form0")
+            # 构造作业完成消息参数
+            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
+            return redirect(reverse('index'))
+        else:
+            attribute_form0 = A3105_ModelForm(instance=A3105.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Xue_ya_jian_ce_CreateView, self).form_valid(form)
+
+class Kong_fu_xue_tang_jian_cha_CreateView(CreateView):
+    success_url = 'forms/'
+    template_name = 'kong_fu_xue_tang_jian_cha_create.html'
+    form_class = T3404_ModelForm  # the first form ModelForm class
+    model = T3404
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(Kong_fu_xue_tang_jian_cha_CreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
+            attribute_form0 = T3404_ModelForm(self.request.POST, prefix="attribute_form0")
+        else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
+            attribute_form0 = T3404_ModelForm(prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Kong_fu_xue_tang_jian_cha_CreateView, self).form_valid(form)
+
+
+
+class Kong_fu_xue_tang_jian_cha_UpdateView(UpdateView):
+    success_url = 'forms/'
+    template_name = 'kong_fu_xue_tang_jian_cha_update.html'
+    form_class = T3404_ModelForm # the first form ModelForm class
+    model = T3404
+
+    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+    #     return redirect(reverse('index'))
+    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
+
+    # # 构造作业开始消息参数
+    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
+
+    context = {}
+        
+    def get_context_data(self, **kwargs):
+        context = super(Kong_fu_xue_tang_jian_cha_UpdateView, self).get_context_data(**kwargs)
+        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        customer = operation_proc.customer
+        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
+        if self.request.method == 'POST':
+            attribute_form0 = T3404_ModelForm(self.request.POST, prefix="attribute_form0")
+            # 构造作业完成消息参数
+            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
+            return redirect(reverse('index'))
+        else:
+            attribute_form0 = T3404_ModelForm(instance=T3404.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Kong_fu_xue_tang_jian_cha_CreateView, self).form_valid(form)
+
+class Tang_hua_xue_hong_dan_bai_jian_cha_biao_CreateView(CreateView):
+    success_url = 'forms/'
+    template_name = 'tang_hua_xue_hong_dan_bai_jian_cha_biao_create.html'
+    form_class = T3405_ModelForm  # the first form ModelForm class
+    model = T3405
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(Tang_hua_xue_hong_dan_bai_jian_cha_biao_CreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
+            attribute_form0 = T3405_ModelForm(self.request.POST, prefix="attribute_form0")
+        else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
+            attribute_form0 = T3405_ModelForm(prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Tang_hua_xue_hong_dan_bai_jian_cha_biao_CreateView, self).form_valid(form)
+
+
+
+class Tang_hua_xue_hong_dan_bai_jian_cha_biao_UpdateView(UpdateView):
+    success_url = 'forms/'
+    template_name = 'tang_hua_xue_hong_dan_bai_jian_cha_biao_update.html'
+    form_class = T3405_ModelForm # the first form ModelForm class
+    model = T3405
+
+    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+    #     return redirect(reverse('index'))
+    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
+
+    # # 构造作业开始消息参数
+    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
+
+    context = {}
+        
+    def get_context_data(self, **kwargs):
+        context = super(Tang_hua_xue_hong_dan_bai_jian_cha_biao_UpdateView, self).get_context_data(**kwargs)
+        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        customer = operation_proc.customer
+        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
+        if self.request.method == 'POST':
+            attribute_form0 = T3405_ModelForm(self.request.POST, prefix="attribute_form0")
+            # 构造作业完成消息参数
+            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
+            return redirect(reverse('index'))
+        else:
+            attribute_form0 = T3405_ModelForm(instance=T3405.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(Tang_hua_xue_hong_dan_bai_jian_cha_biao_CreateView, self).form_valid(form)
+
+class T9001_CreateView(CreateView):
+    success_url = 'forms/'
+    template_name = 'T9001_create.html'
+    form_class = T9001_ModelForm  # the first form ModelForm class
+    model = T9001
+    context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(T9001_CreateView, self).get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
+
+            attribute_form0 = T9001_ModelForm(self.request.POST, prefix="attribute_form0")
+        else:
+            base_form = A6203_ModelForm(prefix="base_form")
+
+            attribute_form0 = T9001_ModelForm(prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(T9001_CreateView, self).form_valid(form)
+
+
+
+class T9001_UpdateView(UpdateView):
+    success_url = 'forms/'
+    template_name = 'T9001_update.html'
+    form_class = T9001_ModelForm # the first form ModelForm class
+    model = T9001
+
+    # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
+    #     return redirect(reverse('index'))
+    # operation_proc.group.set([])  # 设置作业进程所属角色组为空
+
+    # # 构造作业开始消息参数
+    # operand_started.send(sender=self, operation_proc=operation_proc, ocode='rtr', operator=self.request.user)
+
+    context = {}
+        
+    def get_context_data(self, **kwargs):
+        context = super(T9001_UpdateView, self).get_context_data(**kwargs)
+        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        customer = operation_proc.customer
+        base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
+        if self.request.method == 'POST':
+            attribute_form0 = T9001_ModelForm(self.request.POST, prefix="attribute_form0")
+            # 构造作业完成消息参数
+            operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
+            return redirect(reverse('index'))
+        else:
+            attribute_form0 = T9001_ModelForm(instance=T9001.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+        # context
+        context['base_form'] = base_form
+        context['attribute_form0'] = attribute_form0
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        customer = Customer.objects.get(user=context['user'])
+        operator = Staff.objects.get(user=context['user'])
+        # form_valid
+        f = context['attribute_form0'].save(commit=False)
+        f.customer = customer
+        f.operator = operator
+        f.save()
+        return super(T9001_CreateView, self).form_valid(form)

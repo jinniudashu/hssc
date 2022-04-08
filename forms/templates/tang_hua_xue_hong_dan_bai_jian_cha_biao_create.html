@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
 
-{% block content %}
-
-	<form action={% url 'tang_hua_xue_hong_dan_bai_jian_cha_biao_create_url' %} method='POST' enctype='multipart/form-data'> 
-		{% csrf_token %}
-            
-        <h5>个人基本情况_查询视图_1642159528</h5>
-        {{ form_basic_personal_information.as_p }}
+    {% block content %}
+    
+        <form action='' method='GET' enctype='multipart/form-data'> 
+            {% csrf_token %}                
+            <h5>个人基本信息</h5>
+            {{ base_form.as_table }}
+        </form>
         <hr>
-        <h5>糖化血红蛋白检查表</h5>
-        {{ form_tang_hua_xue_hong_dan_bai_jian_cha_biao.as_p }}
+        <form id='attribute_form0' action={% url 'tang_hua_xue_hong_dan_bai_jian_cha_biao_create_url' %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}                
+            <h5>糖化血红蛋白检查</h5>
+            {{ attribute_form0.as_p }}
+            <input type="submit" value="保存表单" onclick="formSave('attribute_form0')" />
+        </form>
         <hr>
-		<input type="submit" value="提交" /> 
-	</form>
-
-{% endblock %}
+        <input type="submit" value="完成服务" onclick="formSave('attribute_form1')" />
+    {% endblock %}
+    

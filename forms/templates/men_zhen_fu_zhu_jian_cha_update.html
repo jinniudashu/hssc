@@ -12,7 +12,7 @@
         <hr>
         <form id='attribute_form0' action={% url 'men_zhen_fu_zhu_jian_cha_update_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
-            <h5>体格检查/完整的健康评估</h5>
+            <h5>辅助检查表</h5>
             {{ attribute_form0.as_p }}
             <input type="submit" value="保存表单" onclick="formSave('attribute_form0')" />
         </form>

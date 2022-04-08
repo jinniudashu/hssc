@@ -12,7 +12,7 @@
         <hr>
         <form id='attribute_form0' action={% url 'T8901_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
-            <h5>糖尿病诊断表</h5>
+            <h5>非胰岛素依赖性糖尿病</h5>
             {{ attribute_form0.as_p }}
             <input type="submit" value="保存表单" onclick="formSave('attribute_form0')" />
         </form>
