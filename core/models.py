@@ -1,13 +1,19 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.shortcuts import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User, Group
-
-from time import time
+from django.forms.models import model_to_dict
+from django.utils import timezone
 from django.utils.text import slugify
-from pypinyin import lazy_pinyin
-
+from enum import Enum
+from time import time
+import datetime
+from itertools import chain
 import json
+import uuid
+from pypinyin import lazy_pinyin
 
 
 # 系统保留事件(form, event_name)
@@ -24,96 +30,26 @@ SYSTEM_OPERAND = [
 	{'name': 'doctor_login', 'label': '员工登录', 'forms': None},      # 员工登录
 ]
 
-
 def gen_slug(s):
     slug = slugify(s, allow_unicode=True)
     return slug + f'-{int(time())}'
 
 
-class Workgroup(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name='名称')
-    label = models.CharField(max_length=255, verbose_name='服务小组名称')
-    group_leader = models.ForeignKey('Staff', on_delete=CASCADE, related_name='group_leader', verbose_name='组长')
-
-    def __str__(self):
-        return str(self.label)
-
-    def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = f'{"_".join(lazy_pinyin(self.label))}'
-        super().save(*args, **kwargs)
+class HsscBase(models.Model):
+    hssc_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="hsscID")
+    label = models.CharField(max_length=255, null=True, verbose_name="名称")
+    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="name")
 
     class Meta:
-        verbose_name = "服务小组"
-        verbose_name_plural = "服务小组"
-        ordering = ['id']
+        abstract = True
 
+    def __str__(self):
+        return str(self.hssc_id)
 
-class Staff(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='员工')
-	name = models.CharField(max_length=50)
-	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
-	email = models.EmailField(max_length=50)
-	Title = [(i, i) for i in ['主任医师', '副主任医师', '主治医师', '住院医师', '主任护师', '副主任护师', '主管护师', '护士长', '护士', '其他']]
-	title = models.PositiveSmallIntegerField(choices=Title, blank=True, null=True, verbose_name='职称')
-	assistant_physician = models.BooleanField(blank=True, null=True, verbose_name='助理医师')
-	resume = models.TextField(blank=True, null=True, verbose_name='简历')
-	Service_Lever = [(i, i) for i in ['低', '中', '高']]
-	service_lever = models.PositiveSmallIntegerField(choices=Service_Lever, blank=True, null=True, verbose_name='服务级别')
-	phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='电话')
-	workgroup = models.ManyToManyField(Workgroup, verbose_name='服务小组')
-	registration_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='挂号费')
-	standardized_workload = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='标化工作量')
-	slug = models.SlugField(max_length=150, blank=True)
-
-	def __str__(self):
-		return str(self.name)
-
-	class Meta:
-		verbose_name = "员工基本信息"
-		verbose_name_plural = "员工基本信息"
-
-	def get_absolute_url(self):
-		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
-
-	def get_update_url(self):
-		return reverse("Staff_update_url", kwargs={"slug":self.slug})
-
-	def get_delete_url(self):
-		return reverse("Staff_delete_url", kwargs={"slug":self.slug})
-
-	def save(self, *args, **kwargs):
-		if not self.id:
-			self.slug = gen_slug(self._meta.model_name)
-		super().save(*args, **kwargs)
-
-
-class Customer(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='客户')
-	name = models.CharField(max_length=50)
-	phone = models.CharField(max_length=20, blank=True, null=True)
-	slug = models.SlugField(max_length=150, blank=True)
-
-	def __str__(self):
-		return str(self.name)
-
-	class Meta:
-		verbose_name = "客户注册信息"
-		verbose_name_plural = "客户注册信息"
-
-	def get_absolute_url(self):
-		return reverse("Staff_detail_url", kwargs={"slug":self.slug})
-
-	def get_update_url(self):
-		return reverse("Staff_update_url", kwargs={"slug":self.slug})
-
-	def get_delete_url(self):
-		return reverse("Staff_delete_url", kwargs={"slug":self.slug})
-
-	def save(self, *args, **kwargs):
-		if not self.id:
-			self.slug = gen_slug(self._meta.model_name)
-		super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.hssc_id is None:
+            self.hssc_id = uuid.uuid1()
+        super().save(*args, **kwargs)
 
 
 # 作业信息表
@@ -226,12 +162,12 @@ class Event_instructions(models.Model):
         ordering = ['event', 'order']
 
 
-# 服务进程表 Service_proc
-class Service_proc(models.Model):
+# 服务进程表 ServiceProc
+class ServiceProc(models.Model):
 	# 服务进程id: spid
 	service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="服务")  # 服务id: sid
-	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_uid', verbose_name="服务专员")  # 作业人员id: uid
-	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='service_cid', verbose_name="客户")  # 客户id: cid
+	operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='service_proc_operator', verbose_name="服务专员")  # 作业人员id: uid
+	customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='service_proc_customer', verbose_name="客户")  # 客户id: cid
 	# workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="工作组")  # 工作小组：workgroup
 	
 	def __str__(self):
@@ -249,47 +185,401 @@ class Service_proc(models.Model):
 		ordering = ['id']
 
 
-# 作业进程表 Operation_proc
-class Operation_proc(models.Model):
-	# 作业进程id: pid
-	operation = models.ForeignKey(Operation, on_delete=models.CASCADE, verbose_name="作业")  # 作业id: oid
-	operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_uid', verbose_name="操作员")  # 作业员id: uid
-	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_cid', verbose_name="客户")  # 客户id: cid
-	group = models.ManyToManyField(Group, blank=True, verbose_name="角色组")  # 角色组：workgroup
-	# 维护作业进程状态：
-	'''
-		作业状态机操作码
-		('cre', 'CREATE'),					= 0
-		('ctr', 'CREATED TO READY'),		= 1
-		('rtr', 'READY TO RUNNING'),		= 2
-		('rth', 'RUNNING TO HANGUP'),		= 3
-		('htr', 'HANGUP TO READY'),			= 2
-		('rtc', 'RUNNING TO COMPLETED'),	= 4
-	'''
-	# 作业状态: state
-	Operation_proc_state = [
-		(0, '创建'),
-		(1, '就绪'),
-		(2, '运行'),
-		(3, '挂起'),
-		(4, '结束'),
-	]
-	state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
-	entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")  # 作业入口: operand/<int:id>/update_view
-	ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
-	service_proc = models.ForeignKey(Service_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程")  # 服务进程id: spid
-	form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
+class OperationProcManager(models.Manager):
+	# 当天常规任务, 优先级=2/3
+	def current_operations(self, operator):
+		procs = self.values('service__name', 'customer__name').filter(operator=operator, priority__in=[2, 3], scheduled_time__gte=datetime.datetime.now().date())
+		return procs
 	
-	def __str__(self):
-	# 	# return 作业名称-客户姓名
-		# return f'{self.operation.name}-{self.user.username}-{self.customer.username}'
-		return "%s - %s - %s" %(self.id, self.operation.label, self.customer.name)
+	# 当天紧急任务, 优先级=1
+	def urgent_operations(self, operator):
+		procs = self.values('service__name', 'customer__name').filter(operator=operator, priority=1)
+		return procs
 
-	def get_absolute_url(self):
-		# 返回作业入口url
-		return self.entry
+	# 本周任务
+	def week_operations(self, operator):
+		today = datetime.date.today()
+		this_week = [today + datetime.timedelta(days=1), today + datetime.timedelta(days=7)]
+		procs = self.values('service__name', 'customer__name').filter(operator=operator, scheduled_time__range=this_week)
+		return procs
+
+
+#作业进程状态机操作码ocode
+class OperationCode(Enum):
+	CRE = 0  # CREATE
+	CTR = 1  # CREATED TO READY
+	RTR = 2  # READY TO RUNNING
+	RTH = 3  # RUNNING TO HANGUP
+	HTR = 4  # HANGUP TO READY
+	RTC = 5  # RUNNING TO COMPLETED
+
+# 作业进程表 OperationProc
+class OperationProc(models.Model):
+    # 作业进程id: pid
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
+    operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_operator', verbose_name="操作员")  # 作业员id: uid
+    customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_customer', verbose_name="客户")  # 客户id: cid
+    group = models.ManyToManyField(Group, blank=True, verbose_name="角色组")  # 角色组：workgroup
+	# 作业状态: state
+    Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束')]
+    state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
+    Operation_priority = [(0, '0级'), (1, '紧急'), (2, '优先'), (3, '一般')]
+    priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name="优先级")
+    entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")  # 作业入口: operand/<int:id>/update_view
+    ppid = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
+    service_proc = models.ForeignKey(ServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程")  # 服务进程id: spid
+    form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
+    scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划时间")
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(editable=False, null=True, verbose_name="修改时间")
+    objects = OperationProcManager()
+
+    class Meta:
+        verbose_name = "作业进程"
+        verbose_name_plural = "作业进程"
+        ordering = ['id']
+
+    def __str__(self):
+	# 	# return 作业名称-客户姓名
+        # return f'{self.operation.name}-{self.user.username}-{self.customer.username}'
+        return "%s - %s - %s" %(self.id, self.service.label, self.customer.name)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created_time = timezone.now()
+        self.modified_time = timezone.now()
+        return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        # 返回作业入口url
+        return self.entry
+
+    def update_state(self, ocode):
+        '''
+        通过作业进程操作码维护作业进程状态：
+	    	Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束')]
+        '''
+        self.state = OperationCode[ocode].value
+        self.save()
+
+# 本段代码用于跟踪调试作业进程状态更新
+@receiver(post_save, sender=OperationProc)
+def new_operation_proc(instance, created, **kwargs):
+    if created: # ctr
+        print ('新作业进程被创建，进行资源请求...：new_operation_proc:', instance)
+    else:
+        if instance.state == 4:  # rtc            
+            print('rtc状态, 作业完成事件，进行调度')
+
+
+# # 系统作业指令表
+class SystemOperand(HsscBase):
+    func = models.CharField(max_length=255, blank=True, null=True, verbose_name="内部实现函数")
+    parameters = models.CharField(max_length=255, blank=True, null=True, verbose_name="参数")
+    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
+    Applicable = [(0, '作业'), (1, '单元服务'), (2, '服务包'), (3, '全部')]
+    applicable = models.PositiveSmallIntegerField(choices=Applicable, default=1, verbose_name='适用范围')
+
+    class Meta:
+        verbose_name = '系统自动作业'
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return self.func
+
+    def execute(self, **kwargs):
+        '''
+        执行作业
+        '''
+        class SystemOperandFunc(Enum):
+            CREATE_NEXT_SERVICE = self.create_next_service  # 生成后续服务
+            RECOMMEND_NEXT_SERVICE = self.recommend_next_service  # 推荐后续服务
+            ALERT_CONTENT_VIOLATIONS = self.alert_content_violations  # 内容违规提示
+            SEND_NOTIFICATION = self.send_notification  # 发送提醒
+
+		# 调用系统自动作业函数
+        SystemOperandFunc[self.func].value(**kwargs)
+
+    def create_next_service(self, **kwargs):
+        '''
+        生成后续服务
+        '''
+        operation = Operation.objects.get(name=kwargs['oname'])
+        if kwargs['uid']:
+            user_operater = User.objects.get(id=kwargs['uid'])
+            operator = Staff.objects.get(user=user_operater)
+        else:
+            operator = None
+        user_customer = User.objects.get(id=kwargs['cid'])
+        customer = Customer.objects.get(user=user_customer)
+        operator_groups = kwargs['group']
+
+        # 创建作业进程
+        try:
+            parent_operation_proc = OperationProc.objects.get(id=kwargs['ppid'])
+        except OperationProc.DoesNotExist:
+            parent_operation_proc = None
+        # service_proc = ServiceProc.objects.get(id=task_params['spid'])
+        proc=OperationProc.objects.create(
+            operation=operation,
+            operator=None,
+            customer=customer,
+            state=0,
+            ppid=parent_operation_proc,
+            # service_proc=service_proc,
+        )
+        proc.group.add(*operator_groups)
+
+        # 根据Operation.forms里的mutate类型的表单创建相关表单实例
+        form_slugs = []
+        forms = filter(lambda _forms: _forms['mutate_or_inquiry']=='mutate', json.loads(operation.forms))
+        for form in forms:
+            form_class_name = form['basemodel'].capitalize()
+            print('创建表单实例:', form_class_name)
+            try:
+                form = globals()[form_class_name].objects.create(
+                    operator = operator,
+                    customer = customer,
+                    pid = proc
+                )
+                form_slugs.append({'form_name': form_class_name, 'slug': form.slug})
+            except Exception as e:
+                print('创建model失败:', form_class_name, e)
+
+        proc.entry = f'{operation.name}/{proc.id}/update_view'      # 更新作业URL路径 
+        proc.form_slugs = json.dumps(form_slugs, ensure_ascii=False, indent=4)
+        proc.save()
+
+        return proc
+
+    def recommend_next_service(self, **kwargs):
+        '''
+        推荐后续服务
+        '''
+        print('recommend_next_service:', '推荐后续服务' )
+
+    def alert_content_violations(self, **kwargs):
+        '''
+        内容违规提示
+        '''
+        print('alert_content_violations:', '内容违规提示')
+
+    def send_notification(self, **kwargs):
+        '''
+        发送提醒
+        '''
+        print('send_notification:', '发送提醒')
+
+
+# 事件规则表
+class EventRule(HsscBase):
+    description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
+    Detection_scope = [(0, '所有历史表单'), (1, '本次服务表单'), (2, '单元服务表单')]
+    detection_scope = models.PositiveSmallIntegerField(choices=Detection_scope, default=1, blank=True, null=True, verbose_name='检测范围')
+    weight = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="权重")
+    expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="内部表达式")
+
+    class Meta:
+        verbose_name = '条件事件'
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def is_satified(self, **kwargs):
+        '''
+        检查表达式是否满足
+        parameters: operation_proc_id
+		'''
+        from core.utils import keyword_replace
+        is_satified = False
+        operation_proc_id = kwargs.get('operation_proc_id')
+        operation_proc = OperationProc.objects.get(id=operation_proc_id)
+		# ...
+        return is_satified
+
+
+# 服务规格设置
+class ServiceSpec(HsscBase):
+    class Meta:
+        verbose_name = "服务规格"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+
+class ServiceRuleManager(models.Manager):
+    '''
+    服务表单保存后根据服务规则生成业务事件
+    params: operation_proc.hssc_id, service.hssc_id
+    return: 
+    how:
+		0. 获取服务作业完成信号
+		1. 根据service.hssc_id获取需要检查的service_rule集合
+		2. 逐一检查event_rule.expression是否满足
+		3. 若满足则构造事件参数，生成自定义信号“发生业务事件”，传给调度函数。事件参数：{}
+    '''
+    # 导入自定义作业完成信号
+    from core.signals import operand_finished
+    @receiver(operand_finished)
+    def check_rules(self, sender, **kwargs):
+        operation_proc_id = kwargs['operation_proc_id']  # 作业进程id
+        # 根据operation_proc_hssc_id获取operation_proc
+        operation_proc = OperationProc.objects.get(hssc_id=operation_proc_id)
+		# 根据operation_proc.service.hssc_id获取service_rule集合
+        service_rules = self.filter(service=operation_proc.service)
+		# 逐一检查event_rule.expression是否满足
+        for service_rule in service_rules:
+			# 如果event_rule.expression为真，则构造事件参数，生成业务事件
+            if service_rule.event_rule.is_satified(operation_proc_id):
+				# 构造作业参数
+                operations_params = {}
+				# 执行系统自动作业
+                service_rule.system_operand.execute(**operations_params)
+        return None
+	
+# 服务规则库
+class ServiceRule(HsscBase):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
+    event_rule = models.ForeignKey(EventRule, on_delete=models.CASCADE,  blank=True, null=True, verbose_name='条件事件')
+    system_operand = models.ForeignKey(SystemOperand, on_delete=models.CASCADE, blank=True, null=True, verbose_name='系统作业')
+    next_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='next_service', verbose_name='后续服务')
+    Receive_form = [(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')]  # 接收表单数据
+    passing_data = models.PositiveSmallIntegerField(choices=Receive_form, default=0,  blank=True, null=True, verbose_name='接收表单')
+    Complete_feedback = [(0, '否'), (1, '返回完成状态'), (2, '返回表单')]
+    complete_feedback = models.PositiveSmallIntegerField(choices=Complete_feedback, default=0,  blank=True, null=True, verbose_name='完成反馈')
+    Reminders = [(0, '客户'), (1, '服务人员'), (2, '服务小组')]
+    reminders = models.PositiveSmallIntegerField(choices=Reminders, default=0,  blank=True, null=True, verbose_name='提醒对象')
+    message_content = models.CharField(max_length=255, blank=True, null=True, verbose_name='消息内容')
+    Interval_rule_options = [(0, '等于'), (1, '小于'), (2, '大于')]
+    interval_rule = models.PositiveSmallIntegerField(choices=Interval_rule_options, blank=True, null=True, verbose_name='间隔条件')
+    interval_time = models.DurationField(blank=True, null=True, verbose_name="间隔时间", help_text='例如：3 days, 22:00:00')
+    Is_active = [(False, '否'), (True, '是')]
+    is_active = models.BooleanField(choices=Is_active, default=True, verbose_name='启用')
+    service_spec = models.ForeignKey(ServiceSpec, on_delete=models.CASCADE, null=True, verbose_name='服务规格')
+    objects = ServiceRuleManager()
+
+    class Meta:
+        verbose_name = '服务规则'
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.service)
+
+
+class HsscFormModel(HsscBase):
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(editable=False, null=True, verbose_name="更新时间")
+    pid = models.ForeignKey(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程id")
+    sid = models.ForeignKey(ServiceProc, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_sid', verbose_name="服务进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created_time = timezone.now()
+            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        self.updated_time = timezone.now()
+        return super().save(*args, **kwargs)
+
+    def get_autocomplete_fields(self):
+        autocompelte_fields_name=[]
+        for field in self.__class__._meta.get_fields():
+            if (field.one_to_one or field.many_to_one):  # 一对一、多对一字段
+                autocompelte_fields_name.append(field.name)
+        return autocompelte_fields_name
+
+    def get_absolute_url(self):
+        return reverse(f'{self.__class__.__name__}_detail_url', kwargs={'slug':self.slug})
+
+    def get_update_url(self):
+        return reverse(f'{self.__class__.__name__}_update_url', kwargs={'slug':self.slug})
+
+    def get_delete_url(self):
+        return reverse(f'{self.__class__.__name__}_delete_url', kwargs={'slug':self.slug})
+
+
+class Customer(HsscFormModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='客户')
+    name = models.CharField(max_length=50, verbose_name="姓名")
+    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="电话")
+    address = models.CharField(max_length=255, blank=True, null=True, verbose_name="地址")
+    charge_person = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='负责人')
+    health_record = models.JSONField(blank=True, null=True, verbose_name="健康记录")
+
+    class Meta:
+        verbose_name = "客户注册信息"
+        verbose_name_plural = "客户注册信息"
+
+    def __str__(self):
+        return str(self.name)
+
+    def update_health_record(self, health_record):
+        '''
+        设置健康记录
+        '''
+        pass
+
+    def get_mr_home_page(self):
+        '''
+        获取客户病案首页
+        '''
+        pass
+
+    def get_history_services(self):
+        pass
+
+    def get_recommanded_services(self):
+        pass
+
+    def get_scheduled_services(self):
+        pass
+
+
+class Workgroup(HsscBase):
+    leader = models.ForeignKey(Customer, on_delete=CASCADE, null=True, verbose_name='组长')
+
+    class Meta:
+        verbose_name = "服务小组"
+        verbose_name_plural = "服务小组"
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}'
+        super().save(*args, **kwargs)
+
+
+class Staff(HsscFormModel):
+	customer = models.OneToOneField(Customer, on_delete=models.CASCADE, null=True, verbose_name='员工')
+	role = models.ManyToManyField(Group, related_name='staff_role', verbose_name='角色')
+	email = models.EmailField(max_length=50)
+	Title = [(i, i) for i in ['主任医师', '副主任医师', '主治医师', '住院医师', '主任护师', '副主任护师', '主管护师', '护士长', '护士', '其他']]
+	title = models.PositiveSmallIntegerField(choices=Title, blank=True, null=True, verbose_name='职称')
+	is_assistant_physician = models.BooleanField(blank=True, null=True, verbose_name='助理医师')
+	resume = models.TextField(blank=True, null=True, verbose_name='简历')
+	Service_Lever = [(i, i) for i in ['低', '中', '高']]
+	service_lever = models.PositiveSmallIntegerField(choices=Service_Lever, blank=True, null=True, verbose_name='服务级别')
+	workgroup = models.ManyToManyField(Workgroup, blank=True, verbose_name='服务小组')
+	registration_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='挂号费')
+	standardized_workload = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='标化工作量')
+	slug = models.SlugField(max_length=150, blank=True)
+
+	def __str__(self):
+		return str(self.name)
 
 	class Meta:
-		verbose_name = "作业进程"
-		verbose_name_plural = "作业进程"
-		ordering = ['id']
+		verbose_name = "员工基本信息"
+		verbose_name_plural = "员工基本信息"
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = gen_slug(self._meta.model_name)
+		super().save(*args, **kwargs)
+

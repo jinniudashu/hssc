@@ -1,10 +1,3 @@
-'''
-服务调度器：
-1. 事件发生器: 根据Signals参数生成业务事件
-2. 调度器：根据业务事件查找任务指令，向调度函数(operation_scheduler)/Celery发送任务指令
-
-业务完成事件命名规则: [form_name]_operation_completed
-'''
 from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
 from django.db.models.signals import post_save, m2m_changed, post_delete
@@ -21,18 +14,11 @@ from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
 # 导入作业事件表、指令表
-from core.models import Staff, Customer, Event, Event_instructions, Instruction, Operation_proc, Operation
+from core.models import Staff, Customer, Event, Event_instructions, Instruction, OperationProc, Operation
 from core.models import SYSTEM_EVENTS
-
-# 导入任务
-from core.tasks import create_operation_proc
-
 # 导入自定义作业完成信号
 from core.signals import operand_finished, operand_started
-
 from core.utils import keyword_replace
-# from core.interpreter import interpreter
-
 
 # 作业调度器
 def operation_scheduler(event, params):
@@ -63,48 +49,13 @@ def operation_scheduler(event, params):
     return
 
 
-# ********************
-# 作业进程运行时
-# ********************
-# 维护作业进程状态
-# 0: Created, 作业被创建，进行资源检查
-# ctr: Created to Ready, 作业准备就绪
-# rtr: Ready to Running，开始作业
-# rtc: Running to Completed, 表单作业完成，查询事件表，调度后续作业进程
-def update_operation_proc_state(proc, ocode):  # 更新作业进程状态
-    if ocode == 'ctr': # CREATED TO READY
-        proc.state=1
-    elif ocode == 'rtr': # READY TO RUNNING
-        proc.state=2
-    elif ocode == 'rth': # RUNNING TO HANGUP
-        proc.state=3
-    elif ocode == 'htr': # HANGUP TO READY
-        proc.state=2
-    elif ocode == 'rtc': # RUNNING TO COMPLETED
-        proc.state=4
-    else:
-        print(f'ERROR: 未定义的操作码 ocode: {ocode}')
-    proc.save()
-    return
-
-# 本段代码用于跟踪调试作业进程状态更新
-@receiver(post_save, sender=Operation_proc)
-def new_operation_proc(instance, created, **kwargs):
-    if created: # ctr
-        print ('新作业进程被创建，进行资源请求...：new_operation_proc:', instance)
-    else:
-        if instance.state == 4:  # rtc            
-            print('rtc状态, 作业完成事件，进行调度')
-
-
 @receiver(operand_started)
 def operand_started_handler(sender, **kwargs):
     operation_proc = kwargs['operation_proc']  # 作业进程
-    ocode = kwargs['ocode']
-    update_operation_proc_state(operation_proc, ocode)  # 更新作业进程操作码
+    operation_proc.update_state(kwargs['ocode'])  # 更新作业进程操作码
     
     operator = kwargs['operator']  # 操作员
-    operation_proc.operator = Staff.objects.get(user=operator)  # 设置作业进程的操作员为当前用户
+    operation_proc.operator = Staff.objects.get(customer=operator)  # 设置作业进程的操作员为当前用户
     operation_proc.save()
 
 
@@ -141,18 +92,15 @@ def is_event_happened_on_list_fields(list_fields, assignments, expression):
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
     pid = kwargs['pid']  # 作业进程id
-    ocode = kwargs['ocode']  # 作业进程操作码
 
     _field_values = kwargs['field_values']  # POST表单数据
     field_values = _field_values.copy()  # 表单字段拷贝，避免修改原始数据
     field_values.pop('csrfmiddlewaretoken')  # 删除csrf字段
 
-    print('收到作业完成消息，更新作业进程状态：', pid, ocode, field_values)
+    proc = OperationProc.objects.get(id=pid)  # 获取当前作业进程实例
+    proc.update_state(kwargs['ocode'])  # 更新作业进程状态
 
-    proc = Operation_proc.objects.get(id=pid)  # 获取当前作业进程实例
-
-    # 1. 更新作业进程状态: rtc
-    update_operation_proc_state(proc, ocode)  # 更新作业进程状态
+    print('收到作业完成消息，更新作业进程状态：', pid, kwargs['ocode'], field_values)
 
     # 2. 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
     try:

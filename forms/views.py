@@ -5,25 +5,25 @@ from django.db.models import Q
 from django.forms import modelformset_factory, inlineformset_factory
 import json
 
-from core.models import Operation_proc, Staff, Customer
+from core.models import OperationProc, Staff, Customer
 from core.signals import operand_started, operand_finished
 from forms.utils import *
 from forms.models import *
 from forms.forms import *
 
 class Index_view(ListView):
-    model = Operation_proc
+    model = OperationProc
     template_name = 'index.html'
 
     # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object(queryset=Operation_proc.objects.exclude(state=4))
+    #     self.object = self.get_object(queryset=OperationProc.objects.exclude(state=4))
 
     def get_context_data(self, **kwargs):
         # 如果用户当前未登录，request.user将被设置为AnonymousUser。用user.is_authenticated()判断用户登录状态：
         operator=Staff.objects.get(user=self.request.user)
         group = Group.objects.filter(user=self.request.user)
         # 获取当前用户所属角色组的所有作业进程
-        procs = Operation_proc.objects.exclude(state=4).filter(Q(group__in=group) | Q(operator=operator)).distinct()
+        procs = OperationProc.objects.exclude(state=4).filter(Q(group__in=group) | Q(operator=operator)).distinct()
 
         todos = []
         for proc in procs:
@@ -90,7 +90,7 @@ class Men_zhen_chu_fang_biao_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Men_zhen_chu_fang_biao_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -170,7 +170,7 @@ class Z6201_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Z6201_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -250,7 +250,7 @@ class User_login_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(User_login_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -330,7 +330,7 @@ class Doctor_login_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Doctor_login_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -410,7 +410,7 @@ class A6501_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6501_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -490,7 +490,7 @@ class A6502_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6502_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -570,7 +570,7 @@ class Men_zhen_fu_zhu_jian_cha_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Men_zhen_fu_zhu_jian_cha_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -650,7 +650,7 @@ class Tang_niao_bing_zhuan_yong_wen_zhen_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_zhuan_yong_wen_zhen_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -730,7 +730,7 @@ class Yao_shi_fu_wu_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Yao_shi_fu_wu_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -810,7 +810,7 @@ class Tang_niao_bing_zi_wo_jian_ce_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_zi_wo_jian_ce_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -890,7 +890,7 @@ class A6217_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6217_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -970,7 +970,7 @@ class A6201_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6201_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1050,7 +1050,7 @@ class A6218_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6218_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1130,7 +1130,7 @@ class T8901_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(T8901_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1210,7 +1210,7 @@ class T6301_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(T6301_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1290,7 +1290,7 @@ class A6202_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6202_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1370,7 +1370,7 @@ class A6220_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6220_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1534,7 +1534,7 @@ class A6299_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A6299_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1698,7 +1698,7 @@ class A3502_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(A3502_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1785,7 +1785,7 @@ class Tang_niao_bing_cha_ti_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Tang_niao_bing_cha_ti_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1872,7 +1872,7 @@ class Xue_ya_jian_ce_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Xue_ya_jian_ce_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -1952,7 +1952,7 @@ class Kong_fu_xue_tang_jian_cha_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Kong_fu_xue_tang_jian_cha_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -2032,7 +2032,7 @@ class Tang_hua_xue_hong_dan_bai_jian_cha_biao_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(Tang_hua_xue_hong_dan_bai_jian_cha_biao_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
@@ -2112,7 +2112,7 @@ class T9001_UpdateView(UpdateView):
         
     def get_context_data(self, **kwargs):
         context = super(T9001_UpdateView, self).get_context_data(**kwargs)
-        operation_proc = get_object_or_404(Operation_proc, id=kwargs['id'])
+        operation_proc = get_object_or_404(OperationProc, id=kwargs['id'])
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':

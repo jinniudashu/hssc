@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 from django.contrib.auth.models import User, Group
-from core.models import Staff, Customer, Operation, Service, Event, Event_instructions, Operation_proc, Instruction
+from core.models import Staff, Customer, Operation, Service, Event, Event_instructions, OperationProc, Instruction
 from core.models import SYSTEM_EVENTS, SYSTEM_OPERAND
 from dictionaries.models import *
 from forms.models import Basic_personal_information

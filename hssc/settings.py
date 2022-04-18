@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'django.contrib.sites',
     'registration',
     'django.contrib.admin',
+    # 'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -153,7 +154,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

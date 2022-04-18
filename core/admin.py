@@ -1,22 +1,24 @@
 from django.contrib import admin
+from hssc.site import clinic_site
 from .models import Workgroup, Staff, Customer, Service, Operation, Event, Instruction, Event_instructions
-from .models import Service_proc, Operation_proc
+from .models import ServiceProc, OperationProc
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['name', 'phone']
-
+clinic_site.register(Customer, CustomerAdmin)
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
     search_fields = ['name']
-
+clinic_site.register(Staff, StaffAdmin)
 
 class WorkgroupAdmin(admin.ModelAdmin):
-    list_display = ('label', 'group_leader')
+    list_display = ('label', 'leader')
     readonly_fields = ['name']
 admin.site.register(Workgroup, WorkgroupAdmin)
+clinic_site.register(Workgroup, WorkgroupAdmin)
 
 class EventInline(admin.TabularInline):
     model = Event
@@ -55,11 +57,11 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
-class Operation_procAdmin(admin.ModelAdmin):
-    list_display = ['id', 'operation', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
-    list_display_links = ['operation', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+class OperationProcAdmin(admin.ModelAdmin):
+    list_display = ['id', 'service', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
     ordering = ['id']
-admin.site.register(Operation_proc, Operation_procAdmin)
+admin.site.register(OperationProc, OperationProcAdmin)
 
 
 class ServiceAdmin(admin.ModelAdmin):
@@ -86,5 +88,5 @@ class InstructionAdmin(admin.ModelAdmin):
 admin.site.register(Instruction, InstructionAdmin)
 
 
-admin.site.register(Service_proc)
+admin.site.register(ServiceProc)
 

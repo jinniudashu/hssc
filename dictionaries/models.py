@@ -1,4 +1,5 @@
 from django.db import models
+from pypinyin import Style, lazy_pinyin
 
 
 class DictBase(models.Model):
@@ -14,6 +15,13 @@ class DictBase(models.Model):
 
     def __str__(self):
         return self.value
+
+    def save(self, *args, **kwargs):
+        if self.label:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+            if self.name is None or self.name=='':
+                self.name = "_".join(lazy_pinyin(self.label))
+        super().save(*args, **kwargs)
 
 
 class Character(DictBase):

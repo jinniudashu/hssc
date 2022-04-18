@@ -8,7 +8,7 @@ from celery import shared_task
 # from celery.utils.log import get_task_logger
 # logger = get_task_logger(__name__)
 
-from core.models import Operation_proc, Operation, Service_proc
+from core.models import OperationProc, Operation, ServiceProc
 
 '''
 指令字典
@@ -34,11 +34,11 @@ def create_operation_proc(task_params):
 
     # 创建作业进程
     try:
-        parent_operation_proc = Operation_proc.objects.get(id=task_params['ppid'])
-    except Operation_proc.DoesNotExist:
+        parent_operation_proc = OperationProc.objects.get(id=task_params['ppid'])
+    except OperationProc.DoesNotExist:
         parent_operation_proc = None
-    # service_proc = Service_proc.objects.get(id=task_params['spid'])
-    proc=Operation_proc.objects.create(
+    # service_proc = ServiceProc.objects.get(id=task_params['spid'])
+    proc=OperationProc.objects.create(
         operation=operation,
         operator=None,
         customer=customer,

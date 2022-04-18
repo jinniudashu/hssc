@@ -4,51 +4,98 @@
 
 <br>
 
-<h5>当前任务</h5>
-	<section class="list-group">
-	{% for todo in todos %}
-		<a class="list-group-item" href="{% url todo.url todo.proc_id %}">
-		{{ todo.operation }}
-		</a>
+<form method="get">
+	<h5>今日服务安排</h5>
+	{{ current_procs_formset.non_form_errors.as_ul }}
+	<table id="formset" class="form">
+	{% for form in current_procs_formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1 row2 %}">
+	  {% for field in form.visible_fields %}
+		<td>
+		{# Include the hidden fields in the form #}
+		{% if forloop.first %}
+		  {% for hidden in form.hidden_fields %}
+		  {{ hidden }}
+		  {% endfor %}
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
 	{% endfor %}
-	</section>
-
+	</table>	
+</form>
 <br>
-
 <hr>
-
 <br>
 
-<h5>系统菜单</h5>
-
-<section class="list-group">
-<a class='list-group-item' href='{% url "yuan_qian_zheng_zhuang_diao_cha_biao_create_url" %}'>
-		院前症状调查表
-	</a>
-        <a class='list-group-item' href='{% url "ge_ren_ji_bing_shi_diao_cha_biao_create_url" %}'>
-		个人疾病史调查表
-	</a>
-        <a class='list-group-item' href='{% url "kong_fu_xue_tang_jian_cha_biao_create_url" %}'>
-		空腹血糖检查表
-	</a>
-        <a class='list-group-item' href='{% url "men_zhen_zhen_duan_biao_create_url" %}'>
-		门诊诊断表
-	</a>
-        <a class='list-group-item' href='{% url "tang_hua_xue_hong_dan_bai_jian_cha_biao_create_url" %}'>
-		糖化血红蛋白检查表
-	</a>
-        <a class='list-group-item' href='{% url "chang_gui_cha_ti_biao_create_url" %}'>
-		常规查体表
-	</a>
-        <a class='list-group-item' href='{% url "tang_niao_bing_cha_ti_biao_create_url" %}'>
-		糖尿病查体表
-	</a>
-        <a class='list-group-item' href='{% url "ge_ren_guo_min_shi_diao_cha_biao_create_url" %}'>
-		个人过敏史调查表
-	</a>
-        <a class='list-group-item' href='{% url "men_zhen_chu_fang_biao_create_url" %}'>
-		门诊处方表
-	</a>
-        
-</section>
+<form method="get">
+	<h5>紧要服务安排</h5>
+	{{ urgent_operations_formset.non_form_errors.as_ul }}
+	<table id="formset" class="form">
+	{% for form in urgent_operations_formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1 row2 %}">
+	  {% for field in form.visible_fields %}
+		<td>
+		{# Include the hidden fields in the form #}
+		{% if forloop.first %}
+		  {% for hidden in form.hidden_fields %}
+		  {{ hidden }}
+		  {% endfor %}
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+	</table>	
+</form>
+<br>
+<hr>
+<br>
+<form method="get">
+	<h5>本周服务安排</h5>
+	{{ week_operations_formset.non_form_errors.as_ul }}
+	<table id="formset" class="form">
+	{% for form in week_operations_formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1 row2 %}">
+	  {% for field in form.visible_fields %}
+		<td>
+		{# Include the hidden fields in the form #}
+		{% if forloop.first %}
+		  {% for hidden in form.hidden_fields %}
+		  {{ hidden }}
+		  {% endfor %}
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+	</table>
+</form>
 {% endblock %}

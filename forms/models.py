@@ -1,41 +1,14 @@
 from django.db import models
 from django.shortcuts import reverse
-from django.utils.text import slugify
 from django.contrib.auth.models import Group
-
-from time import time
-from datetime import date
-from django.utils import timezone
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import Staff, Customer, Operation_proc
+from core.models import HsscFormModel, Staff, Customer, OperationProc, ServiceProc
 from entities.models import *
 
 
-class HsscBuessinessFormBase(models.Model):
-    hssc_id = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name="hsscID")
-    creater = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="创建人")
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
-    update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='%(class)s_customer', blank=True, null=True, verbose_name="客户")
-    operator = models.ForeignKey(Staff, on_delete=models.SET_NULL, related_name='%(class)s_operator', blank=True, null=True, verbose_name="作业人员")
-    pid = models.ForeignKey(Operation_proc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
-    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return str(self.customer)
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{{int(time())}}'
-        super().save(*args, **kwargs)
-
-
-class A6219(HsscBuessinessFormBase):
+class A6219(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6219', verbose_name='症状')
     boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_A6219', verbose_name='糖尿病症状')
@@ -50,7 +23,7 @@ class A6219(HsscBuessinessFormBase):
         return reverse('A6219_update_url', kwargs={'slug': self.slug})
         
 
-class A6501(HsscBuessinessFormBase):
+class A6501(HsscFormModel):
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
     boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     class Meta:
@@ -64,7 +37,7 @@ class A6501(HsscBuessinessFormBase):
         return reverse('A6501_update_url', kwargs={'slug': self.slug})
         
 
-class A5001(HsscBuessinessFormBase):
+class A5001(HsscFormModel):
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_A5001', verbose_name='药品名称')
     class Meta:
         verbose_name = '药物/处方/新治疗/注射'
@@ -77,7 +50,7 @@ class A5001(HsscBuessinessFormBase):
         return reverse('A5001_update_url', kwargs={'slug': self.slug})
         
 
-class T4505(HsscBuessinessFormBase):
+class T4505(HsscFormModel):
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
     numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
     numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
@@ -93,7 +66,7 @@ class T4505(HsscBuessinessFormBase):
         return reverse('T4505_update_url', kwargs={'slug': self.slug})
         
 
-class A6211(HsscBuessinessFormBase):
+class A6211(HsscFormModel):
     datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
     relatedfield_major_life = models.ManyToManyField(Life_event, related_name='life_event_for_relatedfield_major_life_A6211', verbose_name='生活事件')
     class Meta:
@@ -107,7 +80,7 @@ class A6211(HsscBuessinessFormBase):
         return reverse('A6211_update_url', kwargs={'slug': self.slug})
         
 
-class T3003(HsscBuessinessFormBase):
+class T3003(HsscFormModel):
     relatedfield_left_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_left_foot_T3003', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左脚')
     relatedfield_right_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_right_foot_T3003', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右脚')
     class Meta:
@@ -121,7 +94,7 @@ class T3003(HsscBuessinessFormBase):
         return reverse('T3003_update_url', kwargs={'slug': self.slug})
         
 
-class T4504(HsscBuessinessFormBase):
+class T4504(HsscFormModel):
     T4504 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4504_T4504', verbose_name='健康教育')
     class Meta:
         verbose_name = '健康教育'
@@ -134,7 +107,7 @@ class T4504(HsscBuessinessFormBase):
         return reverse('T4504_update_url', kwargs={'slug': self.slug})
         
 
-class Yao_pin_qing_dan(HsscBuessinessFormBase):
+class Yao_pin_qing_dan(HsscFormModel):
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_yao_pin_qing_dan', verbose_name='药品名称')
     class Meta:
         verbose_name = '药品清单'
@@ -147,7 +120,7 @@ class Yao_pin_qing_dan(HsscBuessinessFormBase):
         return reverse('yao_pin_qing_dan_update_url', kwargs={'slug': self.slug})
         
 
-class Ji_gou_qing_dan(HsscBuessinessFormBase):
+class Ji_gou_qing_dan(HsscFormModel):
     relatedfield_affiliation = models.ForeignKey(Institution, related_name='institution_for_relatedfield_affiliation_ji_gou_qing_dan', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
     class Meta:
         verbose_name = '机构清单'
@@ -160,7 +133,7 @@ class Ji_gou_qing_dan(HsscBuessinessFormBase):
         return reverse('ji_gou_qing_dan_update_url', kwargs={'slug': self.slug})
         
 
-class A3502(HsscBuessinessFormBase):
+class A3502(HsscFormModel):
     boolfield_niao_tang = models.ForeignKey(Niao_tang, related_name='niao_tang_for_boolfield_niao_tang_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='尿糖')
     boolfield_dan_bai_zhi = models.ForeignKey(Dan_bai_zhi, related_name='dan_bai_zhi_for_boolfield_dan_bai_zhi_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='蛋白质')
     boolfield_tong_ti = models.ForeignKey(Tong_ti, related_name='tong_ti_for_boolfield_tong_ti_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='尿酮体')
@@ -175,7 +148,7 @@ class A3502(HsscBuessinessFormBase):
         return reverse('A3502_update_url', kwargs={'slug': self.slug})
         
 
-class A6210(HsscBuessinessFormBase):
+class A6210(HsscFormModel):
     relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_A6210', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
     class Meta:
         verbose_name = '遗传病史'
@@ -188,7 +161,7 @@ class A6210(HsscBuessinessFormBase):
         return reverse('A6210_update_url', kwargs={'slug': self.slug})
         
 
-class Zhi_yuan_biao(HsscBuessinessFormBase):
+class Zhi_yuan_biao(HsscFormModel):
     boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_zhi_yuan_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     class Meta:
         verbose_name = '职员表'
@@ -201,7 +174,7 @@ class Zhi_yuan_biao(HsscBuessinessFormBase):
         return reverse('zhi_yuan_biao_update_url', kwargs={'slug': self.slug})
         
 
-class A3101(HsscBuessinessFormBase):
+class A3101(HsscFormModel):
     numberfield_hight = models.IntegerField(null=True, blank=True, verbose_name='身高')
     numberfield_hight_standard_value = models.IntegerField(null=True, blank=True, verbose_name='身高标准值')
     numberfield_hight_up_limit = models.IntegerField(null=True, blank=True, verbose_name='身高上限')
@@ -225,7 +198,7 @@ class A3101(HsscBuessinessFormBase):
         return reverse('A3101_update_url', kwargs={'slug': self.slug})
         
 
-class A6207(HsscBuessinessFormBase):
+class A6207(HsscFormModel):
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_A6207', verbose_name='药品名称')
     class Meta:
         verbose_name = '过敏史'
@@ -238,7 +211,7 @@ class A6207(HsscBuessinessFormBase):
         return reverse('A6207_update_url', kwargs={'slug': self.slug})
         
 
-class T9001(HsscBuessinessFormBase):
+class T9001(HsscFormModel):
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     relatedfield_yi_lou_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_yi_lou_zhen_duan_T9001', verbose_name='可能诊断')
     relatedfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_pai_chu_zhen_duan_T9001', verbose_name='排除诊断')
@@ -254,7 +227,7 @@ class T9001(HsscBuessinessFormBase):
         return reverse('T9001_update_url', kwargs={'slug': self.slug})
         
 
-class A6209(HsscBuessinessFormBase):
+class A6209(HsscFormModel):
     relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_A6209', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
     class Meta:
         verbose_name = '家族病史'
@@ -267,7 +240,7 @@ class A6209(HsscBuessinessFormBase):
         return reverse('A6209_update_url', kwargs={'slug': self.slug})
         
 
-class A3103(HsscBuessinessFormBase):
+class A3103(HsscFormModel):
     numberfield_body_temperature = models.IntegerField(null=True, blank=True, verbose_name='体温')
     numberfield_body_temperature_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体温标准值')
     numberfield_body_temperature_up_limit = models.IntegerField(default=37.4, null=True, blank=True, verbose_name='体温上限')
@@ -291,7 +264,7 @@ class A3103(HsscBuessinessFormBase):
         return reverse('A3103_update_url', kwargs={'slug': self.slug})
         
 
-class Z6201(HsscBuessinessFormBase):
+class Z6201(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
     characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
@@ -312,7 +285,7 @@ class Z6201(HsscBuessinessFormBase):
         return reverse('Z6201_update_url', kwargs={'slug': self.slug})
         
 
-class T4501(HsscBuessinessFormBase):
+class T4501(HsscFormModel):
     T4501 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4501_T4501', verbose_name='营养干预')
     class Meta:
         verbose_name = '营养干预'
@@ -325,7 +298,7 @@ class T4501(HsscBuessinessFormBase):
         return reverse('T4501_update_url', kwargs={'slug': self.slug})
         
 
-class A6201(HsscBuessinessFormBase):
+class A6201(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', verbose_name='症状')
     class Meta:
@@ -339,7 +312,7 @@ class A6201(HsscBuessinessFormBase):
         return reverse('A6201_update_url', kwargs={'slug': self.slug})
         
 
-class A3110(HsscBuessinessFormBase):
+class A3110(HsscFormModel):
     relatedfield_left_ear_hearing = models.ForeignKey(Hearing, related_name='hearing_for_relatedfield_left_ear_hearing_A3110', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左耳听力')
     relatedfield_right_ear_hearing = models.ForeignKey(Hearing, related_name='hearing_for_relatedfield_right_ear_hearing_A3110', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右耳听力')
     class Meta:
@@ -353,7 +326,7 @@ class A3110(HsscBuessinessFormBase):
         return reverse('A3110_update_url', kwargs={'slug': self.slug})
         
 
-class A6215(HsscBuessinessFormBase):
+class A6215(HsscFormModel):
     characterfield_working_hours_per_day = models.TextField(max_length=255, null=True, blank=True, verbose_name='每天工作及工作往返总时长')
     relatedfield_are_you_satisfied_with_the_job_and_life = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_the_job_and_life_A6215', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对目前生活和工作满意吗')
     relatedfield_are_you_satisfied_with_your_adaptability = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_your_adaptability_A6215', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对自己的适应能力满意吗')
@@ -368,7 +341,7 @@ class A6215(HsscBuessinessFormBase):
         return reverse('A6215_update_url', kwargs={'slug': self.slug})
         
 
-class T3404(HsscBuessinessFormBase):
+class T3404(HsscFormModel):
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
     numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
     numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
@@ -384,7 +357,7 @@ class T3404(HsscBuessinessFormBase):
         return reverse('T3404_update_url', kwargs={'slug': self.slug})
         
 
-class Z6233(HsscBuessinessFormBase):
+class Z6233(HsscFormModel):
     characterfield_username = models.CharField(max_length=255, null=True, blank=True, verbose_name='用户名')
     characterfield_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码')
     characterfield_service_role = models.CharField(max_length=255, null=True, blank=True, verbose_name='服务角色')
@@ -399,7 +372,7 @@ class Z6233(HsscBuessinessFormBase):
         return reverse('Z6233_update_url', kwargs={'slug': self.slug})
         
 
-class A6204(HsscBuessinessFormBase):
+class A6204(HsscFormModel):
     datetimefield_time_of_diagnosis = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_A6204', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     class Meta:
@@ -413,7 +386,7 @@ class A6204(HsscBuessinessFormBase):
         return reverse('A6204_update_url', kwargs={'slug': self.slug})
         
 
-class A6218(HsscBuessinessFormBase):
+class A6218(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6218', verbose_name='症状')
     class Meta:
@@ -427,7 +400,7 @@ class A6218(HsscBuessinessFormBase):
         return reverse('A6218_update_url', kwargs={'slug': self.slug})
         
 
-class Z6205(HsscBuessinessFormBase):
+class Z6205(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
     characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
@@ -453,7 +426,7 @@ class Z6205(HsscBuessinessFormBase):
         return reverse('Z6205_update_url', kwargs={'slug': self.slug})
         
 
-class T4502(HsscBuessinessFormBase):
+class T4502(HsscFormModel):
     T4502 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4502_T4502', verbose_name='运动干预')
     class Meta:
         verbose_name = '运动干预'
@@ -466,7 +439,7 @@ class T4502(HsscBuessinessFormBase):
         return reverse('T4502_update_url', kwargs={'slug': self.slug})
         
 
-class A6216(HsscBuessinessFormBase):
+class A6216(HsscFormModel):
     relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_A6216', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
     relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_A6216', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
     class Meta:
@@ -480,7 +453,7 @@ class A6216(HsscBuessinessFormBase):
         return reverse('A6216_update_url', kwargs={'slug': self.slug})
         
 
-class A6205(HsscBuessinessFormBase):
+class A6205(HsscFormModel):
     datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
     relatedfield_name_of_operation = models.ForeignKey(Icpc7_treatments, related_name='icpc7_treatments_for_relatedfield_name_of_operation_A6205', on_delete=models.CASCADE, null=True, blank=True, verbose_name='手术名称')
     class Meta:
@@ -494,7 +467,7 @@ class A6205(HsscBuessinessFormBase):
         return reverse('A6205_update_url', kwargs={'slug': self.slug})
         
 
-class A6214(HsscBuessinessFormBase):
+class A6214(HsscFormModel):
     relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='觉得自身健康状况如何')
     relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='较之过去一年状态如何')
     relatedfield_sports_preference = models.ForeignKey(Sports_preference, related_name='sports_preference_for_relatedfield_sports_preference_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动偏好')
@@ -511,7 +484,7 @@ class A6214(HsscBuessinessFormBase):
         return reverse('A6214_update_url', kwargs={'slug': self.slug})
         
 
-class A3105(HsscBuessinessFormBase):
+class A3105(HsscFormModel):
     numberfield_systolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
     numberfield_systolic_blood_pressure_standard_value = models.IntegerField(null=True, blank=True, verbose_name='收缩压标准值')
     numberfield_systolic_blood_pressure_up_limit = models.IntegerField(default=139.0, null=True, blank=True, verbose_name='收缩压上限')
@@ -531,7 +504,7 @@ class A3105(HsscBuessinessFormBase):
         return reverse('A3105_update_url', kwargs={'slug': self.slug})
         
 
-class A3108(HsscBuessinessFormBase):
+class A3108(HsscFormModel):
     relatedfield_lips = models.ForeignKey(Lips, related_name='lips_for_relatedfield_lips_A3108', on_delete=models.CASCADE, null=True, blank=True, verbose_name='口唇')
     relatedfield_dentition = models.ForeignKey(Dentition, related_name='dentition_for_relatedfield_dentition_A3108', on_delete=models.CASCADE, null=True, blank=True, verbose_name='齿列')
     relatedfield_pharynx = models.ForeignKey(Pharynx, related_name='pharynx_for_relatedfield_pharynx_A3108', on_delete=models.CASCADE, null=True, blank=True, verbose_name='咽部')
@@ -546,7 +519,7 @@ class A3108(HsscBuessinessFormBase):
         return reverse('A3108_update_url', kwargs={'slug': self.slug})
         
 
-class A3109(HsscBuessinessFormBase):
+class A3109(HsscFormModel):
     characterfield_left_eye_vision = models.CharField(max_length=255, null=True, blank=True, verbose_name='左眼视力')
     characterfield_right_eye_vision = models.CharField(max_length=255, null=True, blank=True, verbose_name='右眼视力')
     class Meta:
@@ -560,7 +533,7 @@ class A3109(HsscBuessinessFormBase):
         return reverse('A3109_update_url', kwargs={'slug': self.slug})
         
 
-class A6502(HsscBuessinessFormBase):
+class A6502(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     boolfield_qian_yue_que_ren = models.ForeignKey(Qian_yue_que_ren, related_name='qian_yue_que_ren_for_boolfield_qian_yue_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约确认')
     boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
@@ -575,7 +548,7 @@ class A6502(HsscBuessinessFormBase):
         return reverse('A6502_update_url', kwargs={'slug': self.slug})
         
 
-class A6206(HsscBuessinessFormBase):
+class A6206(HsscFormModel):
     datetimefield_date = models.DateTimeField(null=True, blank=True, verbose_name='日期')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_A6206', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     class Meta:
@@ -589,7 +562,7 @@ class A6206(HsscBuessinessFormBase):
         return reverse('A6206_update_url', kwargs={'slug': self.slug})
         
 
-class Z6230(HsscBuessinessFormBase):
+class Z6230(HsscFormModel):
     characterfield_username = models.CharField(max_length=255, null=True, blank=True, verbose_name='用户名')
     characterfield_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码')
     class Meta:
@@ -603,7 +576,7 @@ class Z6230(HsscBuessinessFormBase):
         return reverse('Z6230_update_url', kwargs={'slug': self.slug})
         
 
-class A6208(HsscBuessinessFormBase):
+class A6208(HsscFormModel):
     numberfield_blood_transfusion = models.IntegerField(null=True, blank=True, verbose_name='输血量')
     numberfield_blood_transfusion_standard_value = models.IntegerField(null=True, blank=True, verbose_name='输血量标准值')
     numberfield_blood_transfusion_up_limit = models.IntegerField(default=400.0, null=True, blank=True, verbose_name='输血量上限')
@@ -620,7 +593,7 @@ class A6208(HsscBuessinessFormBase):
         return reverse('A6208_update_url', kwargs={'slug': self.slug})
         
 
-class T3002(HsscBuessinessFormBase):
+class T3002(HsscFormModel):
     relatedfield_fundus = models.ForeignKey(Normality, related_name='normality_for_relatedfield_fundus_T3002', on_delete=models.CASCADE, null=True, blank=True, verbose_name='眼底')
     class Meta:
         verbose_name = '眼底检查'
@@ -633,7 +606,7 @@ class T3002(HsscBuessinessFormBase):
         return reverse('T3002_update_url', kwargs={'slug': self.slug})
         
 
-class Yong_yao_diao_cha_biao(HsscBuessinessFormBase):
+class Yong_yao_diao_cha_biao(HsscFormModel):
     characterfield_yong_yao_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药剂量')
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_yong_yao_diao_cha_biao', verbose_name='药品名称')
     class Meta:
@@ -647,7 +620,7 @@ class Yong_yao_diao_cha_biao(HsscBuessinessFormBase):
         return reverse('yong_yao_diao_cha_biao_update_url', kwargs={'slug': self.slug})
         
 
-class A6203(HsscBuessinessFormBase):
+class A6203(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     characterfield_resident_file_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
@@ -676,7 +649,7 @@ class A6203(HsscBuessinessFormBase):
         return reverse('A6203_update_url', kwargs={'slug': self.slug})
         
 
-class A3001(HsscBuessinessFormBase):
+class A3001(HsscFormModel):
     numberfield_body_temperature = models.IntegerField(null=True, blank=True, verbose_name='体温')
     numberfield_body_temperature_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体温标准值')
     numberfield_body_temperature_up_limit = models.IntegerField(default=37.4, null=True, blank=True, verbose_name='体温上限')
@@ -718,7 +691,7 @@ class A3001(HsscBuessinessFormBase):
         return reverse('A3001_update_url', kwargs={'slug': self.slug})
         
 
-class T3405(HsscBuessinessFormBase):
+class T3405(HsscFormModel):
     numberfield_tang_hua_xue_hong_dan_bai = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白')
     numberfield_tang_hua_xue_hong_dan_bai_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白标准值')
     numberfield_tang_hua_xue_hong_dan_bai_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=6.0, null=True, blank=True, verbose_name='糖化血红蛋白上限')
@@ -734,7 +707,7 @@ class T3405(HsscBuessinessFormBase):
         return reverse('T3405_update_url', kwargs={'slug': self.slug})
         
 
-class A6202(HsscBuessinessFormBase):
+class A6202(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6202', verbose_name='症状')
     class Meta:
@@ -748,7 +721,7 @@ class A6202(HsscBuessinessFormBase):
         return reverse('A6202_update_url', kwargs={'slug': self.slug})
         
 
-class A6217(HsscBuessinessFormBase):
+class A6217(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6217', verbose_name='症状')
     class Meta:
@@ -762,7 +735,7 @@ class A6217(HsscBuessinessFormBase):
         return reverse('A6217_update_url', kwargs={'slug': self.slug})
         
 
-class Physical_examination_athletic_ability(HsscBuessinessFormBase):
+class Physical_examination_athletic_ability(HsscFormModel):
     relatedfield_athletic_ability = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_athletic_ability_physical_examination_athletic_ability', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动能力')
     class Meta:
         verbose_name = '运动能力调查'
@@ -775,7 +748,7 @@ class Physical_examination_athletic_ability(HsscBuessinessFormBase):
         return reverse('physical_examination_athletic_ability_update_url', kwargs={'slug': self.slug})
         
 
-class A6212(HsscBuessinessFormBase):
+class A6212(HsscFormModel):
     characterfield_average_sleep_duration = models.CharField(max_length=255, null=True, blank=True, verbose_name='平均睡眠时长')
     characterfield_duration_of_insomnia = models.CharField(max_length=255, null=True, blank=True, verbose_name='持续失眠时间')
     relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_A6212', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
@@ -791,7 +764,7 @@ class A6212(HsscBuessinessFormBase):
         return reverse('A6212_update_url', kwargs={'slug': self.slug})
         
 
-class A5002(HsscBuessinessFormBase):
+class A5002(HsscFormModel):
     relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_A5002', verbose_name='药品名称')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_A5002', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     boolfield_shi_fou_ji_xu_shi_yong = models.ForeignKey(Ji_xu_shi_yong_qing_kuang, related_name='ji_xu_shi_yong_qing_kuang_for_boolfield_shi_fou_ji_xu_shi_yong_A5002', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否继续使用')
@@ -806,7 +779,7 @@ class A5002(HsscBuessinessFormBase):
         return reverse('A5002_update_url', kwargs={'slug': self.slug})
         
 
-class A6213(HsscBuessinessFormBase):
+class A6213(HsscFormModel):
     relatedfield_personality_tendency = models.ForeignKey(Character, related_name='character_for_relatedfield_personality_tendency_A6213', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性格倾向')
     boolfield_shi_mian_qing_kuang = models.ForeignKey(Shi_mian_qing_kuang, related_name='shi_mian_qing_kuang_for_boolfield_shi_mian_qing_kuang_A6213', on_delete=models.CASCADE, null=True, blank=True, verbose_name='失眠情况')
     boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = models.ForeignKey(Ya_li_qing_kuang, related_name='ya_li_qing_kuang_for_boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang_A6213', on_delete=models.CASCADE, null=True, blank=True, verbose_name='生活工作压力情况')
@@ -821,7 +794,7 @@ class A6213(HsscBuessinessFormBase):
         return reverse('A6213_update_url', kwargs={'slug': self.slug})
         
 
-class Z6261(HsscBuessinessFormBase):
+class Z6261(HsscFormModel):
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭签约服务协议')
     boolfield_qian_yue_que_ren = models.ForeignKey(Qian_yue_que_ren, related_name='qian_yue_que_ren_for_boolfield_qian_yue_que_ren_Z6261', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约确认')
     boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_Z6261', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
@@ -836,7 +809,7 @@ class Z6261(HsscBuessinessFormBase):
         return reverse('Z6261_update_url', kwargs={'slug': self.slug})
         
 
-class T6301(HsscBuessinessFormBase):
+class T6301(HsscFormModel):
     characterfield_average_sleep_duration = models.CharField(max_length=255, null=True, blank=True, verbose_name='平均睡眠时长')
     characterfield_duration_of_insomnia = models.CharField(max_length=255, null=True, blank=True, verbose_name='持续失眠时间')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
@@ -882,7 +855,7 @@ class T6301(HsscBuessinessFormBase):
         return reverse('T6301_update_url', kwargs={'slug': self.slug})
         
 
-class A6220(HsscBuessinessFormBase):
+class A6220(HsscFormModel):
     boolfield_yuan_wai_jian_kang_ping_gu = models.ForeignKey(Sui_fang_ping_gu, related_name='sui_fang_ping_gu_for_boolfield_yuan_wai_jian_kang_ping_gu_A6220', on_delete=models.CASCADE, null=True, blank=True, verbose_name='监测评估')
     class Meta:
         verbose_name = '监测评估'
