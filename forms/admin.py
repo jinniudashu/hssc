@@ -146,7 +146,7 @@ admin.site.register(A6218, A6218Admin)
 clinic_site.register(A6218, A6218Admin)
 
 class Z6205Admin(HsscFormAdmin):
-    autocomplete_fields = ["relatedfield_affiliation", ]
+    autocomplete_fields = ["relatedfield_affiliation", "relatedfield_service_role", ]
 admin.site.register(Z6205, Z6205Admin)
 clinic_site.register(Z6205, Z6205Admin)
 

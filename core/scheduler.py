@@ -14,7 +14,7 @@ from analytics.models import UserSession
 from analytics.utils import get_client_ip
 
 # 导入作业事件表、指令表
-from core.models import Staff, Customer, Event, Event_instructions, Instruction, OperationProc, Operation
+from core.models import Staff, Customer, OperationProc, Service, ServiceRule, EventRule
 from core.models import SYSTEM_EVENTS
 # 导入自定义作业完成信号
 from core.signals import operand_finished, operand_started
@@ -23,7 +23,7 @@ from core.utils import keyword_replace
 # 作业调度器
 def operation_scheduler(event, params):
     # 查找指令集，发送任务指令
-    event_instructions = Event_instructions.objects.filter(event=event)
+    event_instructions = ServiceRule.objects.filter(event=event)
     print('查找指令集，发送任务指令:', event, event_instructions)
 
     # 指令参数
@@ -33,7 +33,7 @@ def operation_scheduler(event, params):
         task_params['oname'] = event_instruction.params  # 从事件指令参数中获取作业名称
 
         # 根据每条事件指令和预定义的作业分配策略，确定作业任务的操作员
-        operation = Operation.objects.get(name=task_params['oname'])
+        operation = Service.objects.get(name=task_params['oname'])
         task_params['group'] = operation.group.all()
 
         task_func = event_instruction.instruction.func  # 从事件指令中获取操作函数名
@@ -104,7 +104,7 @@ def operand_finished_handler(sender, **kwargs):
 
     # 2. 检查规则表，判断当前作业有规定业务事件需要检查, 如有取出规则集，逐一检查表达式是否为真，触发业务事件, 决定后续作业
     try:
-        events = Event.objects.filter(operation = proc.operation)
+        events = EventRule.objects.filter(operation = proc.operation)
         if events:
             event_params={'uid': proc.operator.id, 'cid': proc.customer.id, 'ppid': proc.ppid}  # 构造事件参数
             for event in events:
@@ -142,9 +142,12 @@ def operand_finished_handler(sender, **kwargs):
 # 收到注册成功信号，生成用户注册事件：registration.signals.user_registered
 @receiver(user_registered)
 def user_registered_handler(sender, user, request, **kwargs):
+    service_rule = ServiceRule.objects.get(name=SYSTEM_EVENTS[0][1])  # 系统内置用户注册事件编码
+
+    operations_params = {}  # 构造作业参数
     params={'uid': None, 'cid': user.id, 'ppid': 0}
-    event = Event.objects.get(name=SYSTEM_EVENTS[0][1])  # 系统内置用户注册事件编码
-    operation_scheduler(event, params)  # 把Event和参数发给调度器
+    
+    service_rule.system_operand.execute(**operations_params)  # 执行系统自动作业
 
 
 # 收到登录信号，生成用户/职员登录事件
@@ -170,7 +173,7 @@ def user_logged_in_handler(sender, user, request, **kwargs):
         params['ppid'] = 0
 
     try:
-        event = Event.objects.get(name=event_name)
+        event = ServiceRule.objects.get(name=event_name)
         operation_scheduler(event, params)  # 把Event和参数发给调度器
     except Exception as e:
         traceback.print_exc()
@@ -181,29 +184,30 @@ def user_logged_in_handler(sender, user, request, **kwargs):
 def user_post_save_handler(sender, instance, created, **kwargs):
     if not created:
         if instance.is_staff:
-            if Staff.objects.filter(user=instance).exists():
-                print('更新员工信息', instance)            
-                instance.staff.name = instance.last_name+instance.first_name
-                instance.staff.email = instance.email
-                instance.staff.save()
-            else:
-                print('创建员工信息', instance)
-                Staff.objects.create(
-                    user=instance,
-                    name=instance.last_name+instance.first_name,
-                    email=instance.email,
-                )
+            print('职员修改', instance)
+            # if Customer.objects.filter(user=instance).exists():
+            #     print('更新员工信息', instance)            
+            #     instance.name = instance.last_name+instance.first_name
+            #     # instance.staff.email = instance.email
+            #     instance.save()
+            # else:
+            #     print('创建员工信息', instance)
+            #     Customer.objects.create(
+            #         user=instance,
+            #         name=instance.last_name+instance.first_name,
+            #         # email=instance.email,
+            #     )
         else:
             if Customer.objects.filter(user=instance).exists():
                 print('更新客户信息', instance)
-                instance.customer.name = instance.last_name+instance.first_name
-                instance.customer.save()
-            else:
-                print('创建客户信息', instance)
-                Customer.objects.create(
-                    user=instance,
-                    name=instance.last_name+instance.first_name,
-                )
+            #     instance.customer.name = instance.last_name+instance.first_name
+            #     instance.customer.save()
+            # else:
+            #     print('创建客户信息', instance)
+            #     Customer.objects.create(
+            #         user=instance,
+            #         name=instance.last_name+instance.first_name,
+            #     )
 
 
 @receiver(m2m_changed, sender=User.groups.through)
@@ -229,35 +233,35 @@ def user_m2m_changed_handler(sender, instance, **kwargs):
 
 
 # 监视事件表Event变更，变更事件后续作业时，同步变更事件指令表Event_instructions的内容
-@receiver(m2m_changed, sender=Event.next.through)
-def event_m2m_changed_handler(sender, instance, action, **kwargs):
+# @receiver(m2m_changed, sender=Event.next.through)
+# def event_m2m_changed_handler(sender, instance, action, **kwargs):
 
-    # 设定指令为 create_operation_proc
-    instruction_create_operation_proc = Instruction.objects.get(name='create_operation_proc')
+#     # 设定指令为 create_operation_proc
+#     instruction_create_operation_proc = Instruction.objects.get(name='create_operation_proc')
 
-    # 获取后续作业
-    next_operations = []
-    if action == 'post_add':
-        next_operations = instance.next.all()
-        print('!!post_add:', next_operations)
-    elif action == 'post_remove':
-        next_operations = instance.next.all()
-        print('##post_remove:', next_operations)
+#     # 获取后续作业
+#     next_operations = []
+#     if action == 'post_add':
+#         next_operations = instance.next.all()
+#         print('!!post_add:', next_operations)
+#     elif action == 'post_remove':
+#         next_operations = instance.next.all()
+#         print('##post_remove:', next_operations)
     
-    # 删除原有事件指令
-    Event_instructions.objects.filter(event=instance).delete()
+#     # 删除原有事件指令
+#     Event_instructions.objects.filter(event=instance).delete()
 
-    # 新增事件指令
-    for operation in next_operations:
-        Event_instructions.objects.create(
-            event=instance,
-            instruction=instruction_create_operation_proc,
-            order=1,
-            params=operation.name,    # 用后续作业name作为指令参数
-        )
+#     # 新增事件指令
+#     for operation in next_operations:
+#         Event_instructions.objects.create(
+#             event=instance,
+#             instruction=instruction_create_operation_proc,
+#             order=1,
+#             params=operation.name,    # 用后续作业name作为指令参数
+#         )
 
 
 # 监视事件表变更，管理员删除事件表Event时，同步删除事件指令表Event_instructions的内容
-@receiver(post_delete, sender=Event)
-def event_post_delete_handler(sender, instance, **kwargs):
-    Event_instructions.objects.filter(event=instance).delete()
+# @receiver(post_delete, sender=Event)
+# def event_post_delete_handler(sender, instance, **kwargs):
+#     Event_instructions.objects.filter(event=instance).delete()

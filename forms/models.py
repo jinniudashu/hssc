@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, Staff, Customer, OperationProc, ServiceProc
+from core.models import HsscFormModel, Role, Staff, Customer, OperationProc, ServiceProc
 from entities.models import *
 
 
@@ -414,7 +414,7 @@ class Z6205(HsscFormModel):
     characterfield_practice_time = models.CharField(max_length=255, null=True, blank=True, verbose_name='执业时间')
     datetimefield_date_of_birth = models.DateTimeField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_affiliation = models.ForeignKey(Institution, related_name='institution_for_relatedfield_affiliation_Z6205', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
-    relatedfield_service_role = models.ManyToManyField(Group, related_name='group_for_relatedfield_service_role_Z6205', verbose_name='服务角色')
+    relatedfield_service_role = models.ManyToManyField(Role, related_name='role_for_relatedfield_service_role_Z6205', verbose_name='服务角色')
     class Meta:
         verbose_name = '医生注册'
         verbose_name_plural = verbose_name

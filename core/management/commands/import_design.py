@@ -37,7 +37,9 @@ class Command(BaseCommand):
                 self.write_file('./icpc/admin.py', value)
                 print(key)
             elif key == 'icpc_data':
-                self.write_file('./icpc/fixtures/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))                
+                self.write_file('./icpc/fixtures/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))
+            elif key == 'core_initial_data':
+                self.write_file('./core/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))
             else:
                 self.write_file(f'./forms/{key}.py', value)
                 print(key)

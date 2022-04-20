@@ -20,7 +20,8 @@ def index_staff(request):
     # operator=Staff.objects.get(user=request.user)
     # 获取当前用户所属角色组的所有作业进程
     # group = Group.objects.filter(user=request.user)
-    user = Staff.objects.get(user=request.user)
+    # user = Customer.objects.get(user=request.user)
+    user = None
     print('user:', user)
 
     current_operations = OperationProc.objects.current_operations(user)

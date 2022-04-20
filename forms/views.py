@@ -1400,8 +1400,8 @@ class A6220_UpdateView(UpdateView):
 class A6299_CreateView(CreateView):
     success_url = 'forms/'
     template_name = 'A6299_create.html'
-    form_class = A6207_ModelForm  # the first form ModelForm class
-    model = A6207
+    form_class = A6204_ModelForm  # the first form ModelForm class
+    model = A6204
     context = {}
 
     def get_context_data(self, **kwargs):
@@ -1409,35 +1409,35 @@ class A6299_CreateView(CreateView):
         if self.request.method == 'POST':
             base_form = A6203_ModelForm(self.request.POST, prefix="base_form")
 
-            attribute_form0 = A6207_ModelForm(self.request.POST, prefix="attribute_form0")
-            attribute_form1 = A6212_ModelForm(self.request.POST, prefix="attribute_form1")
-            attribute_form2 = A6209_ModelForm(self.request.POST, prefix="attribute_form2")
-            attribute_form3 = A6213_ModelForm(self.request.POST, prefix="attribute_form3")
-            attribute_form4 = A6215_ModelForm(self.request.POST, prefix="attribute_form4")
-            attribute_form5 = A6204_ModelForm(self.request.POST, prefix="attribute_form5")
-            attribute_form6 = A6216_ModelForm(self.request.POST, prefix="attribute_form6")
-            attribute_form7 = A6205_ModelForm(self.request.POST, prefix="attribute_form7")
-            attribute_form8 = A6214_ModelForm(self.request.POST, prefix="attribute_form8")
-            attribute_form9 = A6206_ModelForm(self.request.POST, prefix="attribute_form9")
-            attribute_form10 = A6208_ModelForm(self.request.POST, prefix="attribute_form10")
-            attribute_form11 = A6203_ModelForm(self.request.POST, prefix="attribute_form11")
-            attribute_form12 = A6210_ModelForm(self.request.POST, prefix="attribute_form12")
+            attribute_form0 = A6204_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form1 = A6216_ModelForm(self.request.POST, prefix="attribute_form1")
+            attribute_form2 = A6205_ModelForm(self.request.POST, prefix="attribute_form2")
+            attribute_form3 = A6214_ModelForm(self.request.POST, prefix="attribute_form3")
+            attribute_form4 = A6206_ModelForm(self.request.POST, prefix="attribute_form4")
+            attribute_form5 = A6208_ModelForm(self.request.POST, prefix="attribute_form5")
+            attribute_form6 = A6203_ModelForm(self.request.POST, prefix="attribute_form6")
+            attribute_form7 = A6210_ModelForm(self.request.POST, prefix="attribute_form7")
+            attribute_form8 = A6207_ModelForm(self.request.POST, prefix="attribute_form8")
+            attribute_form9 = A6212_ModelForm(self.request.POST, prefix="attribute_form9")
+            attribute_form10 = A6209_ModelForm(self.request.POST, prefix="attribute_form10")
+            attribute_form11 = A6213_ModelForm(self.request.POST, prefix="attribute_form11")
+            attribute_form12 = A6215_ModelForm(self.request.POST, prefix="attribute_form12")
         else:
             base_form = A6203_ModelForm(prefix="base_form")
 
-            attribute_form0 = A6207_ModelForm(prefix="attribute_form0")
-            attribute_form1 = A6212_ModelForm(prefix="attribute_form1")
-            attribute_form2 = A6209_ModelForm(prefix="attribute_form2")
-            attribute_form3 = A6213_ModelForm(prefix="attribute_form3")
-            attribute_form4 = A6215_ModelForm(prefix="attribute_form4")
-            attribute_form5 = A6204_ModelForm(prefix="attribute_form5")
-            attribute_form6 = A6216_ModelForm(prefix="attribute_form6")
-            attribute_form7 = A6205_ModelForm(prefix="attribute_form7")
-            attribute_form8 = A6214_ModelForm(prefix="attribute_form8")
-            attribute_form9 = A6206_ModelForm(prefix="attribute_form9")
-            attribute_form10 = A6208_ModelForm(prefix="attribute_form10")
-            attribute_form11 = A6203_ModelForm(prefix="attribute_form11")
-            attribute_form12 = A6210_ModelForm(prefix="attribute_form12")
+            attribute_form0 = A6204_ModelForm(prefix="attribute_form0")
+            attribute_form1 = A6216_ModelForm(prefix="attribute_form1")
+            attribute_form2 = A6205_ModelForm(prefix="attribute_form2")
+            attribute_form3 = A6214_ModelForm(prefix="attribute_form3")
+            attribute_form4 = A6206_ModelForm(prefix="attribute_form4")
+            attribute_form5 = A6208_ModelForm(prefix="attribute_form5")
+            attribute_form6 = A6203_ModelForm(prefix="attribute_form6")
+            attribute_form7 = A6210_ModelForm(prefix="attribute_form7")
+            attribute_form8 = A6207_ModelForm(prefix="attribute_form8")
+            attribute_form9 = A6212_ModelForm(prefix="attribute_form9")
+            attribute_form10 = A6209_ModelForm(prefix="attribute_form10")
+            attribute_form11 = A6213_ModelForm(prefix="attribute_form11")
+            attribute_form12 = A6215_ModelForm(prefix="attribute_form12")
         # context
         context['base_form'] = base_form
         context['attribute_form0'] = attribute_form0
@@ -1520,8 +1520,8 @@ class A6299_CreateView(CreateView):
 class A6299_UpdateView(UpdateView):
     success_url = 'forms/'
     template_name = 'A6299_update.html'
-    form_class = A6207_ModelForm # the first form ModelForm class
-    model = A6207
+    form_class = A6204_ModelForm # the first form ModelForm class
+    model = A6204
 
     # if operation_proc.group is None:  # 如果进程角色已经被置为空，说明已有其他人处理，退出本修改作业进程
     #     return redirect(reverse('index'))
@@ -1538,36 +1538,36 @@ class A6299_UpdateView(UpdateView):
         customer = operation_proc.customer
         base_form = A6203_ModelForm(instance=A6203.objects.get(customer=1), prefix="base_form")
         if self.request.method == 'POST':
-            attribute_form0 = A6207_ModelForm(self.request.POST, prefix="attribute_form0")
-            attribute_form1 = A6212_ModelForm(self.request.POST, prefix="attribute_form1")
-            attribute_form2 = A6209_ModelForm(self.request.POST, prefix="attribute_form2")
-            attribute_form3 = A6213_ModelForm(self.request.POST, prefix="attribute_form3")
-            attribute_form4 = A6215_ModelForm(self.request.POST, prefix="attribute_form4")
-            attribute_form5 = A6204_ModelForm(self.request.POST, prefix="attribute_form5")
-            attribute_form6 = A6216_ModelForm(self.request.POST, prefix="attribute_form6")
-            attribute_form7 = A6205_ModelForm(self.request.POST, prefix="attribute_form7")
-            attribute_form8 = A6214_ModelForm(self.request.POST, prefix="attribute_form8")
-            attribute_form9 = A6206_ModelForm(self.request.POST, prefix="attribute_form9")
-            attribute_form10 = A6208_ModelForm(self.request.POST, prefix="attribute_form10")
-            attribute_form11 = A6203_ModelForm(self.request.POST, prefix="attribute_form11")
-            attribute_form12 = A6210_ModelForm(self.request.POST, prefix="attribute_form12")
+            attribute_form0 = A6204_ModelForm(self.request.POST, prefix="attribute_form0")
+            attribute_form1 = A6216_ModelForm(self.request.POST, prefix="attribute_form1")
+            attribute_form2 = A6205_ModelForm(self.request.POST, prefix="attribute_form2")
+            attribute_form3 = A6214_ModelForm(self.request.POST, prefix="attribute_form3")
+            attribute_form4 = A6206_ModelForm(self.request.POST, prefix="attribute_form4")
+            attribute_form5 = A6208_ModelForm(self.request.POST, prefix="attribute_form5")
+            attribute_form6 = A6203_ModelForm(self.request.POST, prefix="attribute_form6")
+            attribute_form7 = A6210_ModelForm(self.request.POST, prefix="attribute_form7")
+            attribute_form8 = A6207_ModelForm(self.request.POST, prefix="attribute_form8")
+            attribute_form9 = A6212_ModelForm(self.request.POST, prefix="attribute_form9")
+            attribute_form10 = A6209_ModelForm(self.request.POST, prefix="attribute_form10")
+            attribute_form11 = A6213_ModelForm(self.request.POST, prefix="attribute_form11")
+            attribute_form12 = A6215_ModelForm(self.request.POST, prefix="attribute_form12")
             # 构造作业完成消息参数
             operand_finished.send(sender=self, pid=kwargs['id'], ocode='rtc', field_values=self.request.POST)
             return redirect(reverse('index'))
         else:
-            attribute_form0 = A6207_ModelForm(instance=A6207.objects.get(pid=kwargs['id']), prefix="attribute_form0")
-            attribute_form1 = A6212_ModelForm(instance=A6212.objects.get(pid=kwargs['id']), prefix="attribute_form1")
-            attribute_form2 = A6209_ModelForm(instance=A6209.objects.get(pid=kwargs['id']), prefix="attribute_form2")
-            attribute_form3 = A6213_ModelForm(instance=A6213.objects.get(pid=kwargs['id']), prefix="attribute_form3")
-            attribute_form4 = A6215_ModelForm(instance=A6215.objects.get(pid=kwargs['id']), prefix="attribute_form4")
-            attribute_form5 = A6204_ModelForm(instance=A6204.objects.get(pid=kwargs['id']), prefix="attribute_form5")
-            attribute_form6 = A6216_ModelForm(instance=A6216.objects.get(pid=kwargs['id']), prefix="attribute_form6")
-            attribute_form7 = A6205_ModelForm(instance=A6205.objects.get(pid=kwargs['id']), prefix="attribute_form7")
-            attribute_form8 = A6214_ModelForm(instance=A6214.objects.get(pid=kwargs['id']), prefix="attribute_form8")
-            attribute_form9 = A6206_ModelForm(instance=A6206.objects.get(pid=kwargs['id']), prefix="attribute_form9")
-            attribute_form10 = A6208_ModelForm(instance=A6208.objects.get(pid=kwargs['id']), prefix="attribute_form10")
-            attribute_form11 = A6203_ModelForm(instance=A6203.objects.get(pid=kwargs['id']), prefix="attribute_form11")
-            attribute_form12 = A6210_ModelForm(instance=A6210.objects.get(pid=kwargs['id']), prefix="attribute_form12")
+            attribute_form0 = A6204_ModelForm(instance=A6204.objects.get(pid=kwargs['id']), prefix="attribute_form0")
+            attribute_form1 = A6216_ModelForm(instance=A6216.objects.get(pid=kwargs['id']), prefix="attribute_form1")
+            attribute_form2 = A6205_ModelForm(instance=A6205.objects.get(pid=kwargs['id']), prefix="attribute_form2")
+            attribute_form3 = A6214_ModelForm(instance=A6214.objects.get(pid=kwargs['id']), prefix="attribute_form3")
+            attribute_form4 = A6206_ModelForm(instance=A6206.objects.get(pid=kwargs['id']), prefix="attribute_form4")
+            attribute_form5 = A6208_ModelForm(instance=A6208.objects.get(pid=kwargs['id']), prefix="attribute_form5")
+            attribute_form6 = A6203_ModelForm(instance=A6203.objects.get(pid=kwargs['id']), prefix="attribute_form6")
+            attribute_form7 = A6210_ModelForm(instance=A6210.objects.get(pid=kwargs['id']), prefix="attribute_form7")
+            attribute_form8 = A6207_ModelForm(instance=A6207.objects.get(pid=kwargs['id']), prefix="attribute_form8")
+            attribute_form9 = A6212_ModelForm(instance=A6212.objects.get(pid=kwargs['id']), prefix="attribute_form9")
+            attribute_form10 = A6209_ModelForm(instance=A6209.objects.get(pid=kwargs['id']), prefix="attribute_form10")
+            attribute_form11 = A6213_ModelForm(instance=A6213.objects.get(pid=kwargs['id']), prefix="attribute_form11")
+            attribute_form12 = A6215_ModelForm(instance=A6215.objects.get(pid=kwargs['id']), prefix="attribute_form12")
         # context
         context['base_form'] = base_form
         context['attribute_form0'] = attribute_form0
