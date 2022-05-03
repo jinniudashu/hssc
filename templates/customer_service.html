@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+<script src="htmx.min.js" defer></script>
+
+{% block content %}
+    <h3>病例首页</h3>
+    {{ profile.name }}
+    {{ profile.phone }}
+    {{ profile.address }}
+    {{ profile.charge_staff }}
+    {{ profile.workgroup.label }}
+    <a href="{{ profile.get_absolute_url }}">查看详情</a>
+    <br>
+    <hr>
+    <br>
+    <h3>已安排服务</h3>
+    {% for proc in scheduled_services %}
+        <a href="{{ proc.entry }}">{{ proc.service.label }}</a>
+        <br>
+    {% endfor %}
+    <br>
+    <hr>
+    <br>
+    <h3>可选服务</h3>
+    {% for service in recommanded_services %}
+        <a href="/core/new_service/{{ profile.id }}/{{ service.service.id }}/">{{ service.service.label }}</a>
+        <br>
+    {% endfor %}
+    <br>
+    <hr>
+    <br>
+    <h3>历史服务</h3>
+    {% for proc in history_services %}
+        <a href="{{ proc.entry }}">{{ proc.service.label }}</a>
+        <br>
+    {% endfor %}
+    <br>
+    <hr>
+    <br>
+    <input type="submit" value="新增服务安排" onclick="location.href='/clinic/';"/>
+    <span>
+        <input type="button" value="新增服务" hx-trigger="click" hx-get="/core/get_services/{{ profile.id }}" hx-target="#popup_menu" hx-swap="innerHTML" />
+        <select id="popup_menu" onchange="javascript:handleSelect(this)"></select>
+    </span>
+    <input type="submit" value="退出" onclick="location.href='/clinic/';"/>
+
+    <script type="text/javascript">
+        function handleSelect(item)
+        {
+            window.location = "/core/new_service/"+item.value+"/";
+        }
+    </script>
+
+{% endblock %}

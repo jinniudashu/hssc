@@ -22,12 +22,12 @@ class UniversalManagerApp(AppConfig):
 	"""
 	name = 'hssc'
 
-	def ready(self):
-		models = apps.get_app_config('forms').get_models()
-		# models = apps.get_models()
-		for model in models:
-			admin_class = type('AdminClass', (ListAdminMixin, admin.ModelAdmin), {})
-			try:
-				admin.site.register(model, admin_class)
-			except admin.sites.AlreadyRegistered:
-				pass
+	# def ready(self):
+	# 	models = apps.get_app_config('forms').get_models()
+	# 	# models = apps.get_models()
+	# 	for model in models:
+	# 		admin_class = type('AdminClass', (ListAdminMixin, admin.ModelAdmin), {})
+	# 		try:
+	# 			admin.site.register(model, admin_class)
+	# 		except admin.sites.AlreadyRegistered:
+	# 			pass

@@ -9,9 +9,9 @@
         <hr><form action={% url 'tang_hua_xue_hong_dan_bai_jian_cha_biao_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
             <h5>糖化血红蛋白检查</h5>
-            {{ attribute_form0.as_p }}
+            {{ t3405_form.as_p }}
         <hr>
         </form>
-        <input type="submit" value="完成服务" onclick="formSave('attribute_form1')" />
+        <input type="submit" value="完成服务" onclick="formSave('t3405_form')" />
     {% endblock %}
     

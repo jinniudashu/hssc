@@ -9,9 +9,9 @@
         <hr><form action={% url 'T6301_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
             <h5>糖尿病一般随访</h5>
-            {{ attribute_form0.as_p }}
+            {{ t6301_form.as_p }}
         <hr>
         </form>
-        <input type="submit" value="完成服务" onclick="formSave('attribute_form1')" />
+        <input type="submit" value="完成服务" onclick="formSave('t6301_form')" />
     {% endblock %}
     

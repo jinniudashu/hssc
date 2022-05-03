@@ -1,15 +1,14 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from forms.admin import clinic_site
+from hssc.site import clinic_site
 from .views import index
 
 urlpatterns = [
     path('', index, name='index'),
     path('accounts/', include('registration.backends.simple.urls')),
     path('admin/', admin.site.urls, name='admin'),
-    path('clinic/', clinic_site.urls, name='clinic'),
-    path('forms/', include('forms.urls')),
+    path('clinic/', clinic_site.urls, name='clinic:index'),
     path('core/', include('core.urls')),
     # path('grappelli/', include('grappelli.urls')),
 ]

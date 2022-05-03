@@ -1,0 +1,127 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<form method="get">
+	<h5>共享服务</h5>
+	{% for proc in unassigned_procs %}
+        <div class="proc-item">
+            <a href="receive_task/{{ proc.id }}">
+                <span class="proc-item-title-time">{{ proc.customer.name }}</span>
+                <span class="proc-item-title-text">{{ proc.service.label }}</span>
+                <span class="proc-item-title-text">{{ proc.customer.workgroup.label }}</span>
+            </a>
+        </div>
+    {% endfor %}
+</form>
+<br>
+<hr>
+<br>
+<form method="get">
+	<h5>今日服务安排</h5>
+	{{ today_todos_formset.non_form_errors.as_ul }}
+	<table id="formset" class="form">
+	{% for form in today_todos_formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1 row2 %}">
+	  {% for field in form.visible_fields %}
+      <td>
+          {# Include the hidden fields in the form #}
+              {% if forloop.first %}
+              {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+              {% endfor %}
+          </a>
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+	</table>	
+</form>
+<br>
+<hr>
+<br>
+<form method="get">
+	<h5>紧要服务安排</h5>
+	{{ urgent_todos_formset.non_form_errors.as_ul }}
+	<table id="formset" class="form">
+	{% for form in urgent_todos_formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1 row2 %}">
+	  {% for field in form.visible_fields %}
+		<td>
+		{# Include the hidden fields in the form #}
+		{% if forloop.first %}
+		  {% for hidden in form.hidden_fields %}
+		  {{ hidden }}
+		  {% endfor %}
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+	</table>	
+</form>
+<br>
+<hr>
+<br>
+<form method="get">
+	<h5>本周服务安排</h5>
+	{{ week_todos_formset.non_form_errors.as_ul }}
+	<table id="formset" class="form">
+	{% for form in week_todos_formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1 row2 %}">
+	  {% for field in form.visible_fields %}
+		<td>
+		{# Include the hidden fields in the form #}
+		{% if forloop.first %}
+		  {% for hidden in form.hidden_fields %}
+		  {{ hidden }}
+		  {% endfor %}
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+	</table>
+</form>
+
+<br>
+
+{% endblock %}

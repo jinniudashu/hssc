@@ -9,9 +9,9 @@
         <hr><form action={% url 'A6218_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
             <h5>门诊医生问诊</h5>
-            {{ attribute_form0.as_p }}
+            {{ a6218_form.as_p }}
         <hr>
         </form>
-        <input type="submit" value="完成服务" onclick="formSave('attribute_form1')" />
+        <input type="submit" value="完成服务" onclick="formSave('a6218_form')" />
     {% endblock %}
     

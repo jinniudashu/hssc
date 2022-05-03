@@ -9,13 +9,13 @@
         <hr><form action={% url 'tang_niao_bing_cha_ti_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
             <h5>足背动脉检查</h5>
-            {{ attribute_form0.as_p }}
+            {{ t3003_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>眼底检查</h5>
-            {{ attribute_form1.as_p }}
+            {{ t3002_form.as_p }}
         <hr>
         </form>
-        <input type="submit" value="完成服务" onclick="formSave('attribute_form2')" />
+        <input type="submit" value="完成服务" onclick="formSave('t3002_form')" />
     {% endblock %}
     

@@ -9,9 +9,9 @@
         <hr><form action={% url 'T8901_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
             <h5>非胰岛素依赖性糖尿病</h5>
-            {{ attribute_form0.as_p }}
+            {{ t9001_form.as_p }}
         <hr>
         </form>
-        <input type="submit" value="完成服务" onclick="formSave('attribute_form1')" />
+        <input type="submit" value="完成服务" onclick="formSave('t9001_form')" />
     {% endblock %}
     

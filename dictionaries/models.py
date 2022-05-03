@@ -304,3 +304,45 @@ class Dan_bai_zhi(DictBase):
     class Meta:
         verbose_name = '蛋白质'
         verbose_name_plural = verbose_name
+
+
+class Yong_yao_tu_jing(DictBase):
+    class Meta:
+        verbose_name = '用药途径'
+        verbose_name_plural = verbose_name
+
+
+class Xin_yu_ping_ji(DictBase):
+    class Meta:
+        verbose_name = '信誉评级'
+        verbose_name_plural = verbose_name
+
+
+class Yao_pin_dan_wei(DictBase):
+    class Meta:
+        verbose_name = '药品计量单位'
+        verbose_name_plural = verbose_name
+
+
+class Yao_pin_fen_lei(DictBase):
+    class Meta:
+        verbose_name = '药品分类'
+        verbose_name_plural = verbose_name
+
+
+class Fu_wu_jue_se(DictBase):
+    class Meta:
+        verbose_name = '服务角色'
+        verbose_name_plural = verbose_name
+
+
+class She_bei_shi_yong_fu_wu_gong_neng(DictBase):
+    class Meta:
+        verbose_name = '设备适用服务功能'
+        verbose_name_plural = verbose_name
+
+
+class Qin_shu_guan_xi(DictBase):
+    class Meta:
+        verbose_name = '亲属关系'
+        verbose_name_plural = verbose_name

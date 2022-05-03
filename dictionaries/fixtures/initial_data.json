@@ -1,5 +1,247 @@
 [
     {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5a48c8-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "支",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5a88f6-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "盒",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5ab66e-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "粒",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5af732-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "片",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5b2d9c-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "袋",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5b619a-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "瓶",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_dan_wei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ec5b93fe-c116-11ec-b731-2617a93150cd",
+            "pym": null,
+            "value": "ml",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Xin_yu_ping_ji",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "e9c84600-c5cb-11ec-b9d4-725badf7393d",
+            "pym": null,
+            "value": "高",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Xin_yu_ping_ji",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "e9c98baa-c5cb-11ec-b9d4-725badf7393d",
+            "pym": null,
+            "value": "中",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Xin_yu_ping_ji",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "e9c9bda0-c5cb-11ec-b9d4-725badf7393d",
+            "pym": null,
+            "value": "低",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_fen_lei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "d8ab56a2-c5ce-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "抗生素类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_fen_lei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "d8abe8ba-c5ce-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "激素类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7d24f6-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "健康管家",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7d5872-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "医生",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7d8978-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "助理医生",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7db9b6-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "公卫医生",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7df16a-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "护士",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7e2356-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "药房",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7e566e-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "化验",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7e928c-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "计免",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7ecd4c-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "行政管理",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Fu_wu_jue_se",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "2e7f073a-c5d0-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "系统管理员",
+            "icpc": null
+        }
+    },
+    {
         "model": "dictionaries.Blood_type",
         "fields": {
             "label": "B型",
@@ -700,6 +942,17 @@
             "hssc_id": "de5f6e88-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "yywyjtyd",
             "value": "有氧无氧交替运动",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qian_dao_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "83000b58-a52b-11ec-a478-2ec403f6c47b",
+            "pym": null,
+            "value": "未到达",
             "icpc": null
         }
     },
@@ -1452,17 +1705,6 @@
         }
     },
     {
-        "model": "dictionaries.Qian_dao_que_ren",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "83000b58-a52b-11ec-a478-2ec403f6c47b",
-            "pym": null,
-            "value": "未到达",
-            "icpc": null
-        }
-    },
-    {
         "model": "dictionaries.Shi_mian_qing_kuang",
         "fields": {
             "label": null,
@@ -1856,6 +2098,182 @@
             "pym": null,
             "value": "阳性",
             "icpc": "U9802"
+        }
+    },
+    {
+        "model": "dictionaries.Yong_yao_tu_jing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ff333b92-bf7e-11ec-8dcd-6afc6c25d902",
+            "pym": null,
+            "value": "口服",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yong_yao_tu_jing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ff352092-bf7e-11ec-8dcd-6afc6c25d902",
+            "pym": null,
+            "value": "注射",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yong_yao_tu_jing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ff357d76-bf7e-11ec-8dcd-6afc6c25d902",
+            "pym": null,
+            "value": "外用",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.She_bei_shi_yong_fu_wu_gong_neng",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "306de290-c5d6-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "检查类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.She_bei_shi_yong_fu_wu_gong_neng",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "306e23ea-c5d6-11ec-b819-725badf7393d",
+            "pym": null,
+            "value": "干预类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c036dc4-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "父亲",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c040cb6-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "母亲",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c043bdc-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "爷爷",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c04676a-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "奶奶",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c049906-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "外公",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c04d42a-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "外婆",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c05012a-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "兄妹",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c052cfe-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "儿子",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c055b7a-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "女儿",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c058532-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "表兄妹",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qin_shu_guan_xi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6c05d60e-cab9-11ec-b358-8e39d789b675",
+            "pym": null,
+            "value": "堂兄妹",
+            "icpc": null
         }
     }
 ]

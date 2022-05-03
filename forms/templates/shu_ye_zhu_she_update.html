@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+    {% block content %}
+    
+        <form action='' method='GET' enctype='multipart/form-data'> 
+            {% csrf_token %}                
+            <h5>个人基本信息</h5>
+            {{ base_form.as_table }}
+        </form>
+        <hr><form action={% url 'shu_ye_zhu_she_update_url' id %} method='POST' enctype='multipart/form-data'> 
+            {% csrf_token %}                
+            <h5>输液注射单</h5>
+            {{ shu_ye_zhu_she_dan_form.as_p }}
+        <hr>
+        </form>
+        <input type="submit" value="完成服务" onclick="formSave('shu_ye_zhu_she_dan_form')" />
+    {% endblock %}
+    

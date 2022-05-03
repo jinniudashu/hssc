@@ -1,90 +1,82 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
-from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib.auth.models import User
+import datetime
 
-from core.models import Staff, Customer, OperationProc
-from core.forms import OperationFormSet
-
-class OperatorInfo:
-    def __init__(self, operator_id):
-        self.operator = Staff.objects.get(id=operator_id)
-        self.role = self.operator.role.all()
-
-    def get_menu_items(self):
-        pass
-
-def index_staff(request):
-    context = {}
-    # operator=Staff.objects.get(user=request.user)
-    # 获取当前用户所属角色组的所有作业进程
-    # group = Group.objects.filter(user=request.user)
-    # user = Customer.objects.get(user=request.user)
-    user = None
-    print('user:', user)
-
-    current_operations = OperationProc.objects.current_operations(user)
-    print('current_operations:', current_operations)
-    current_operations_formset = OperationFormSet(initial=current_operations, prefix='current_operations')
-    context['current_procs_formset'] = current_operations_formset
-
-    urgent_operations = OperationProc.objects.urgent_operations(user)
-    print('urgent_operations:', urgent_operations)
-    urgent_operations_formset = OperationFormSet(initial=urgent_operations, prefix='urgent_operations')
-    context['urgent_operations_formset'] = urgent_operations_formset
-
-    week_operations = OperationProc.objects.week_operations(user)
-    print('week_operations:', week_operations)
-    week_operations_formset = OperationFormSet(initial=week_operations, prefix='week_operations')
-    context['week_operations_formset'] = week_operations_formset
-
-    return render(request, 'index_staff.html', context)
-
-
-def customer_view(request):
-    context = {}
-    customer = Customer(request.GET.get('customer_id'))
-    
-    from forms.forms import A6203_ModelForm
-    mr_home_page = customer.get_mr_home_page()
-    mr_home_page_form = A6203_ModelForm(initial=mr_home_page, prefix='mr_home_page')
-    context['mr_home_page_form'] = mr_home_page_form
-
-    from core.forms import OperationItemFormSet
-    history_services = customer.get_history_services()
-    history_services_formset = OperationItemFormSet(initial=history_services, prefix='history_services')
-    context['history_services_formset'] = history_services_formset
-    recommanded_services = customer.get_recommanded_services()
-    recommanded_services_formset = OperationItemFormSet(initial=recommanded_services, prefix='recommanded_services')
-    context['recommanded_services_formset'] = recommanded_services_formset
-    scheduled_services = customer.get_scheduled_services()
-    scheduled_services_formset = OperationItemFormSet(initial=scheduled_services, prefix='scheduled_services')
-    context['scheduled_services_formset'] = scheduled_services_formset
-
-    return render(request, 'customer_info.html', context)
-
+from core.models import Customer, OperationProc, Service
+from service.models import *
 
 def index_customer(request):
     context = {}
     customer = Customer.objects.get(user=request.user)
     context ['customer'] = customer.name
-    print('customer:', customer)
     # 获取当前用户所属的所有作业进程
     procs = OperationProc.objects.exclude(state=4).filter(customer=customer)
-    print('procs:', procs)
     todos = []
     for proc in procs:
         todo = {}
-        todo['operation'] = proc.operation.label
-        todo['url'] = f'{proc.operation.name}_update_url'
-        todo['proc_id'] = proc.id
+        todo['service'] = proc.service.label
         todos.append(todo)
     context['todos'] = todos
 
     return render(request, 'index_customer.html', context)
 
 
-def htmx_test(request):
-    print('From htmx_test:', request)
-    return HttpResponse('From: htmx_test')
+def get_services(request, **kwargs):
+    '''
+    从kwargs获取参数：customer_id
+    返回context可用服务列表,customer_id
+    '''
+    context = {}
+    # staff_roles = User.objects.get(username=request.user).customer.staff.role.all()
+    # context['services'] = Service.objects.filter(role__in=staff_roles)  
+    context['services'] = Service.objects.filter(is_system_service=False)
+    context['customer_id'] = kwargs['customer_id']
+    return render(request, 'popup_menu.html', context)
+
+
+def new_service(request, **kwargs):
+    '''
+    人工创建新服务：作业进程+表单进程
+    从kwargs获取参数：customer_id, service_id
+    '''
+    # 从request获取参数：customer, service, operator, creator
+    customer = Customer.objects.get(id=kwargs['customer_id'])
+    operator = User.objects.get(username=request.user).customer
+    service = Service.objects.get(id=kwargs['service_id'])
+
+    # 创建新的OperationProc服务作业进程实例
+    new_proc=OperationProc.objects.create(
+        service=service,  # 服务
+        customer=customer,  # 客户
+        operator=operator,  # 操作员
+        creater=operator,  # 创建者
+        state=1,  # 进程状态为创建
+        scheduled_time=datetime.datetime.now(),  # 创建时间
+        # contract_service_proc=contract_service_proc,  # 所属合约服务进程
+    )
+
+    # 创建新的model实例
+    form = eval(service.name.capitalize()).objects.create(
+        customer=customer,
+        creater=operator,
+        operator=operator,
+        pid=new_proc,
+        cpid=new_proc.contract_service_proc,
+    )
+
+    # 添加model的客户基本信息
+    form.characterfield_name = new_proc.customer.name
+    # form.characterfield_gender = new_proc.customer.a6299_customer.characterfield_gender
+    # form.characterfield_age = new_proc.customer.a6299_customer.characterfield_age
+    form.characterfield_contact_information = new_proc.customer.phone
+    form.characterfield_contact_address = new_proc.customer.address
+    form.save()
+
+    # 更新OperationProc服务进程的入口url
+    new_proc.entry = f'/clinic/service/{service.name.lower()}/{form.id}/change'
+    new_proc.save()
+
+
+    # 重定向到/clinic/service/model/id/change
+    return redirect(new_proc.entry)

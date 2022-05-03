@@ -8,58 +8,58 @@
         </form>
         <hr><form action={% url 'A6299_create_url' %} method='POST' enctype='multipart/form-data'> 
             {% csrf_token %}                
+            <h5>家族病史</h5>
+            {{ a6209_form.as_p }}
+        <hr>
+            {% csrf_token %}                
             <h5>疾病史</h5>
-            {{ attribute_form0.as_p }}
+            {{ a6204_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>社会环境评估</h5>
-            {{ attribute_form1.as_p }}
-        <hr>
-            {% csrf_token %}                
-            <h5>手术史</h5>
-            {{ attribute_form2.as_p }}
-        <hr>
-            {% csrf_token %}                
-            <h5>个人身体健康评估</h5>
-            {{ attribute_form3.as_p }}
+            {{ a6216_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>外伤史</h5>
-            {{ attribute_form4.as_p }}
+            {{ a6206_form.as_p }}
+        <hr>
+            {% csrf_token %}                
+            <h5>手术史</h5>
+            {{ a6205_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>输血史</h5>
-            {{ attribute_form5.as_p }}
+            {{ a6208_form.as_p }}
         <hr>
             {% csrf_token %}                
-            <h5>个人基本信息</h5>
-            {{ attribute_form6.as_p }}
+            <h5>个人身体健康评估</h5>
+            {{ a6214_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>遗传病史</h5>
-            {{ attribute_form7.as_p }}
-        <hr>
-            {% csrf_token %}                
-            <h5>过敏史</h5>
-            {{ attribute_form8.as_p }}
+            {{ a6210_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>个人健康行为调查</h5>
-            {{ attribute_form9.as_p }}
+            {{ a6212_form.as_p }}
         <hr>
             {% csrf_token %}                
-            <h5>家族病史</h5>
-            {{ attribute_form10.as_p }}
+            <h5>个人基本信息</h5>
+            {{ a6203_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>个人心理综合素质调查</h5>
-            {{ attribute_form11.as_p }}
+            {{ a6213_form.as_p }}
+        <hr>
+            {% csrf_token %}                
+            <h5>过敏史</h5>
+            {{ a6207_form.as_p }}
         <hr>
             {% csrf_token %}                
             <h5>个人适应能力评估</h5>
-            {{ attribute_form12.as_p }}
+            {{ a6215_form.as_p }}
         <hr>
         </form>
-        <input type="submit" value="完成服务" onclick="formSave('attribute_form13')" />
+        <input type="submit" value="完成服务" onclick="formSave('a6215_form')" />
     {% endblock %}
     

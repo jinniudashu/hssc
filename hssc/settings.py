@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'crispy_forms',
     # our apps
     'analytics',
@@ -56,7 +57,8 @@ INSTALLED_APPS = [
     'entities',
     'dictionaries',
     'icpc',
-    'forms',
+    # 'forms',
+    'service',
     
     'hssc.apps.UniversalManagerApp',
     'rest_framework',
@@ -178,7 +180,7 @@ django_heroku.settings(locals())
 # django-registration-redux
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
-LOGIN_REDIRECT_URL = '/forms/' # The page you want users to arrive at after they successful log in
+LOGIN_REDIRECT_URL = '/index_customer/' # The page you want users to arrive at after they successful log in
 LOGIN_URL = 'accounts/login/' # The page users are directed to if they are not logged in,
 SIMPLE_BACKEND_REDIRECT_URL = '/'
 

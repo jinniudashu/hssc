@@ -1,8 +1,9 @@
 from django.contrib import admin
 from hssc.site import clinic_site
-from .models import Workgroup, Role, Staff, Customer, Service
-from .models import ServiceProc, OperationProc
+from core.models import *
 
+
+admin.site.register(StaffTodo)
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
@@ -19,79 +20,112 @@ class StaffAdmin(admin.ModelAdmin):
     search_fields = ['name']
 clinic_site.register(Staff, StaffAdmin)
 
+
 class WorkgroupAdmin(admin.ModelAdmin):
     list_display = ('label', 'leader')
     readonly_fields = ['name']
 admin.site.register(Workgroup, WorkgroupAdmin)
 clinic_site.register(Workgroup, WorkgroupAdmin)
 
-# class EventInline(admin.TabularInline):
-#     model = Event
-#     extra = 0
-
-
-# class OperationAdmin(admin.ModelAdmin):
-#     list_display = ['label', 'name', 'id']
-#     list_display_links = ['label', 'name']
-#     readonly_fields = ['forms']
-#     fieldsets = (
-#         (None, {
-#             'fields': (('label', 'name', ), 'forms', 'priority', 'group',)
-#         }),
-#         ('作业管理', {
-#             'fields': ('not_suitable', 'time_limits', 'working_hours', 'cost', 'load_feedback')
-#         }),
-#         ('资源配置', {
-#             'fields': ('resource_materials','resource_devices','resource_knowledge')
-#         }),
-#     )
-    
-#     search_fields = ['name', 'label']
-#     inlines = [EventInline]
-#     ordering = ['id']
-# admin.site.register(Operation, OperationAdmin)
-
-
-# class EventAdmin(admin.ModelAdmin):
-# #     change_form_template = "core/templates/change_form.html"
-#     list_display = ['label', 'name', 'operation', 'id']
-#     list_display_links = ['label', 'name', 'operation',]
-#     search_fields = ['name', 'label']
-#     readonly_fields = ['parameters']
-#     ordering = ['id']
-# admin.site.register(Event, EventAdmin)
-
 
 class OperationProcAdmin(admin.ModelAdmin):
-    list_display = ['id', 'service', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
-    list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'ppid', 'service_proc']
+    list_display = ['id', 'service', 'operator', 'customer', 'state', 'entry', 'parent_proc', 'contract_service_proc']
+    list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'parent_proc', 'contract_service_proc']
     ordering = ['id']
 admin.site.register(OperationProc, OperationProcAdmin)
 
 
+@admin.register(BuessinessForm)
+class BuessinessFormAdmin(admin.ModelAdmin):
+    list_display = ['name_icpc', 'label', 'name', 'id']
+    list_display_links = ['label', 'name',]
+    fieldsets = (
+        (None, {
+            'fields': (('label', 'name_icpc'), 'description', ('name', 'hssc_id'), )
+        }),
+    )
+    search_fields = ['name', 'label', 'pym']
+    readonly_fields = ['name', 'hssc_id', 'meta_data']
+    autocomplete_fields = ['name_icpc',]
+
+
+class BuessinessFormsSettingInline(admin.TabularInline):
+    model = BuessinessFormsSetting
+    exclude = ['name', 'label', 'hssc_id']
+    autocomplete_fields = ['buessiness_form']
+
+
+@admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'id']
-    list_display_links = ['name']
-    search_fields = ['name']
+    list_display = ['name_icpc', 'label', 'name', 'id']
+    list_display_links = ['label', 'name',]
+    fieldsets = (
+        ('基本信息', {
+            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority'), 'role', ('history_services_display', 'enable_queue_counter'), ('name', 'hssc_id'))
+        }),
+        ('作业管理', {
+            'fields': ('suppliers', 'not_suitable', ('awaiting_time_frame' ,'execution_time_frame'), 'working_hours', 'cost', 'load_feedback')
+        }),
+        ('资源配置', {
+            'fields': ('resource_materials','resource_devices','resource_knowledge')
+        }),
+    )
+    search_fields=['label', 'pym']
     ordering = ['id']
-admin.site.register(Service, ServiceAdmin)
+    readonly_fields = ['name', 'hssc_id']
+    inlines = [BuessinessFormsSettingInline]
+    filter_horizontal = ("role",)
+    autocomplete_fields = ["name_icpc"]
 
 
-# class Event_instructionsAdmin(admin.ModelAdmin):
-#     list_display = ['event', 'instruction', 'order', 'params', 'id']
-#     list_display_links = ['event', 'instruction', 'order', 'params']
-#     search_fields = ['event']
-#     ordering = ['id']
-# admin.site.register(Event_instructions, Event_instructionsAdmin)
+class ServicePackageDetailInline(admin.TabularInline):
+    model = ServicePackageDetail
+    exclude = ['name', 'label', 'hssc_id', 'pym']
+    autocomplete_fields = ['service']
+
+@admin.register(ServicePackage)
+class ServicePackageAdmin(admin.ModelAdmin):
+    list_display = ['name_icpc', 'label', 'id']
+    list_display_links = ['label', ]
+    fieldsets = (
+        (None, {
+            'fields': (('label', 'name_icpc'), ('begin_time_setting', 'duration', 'awaiting_time_frame' ,'execution_time_frame'), ('name', 'hssc_id'))
+        }),
+    )
+    search_fields=['label', 'pym']
+    readonly_fields = ['name', 'hssc_id']
+    inlines = [ServicePackageDetailInline]
+    ordering = ['id']
 
 
-# class InstructionAdmin(admin.ModelAdmin):
-#     list_display = ['label', 'name', 'code', 'func', 'description', 'id']
-#     list_display_links = ['label', 'name', 'code', 'func']
-#     search_fields = ['name']
-#     ordering = ['id']
-# admin.site.register(Instruction, InstructionAdmin)
+@admin.register(ServiceRule)
+class ServiceRuleAdmin(admin.ModelAdmin):
+    list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'complete_feedback', 'is_active']
+    list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'complete_feedback', 'is_active']
+    list_display_links = ['label', ]
+    readonly_fields = ['name', 'hssc_id']
+    autocomplete_fields = ['service', 'next_service', 'event_rule']
+    ordering = ['id']
 
 
-admin.site.register(ServiceProc)
+@admin.register(ManagedEntity)
+class ManagedEntityAdmin(admin.ModelAdmin):
+    readonly_fields = ['hssc_id', 'pym', 'name', 'model_name']
+
+
+@admin.register(EventRule)
+class EventRuleAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description', 'detection_scope', 'weight')
+    list_display_links = ['label', 'description']
+    search_fields=['label', 'name', 'pym']
+    readonly_fields = ['expression', 'hssc_id']
+    ordering = ('id',)
+
+
+admin.site.register(ContractServiceProc)
+admin.site.register(SystemOperand)
+admin.site.register(ServiceSpec)
+admin.site.register(ContractService)
+admin.site.register(RecommendedService)
+admin.site.register(Message)
 
