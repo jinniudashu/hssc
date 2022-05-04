@@ -21,13 +21,13 @@ def operand_started_handler(sender, **kwargs):
     operation_proc.operator = kwargs['operator']  # 设置当前用户为作业进程操作员
     operation_proc.save()
 
+
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
     # 用operand_finished信号参数的pid获取operation_proc
     operation_proc = OperationProc.objects.get(id=kwargs['pid'])
     # 更新作业进程状态
-    operation_proc.update_state(kwargs['ocode'])
-    
+    operation_proc.update_state(kwargs['ocode'])    
 
 
 @receiver(user_logged_in)

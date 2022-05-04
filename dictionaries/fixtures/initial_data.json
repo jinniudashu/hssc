@@ -946,6 +946,17 @@
         }
     },
     {
+        "model": "dictionaries.Qian_dao_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "83000b58-a52b-11ec-a478-2ec403f6c47b",
+            "pym": null,
+            "value": "未到达",
+            "icpc": null
+        }
+    },
+    {
         "model": "dictionaries.Comparative_expression",
         "fields": {
             "label": "改善很大",
@@ -1690,17 +1701,6 @@
             "hssc_id": "82ffcc42-a52b-11ec-a478-2ec403f6c47b",
             "pym": null,
             "value": "已到达",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Qian_dao_que_ren",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "83000b58-a52b-11ec-a478-2ec403f6c47b",
-            "pym": null,
-            "value": "未到达",
             "icpc": null
         }
     },

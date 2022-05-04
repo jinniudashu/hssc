@@ -118,7 +118,7 @@ class EventRuleAdmin(admin.ModelAdmin):
     list_display = ('label', 'description', 'detection_scope', 'weight')
     list_display_links = ['label', 'description']
     search_fields=['label', 'name', 'pym']
-    readonly_fields = ['expression', 'hssc_id']
+    readonly_fields = ['hssc_id']
     ordering = ('id',)
 
 

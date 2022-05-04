@@ -6,6 +6,36 @@ from crispy_forms.layout import Layout, Field, HTML, Submit
 
 from .models import *
 
+class Z6205_ModelForm(ModelForm):
+    class Meta:
+        model = Z6205
+        fields = ['characterfield_name', 'characterfield_gender', 'characterfield_age', 'characterhssc_identification_number', 'characterfield_contact_address', 'characterfield_practice_qualification', 'characterfield_password_setting', 'characterfield_confirm_password', 'characterfield_expertise', 'characterfield_practice_time', 'datetimefield_date_of_birth', 'relatedfield_affiliation', 'relatedfield_service_role', ]
+        widgets = {'relatedfield_affiliation': Select, 'relatedfield_service_role': CheckboxSelectMultiple, }
+    
+class A3109_ModelForm(ModelForm):
+    class Meta:
+        model = A3109
+        fields = ['characterfield_right_eye_vision', 'characterfield_left_eye_vision', ]
+        
+    
+class A3108_ModelForm(ModelForm):
+    class Meta:
+        model = A3108
+        fields = ['relatedfield_lips', 'relatedfield_dentition', 'relatedfield_pharynx', ]
+        widgets = {'relatedfield_lips': RadioSelect, 'relatedfield_dentition': RadioSelect, 'relatedfield_pharynx': Select, }
+    
+class T4502_ModelForm(ModelForm):
+    class Meta:
+        model = T4502
+        fields = ['T4502', ]
+        widgets = {'T4502': SelectMultiple, }
+    
+class Ji_gou_ji_ben_xin_xi_biao_ModelForm(ModelForm):
+    class Meta:
+        model = Ji_gou_ji_ben_xin_xi_biao
+        fields = ['characterfield_contact_address', 'characterfield_contact_number', 'boolfield_ji_gou_bian_ma', 'boolfield_ji_gou_ming_cheng', 'boolfield_ji_gou_dai_ma', 'boolfield_ji_gou_shu_xing', 'boolfield_ji_gou_ceng_ji', 'boolfield_suo_zai_hang_zheng_qu_hua_dai_ma', 'boolfield_xing_zheng_qu_hua_gui_shu', 'boolfield_fa_ding_fu_ze_ren', ]
+        
+    
 class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao_ModelForm(ModelForm):
     class Meta:
         model = Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao
@@ -17,12 +47,6 @@ class Zhi_yuan_ji_ben_xin_xi_biao_ModelForm(ModelForm):
         model = Zhi_yuan_ji_ben_xin_xi_biao
         fields = ['characterfield_name', 'characterhssc_identification_number', 'characterfield_practice_qualification', 'characterfield_expertise', 'characterfield_practice_time', 'characterfield_contact_number', 'boolfield_zhi_yuan_bian_ma', 'relatedfield_affiliation', 'relatedfield_service_role', ]
         widgets = {'relatedfield_affiliation': Select, 'relatedfield_service_role': CheckboxSelectMultiple, }
-    
-class Ji_gou_ji_ben_xin_xi_biao_ModelForm(ModelForm):
-    class Meta:
-        model = Ji_gou_ji_ben_xin_xi_biao
-        fields = ['characterfield_contact_address', 'characterfield_contact_number', 'boolfield_ji_gou_bian_ma', 'boolfield_ji_gou_ming_cheng', 'boolfield_ji_gou_dai_ma', 'boolfield_ji_gou_shu_xing', 'boolfield_ji_gou_ceng_ji', 'boolfield_suo_zai_hang_zheng_qu_hua_dai_ma', 'boolfield_xing_zheng_qu_hua_gui_shu', 'boolfield_fa_ding_fu_ze_ren', ]
-        
     
 class She_bei_ji_ben_xin_xi_biao_ModelForm(ModelForm):
     class Meta:
@@ -197,30 +221,6 @@ class A6218_ModelForm(ModelForm):
         model = A6218
         fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', ]
         widgets = {'relatedfield_symptom_list': SelectMultiple, }
-    
-class T4502_ModelForm(ModelForm):
-    class Meta:
-        model = T4502
-        fields = ['T4502', ]
-        widgets = {'T4502': SelectMultiple, }
-    
-class Z6205_ModelForm(ModelForm):
-    class Meta:
-        model = Z6205
-        fields = ['characterfield_name', 'characterfield_gender', 'characterfield_age', 'characterhssc_identification_number', 'characterfield_contact_address', 'characterfield_practice_qualification', 'characterfield_password_setting', 'characterfield_confirm_password', 'characterfield_expertise', 'characterfield_practice_time', 'datetimefield_date_of_birth', 'relatedfield_affiliation', 'relatedfield_service_role', ]
-        widgets = {'relatedfield_affiliation': Select, 'relatedfield_service_role': CheckboxSelectMultiple, }
-    
-class A3109_ModelForm(ModelForm):
-    class Meta:
-        model = A3109
-        fields = ['characterfield_right_eye_vision', 'characterfield_left_eye_vision', ]
-        
-    
-class A3108_ModelForm(ModelForm):
-    class Meta:
-        model = A3108
-        fields = ['relatedfield_lips', 'relatedfield_dentition', 'relatedfield_pharynx', ]
-        widgets = {'relatedfield_lips': RadioSelect, 'relatedfield_dentition': RadioSelect, 'relatedfield_pharynx': Select, }
     
 class A6205_ModelForm(ModelForm):
     class Meta:

@@ -170,8 +170,7 @@ admin.site.register(A6220, A6220Admin)
 clinic_site.register(A6220, A6220Admin)
 
 class A6299Admin(HsscFormAdmin):
-    fieldsets = (("基本信息", {"fields": ((),)}), 
-        ("个人基本信息", {"fields": ("characterfield_name", "characterhssc_identification_number", "characterfield_resident_file_number", "characterfield_family_address", "characterfield_contact_number", "characterfield_medical_ic_card_number", "datetimefield_date_of_birth", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", )}), 
+    fieldsets = (("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "characterfield_age", "characterfield_contact_address", "characterfield_contact_number", ),)}), 
         ("遗传病史", {"fields": ("boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", )}), 
         ("过敏史", {"fields": ("relatedfield_drug_name", )}), 
         ("家族病史", {"fields": ("boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", )}), 
@@ -184,8 +183,8 @@ class A6299Admin(HsscFormAdmin):
         ("个人身体健康评估", {"fields": ("relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", )}), 
         ("个人健康行为调查", {"fields": ("characterfield_average_sleep_duration", "characterfield_duration_of_insomnia", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", )}), 
         ("社会环境评估", {"fields": ("relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", )}), )
-    autocomplete_fields = ["relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", "boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", "relatedfield_drug_name", "boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", "relatedfield_name_of_operation", "boolfield_ge_ren_bing_shi", "boolfield_wai_shang_xing_ji_bing", "relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", "relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", "relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", ]
-    readonly_fields = []
+    autocomplete_fields = ["boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", "relatedfield_drug_name", "boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", "relatedfield_name_of_operation", "boolfield_ge_ren_bing_shi", "boolfield_wai_shang_xing_ji_bing", "relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", "relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", "relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", ]
+    readonly_fields = ["characterfield_name", "characterfield_gender", "characterfield_age", "characterfield_contact_address", "characterfield_contact_number", ]
 admin.site.register(A6299, A6299Admin)
 clinic_site.register(A6299, A6299Admin)
 
@@ -253,3 +252,11 @@ class Shu_ye_zhu_sheAdmin(HsscFormAdmin):
     readonly_fields = ["characterfield_name", "characterfield_gender", "characterfield_age", "characterfield_contact_address", "characterfield_contact_number", ]
 admin.site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)
 clinic_site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)
+
+class Ju_min_ji_ben_xin_xi_diao_chaAdmin(HsscFormAdmin):
+    fieldsets = (("基本信息", {"fields": ((),)}), 
+        ("个人基本信息", {"fields": ("characterfield_name", "characterhssc_identification_number", "characterfield_resident_file_number", "characterfield_family_address", "characterfield_contact_number", "characterfield_medical_ic_card_number", "datetimefield_date_of_birth", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", )}), )
+    autocomplete_fields = ["relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", ]
+    readonly_fields = []
+admin.site.register(Ju_min_ji_ben_xin_xi_diao_cha, Ju_min_ji_ben_xin_xi_diao_chaAdmin)
+clinic_site.register(Ju_min_ji_ben_xin_xi_diao_cha, Ju_min_ji_ben_xin_xi_diao_chaAdmin)
