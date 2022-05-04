@@ -9,8 +9,8 @@ class Command(BaseCommand):
         # 表单系统脚本源代码URL
         # 获取脚本源码，创建文件
 
-        SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_backup/source_codes_list/'
-        # SOURCECODE_URL = 'http://127.0.0.1:8000/define_backup/source_codes_list/'
+        # SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_backup/source_codes_list/'
+        SOURCECODE_URL = 'http://127.0.0.1:8000/define_backup/source_codes_list/'
         print('开始导入脚本...')
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]

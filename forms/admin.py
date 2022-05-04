@@ -16,31 +16,6 @@ class HsscFormAdmin(admin.ModelAdmin):
         )
 
 
-class Z6205Admin(HsscFormAdmin):
-    autocomplete_fields = ["relatedfield_affiliation", "relatedfield_service_role", ]
-admin.site.register(Z6205, Z6205Admin)
-clinic_site.register(Z6205, Z6205Admin)
-
-class A3109Admin(HsscFormAdmin):
-    pass
-admin.site.register(A3109, A3109Admin)
-clinic_site.register(A3109, A3109Admin)
-
-class A3108Admin(HsscFormAdmin):
-    autocomplete_fields = ["relatedfield_lips", "relatedfield_dentition", "relatedfield_pharynx", ]
-admin.site.register(A3108, A3108Admin)
-clinic_site.register(A3108, A3108Admin)
-
-class T4502Admin(HsscFormAdmin):
-    autocomplete_fields = ["T4502", ]
-admin.site.register(T4502, T4502Admin)
-clinic_site.register(T4502, T4502Admin)
-
-class Ji_gou_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
-    pass
-admin.site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
-clinic_site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
-
 class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
     autocomplete_fields = ["boolfield_xin_yu_ping_ji", ]
 admin.site.register(Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao, Wu_liu_gong_ying_shang_ji_ben_xin_xi_biaoAdmin)
@@ -50,6 +25,11 @@ class Zhi_yuan_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
     autocomplete_fields = ["relatedfield_affiliation", "relatedfield_service_role", ]
 admin.site.register(Zhi_yuan_ji_ben_xin_xi_biao, Zhi_yuan_ji_ben_xin_xi_biaoAdmin)
 clinic_site.register(Zhi_yuan_ji_ben_xin_xi_biao, Zhi_yuan_ji_ben_xin_xi_biaoAdmin)
+
+class Ji_gou_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
+    pass
+admin.site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
+clinic_site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
 
 class She_bei_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
     autocomplete_fields = ["boolfield_she_bei_shi_yong_fu_wu_gong_neng", ]
@@ -195,6 +175,26 @@ class A6218Admin(HsscFormAdmin):
     autocomplete_fields = ["relatedfield_symptom_list", ]
 admin.site.register(A6218, A6218Admin)
 clinic_site.register(A6218, A6218Admin)
+
+class T4502Admin(HsscFormAdmin):
+    autocomplete_fields = ["T4502", ]
+admin.site.register(T4502, T4502Admin)
+clinic_site.register(T4502, T4502Admin)
+
+class Z6205Admin(HsscFormAdmin):
+    autocomplete_fields = ["relatedfield_affiliation", "relatedfield_service_role", ]
+admin.site.register(Z6205, Z6205Admin)
+clinic_site.register(Z6205, Z6205Admin)
+
+class A3109Admin(HsscFormAdmin):
+    pass
+admin.site.register(A3109, A3109Admin)
+clinic_site.register(A3109, A3109Admin)
+
+class A3108Admin(HsscFormAdmin):
+    autocomplete_fields = ["relatedfield_lips", "relatedfield_dentition", "relatedfield_pharynx", ]
+admin.site.register(A3108, A3108Admin)
+clinic_site.register(A3108, A3108Admin)
 
 class A6205Admin(HsscFormAdmin):
     autocomplete_fields = ["relatedfield_name_of_operation", ]

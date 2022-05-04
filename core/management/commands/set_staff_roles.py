@@ -11,7 +11,9 @@ class Command(BaseCommand):
     help = 'Restore design data from backuped json file'
 
     def handle(self, *args, **options):
+        # 如果不存在管理员组，则创建
         admin_group = Group.objects.get(name='admin')  # 获取管理员组
+
         for user_data in test_user_data['user']:
             user = User.objects.get(username=user_data['username'])
             # 把测试用户增加到管理员组

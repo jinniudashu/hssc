@@ -289,6 +289,8 @@ class EventRule(HsscBase):
             list_fields = []
 
             # 获取需要被检查的表达式包含的字段名称, 转换为数组
+            print('From EventRule.is_satified 检查表达式:', self.expression)
+            print('From EventRule.is_satified 检查表达式字段:', self.expression_fields)
             _expression_fields = self.expression_fields.split(', ')            
             for field_name in _expression_fields:
                 # 获取表达式所用字段的表单值（form_data.field的值）,去除字符串值的空格
@@ -389,10 +391,12 @@ def check_rules(sender, **kwargs):
     # 根据operation_proc.service.hssc_id获取service_rule集合
     service_rules = ServiceRule.objects.filter(service=operation_proc.service, is_active=True)
     # 逐一检查event_rule.expression是否满足
+    print('From check_rules 检查服务规则：', service_rules)
     for service_rule in service_rules:
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件
         if service_rule.event_rule.is_satified(form_data):
             # 构造作业参数
+            print('From check_rules 满足规则：', service_rule)
             operation_params = {
                 'operation_proc': operation_proc,
                 'operator': operator,
@@ -406,8 +410,9 @@ def check_rules(sender, **kwargs):
                 'interval_time': service_rule.interval_time,
             }
             # 执行系统自动作业
+            print('From check_rules 操作参数:', operation_params)
             _result = service_rule.system_operand.execute(**operation_params)
-            print('check_rules:', _result)
+            print('From check_rules 执行结果:', _result)
     return None
 
 
@@ -513,14 +518,6 @@ class OperationProc(HsscBase):
         '''
         self.state = OperationCode[ocode].value
         self.save()
-
-from core.signals import operand_started
-@receiver(operand_started)
-def operand_started_handler(sender, **kwargs):
-    operation_proc = kwargs['operation_proc']  # 作业进程
-    operation_proc.update_state(kwargs['ocode'])  # 更新作业进程操作码    
-    operation_proc.operator = kwargs['operator']  # 设置当前用户为作业进程操作员
-    operation_proc.save()
 
 
 class StaffTodoManager(models.Manager):

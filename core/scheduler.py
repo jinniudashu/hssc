@@ -9,9 +9,25 @@ from registration.signals import user_registered, user_activated, user_approved
 from analytics.models import UserSession
 from analytics.utils import get_client_ip
 # 导入自定义作业完成信号
-from core.signals import operand_finished
+from core.signals import operand_finished, operand_started
 # 导入作业事件表、指令表
 from core.models import Staff, Customer, OperationProc, Service
+
+
+@receiver(operand_started)
+def operand_started_handler(sender, **kwargs):
+    operation_proc = kwargs['operation_proc']  # 作业进程
+    operation_proc.update_state(kwargs['ocode'])  # 更新作业进程操作码    
+    operation_proc.operator = kwargs['operator']  # 设置当前用户为作业进程操作员
+    operation_proc.save()
+
+@receiver(operand_finished)
+def operand_finished_handler(sender, **kwargs):
+    # 用operand_finished信号参数的pid获取operation_proc
+    operation_proc = OperationProc.objects.get(id=kwargs['pid'])
+    # 更新作业进程状态
+    operation_proc.update_state(kwargs['ocode'])
+    
 
 
 @receiver(user_logged_in)
@@ -76,7 +92,7 @@ def user_registered_handler(sender, user, request, **kwargs):
         state=4,  # 进程状态：注册完成
     )
 
-    # 发送登录作业完成信号
+    # 发送注册作业完成信号
     operand_finished.send(sender=user_registered_handler, pid=new_proc.id, ocode='RTC', uid=user.id, form_data=None)
     print('operand_finished sended')
 
