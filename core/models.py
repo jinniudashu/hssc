@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
+import importlib
 from enum import Enum
 from time import time
 import datetime
@@ -17,7 +18,8 @@ from pypinyin import lazy_pinyin
 # 导入自定义作业完成信号
 from core.signals import operand_finished
 from hssc.hsscbase_class import HsscBase, HsscPymBase
-from icpc.models import Icpc
+from icpc.models import *
+from dictionaries.models import *
 
 
 def gen_slug(s):
@@ -259,6 +261,7 @@ class SystemOperand(HsscBase):
 
 # 事件规则表
 from core.utils import keyword_replace
+from core.fields_type import FieldsType
 class EventRule(HsscBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
     Detection_scope = [(0, '所有历史表单'), (1, '本次服务表单'), (2, '单元服务表单')]
@@ -282,57 +285,45 @@ class EventRule(HsscBase):
         if self.expression == 'completed':
             return True
         else:
-            # 构造一个字段字典，存储表达式内的字段及它们的值
-            expression_fields = {}
-            # 表单字段如果有多个值，需要单独识别处理
-            # 使用list_fields存储有多个值的表达式字段
-            list_fields = []
-
-            # 获取需要被检查的表达式包含的字段名称, 转换为数组
             print('From EventRule.is_satified 检查表达式:', self.expression)
             print('From EventRule.is_satified 检查表达式字段:', self.expression_fields)
-            _expression_fields = self.expression_fields.split(', ')            
-            for field_name in _expression_fields:
-                # 获取表达式所用字段的表单值（form_data.field的值）,去除字符串值的空格
-                expression_fields[field_name] = f'{form_data[field_name]}'.replace(' ', '')
+            # 构造一个字段字典，存储表达式内的字段及它们的值
+            expression_fields = {}
+            # 获取需要被检查的表达式包含的字段名称, 转换为数组
+            for field_name in self.expression_fields.split(', '):
+                _type = eval(f'FieldsType.{field_name}.value')
+                if _type == 'Numbers':  # 如果字段类型是Numbers，直接转换为字符串
+                    expression_fields[field_name] = f'{form_data[field_name]}'
+                elif _type == 'String':  # 如果字段类型是String，转换为集合字符串
+                    expression_fields[field_name] = str(set(f'{form_data[field_name]}'.replace(' ', '')))
+                elif _type == 'Datetime':
+                    pass
+                elif _type == 'Date':
+                    pass
+                else:  # 字段值是关联字典，转换为集合字符串
+                    # 转换id列表为字典值列表
+                    if form_data.getlist(field_name):
+                        str_value_list = self.convert_id_to_value(_type, form_data.getlist(field_name))
+                        expression_fields[field_name] = str(set(str_value_list))
 
-                # 如果是字段值是数组，需要专门处理逻辑，入栈
-                if len(form_data.getlist(field_name))>1:
-                    list_fields.append({field_name: form_data.getlist(field_name)})  # 存储列表类型的表单字段
+            return eval(keyword_replace(self.expression, expression_fields))
 
-            # 栈为空，表示没有数组类型的字段，直接用assignments检查表达式
-            if not list_fields:
-                # 把表达式中的变量替换为字典中对应的字段值，调用解释器执行，返回结果True/False
-                return eval(keyword_replace(self.expression, expression_fields))
-            else:  # 如果栈中有数组，用栈中的数组的每个值排列组合，逐一更新字典相应字段值
-                return self.is_satified_on_list(list_fields, expression_fields, self.expression)
-
-    def is_satified_on_list(list_fields, expression_fields, expression):
-        '''
-        判断数组类型的字段值是否成立
-        '''
-        # 遍历数组字段，构造expression_fields字典
-        # 转换list_fields中的字典为数组：{'a': [1, 2, 3]} -> [{'a': 1}, {'a': 2}, {'a': 3}]
-        fields = []
-        for field in list_fields:
-            (key, value_list), = field.items()
-            value_dict_list = []
-            for value in value_list:
-                value_dict_list.append({key: value})
-            
-            fields.append(value_dict_list)
-
-        # 将fields中元素的每种排列组合逐一添加到assignments中
-        from itertools import product
-        for item in list(product(*fields)):
-            for key_list_pair in item:
-                (key, value), = key_list_pair.items()
-                expression_fields[key] = value
-            # 把表达式中的变量替换为字典中对应的字段值，判断表达式是否成立
-            if eval(keyword_replace(expression, expression_fields)):
-                return True  # 任一参数组合成立，则返回True
-        
-        return False
+    def convert_id_to_value(self, _type, id_list):
+        print('进入：', _type, id_list)
+        _model_list = _type.split('.')
+        app_label = _model_list[0]
+        model_name = _model_list[1]
+        val_list = []
+        if app_label == 'icpc':
+            for id in id_list:
+                val = eval(model_name).objects.get(id=id).iname
+                val_list.append(val)
+        elif app_label == 'dictionaries':
+            for id in id_list:
+                val = eval(model_name).objects.get(id=id).value
+                val_list.append(val)
+        print('退出：', val_list)
+        return val_list
 
 
 # 服务规格设置

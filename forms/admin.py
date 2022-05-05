@@ -16,6 +16,26 @@ class HsscFormAdmin(admin.ModelAdmin):
         )
 
 
+class A6201Admin(HsscFormAdmin):
+    autocomplete_fields = ["relatedfield_symptom_list", "boolfield_chang_yong_zheng_zhuang", ]
+admin.site.register(A6201, A6201Admin)
+clinic_site.register(A6201, A6201Admin)
+
+class A6502Admin(HsscFormAdmin):
+    autocomplete_fields = ["boolfield_qian_dao_que_ren", ]
+admin.site.register(A6502, A6502Admin)
+clinic_site.register(A6502, A6502Admin)
+
+class A6204Admin(HsscFormAdmin):
+    autocomplete_fields = ["boolfield_ge_ren_bing_shi", ]
+admin.site.register(A6204, A6204Admin)
+clinic_site.register(A6204, A6204Admin)
+
+class T6301Admin(HsscFormAdmin):
+    autocomplete_fields = ["boolfield_yao_pin_dan_wei", "relatedfield_drug_name", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "boolfield_tang_niao_bing_zheng_zhuang", ]
+admin.site.register(T6301, T6301Admin)
+clinic_site.register(T6301, T6301Admin)
+
 class Z6205Admin(HsscFormAdmin):
     autocomplete_fields = ["relatedfield_affiliation", "relatedfield_service_role", ]
 admin.site.register(Z6205, Z6205Admin)
@@ -265,26 +285,6 @@ class Z6261Admin(HsscFormAdmin):
     autocomplete_fields = ["boolfield_qian_yue_que_ren", "boolfield_ze_ren_ren", ]
 admin.site.register(Z6261, Z6261Admin)
 clinic_site.register(Z6261, Z6261Admin)
-
-class A6201Admin(HsscFormAdmin):
-    autocomplete_fields = ["relatedfield_symptom_list", "boolfield_chang_yong_zheng_zhuang", ]
-admin.site.register(A6201, A6201Admin)
-clinic_site.register(A6201, A6201Admin)
-
-class A6502Admin(HsscFormAdmin):
-    autocomplete_fields = ["boolfield_qian_dao_que_ren", ]
-admin.site.register(A6502, A6502Admin)
-clinic_site.register(A6502, A6502Admin)
-
-class A6204Admin(HsscFormAdmin):
-    autocomplete_fields = ["boolfield_ge_ren_bing_shi", ]
-admin.site.register(A6204, A6204Admin)
-clinic_site.register(A6204, A6204Admin)
-
-class T6301Admin(HsscFormAdmin):
-    autocomplete_fields = ["boolfield_yao_pin_dan_wei", "relatedfield_drug_name", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "boolfield_tang_niao_bing_zheng_zhuang", ]
-admin.site.register(T6301, T6301Admin)
-clinic_site.register(T6301, T6301Admin)
 
 class A6210Admin(HsscFormAdmin):
     autocomplete_fields = ["boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", ]

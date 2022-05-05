@@ -6,6 +6,30 @@ from crispy_forms.layout import Layout, Field, HTML, Submit
 
 from .models import *
 
+class A6201_ModelForm(ModelForm):
+    class Meta:
+        model = A6201
+        fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', 'boolfield_chang_yong_zheng_zhuang', ]
+        widgets = {'relatedfield_symptom_list': SelectMultiple, 'boolfield_chang_yong_zheng_zhuang': CheckboxSelectMultiple, }
+    
+class A6502_ModelForm(ModelForm):
+    class Meta:
+        model = A6502
+        fields = ['boolfield_qian_dao_que_ren', ]
+        widgets = {'boolfield_qian_dao_que_ren': RadioSelect, }
+    
+class A6204_ModelForm(ModelForm):
+    class Meta:
+        model = A6204
+        fields = ['datetimefield_time_of_diagnosis', 'boolfield_ge_ren_bing_shi', ]
+        widgets = {'boolfield_ge_ren_bing_shi': Select, }
+    
+class T6301_ModelForm(ModelForm):
+    class Meta:
+        model = T6301
+        fields = ['boolfield_fu_yong_pin_ci', 'boolfield_yao_pin_dan_wei', 'relatedfield_drug_name', 'relatedfield_drinking_frequency', 'relatedfield_smoking_frequency', 'boolfield_tang_niao_bing_zheng_zhuang', ]
+        widgets = {'boolfield_yao_pin_dan_wei': Select, 'relatedfield_drug_name': SelectMultiple, 'relatedfield_drinking_frequency': RadioSelect, 'relatedfield_smoking_frequency': RadioSelect, 'boolfield_tang_niao_bing_zheng_zhuang': CheckboxSelectMultiple, }
+    
 class Z6205_ModelForm(ModelForm):
     class Meta:
         model = Z6205
@@ -305,30 +329,6 @@ class Z6261_ModelForm(ModelForm):
         model = Z6261
         fields = ['boolfield_jia_ting_qian_yue_fu_wu_xie_yi', 'boolfield_qian_yue_que_ren', 'boolfield_ze_ren_ren', ]
         widgets = {'boolfield_qian_yue_que_ren': Select, 'boolfield_ze_ren_ren': Select, }
-    
-class A6201_ModelForm(ModelForm):
-    class Meta:
-        model = A6201
-        fields = ['characterfield_supplementary_description_of_the_condition', 'relatedfield_symptom_list', 'boolfield_chang_yong_zheng_zhuang', ]
-        widgets = {'relatedfield_symptom_list': SelectMultiple, 'boolfield_chang_yong_zheng_zhuang': CheckboxSelectMultiple, }
-    
-class A6502_ModelForm(ModelForm):
-    class Meta:
-        model = A6502
-        fields = ['boolfield_qian_dao_que_ren', ]
-        widgets = {'boolfield_qian_dao_que_ren': RadioSelect, }
-    
-class A6204_ModelForm(ModelForm):
-    class Meta:
-        model = A6204
-        fields = ['datetimefield_time_of_diagnosis', 'boolfield_ge_ren_bing_shi', ]
-        widgets = {'boolfield_ge_ren_bing_shi': Select, }
-    
-class T6301_ModelForm(ModelForm):
-    class Meta:
-        model = T6301
-        fields = ['boolfield_fu_yong_pin_ci', 'boolfield_yao_pin_dan_wei', 'relatedfield_drug_name', 'relatedfield_drinking_frequency', 'relatedfield_smoking_frequency', 'boolfield_tang_niao_bing_zheng_zhuang', ]
-        widgets = {'boolfield_yao_pin_dan_wei': Select, 'relatedfield_drug_name': SelectMultiple, 'relatedfield_drinking_frequency': RadioSelect, 'relatedfield_smoking_frequency': RadioSelect, 'boolfield_tang_niao_bing_zheng_zhuang': CheckboxSelectMultiple, }
     
 class A6210_ModelForm(ModelForm):
     class Meta:

@@ -27,6 +27,66 @@ def operation_proc_created(sender, instance, created, **kwargs):
         instance.save()
 
 
+class A6201(HsscFormModel):
+    characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', verbose_name='症状')
+    boolfield_chang_yong_zheng_zhuang = models.ManyToManyField(Chang_yong_zheng_zhuang, related_name='chang_yong_zheng_zhuang_for_boolfield_chang_yong_zheng_zhuang_A6201', verbose_name='常用症状')
+    class Meta:
+        verbose_name = '院外咨询'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('A6201_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('A6201_update_url', kwargs={'slug': self.slug})
+        
+
+class A6502(HsscFormModel):
+    boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
+    class Meta:
+        verbose_name = '门诊分诊'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('A6502_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('A6502_update_url', kwargs={'slug': self.slug})
+        
+
+class A6204(HsscFormModel):
+    datetimefield_time_of_diagnosis = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
+    boolfield_ge_ren_bing_shi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ge_ren_bing_shi_A6204', on_delete=models.CASCADE, null=True, blank=True, verbose_name='个人病史')
+    class Meta:
+        verbose_name = '疾病史'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('A6204_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('A6204_update_url', kwargs={'slug': self.slug})
+        
+
+class T6301(HsscFormModel):
+    boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
+    boolfield_yao_pin_dan_wei = models.ForeignKey(Yao_pin_dan_wei, related_name='yao_pin_dan_wei_for_boolfield_yao_pin_dan_wei_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品单位')
+    relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_T6301', verbose_name='药品名称')
+    relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
+    relatedfield_smoking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_smoking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='吸烟频次')
+    boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_T6301', verbose_name='糖尿病症状')
+    class Meta:
+        verbose_name = '糖尿病一般随访'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('T6301_detail_url', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        return reverse('T6301_update_url', kwargs={'slug': self.slug})
+        
+
 class Z6205(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
@@ -892,66 +952,6 @@ class Z6261(HsscFormModel):
 
     def get_update_url(self):
         return reverse('Z6261_update_url', kwargs={'slug': self.slug})
-        
-
-class A6201(HsscFormModel):
-    characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', verbose_name='症状')
-    boolfield_chang_yong_zheng_zhuang = models.ManyToManyField(Chang_yong_zheng_zhuang, related_name='chang_yong_zheng_zhuang_for_boolfield_chang_yong_zheng_zhuang_A6201', verbose_name='常用症状')
-    class Meta:
-        verbose_name = '院外咨询'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6201_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6201_update_url', kwargs={'slug': self.slug})
-        
-
-class A6502(HsscFormModel):
-    boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
-    class Meta:
-        verbose_name = '门诊分诊'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6502_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6502_update_url', kwargs={'slug': self.slug})
-        
-
-class A6204(HsscFormModel):
-    datetimefield_time_of_diagnosis = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
-    boolfield_ge_ren_bing_shi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ge_ren_bing_shi_A6204', on_delete=models.CASCADE, null=True, blank=True, verbose_name='个人病史')
-    class Meta:
-        verbose_name = '疾病史'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6204_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6204_update_url', kwargs={'slug': self.slug})
-        
-
-class T6301(HsscFormModel):
-    boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
-    boolfield_yao_pin_dan_wei = models.ForeignKey(Yao_pin_dan_wei, related_name='yao_pin_dan_wei_for_boolfield_yao_pin_dan_wei_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品单位')
-    relatedfield_drug_name = models.ManyToManyField(Medicine, related_name='medicine_for_relatedfield_drug_name_T6301', verbose_name='药品名称')
-    relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
-    relatedfield_smoking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_smoking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='吸烟频次')
-    boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_T6301', verbose_name='糖尿病症状')
-    class Meta:
-        verbose_name = '糖尿病一般随访'
-        verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T6301_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T6301_update_url', kwargs={'slug': self.slug})
         
 
 class A6210(HsscFormModel):
