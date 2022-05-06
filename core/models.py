@@ -17,7 +17,7 @@ from pypinyin import lazy_pinyin
 
 # 导入自定义作业完成信号
 from core.signals import operand_finished
-from hssc.hsscbase_class import HsscBase, HsscPymBase
+from core.hsscbase_class import HsscBase, HsscPymBase
 from icpc.models import *
 from dictionaries.models import *
 
@@ -261,7 +261,7 @@ class SystemOperand(HsscBase):
 
 # 事件规则表
 from core.utils import keyword_replace
-from core.fields_type import FieldsType
+from core.hsscbase_class import FieldsType
 class EventRule(HsscBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
     Detection_scope = [(0, '所有历史表单'), (1, '本次服务表单'), (2, '单元服务表单')]
@@ -303,12 +303,12 @@ class EventRule(HsscBase):
                 else:  # 字段值是关联字典，转换为集合字符串
                     # 转换id列表为字典值列表
                     if form_data.getlist(field_name):
-                        str_value_list = self.convert_id_to_value(_type, form_data.getlist(field_name))
+                        str_value_list = self._convert_id_to_value(_type, form_data.getlist(field_name))
                         expression_fields[field_name] = str(set(str_value_list))
 
             return eval(keyword_replace(self.expression, expression_fields))
 
-    def convert_id_to_value(self, _type, id_list):
+    def _convert_id_to_value(self, _type, id_list):
         print('进入：', _type, id_list)
         _model_list = _type.split('.')
         app_label = _model_list[0]
