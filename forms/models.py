@@ -8,25 +8,6 @@ from core.models import HsscFormModel, Role, Staff, OperationProc
 from entities.models import *
 
 
-@receiver(post_save, sender=OperationProc)
-def operation_proc_created(sender, instance, created, **kwargs):
-    # 创建服务进程里使用的表单实例, 将form_slugs保存到进程实例中
-    if created:
-        form_slugs = []
-        for form in instance.service.buessiness_forms.all():
-            form_class_name = form.name.capitalize()
-            print('创建表单实例:', form_class_name)
-            form = eval(form_class_name).objects.create(
-                customer=instance.customer,
-                creater=instance.operator,
-                pid=instance,
-                cpid=instance.contract_service_proc,
-            )
-            form_slugs.append({'form_name': form_class_name, 'slug': form.slug})
-        instance.form_slugs = json.dumps(form_slugs, ensure_ascii=False, indent=4)
-        instance.save()
-
-
 class A6201(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', verbose_name='症状')

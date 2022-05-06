@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 print(key)
             elif key == 'icpc_data':
                 self.write_file('./icpc/fixtures/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))
-            elif key == 'core_initial_data':
+            elif key == 'init_core_data':
                 self.write_file('./core/initial_data.json', json.dumps(value, ensure_ascii=False, indent=4))
             elif key == 'forms':
                 for _key, _value in value.items():
