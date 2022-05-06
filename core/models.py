@@ -1,17 +1,14 @@
-from django.db.models.query import QuerySet
 from django.db import models
-from django.db.models.deletion import CASCADE
+from django.db.models.query import QuerySet
+from django.db.models.signals import post_save
 from django.shortcuts import reverse
 from django.dispatch import receiver
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
-import importlib
 from enum import Enum
 from time import time
 import datetime
-import json
 
 from pypinyin import lazy_pinyin
 
@@ -677,7 +674,7 @@ class Staff(HsscBase):
 
 # 工作组
 class Workgroup(HsscBase):
-    leader = models.ForeignKey(Staff, on_delete=CASCADE, related_name='workgroup_customer', null=True, verbose_name='组长')
+    leader = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='workgroup_customer', null=True, verbose_name='组长')
     members = models.ManyToManyField(Staff, related_name='workgroup_members', blank=True, verbose_name='组员')
 
     class Meta:
