@@ -4,7 +4,7 @@ import json
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, Role, Staff, OperationProc
+from core.models import HsscFormModel, Staff
 from entities.models import *
 
 
@@ -15,12 +15,6 @@ class A6201(HsscFormModel):
     class Meta:
         verbose_name = '院外咨询'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6201_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6201_update_url', kwargs={'slug': self.slug})
         
 
 class A6502(HsscFormModel):
@@ -28,12 +22,6 @@ class A6502(HsscFormModel):
     class Meta:
         verbose_name = '门诊分诊'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6502_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6502_update_url', kwargs={'slug': self.slug})
         
 
 class A6204(HsscFormModel):
@@ -42,12 +30,6 @@ class A6204(HsscFormModel):
     class Meta:
         verbose_name = '疾病史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6204_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6204_update_url', kwargs={'slug': self.slug})
         
 
 class T6301(HsscFormModel):
@@ -60,12 +42,6 @@ class T6301(HsscFormModel):
     class Meta:
         verbose_name = '糖尿病一般随访'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T6301_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T6301_update_url', kwargs={'slug': self.slug})
         
 
 class Z6205(HsscFormModel):
@@ -85,12 +61,6 @@ class Z6205(HsscFormModel):
     class Meta:
         verbose_name = '医生注册'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('Z6205_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('Z6205_update_url', kwargs={'slug': self.slug})
         
 
 class A3109(HsscFormModel):
@@ -99,12 +69,6 @@ class A3109(HsscFormModel):
     class Meta:
         verbose_name = '视力检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3109_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3109_update_url', kwargs={'slug': self.slug})
         
 
 class A3108(HsscFormModel):
@@ -114,12 +78,6 @@ class A3108(HsscFormModel):
     class Meta:
         verbose_name = '口腔检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3108_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3108_update_url', kwargs={'slug': self.slug})
         
 
 class T4502(HsscFormModel):
@@ -127,12 +85,6 @@ class T4502(HsscFormModel):
     class Meta:
         verbose_name = '运动干预'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T4502_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T4502_update_url', kwargs={'slug': self.slug})
         
 
 class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
@@ -149,12 +101,6 @@ class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '机构基本信息表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('ji_gou_ji_ben_xin_xi_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('ji_gou_ji_ben_xin_xi_biao_update_url', kwargs={'slug': self.slug})
         
 
 class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao(HsscFormModel):
@@ -168,12 +114,6 @@ class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '物料供应商基本信息表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('wu_liu_gong_ying_shang_ji_ben_xin_xi_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('wu_liu_gong_ying_shang_ji_ben_xin_xi_biao_update_url', kwargs={'slug': self.slug})
         
 
 class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
@@ -189,12 +129,6 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '职员基本信息表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('zhi_yuan_ji_ben_xin_xi_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('zhi_yuan_ji_ben_xin_xi_biao_update_url', kwargs={'slug': self.slug})
         
 
 class She_bei_ji_ben_xin_xi_biao(HsscFormModel):
@@ -209,12 +143,6 @@ class She_bei_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '设备基本信息表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('she_bei_ji_ben_xin_xi_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('she_bei_ji_ben_xin_xi_biao_update_url', kwargs={'slug': self.slug})
         
 
 class Yong_yao_diao_cha_biao(HsscFormModel):
@@ -222,12 +150,6 @@ class Yong_yao_diao_cha_biao(HsscFormModel):
     class Meta:
         verbose_name = '用药调查表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('yong_yao_diao_cha_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('yong_yao_diao_cha_biao_update_url', kwargs={'slug': self.slug})
         
 
 class T3003(HsscFormModel):
@@ -236,12 +158,6 @@ class T3003(HsscFormModel):
     class Meta:
         verbose_name = '足背动脉检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T3003_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T3003_update_url', kwargs={'slug': self.slug})
         
 
 class T3002(HsscFormModel):
@@ -249,12 +165,6 @@ class T3002(HsscFormModel):
     class Meta:
         verbose_name = '眼底检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T3002_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T3002_update_url', kwargs={'slug': self.slug})
         
 
 class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
@@ -269,12 +179,6 @@ class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '服务分供机构基本信息表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_biao_update_url', kwargs={'slug': self.slug})
         
 
 class A6208(HsscFormModel):
@@ -286,12 +190,6 @@ class A6208(HsscFormModel):
     class Meta:
         verbose_name = '输血史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6208_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6208_update_url', kwargs={'slug': self.slug})
         
 
 class Z6233(HsscFormModel):
@@ -300,12 +198,6 @@ class Z6233(HsscFormModel):
     class Meta:
         verbose_name = '医生'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('Z6233_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('Z6233_update_url', kwargs={'slug': self.slug})
         
 
 class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
@@ -326,12 +218,6 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '药品基本信息表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('yao_pin_ji_ben_xin_xi_biao_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('yao_pin_ji_ben_xin_xi_biao_update_url', kwargs={'slug': self.slug})
         
 
 class A5001(HsscFormModel):
@@ -343,12 +229,6 @@ class A5001(HsscFormModel):
     class Meta:
         verbose_name = '药物处方'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A5001_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A5001_update_url', kwargs={'slug': self.slug})
         
 
 class T4504(HsscFormModel):
@@ -356,12 +236,6 @@ class T4504(HsscFormModel):
     class Meta:
         verbose_name = '健康教育'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T4504_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T4504_update_url', kwargs={'slug': self.slug})
         
 
 class Shu_ye_zhu_she_dan(HsscFormModel):
@@ -375,12 +249,6 @@ class Shu_ye_zhu_she_dan(HsscFormModel):
     class Meta:
         verbose_name = '输液注射单'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('shu_ye_zhu_she_dan_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('shu_ye_zhu_she_dan_update_url', kwargs={'slug': self.slug})
         
 
 class A6219(HsscFormModel):
@@ -390,12 +258,6 @@ class A6219(HsscFormModel):
     class Meta:
         verbose_name = '糖尿病专用问诊'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6219_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6219_update_url', kwargs={'slug': self.slug})
         
 
 class A6203(HsscFormModel):
@@ -419,12 +281,6 @@ class A6203(HsscFormModel):
     class Meta:
         verbose_name = '个人基本信息'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6203_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6203_update_url', kwargs={'slug': self.slug})
         
 
 class A3001(HsscFormModel):
@@ -476,12 +332,6 @@ class A3001(HsscFormModel):
     class Meta:
         verbose_name = '体格检查表'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3001_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3001_update_url', kwargs={'slug': self.slug})
         
 
 class A3101(HsscFormModel):
@@ -500,12 +350,6 @@ class A3101(HsscFormModel):
     class Meta:
         verbose_name = '身高体重测量'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3101_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3101_update_url', kwargs={'slug': self.slug})
         
 
 class A6501(HsscFormModel):
@@ -514,12 +358,6 @@ class A6501(HsscFormModel):
     class Meta:
         verbose_name = '代人预约挂号'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6501_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6501_update_url', kwargs={'slug': self.slug})
         
 
 class T4505(HsscFormModel):
@@ -530,12 +368,6 @@ class T4505(HsscFormModel):
     class Meta:
         verbose_name = '糖尿病自我监测'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T4505_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T4505_update_url', kwargs={'slug': self.slug})
         
 
 class A6211(HsscFormModel):
@@ -544,12 +376,6 @@ class A6211(HsscFormModel):
     class Meta:
         verbose_name = '重大生活事件调查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6211_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6211_update_url', kwargs={'slug': self.slug})
         
 
 class A3502(HsscFormModel):
@@ -559,12 +385,6 @@ class A3502(HsscFormModel):
     class Meta:
         verbose_name = '尿常规检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3502_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3502_update_url', kwargs={'slug': self.slug})
         
 
 class T4501(HsscFormModel):
@@ -572,12 +392,6 @@ class T4501(HsscFormModel):
     class Meta:
         verbose_name = '营养干预'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T4501_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T4501_update_url', kwargs={'slug': self.slug})
         
 
 class A6207(HsscFormModel):
@@ -585,12 +399,6 @@ class A6207(HsscFormModel):
     class Meta:
         verbose_name = '过敏史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6207_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6207_update_url', kwargs={'slug': self.slug})
         
 
 class A6206(HsscFormModel):
@@ -599,12 +407,6 @@ class A6206(HsscFormModel):
     class Meta:
         verbose_name = '外伤史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6206_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6206_update_url', kwargs={'slug': self.slug})
         
 
 class A3103(HsscFormModel):
@@ -623,12 +425,6 @@ class A3103(HsscFormModel):
     class Meta:
         verbose_name = '生命体征检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3103_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3103_update_url', kwargs={'slug': self.slug})
         
 
 class A6215(HsscFormModel):
@@ -638,12 +434,6 @@ class A6215(HsscFormModel):
     class Meta:
         verbose_name = '个人适应能力评估'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6215_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6215_update_url', kwargs={'slug': self.slug})
         
 
 class Z6201(HsscFormModel):
@@ -658,12 +448,6 @@ class Z6201(HsscFormModel):
     class Meta:
         verbose_name = '用户注册'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('Z6201_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('Z6201_update_url', kwargs={'slug': self.slug})
         
 
 class T3404(HsscFormModel):
@@ -674,12 +458,6 @@ class T3404(HsscFormModel):
     class Meta:
         verbose_name = '空腹血糖检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T3404_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T3404_update_url', kwargs={'slug': self.slug})
         
 
 class A3110(HsscFormModel):
@@ -688,12 +466,6 @@ class A3110(HsscFormModel):
     class Meta:
         verbose_name = '听力检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3110_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3110_update_url', kwargs={'slug': self.slug})
         
 
 class A6216(HsscFormModel):
@@ -702,12 +474,6 @@ class A6216(HsscFormModel):
     class Meta:
         verbose_name = '社会环境评估'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6216_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6216_update_url', kwargs={'slug': self.slug})
         
 
 class A6218(HsscFormModel):
@@ -716,12 +482,6 @@ class A6218(HsscFormModel):
     class Meta:
         verbose_name = '门诊医生问诊'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6218_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6218_update_url', kwargs={'slug': self.slug})
         
 
 class A6205(HsscFormModel):
@@ -730,12 +490,6 @@ class A6205(HsscFormModel):
     class Meta:
         verbose_name = '手术史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6205_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6205_update_url', kwargs={'slug': self.slug})
         
 
 class A6214(HsscFormModel):
@@ -747,12 +501,6 @@ class A6214(HsscFormModel):
     class Meta:
         verbose_name = '个人身体健康评估'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6214_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6214_update_url', kwargs={'slug': self.slug})
         
 
 class Z6230(HsscFormModel):
@@ -761,12 +509,6 @@ class Z6230(HsscFormModel):
     class Meta:
         verbose_name = '用户登录'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('Z6230_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('Z6230_update_url', kwargs={'slug': self.slug})
         
 
 class A3105(HsscFormModel):
@@ -781,12 +523,6 @@ class A3105(HsscFormModel):
     class Meta:
         verbose_name = '血压监测'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A3105_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A3105_update_url', kwargs={'slug': self.slug})
         
 
 class A6217(HsscFormModel):
@@ -795,12 +531,6 @@ class A6217(HsscFormModel):
     class Meta:
         verbose_name = '院内辅助问诊'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6217_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6217_update_url', kwargs={'slug': self.slug})
         
 
 class T3405(HsscFormModel):
@@ -811,12 +541,6 @@ class T3405(HsscFormModel):
     class Meta:
         verbose_name = '糖化血红蛋白检查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T3405_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T3405_update_url', kwargs={'slug': self.slug})
         
 
 class A6202(HsscFormModel):
@@ -825,12 +549,6 @@ class A6202(HsscFormModel):
     class Meta:
         verbose_name = '院外辅助问诊'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6202_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6202_update_url', kwargs={'slug': self.slug})
         
 
 class A6220(HsscFormModel):
@@ -838,12 +556,6 @@ class A6220(HsscFormModel):
     class Meta:
         verbose_name = '监测评估'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6220_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6220_update_url', kwargs={'slug': self.slug})
         
 
 class A6212(HsscFormModel):
@@ -854,12 +566,6 @@ class A6212(HsscFormModel):
     class Meta:
         verbose_name = '个人健康行为调查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6212_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6212_update_url', kwargs={'slug': self.slug})
         
 
 class T9001(HsscFormModel):
@@ -869,12 +575,6 @@ class T9001(HsscFormModel):
     class Meta:
         verbose_name = '非胰岛素依赖性糖尿病'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('T9001_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('T9001_update_url', kwargs={'slug': self.slug})
         
 
 class A5002(HsscFormModel):
@@ -884,12 +584,6 @@ class A5002(HsscFormModel):
     class Meta:
         verbose_name = '药事服务'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A5002_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A5002_update_url', kwargs={'slug': self.slug})
         
 
 class Physical_examination_athletic_ability(HsscFormModel):
@@ -897,12 +591,6 @@ class Physical_examination_athletic_ability(HsscFormModel):
     class Meta:
         verbose_name = '运动能力调查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('physical_examination_athletic_ability_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('physical_examination_athletic_ability_update_url', kwargs={'slug': self.slug})
         
 
 class A6213(HsscFormModel):
@@ -912,12 +600,6 @@ class A6213(HsscFormModel):
     class Meta:
         verbose_name = '个人心理综合素质调查'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6213_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6213_update_url', kwargs={'slug': self.slug})
         
 
 class Z6261(HsscFormModel):
@@ -927,12 +609,6 @@ class Z6261(HsscFormModel):
     class Meta:
         verbose_name = '家庭医生签约'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('Z6261_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('Z6261_update_url', kwargs={'slug': self.slug})
         
 
 class A6210(HsscFormModel):
@@ -941,12 +617,6 @@ class A6210(HsscFormModel):
     class Meta:
         verbose_name = '遗传病史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6210_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6210_update_url', kwargs={'slug': self.slug})
         
 
 class A6209(HsscFormModel):
@@ -955,11 +625,5 @@ class A6209(HsscFormModel):
     class Meta:
         verbose_name = '家族病史'
         verbose_name_plural = verbose_name
-
-    def get_absolute_url(self):
-        return reverse('A6209_detail_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('A6209_update_url', kwargs={'slug': self.slug})
         
 
