@@ -302,9 +302,9 @@ class EventRule(HsscBase):
                     pass
                 else:  # 字段值是关联字典，转换为集合字符串
                     # 转换id列表为字典值列表
-                    if form_data.getlist(field_name):
-                        str_value_list = self._convert_id_to_value(_type, form_data.getlist(field_name))
-                        expression_fields[field_name] = str(set(str_value_list))
+                    if form_data.getlist(field_name):  # 如果列表字段值不为空
+                        str_value_set = self._convert_id_to_value(_type, form_data.getlist(field_name))
+                        expression_fields[field_name] = str(str_value_set)
             return eval(keyword_replace(self.expression, expression_fields))
 
     @staticmethod
@@ -313,17 +313,12 @@ class EventRule(HsscBase):
         _model_list = _type.split('.')
         app_label = _model_list[0]
         model_name = _model_list[1]
-        val_list = []
-        if app_label == 'icpc':
-            for id in id_list:
-                val = eval(model_name).objects.get(id=id).iname
-                val_list.append(val)
-        elif app_label == 'dictionaries':
-            for id in id_list:
-                val = eval(model_name).objects.get(id=id).value
-                val_list.append(val)
-        print('退出：', val_list)
-        return val_list
+        class ConvertIdToValue(Enum):
+            icpc = map(lambda x: eval(model_name).objects.get(id=x).iname, id_list)
+            dictionaries = map(lambda x: eval(model_name).objects.get(id=x).value, id_list)
+            # medcine = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
+        val_iterator = eval(f'ConvertIdToValue.{app_label}').value
+        return set(val_iterator)
 
 
 # 服务规格设置
