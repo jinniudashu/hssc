@@ -19,14 +19,14 @@ class HsscFormAdmin(admin.ModelAdmin):
     exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", ]
     view_on_site = False
 
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        extra_context = extra_context or {}
-        # base_form = A6203_ModelForm(prefix="base_form")
-        base_form = 'base_form'
-        extra_context['base_form'] = base_form
-        return super().change_view(
-            request, object_id, form_url, extra_context=extra_context,
-        )
+    # def change_view(self, request, object_id, form_url='', extra_context=None):
+    #     extra_context = extra_context or {}
+    #     # base_form = A6203_ModelForm(prefix="base_form")
+    #     base_form = 'base_form'
+    #     extra_context['base_form'] = base_form
+    #     return super().change_view(
+    #         request, object_id, form_url, extra_context=extra_context,
+    #     )
 
     def save_model(self, request, obj, form, change):
         # 发送服务作业完成信号
