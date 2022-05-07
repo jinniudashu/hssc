@@ -285,7 +285,7 @@ class EventRule(HsscBase):
         else:
             print('From EventRule.is_satified 检查表达式:', self.expression, )
             print('检查字段:', self.expression_fields)
-            # 构造一个字段字典，存储表达式内的字段及它们的值
+            # 构造一个存储表达式内的字段及值的字典
             expression_fields = {}
             # 预处理 self.expression_fields: 去除空格，以逗号转为数组，再转为集合
             expression_fields_set = set(self.expression_fields.strip().split(','))
