@@ -261,7 +261,7 @@ from core.utils import keyword_replace
 from core.hsscbase_class import FieldsType
 class EventRule(HsscBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
-    Detection_scope = [(0, '所有历史表单'), (1, '本次服务表单'), (2, '单元服务表单')]
+    Detection_scope = [(0, '所有历史表单'), (1, '本次服务表单'), (2, '本周服务表单')]
     detection_scope = models.PositiveSmallIntegerField(choices=Detection_scope, default=1, blank=True, null=True, verbose_name='检测范围')
     weight = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="权重")
     expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="内部表达式")
@@ -283,11 +283,14 @@ class EventRule(HsscBase):
             print('From EventRule.is_satified 检查表达式:', self.expression, )
             print('扫描内容:', form_data)
             print('检查字段:', self.expression_fields)
+            # 预处理form_data, 初始值为本次服务表单内容, 根据self.detection_scope 生成 scaned_data
+            # scaned_data = self._detection_scope_extend(form_data)
+
             # 预处理 self.expression_fields: 去除空格，转为数组，再转为集合
             expression_fields_set = set(self.expression_fields.strip().split(','))
+            
             # 构造一个仅存储表达式内的字段及值的字典
             expression_fields = {}
-            # 获取需要被检查的表达式包含的字段名称, 转换为数组
             for field_name in expression_fields_set:
                 field_value = form_data.get(field_name, '')
                 field_type = eval(f'FieldsType.{field_name}').value
@@ -302,7 +305,8 @@ class EventRule(HsscBase):
                     print('进入：', field_type, form_data.getlist(field_name))
                     expression_fields[field_name] = self._get_set_value(field_type, form_data.getlist(field_name))
             print('表达式字段及值:', expression_fields)
-            return eval(keyword_replace(self.expression, expression_fields))
+            result = eval(keyword_replace(self.expression, expression_fields))
+            return result
 
     @staticmethod
     def _get_set_value(field_type, id_list):
