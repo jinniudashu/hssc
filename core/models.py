@@ -278,17 +278,20 @@ class EventRule(HsscBase):
         parameters: form_data
         return: Boolean
 		'''
+
         # 完成事件直接返回
         if self.expression == 'completed':
             return True
         else:
-            print('From EventRule.is_satified 检查表达式:', self.expression)
-            print('From EventRule.is_satified 检查表达式字段:', self.expression_fields)
+            print('From EventRule.is_satified 检查表达式:', self.expression, )
+            print('检查字段:', self.expression_fields)
             # 构造一个字段字典，存储表达式内的字段及它们的值
             expression_fields = {}
+            # 预处理 self.expression_fields: 去除空格，以逗号转为数组，再转为集合
+            expression_fields_set = set(self.expression_fields.strip().split(','))
             # 获取需要被检查的表达式包含的字段名称, 转换为数组
-            for field_name in self.expression_fields.split(', '):
-                _type = eval(f'FieldsType.{field_name}.value')
+            for field_name in expression_fields_set:
+                _type = eval(f'FieldsType.{field_name}').value
                 if _type == 'Numbers':  # 如果字段类型是Numbers，直接转换为字符串
                     expression_fields[field_name] = f'{form_data[field_name]}'
                 elif _type == 'String':  # 如果字段类型是String，转换为集合字符串
@@ -302,10 +305,10 @@ class EventRule(HsscBase):
                     if form_data.getlist(field_name):
                         str_value_list = self._convert_id_to_value(_type, form_data.getlist(field_name))
                         expression_fields[field_name] = str(set(str_value_list))
-
             return eval(keyword_replace(self.expression, expression_fields))
 
-    def _convert_id_to_value(self, _type, id_list):
+    @staticmethod
+    def _convert_id_to_value(_type, id_list):
         print('进入：', _type, id_list)
         _model_list = _type.split('.')
         app_label = _model_list[0]
