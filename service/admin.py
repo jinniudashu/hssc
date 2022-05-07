@@ -1,32 +1,22 @@
-# from django.forms import ModelForm, Select, CheckboxSelectMultiple
-from django.shortcuts import redirect
 from django.contrib import admin
+from django.shortcuts import redirect
 
 from hssc.site import clinic_site
-# 导入自定义作业完成信号
-from core.signals import operand_finished
+from core.signals import operand_finished  # 自定义作业完成信号
 from service.models import *
-# from forms.models import A6203
 
-
-# class A6203_ModelForm(ModelForm):
-#     class Meta:
-#         model = A6203
-#         fields = ['characterfield_name', 'characterhssc_identification_number', 'characterfield_resident_file_number', 'characterfield_family_address', 'characterfield_contact_number', 'characterfield_medical_ic_card_number', 'datetimefield_date_of_birth', 'relatedfield_gender', 'relatedfield_nationality', 'relatedfield_marital_status', 'relatedfield_education', 'relatedfield_occupational_status', 'relatedfield_medical_expenses_burden', 'relatedfield_type_of_residence', 'relatedfield_blood_type', 'relatedfield_signed_family_doctor', 'relatedfield_family_relationship', ]
-#         widgets = {'relatedfield_gender': Select, 'relatedfield_nationality': Select, 'relatedfield_marital_status': Select, 'relatedfield_education': Select, 'relatedfield_occupational_status': Select, 'relatedfield_medical_expenses_burden': CheckboxSelectMultiple, 'relatedfield_type_of_residence': Select, 'relatedfield_blood_type': Select, 'relatedfield_signed_family_doctor': Select, 'relatedfield_family_relationship': Select, }
 
 class HsscFormAdmin(admin.ModelAdmin):
     exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", ]
     view_on_site = False
 
-    # def change_view(self, request, object_id, form_url='', extra_context=None):
-    #     extra_context = extra_context or {}
-    #     # base_form = A6203_ModelForm(prefix="base_form")
-    #     base_form = 'base_form'
-    #     extra_context['base_form'] = base_form
-    #     return super().change_view(
-    #         request, object_id, form_url, extra_context=extra_context,
-    #     )
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        base_form = 'base_form'
+        extra_context['base_form'] = base_form
+        return super().change_view(
+            request, object_id, form_url, extra_context=extra_context,
+        )
 
     def save_model(self, request, obj, form, change):
         # 发送服务作业完成信号

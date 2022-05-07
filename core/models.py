@@ -274,14 +274,12 @@ class EventRule(HsscBase):
 
     def is_satified(self, form_data):
         '''
-        检查表达式是否满足
-        return: Boolean
+        检查表达式是否满足 return: Boolean
         parameters: form_data, self.expression
 		'''
-        # 完成事件直接返回
-        if self.expression == 'completed':
+        if self.expression == 'completed':  # 完成事件直接返回
             return True
-        else:
+        else:  # 其他事件
             print('From EventRule.is_satified 检查表达式:', self.expression, )
             print('扫描内容:', form_data)
             print('检查字段:', self.expression_fields)
@@ -291,16 +289,15 @@ class EventRule(HsscBase):
             expression_fields = {}
             # 获取需要被检查的表达式包含的字段名称, 转换为数组
             for field_name in expression_fields_set:
-                field_value = form_data.get(field_name)
+                field_value = form_data.get(field_name, '')
                 field_type = eval(f'FieldsType.{field_name}').value
-                if field_type == 'Datetime' or field_type == 'Date':
+
+                if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
                     return False
-                elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接转换为字符串
-                    expression_fields[field_name] = f'{field_value}'
-                    # expression_fields[field_name] = f'{field_value}' if field_value is not None else None
+                elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
+                    expression_fields[field_name] = field_value
                 elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
                     expression_fields[field_name] = str(set(field_value.strip()))
-                    # expression_fields[field_name] = str(set(field_value.strip())) if field_value else None
                 else:  # 字段值是关联字典，转换为集合字符串
                     print('进入：', field_type, form_data.getlist(field_name))
                     expression_fields[field_name] = self._get_set_value(field_type, form_data.getlist(field_name))
@@ -310,7 +307,7 @@ class EventRule(HsscBase):
     @staticmethod
     def _get_set_value(field_type, id_list):
         if not id_list:
-            return None
+            return ''
         else:
             # 转换id列表为对应的字典值列表
             _model_list = field_type.split('.')  # 分割模型名称field_type: app_label.model_name
