@@ -4,6 +4,7 @@ from core.models import *
 
 
 admin.site.register(StaffTodo)
+admin.site.register(CustomerServiceLog)
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
@@ -61,7 +62,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     fieldsets = (
         ('基本信息', {
-            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority'), 'role', ('history_services_display', 'enable_queue_counter'), ('name', 'hssc_id'))
+            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority'), 'role', 'history_services_display', 'enable_queue_counter', 'route_to', ('name', 'hssc_id'))
         }),
         ('作业管理', {
             'fields': ('suppliers', 'not_suitable', ('awaiting_time_frame' ,'execution_time_frame'), 'working_hours', 'cost', 'load_feedback')

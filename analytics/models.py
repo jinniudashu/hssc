@@ -73,3 +73,12 @@ def form_post_save_handler(sender, instance, created, **kwargs):
             s.end_session()
 
 
+def record_login(request, user):
+    # 用户登录Session登记
+    ip_address = get_client_ip(request)
+    session_key = request.session.session_key
+    UserSession.objects.create(
+        user=user,
+        ip_address=ip_address,
+        session_key=session_key
+    )

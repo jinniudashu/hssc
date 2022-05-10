@@ -1,20 +1,6 @@
-from core.signals import operand_started, operand_finished
-class SendSignalsMixin:
-    def send_operand_finished(self, pid):
-        # 构造作业完成消息参数
-        ocode = 'RTC'
-        form_data=self.request.POST.copy()
-        form_data.pop('csrfmiddlewaretoken')
-        operand_finished.send(sender=self, pid=pid, ocode=ocode, uid=self.request.user, form_data=form_data)
-
-    def send_operand_started(self, pid):
-        ocode = 'RTR'
-        operand_started.send(sender=self, pid=pid, ocode=ocode, uid=self.request.user)
-
-
-def keyword_replace(s, replace_dict):
+def field_name_replace(s, replace_dict):
     '''
-    keyword_replace
+    field_name_replace
     '''
     import re
     next = []

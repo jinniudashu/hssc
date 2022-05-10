@@ -67,6 +67,16 @@ test_user_data = {
             'last_name': '周',
             'role': ['药士', '药剂师'],
         },
+        {
+            'username': '林丽',
+            'password': 'info1234',
+            'email': 'test@test.com',
+            'is_superuser': False,
+            'is_staff': True,
+            'first_name': '丽',
+            'last_name': '林',
+            'role': ['检验师'],
+        },
     ],
 }
 

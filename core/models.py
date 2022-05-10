@@ -3,17 +3,18 @@ from django.db.models.query import QuerySet
 from django.db.models.signals import post_save
 from django.shortcuts import reverse
 from django.dispatch import receiver
+from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
 from enum import Enum
 from time import time
 import datetime
+import json
 
 from pypinyin import lazy_pinyin
 
 # 导入自定义作业完成信号
-from core.signals import operand_finished
 from core.hsscbase_class import HsscBase, HsscPymBase
 from icpc.models import *
 from dictionaries.models import *
@@ -68,6 +69,8 @@ class Service(HsscPymBase):
     History_services_display=[(0, '所有历史服务'), (1, '当日服务')]
     history_services_display = models.PositiveBigIntegerField(choices=History_services_display, default=0, blank=True, null=True, verbose_name='历史服务默认显示')
     enable_queue_counter = models.BooleanField(default=True, verbose_name='显示队列数量')
+    Route_to = [('INDEX', '任务工作台'), ('CUSTOMER_HOMEPAGE', '客户病例首页')]
+    route_to = models.CharField(max_length=50, choices=Route_to, default='CUSTOMER_HOMEPAGE', blank=True, null=True, verbose_name='完成跳转至')
     suppliers = models.CharField(max_length=255, blank=True, null=True, verbose_name="供应商")
     not_suitable = models.CharField(max_length=255, blank=True, null=True, verbose_name='不适用对象')
     execution_time_frame = models.DurationField(blank=True, null=True, verbose_name='完成时限')
@@ -257,12 +260,12 @@ class SystemOperand(HsscBase):
 
 
 # 事件规则表
-from core.utils import keyword_replace
+from core.utils import field_name_replace
 from core.hsscbase_class import FieldsType
 class EventRule(HsscBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
-    Detection_scope = [(0, '所有历史表单'), (1, '本次服务表单'), (2, '本周服务表单')]
-    detection_scope = models.PositiveSmallIntegerField(choices=Detection_scope, default=1, blank=True, null=True, verbose_name='检测范围')
+    Detection_scope = [('ALL', '所有历史表单'), ('CURRENT_SERVICE', '本次服务表单'), ('LAST_WEEK_SERVICES', '过去7天表单')]
+    detection_scope = models.CharField(max_length=100, choices=Detection_scope, default='CURRENT_SERVICE', blank=True, null=True, verbose_name='检测范围')
     weight = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="权重")
     expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="内部表达式")
     expression_fields = models.CharField(max_length=1024, blank=True, null=True, verbose_name="内部表达式字段")
@@ -272,41 +275,61 @@ class EventRule(HsscBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
-    def is_satified(self, form_data):
+    def is_satified(self, operation_proc):
         '''
         检查表达式是否满足 return: Boolean
         parameters: form_data, self.expression
 		'''
         if self.expression == 'completed':  # 完成事件直接返回
             return True
-        else:  # 其他事件
-            print('From EventRule.is_satified 检查表达式:', self.expression, )
-            print('扫描内容:', form_data)
-            print('检查字段:', self.expression_fields)
-            # 预处理form_data, 初始值为本次服务表单内容, 根据self.detection_scope 生成 scaned_data
-            # scaned_data = self._detection_scope_extend(form_data)
+        else:  # 判断是否发生其他业务事件
+            # 数据预处理
+            expression_fields_set = set(self.expression_fields.strip().split(','))  # self.expression_fields: 去除空格，转为数组，再转为集合去重
+            scanned_data_dict = self._get_scanned_data(operation_proc, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
+            print('From EventRule.is_satified 检查表达式:', self.expression)
+            print('检查字段:', expression_fields_set)            
+            print('扫描内容:', scanned_data_dict)
 
-            # 预处理 self.expression_fields: 去除空格，转为数组，再转为集合
-            expression_fields_set = set(self.expression_fields.strip().split(','))
-            
-            # 构造一个仅存储表达式内的字段及值的字典
-            expression_fields = {}
+            expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及值的字典
             for field_name in expression_fields_set:
-                field_value = form_data.get(field_name, '')
-                field_type = eval(f'FieldsType.{field_name}').value
+                expression_fields_val_dict[field_name] = scanned_data_dict.get(field_name, '')            
 
-                if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
-                    return False
-                elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
-                    expression_fields[field_name] = field_value
-                elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
-                    expression_fields[field_name] = str(set(field_value.strip()))
-                else:  # 字段值是关联字典，转换为集合字符串
-                    print('进入：', field_type, form_data.getlist(field_name))
-                    expression_fields[field_name] = self._get_set_value(field_type, form_data.getlist(field_name))
-            print('表达式字段及值:', expression_fields)
-            result = eval(keyword_replace(self.expression, expression_fields))
+            print('表达式字段及值:', expression_fields_val_dict)
+            result = eval(field_name_replace(self.expression, expression_fields_val_dict))  # 待检查的字段值带入表达式，并执行返回结果
             return result
+
+    def _get_scanned_data(self, operation_proc, expression_fields_set):
+        # 1. 先根据detection_scope生成待检测数据集合
+        if self.detection_scope == 'CURRENT_SERVICE':
+            _scanned_data = operation_proc.customer.get_health_record_by_pid(operation_proc)
+        else:
+            period = None  # 意味着self.detection_scope == 'ALL'表示获取全部健康记录
+            if self.detection_scope == 'LAST_WEEK_SERVICES':  # 获取表示指定时间段内的健康记录
+                start_time = datetime.datetime.now() + datetime.timedelta(days=-7)
+                end_time = datetime.datetime.now()
+                period = (start_time, end_time)
+            _scanned_data = operation_proc.customer.get_health_record_by_period(period)  # 返回客户健康档案记录dict
+        print('From core.models.EventRule._get_scanned_data._scanned_data: 1.', _scanned_data)
+
+        # 2. 根据表达式字段集合剪裁生成待检测数据字典
+        scanned_data = {}
+        for field_name in expression_fields_set:
+            scanned_data[field_name] = _scanned_data.get(field_name, '')
+        print('From core.models.EventRule._get_scanned_data.scanned_data: 2.', scanned_data)
+
+        # 3. 生成符合field_name_replace()要求格式的待检测数据集合
+        for field_name, field_val in scanned_data.items():
+            # 先获取字段类型
+            field_type = eval(f'FieldsType.{field_name}').value
+            if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
+                scanned_data[field_name] = f'{field_val}'
+            elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
+                scanned_data[field_name] = f'{field_val}'
+            else:  # 如果字段类型是String或关联字段，转换为集合字符串
+                print('From core.models.EventRule._get_scanned_data', field_type, scanned_data[field_name])
+                scanned_data[field_name] = f'{set(field_val)}'
+        print('From core.models.EventRule._get_scanned_data.scanned_data: 3.', scanned_data)
+        return scanned_data
 
     @staticmethod
     def _get_set_value(field_type, id_list):
@@ -332,6 +355,34 @@ class ServiceSpec(HsscBase):
         verbose_name_plural = verbose_name
         ordering = ['id']
 
+
+class ServiceRuleManager(models.Manager):
+    def check_rules(self, operation_proc):
+        '''
+        根据服务规则检查业务事件是否发生，执行系统作业
+        '''
+        # 逐一检查service_rule.event_rule.expression是否满足
+        for service_rule in self.filter(service=operation_proc.service, is_active=True):
+            # 如果event_rule.expression为真，则构造事件参数，生成业务事件
+            if service_rule.event_rule.is_satified(operation_proc):
+                print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
+                # 构造作业参数
+                operation_params = {
+                    'operation_proc': operation_proc,
+                    'operator': operation_proc.operator,
+                    'service': service_rule.service,
+                    'next_service': service_rule.next_service,
+                    'passing_data': service_rule.passing_data,
+                    'complete_feedback': service_rule.complete_feedback,
+                    'reminders': service_rule.reminders,
+                    'message': service_rule.message,
+                    'interval_rule': service_rule.interval_rule,
+                    'interval_time': service_rule.interval_time,
+                }
+                # 执行系统自动作业
+                _result = service_rule.system_operand.execute(**operation_params)
+                print('From check_rules 执行结果:', _result)
+
 # 服务规则库
 class ServiceRule(HsscBase):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
@@ -351,6 +402,8 @@ class ServiceRule(HsscBase):
     is_active = models.BooleanField(choices=[(False, '否'), (True, '是')], default=True, verbose_name='启用')
     service_spec = models.ForeignKey(ServiceSpec, on_delete=models.CASCADE, null=True, verbose_name='服务规格')
 
+    objects = ServiceRuleManager()
+
     class Meta:
         verbose_name = '服务规则'
         verbose_name_plural = verbose_name
@@ -358,52 +411,6 @@ class ServiceRule(HsscBase):
 
     def __str__(self):
         return str(self.service)
-
-@receiver(operand_finished)
-def check_rules(sender, **kwargs):
-    '''
-    服务表单保存后根据服务规则生成业务事件
-    params: operation_proc.hssc_id, service.hssc_id
-    return: 
-    how:
-		0. 获取服务作业完成信号
-		1. 根据service.hssc_id获取需要检查的service_rule集合
-		2. 逐一检查event_rule.expression是否满足
-		3. 若满足则构造事件参数，生成自定义信号“发生业务事件”，传给调度函数。事件参数：{}
-    '''
-    # 用operand_finished信号参数的pid获取operation_proc
-    operation_proc = OperationProc.objects.get(id=kwargs['pid'])
-    # 用operand_finished信号参数的uid获取操作员的Customer信息
-    operator = User.objects.get(id=kwargs['uid']).customer
-    # 获取服务表单数据：POST表单数据
-    form_data = kwargs['form_data']
-
-    # 根据operation_proc.service.hssc_id获取service_rule集合
-    service_rules = ServiceRule.objects.filter(service=operation_proc.service, is_active=True)
-    # 逐一检查event_rule.expression是否满足
-    print('From check_rules 检查服务规则：', service_rules)
-    for service_rule in service_rules:
-        # 如果event_rule.expression为真，则构造事件参数，生成业务事件
-        if service_rule.event_rule.is_satified(form_data):
-            # 构造作业参数
-            print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
-            operation_params = {
-                'operation_proc': operation_proc,
-                'operator': operator,
-                'service': service_rule.service,
-                'next_service': service_rule.next_service,
-                'passing_data': service_rule.passing_data,
-                'complete_feedback': service_rule.complete_feedback,
-                'reminders': service_rule.reminders,
-                'message': service_rule.message,
-                'interval_rule': service_rule.interval_rule,
-                'interval_time': service_rule.interval_time,
-            }
-            # 执行系统自动作业
-            print('From check_rules 操作参数:', operation_params)
-            _result = service_rule.system_operand.execute(**operation_params)
-            print('From check_rules 执行结果:', _result)
-    return None
 
 
 class ContractService(HsscPymBase):
@@ -452,7 +459,7 @@ class OperationProcManager(models.Manager):
     def get_unassigned_proc(self, operator):
 	# 获取待分配作业进程: 状态为创建，且未分配操作员，服务岗位为操作员所属岗位，以及用户服务小组为操作员所属服务小组
         return self.filter(state=0, operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
-
+    
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
     # 作业进程id: pid
@@ -567,30 +574,6 @@ class StaffTodo(HsscBase):
             self.label = f'{self.customer_name} - {self.service_label}'
         return super().save(*args, **kwargs)
 
-@receiver(post_save, sender=OperationProc)
-def sync_proc_todo_list(sender, instance, created, **kwargs):
-    # 根据服务进程创建待办事项
-    if instance.operator and instance.customer:
-        try :
-            todo = instance.stafftodo
-            todo.scheduled_time = instance.scheduled_time
-            todo.state = instance.state
-            todo.priority = instance.priority
-            todo.save()
-        except StaffTodo.DoesNotExist:
-            todo = StaffTodo.objects.create(
-                operation_proc=instance,
-                operator=instance.operator,
-                scheduled_time=instance.scheduled_time,
-                state=instance.state,
-                customer_number=instance.customer.name,
-                customer_name=instance.customer.name,
-                service_label=instance.service.label,
-                customer_phone=instance.customer.phone,
-                customer_address=instance.customer.address,
-                priority = instance.priority
-            )
-
 
 # 用户基本信息
 class Customer(HsscBase):
@@ -614,11 +597,39 @@ class Customer(HsscBase):
             self.label = self.name
         super().save(*args, **kwargs)
 
-    def update_health_record(self, health_record):
+    def add_health_record(self, operation_proc, form_instance):
         '''
-        设置健康记录
+        保存健康记录
         '''
-        pass
+        print('From core.models.Customer.add_health_record:', form_instance, model_to_dict(form_instance))
+        log = CustomerServiceLog.objects.create(
+            name=self.name,
+            label=self.name,
+            customer=self,
+            operator=operation_proc.operator,
+            creater=operation_proc.creater,
+            pid=operation_proc,
+            cpid=operation_proc.contract_service_proc,
+            data=model_to_dict(form_instance)
+        )
+        return log
+
+    def get_health_record_by_pid(self, operation_proc):
+        '''
+        获取一次服务作业的健康记录
+        '''
+        log = CustomerServiceLog.objects.get(pid = operation_proc)            
+        return log.data
+
+    def get_health_record_by_period(self, period):
+        '''
+        获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
+        '''
+        customer_medical_data = {}
+        logs = CustomerServiceLog.objects.get_customer_service_log(self, period)            
+        for log in logs:
+            customer_medical_data = {**customer_medical_data, **log.data}
+        return customer_medical_data
 
     def get_profile(self) -> 'QuerySet[Customer]':
         '''
@@ -643,6 +654,9 @@ class Customer(HsscBase):
         获取已安排服务列表
         '''
         return self.operation_proc_customer.filter(state__in = [0, 1, 2, 3])
+
+    def get_absolute_url(self):
+        return reverse('customer_homepage', args=[self.id])
 
 
 # 职员基本信息
@@ -709,8 +723,9 @@ class HsscFormModel(HsscBase):
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         if not self.id:
-            self.created_time = timezone.now()
             self.slug = slugify(self._meta.model_name, allow_unicode=True) + f'-{int(time())}'
+        if not self.created_time:
+            self.created_time = timezone.now()
         self.updated_time = timezone.now()
         return super().save(*args, **kwargs)
 
@@ -731,6 +746,30 @@ class HsscFormModel(HsscBase):
         return reverse(f'{self.__class__.__name__}_delete_url', kwargs={'slug':self.slug})
 
 
+class CustomerServiceLogManager(models.Manager):
+    def get_customer_service_log(self, customer, period=None):
+        # 返回客户的给定时间段的服务日志
+        if period:
+            return self.filter(customer=customer, created_time__range=period).order_by('created_time')
+        return self.filter(customer=customer)
+
+# 客户健康记录
+from rest_framework.utils.encoders import JSONEncoder
+class CustomerServiceLog(HsscFormModel):
+    Log_category = [('Subjective', '主观资料'), ('ObjectiveO', '客观资料'), ('Assessment', '诊断与评价'), ('Plan', '治疗方案'), ('Management', '管理活动')]
+    category = models.CharField(max_length=50, choices=Log_category , blank=True, null=True, verbose_name="记录类别")
+    data = models.JSONField(blank=True, null=True, encoder=JSONEncoder, verbose_name="服务记录")
+    objects = CustomerServiceLogManager()
+
+    class Meta:
+        verbose_name = "客户服务记录"
+        verbose_name_plural = verbose_name
+        ordering = ['created_time']
+
+    def __str__(self):
+        return f'{self.name}--{self.created_time}'
+
+# 推荐服务
 class RecommendedService(HsscFormModel):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="推荐服务")
 

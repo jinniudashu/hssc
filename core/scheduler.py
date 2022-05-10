@@ -1,19 +1,9 @@
-from django.contrib.auth.models import User
-from django.contrib.auth.signals import user_logged_in, user_logged_out
-from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
-from registration.signals import user_registered, user_activated, user_approved
 
-# 导入UserSession
-from analytics.models import UserSession
-from analytics.utils import get_client_ip
 # 导入自定义作业完成信号
-from core.signals import operand_finished, operand_started
-# 导入作业事件表、指令表
-from core.models import Staff, Customer, OperationProc, Service
-
-
+from core.signals import operand_started
 @receiver(operand_started)
 def operand_started_handler(sender, **kwargs):
     operation_proc = kwargs['operation_proc']  # 作业进程
@@ -22,14 +12,61 @@ def operand_started_handler(sender, **kwargs):
     operation_proc.save()
 
 
+# 导入自定义作业完成信号
+from core.signals import operand_finished
+from core.models import Staff, Customer, OperationProc, Service, ServiceRule, StaffTodo
+from service.models import get_form_instance
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
-    # 用operand_finished信号参数的pid获取operation_proc
+    # 从信号参数pid获取operation_proc
     operation_proc = OperationProc.objects.get(id=kwargs['pid'])
-    # 更新作业进程状态
-    operation_proc.update_state(kwargs['ocode'])    
+
+    # 1. 更新作业进程状态为RTC
+    operation_proc.update_state(kwargs['ocode'])
+
+    # 2. 非系统内置服务，则为客户表单作业，保存表单记录
+    if not operation_proc.service.is_system_service:
+        form_instance = get_form_instance(operation_proc)  # 获取表单实例
+        operation_proc.customer.add_health_record(operation_proc, form_instance) # 存入客户健康记录
+
+    # 3. 检查服务规则
+    ServiceRule.objects.check_rules(operation_proc)
 
 
+from service.models import create_form_instance
+@receiver(post_save, sender=OperationProc)
+def operation_proc_post_save_handler(sender, instance, created, **kwargs):
+    # 创建服务进程里使用的表单实例, 将form_slugs保存到进程实例中
+    if created and instance.state == 0:  # 系统保留作业(state=4)不创建model进程
+        form = create_form_instance(instance)
+        # 更新OperationProc服务进程的入口url
+        instance.entry = f'/clinic/service/{instance.service.name.lower()}/{form.id}/change'
+        instance.save()
+
+    # 根据服务进程创建待办事项: sync_proc_todo_list
+    if instance.operator and instance.customer:
+        try :
+            todo = instance.stafftodo
+            todo.scheduled_time = instance.scheduled_time
+            todo.state = instance.state
+            todo.priority = instance.priority
+            todo.save()
+        except StaffTodo.DoesNotExist:
+            todo = StaffTodo.objects.create(
+                operation_proc=instance,
+                operator=instance.operator,
+                scheduled_time=instance.scheduled_time,
+                state=instance.state,
+                customer_number=instance.customer.name,
+                customer_name=instance.customer.name,
+                service_label=instance.service.label,
+                customer_phone=instance.customer.phone,
+                customer_address=instance.customer.address,
+                priority = instance.priority
+            )
+
+
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, user, request, **kwargs):
     '''
@@ -37,13 +74,8 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     收到登录信号，生成用户/职员登录事件
     '''
     # 用户登录Session登记
-    ip_address = get_client_ip(request)
-    session_key = request.session.session_key
-    UserSession.objects.create(
-        user=user,
-        ip_address=ip_address,
-        session_key=session_key
-    )
+    from analytics.models import record_login
+    record_login(request, user)
 
     # 获得登陆作业进程参数
     if user.is_staff:  # 职员登录
@@ -70,6 +102,7 @@ def user_logged_in_handler(sender, user, request, **kwargs):
 
 
 # 收到注册成功信号，生成用户注册事件：registration.signals.user_registered
+from registration.signals import user_registered, user_activated, user_approved
 @receiver(user_registered)
 def user_registered_handler(sender, user, request, **kwargs):
     # 获得注册作业进程参数
@@ -97,6 +130,7 @@ def user_registered_handler(sender, user, request, **kwargs):
     print('operand_finished sended')
 
 
+from django.contrib.auth.models import User
 @receiver(post_save, sender=User)
 def user_post_save_handler(sender, instance, created, **kwargs):
     if created:  # 创建用户

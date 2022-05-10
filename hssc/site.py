@@ -40,10 +40,10 @@ class ClinicSite(admin.AdminSite):
 
     # 接受任务：把任务放入当前用户的待办列表中
     def receive_task(self, request, **kwargs):
-        proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        proc.operator = User.objects.get(username=request.user).customer
-        proc.state = 1
-        proc.save()
+        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        operation_proc.operator = User.objects.get(username=request.user).customer
+        operation_proc.state = 1
+        operation_proc.save()
         return redirect('/clinic/')
         
 

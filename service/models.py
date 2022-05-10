@@ -1,27 +1,28 @@
 from django.db import models
-from django.shortcuts import reverse
-import json
+from django.forms.models import model_to_dict
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, Role, Staff, OperationProc
+from core.models import HsscFormModel, Staff
 from entities.models import *
 
-@receiver(post_save, sender=OperationProc)
-def operation_proc_created(sender, instance, created, **kwargs):
-    # 创建服务进程里使用的表单实例, 将form_slugs保存到进程实例中
-    if created and instance.state == 0:  # 系统保留作业(state=4)不创建model进程
-        model_name = instance.service.name.capitalize()
-        print('创建表单实例:', model_name)
-        form = eval(model_name).objects.create(
-            customer=instance.customer,
-            creater=instance.operator,
-            pid=instance,
-            cpid=instance.contract_service_proc,
-        )
-        # 更新OperationProc服务进程的入口url
-        instance.entry = f'/clinic/service/{instance.service.name.lower()}/{form.id}/change'
-        instance.save()
+
+def create_form_instance(operation_proc):
+    model_name = operation_proc.service.name.capitalize()
+    print('From service.models, 创建表单实例:', model_name)
+    form_instance = eval(model_name).objects.create(
+        customer=operation_proc.customer,
+        creater=operation_proc.operator,
+        pid=operation_proc,
+        cpid=operation_proc.contract_service_proc,
+    )
+    return form_instance
+
+def get_form_instance(operation_proc):
+    model_name = operation_proc.service.name.capitalize()
+    form_instance = eval(model_name).objects.get(pid=operation_proc)
+    print('From service.models, 获取表单实例:', model_name, model_to_dict(form_instance))
+    return form_instance
 
 
 class Men_zhen_chu_fang_biao(HsscFormModel):

@@ -1,8 +1,10 @@
-from django.contrib import admin
 from django.shortcuts import redirect
+from django.contrib import admin
+from django.shortcuts import reverse
 
 from hssc.site import clinic_site
-from core.signals import operand_finished  # 自定义作业完成信号
+# 导入自定义作业完成信号
+from core.signals import operand_finished
 from service.models import *
 
 
@@ -40,7 +42,12 @@ class HsscFormAdmin(admin.ModelAdmin):
         return super().render_change_form(request, context, add, change, form_url, obj)
 
     def response_change(self, request, obj):
-        return redirect('/clinic/')
+        # 按照service.route_to的配置跳转
+        redirect_option = obj.pid.service.route_to
+        if redirect_option == 'CUSTOMER_HOMEPAGE':
+            return redirect(obj.customer)
+        else:
+            return redirect('index')
 
 
 class Men_zhen_chu_fang_biaoAdmin(HsscFormAdmin):

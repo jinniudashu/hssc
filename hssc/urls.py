@@ -8,6 +8,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('accounts/', include('registration.backends.simple.urls')),
     path('admin/', admin.site.urls, name='admin'),
+	path('clinic/customer_service/<int:customer_id>', clinic_site.customer_service, name='customer_homepage'),
     path('clinic/', clinic_site.urls, name='clinic:index'),
     path('core/', include('core.urls')),
     # path('grappelli/', include('grappelli.urls')),
