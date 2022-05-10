@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 from django.contrib import admin
-from django.shortcuts import reverse
 
 from hssc.site import clinic_site
 # 导入自定义作业完成信号
