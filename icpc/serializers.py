@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+
 class Icpc1_register_loginsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Icpc1_register_logins

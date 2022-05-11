@@ -3,6 +3,14 @@ from hssc.site import clinic_site
 from .models import *
 
 
+@admin.register(An_pai_que_ren)
+class An_pai_que_renAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+clinic_site.register(An_pai_que_ren, An_pai_que_renAdmin)
+
+
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']

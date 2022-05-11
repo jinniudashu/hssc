@@ -2266,6 +2266,28 @@
         }
     },
     {
+        "model": "dictionaries.An_pai_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d35f254-d100-11ec-b369-823d1f108281",
+            "pym": null,
+            "value": "yes",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.An_pai_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d37a964-d100-11ec-b369-823d1f108281",
+            "pym": null,
+            "value": "no",
+            "icpc": null
+        }
+    },
+    {
         "model": "dictionaries.Qin_shu_guan_xi",
         "fields": {
             "label": null,

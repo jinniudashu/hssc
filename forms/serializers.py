@@ -1,13 +1,74 @@
 from rest_framework import serializers
 from .models import *
+
+class A6207Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6207
+        fields = '__all__'
+
+class T4501Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = T4501
+        fields = '__all__'
+
+class A6206Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6206
+        fields = '__all__'
+
+class A3103Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A3103
+        fields = '__all__'
+
+class A6215Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6215
+        fields = '__all__'
+
+class Z6201Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Z6201
+        fields = '__all__'
+
+class T3404Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = T3404
+        fields = '__all__'
+
+class A3110Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A3110
+        fields = '__all__'
+
+class A6216Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6216
+        fields = '__all__'
+
+class A3105Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A3105
+        fields = '__all__'
+
+class A6217Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6217
+        fields = '__all__'
+
+class T3405Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = T3405
+        fields = '__all__'
+
+class A6202Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6202
+        fields = '__all__'
+
 class A6201Serializer(serializers.ModelSerializer):
     class Meta:
         model = A6201
-        fields = '__all__'
-
-class A6502Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6502
         fields = '__all__'
 
 class A6204Serializer(serializers.ModelSerializer):
@@ -18,6 +79,21 @@ class A6204Serializer(serializers.ModelSerializer):
 class T6301Serializer(serializers.ModelSerializer):
     class Meta:
         model = T6301
+        fields = '__all__'
+
+class Fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fu_wu
+        fields = '__all__'
+
+class Yao_pin_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yao_pin_ji_ben_xin_xi_biao
+        fields = '__all__'
+
+class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao
         fields = '__all__'
 
 class Z6205Serializer(serializers.ModelSerializer):
@@ -43,11 +119,6 @@ class T4502Serializer(serializers.ModelSerializer):
 class Ji_gou_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ji_gou_ji_ben_xin_xi_biao
-        fields = '__all__'
-
-class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao
         fields = '__all__'
 
 class Zhi_yuan_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
@@ -88,11 +159,6 @@ class A6208Serializer(serializers.ModelSerializer):
 class Z6233Serializer(serializers.ModelSerializer):
     class Meta:
         model = Z6233
-        fields = '__all__'
-
-class Yao_pin_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yao_pin_ji_ben_xin_xi_biao
         fields = '__all__'
 
 class A5001Serializer(serializers.ModelSerializer):
@@ -150,51 +216,6 @@ class A3502Serializer(serializers.ModelSerializer):
         model = A3502
         fields = '__all__'
 
-class T4501Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = T4501
-        fields = '__all__'
-
-class A6207Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6207
-        fields = '__all__'
-
-class A6206Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6206
-        fields = '__all__'
-
-class A3103Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A3103
-        fields = '__all__'
-
-class A6215Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6215
-        fields = '__all__'
-
-class Z6201Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Z6201
-        fields = '__all__'
-
-class T3404Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = T3404
-        fields = '__all__'
-
-class A3110Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A3110
-        fields = '__all__'
-
-class A6216Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6216
-        fields = '__all__'
-
 class A6218Serializer(serializers.ModelSerializer):
     class Meta:
         model = A6218
@@ -213,26 +234,6 @@ class A6214Serializer(serializers.ModelSerializer):
 class Z6230Serializer(serializers.ModelSerializer):
     class Meta:
         model = Z6230
-        fields = '__all__'
-
-class A3105Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A3105
-        fields = '__all__'
-
-class A6217Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6217
-        fields = '__all__'
-
-class T3405Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = T3405
-        fields = '__all__'
-
-class A6202Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6202
         fields = '__all__'
 
 class A6220Serializer(serializers.ModelSerializer):
@@ -278,4 +279,9 @@ class A6210Serializer(serializers.ModelSerializer):
 class A6209Serializer(serializers.ModelSerializer):
     class Meta:
         model = A6209
+        fields = '__all__'
+
+class A6502Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6502
         fields = '__all__'

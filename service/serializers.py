@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+
 class Men_zhen_chu_fang_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Men_zhen_chu_fang_biao
@@ -118,4 +119,39 @@ class Shu_ye_zhu_sheSerializer(serializers.ModelSerializer):
 class Ju_min_ji_ben_xin_xi_diao_chaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ju_min_ji_ben_xin_xi_diao_cha
+        fields = '__all__'
+
+class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu
+        fields = '__all__'
+
+class Yao_pin_ji_ben_xin_xi_diao_chaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yao_pin_ji_ben_xin_xi_diao_cha
+        fields = '__all__'
+
+class Gong_ying_shang_ji_ben_xin_xi_diao_chaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gong_ying_shang_ji_ben_xin_xi_diao_cha
+        fields = '__all__'
+
+class She_bei_ji_ben_xin_xi_ji_luSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = She_bei_ji_ben_xin_xi_ji_lu
+        fields = '__all__'
+
+class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_chaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_cha
+        fields = '__all__'
+
+class Zhi_yuan_ji_ben_xin_xi_wei_huSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zhi_yuan_ji_ben_xin_xi_wei_hu
+        fields = '__all__'
+
+class Ji_gou_ji_ben_xin_xi_wei_huSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ji_gou_ji_ben_xin_xi_wei_hu
         fields = '__all__'

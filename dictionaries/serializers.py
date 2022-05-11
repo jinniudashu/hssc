@@ -1,5 +1,11 @@
 from rest_framework import serializers
 from .models import *
+
+class An_pai_que_renSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = An_pai_que_ren
+        fields = 'value'
+
 class CharacterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Character
