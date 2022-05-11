@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.serializers import serialize
 from django.db.models.query import QuerySet
 from django.db.models.signals import post_save
 from django.shortcuts import reverse
@@ -592,6 +593,9 @@ class Customer(HsscBase):
     def __str__(self):
         return str(self.name)
 
+    def natural_key(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         if not self.label:
             self.label = self.name
@@ -602,6 +606,7 @@ class Customer(HsscBase):
         保存健康记录
         '''
         print('From core.models.Customer.add_health_record:', form_instance, model_to_dict(form_instance))
+        _health_record = serialize('json', [form_instance], use_natural_foreign_keys=True)
         log = CustomerServiceLog.objects.create(
             name=self.name,
             label=self.name,
@@ -610,7 +615,7 @@ class Customer(HsscBase):
             creater=operation_proc.creater,
             pid=operation_proc,
             cpid=operation_proc.contract_service_proc,
-            data=model_to_dict(form_instance)
+            data=json.loads(_health_record)[0]['fields'],
         )
         return log
 

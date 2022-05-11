@@ -16,6 +16,9 @@ class DictBase(models.Model):
     def __str__(self):
         return self.value
 
+    def natural_key(self):
+        return self.value
+
     def save(self, *args, **kwargs):
         if self.label:
             self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
