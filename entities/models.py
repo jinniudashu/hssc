@@ -1,5 +1,4 @@
 from django.db import models
-from django.forms import CharField
 
 class Medicine(models.Model):
 	name = models.CharField(max_length=255, verbose_name="药品名称")

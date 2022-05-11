@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import *
+from icpc.serializers import *
+
 class Men_zhen_chu_fang_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Men_zhen_chu_fang_biao
@@ -46,9 +48,11 @@ class A6201Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class A6218Serializer(serializers.ModelSerializer):
+    icpc3_symptoms_and_problems_iname = serializers.CharField(source='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6218.iname')
+    # icpc3_symptoms_and_problems_iname = serializers.CharField(source='icpc3_symptoms_and_problems.iname')
     class Meta:
         model = A6218
-        fields = '__all__'
+        fields = ('characterfield_name', 'relatedfield_symptom_list', 'icpc3_symptoms_and_problems_iname')
 
 class T8901Serializer(serializers.ModelSerializer):
     class Meta:
