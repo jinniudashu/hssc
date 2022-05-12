@@ -1,7 +1,25 @@
 from django.db import models
-from core.models import HsscFormModel, Staff
+from core.models import HsscFormModel
 from icpc.models import *
 from dictionaries.models import *
+
+
+class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
+    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    boolfield_ji_gou_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构编码')
+    boolfield_ji_gou_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构名称')
+    boolfield_ji_gou_dai_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构代码')
+    boolfield_ji_gou_shu_xing = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构属性')
+    boolfield_ji_gou_ceng_ji = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构层级')
+    boolfield_suo_zai_hang_zheng_qu_hua_dai_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='所在行政区划代码')
+    boolfield_xing_zheng_qu_hua_gui_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='行政区划归属')
+    boolfield_fa_ding_fu_ze_ren = models.CharField(max_length=255, null=True, blank=True, verbose_name='法定负责人')
+    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    class Meta:
+        verbose_name = '机构基本信息表'
+        verbose_name_plural = verbose_name
+
+
 class A6203(HsscFormModel):
     characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     characterfield_resident_file_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
@@ -18,7 +36,7 @@ class A6203(HsscFormModel):
     relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_A6203', verbose_name='医疗费用负担')
     relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
-    relatedfield_signed_family_doctor = models.ForeignKey(Staff, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
+    relatedfield_signed_family_doctor = models.ForeignKey('Zhi_yuan_ji_ben_xin_xi_biao', related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
     relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
     class Meta:
         verbose_name = '个人基本信息'
@@ -45,22 +63,6 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
-    boolfield_ji_gou_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构编码')
-    boolfield_ji_gou_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构名称')
-    boolfield_ji_gou_dai_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构代码')
-    boolfield_ji_gou_shu_xing = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构属性')
-    boolfield_ji_gou_ceng_ji = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构层级')
-    boolfield_suo_zai_hang_zheng_qu_hua_dai_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='所在行政区划代码')
-    boolfield_xing_zheng_qu_hua_gui_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='行政区划归属')
-    boolfield_fa_ding_fu_ze_ren = models.CharField(max_length=255, null=True, blank=True, verbose_name='法定负责人')
-    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    class Meta:
-        verbose_name = '机构基本信息表'
-        verbose_name_plural = verbose_name
-        
-
 class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
     characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     characterfield_practice_qualification = models.CharField(max_length=255, null=True, blank=True, verbose_name='执业资质')
@@ -74,7 +76,7 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
     class Meta:
         verbose_name = '职员基本信息表'
         verbose_name_plural = verbose_name
-        
+                
 
 class She_bei_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_she_bei_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='设备编码')
