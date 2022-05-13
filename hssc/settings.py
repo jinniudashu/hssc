@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     # our apps
     'analytics',
     'core',
-    'entities',
+    # 'entities',
     'dictionaries',
     'icpc',
     # 'forms',

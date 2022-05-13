@@ -744,12 +744,6 @@ class HsscFormModel(HsscBase):
     def get_absolute_url(self):
         return reverse(f'{self.__class__.__name__}_detail_url', kwargs={'slug':self.slug})
 
-    def get_update_url(self):
-        return reverse(f'{self.__class__.__name__}_update_url', kwargs={'slug':self.slug})
-
-    def get_delete_url(self):
-        return reverse(f'{self.__class__.__name__}_delete_url', kwargs={'slug':self.slug})
-
 
 class CustomerServiceLogManager(models.Manager):
     def get_customer_service_log(self, customer, period=None):
@@ -798,3 +792,15 @@ class Message(HsscFormModel):
 
     def __str__(self):
         return str(self.message)
+
+
+class HsscBaseFormModel(HsscFormModel):
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name

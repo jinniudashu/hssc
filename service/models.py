@@ -4,7 +4,7 @@ from django.forms.models import model_to_dict
 from icpc.models import *
 from dictionaries.models import *
 from core.models import HsscFormModel, Staff
-from entities.models import *
+# from entities.models import *
 
 
 def create_form_instance(operation_proc):
