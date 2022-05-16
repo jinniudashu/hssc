@@ -136,6 +136,7 @@ def operation_proc_post_save_handler(sender, instance, created, **kwargs):
 
     if not created and instance.state == 4 and not instance.service.is_system_service :  # 表单作业完成(state=4)
         # 发送服务作业完成信号
+        print('发送服务作业完成信号:', instance.content_object.relatedfield_symptom_list)
         operand_finished.send(sender=operation_proc_post_save_handler, pid=instance)
 
     # 根据服务进程创建待办事项: sync_proc_todo_list
@@ -182,13 +183,13 @@ def operand_finished_handler(sender, **kwargs):
                 end_time = datetime.datetime.now()
                 period = (start_time, end_time)
             _scanned_data = operation_proc.customer.get_health_record_by_period(period)  # 返回客户健康档案记录dict
-        print('From core.models.EventRule._get_scanned_data._scanned_data: 1.', _scanned_data)
+        print('From scheduler._get_scanned_data: 1. _scanned_data:', _scanned_data)
 
         # 2. 根据表达式字段集合剪裁生成待检测数据字典
         scanned_data = {}
         for field_name in expression_fields_set:
             scanned_data[field_name] = _scanned_data.get(field_name, '')
-        print('From core.models.EventRule._get_scanned_data.scanned_data: 2.', scanned_data)
+        print('From scheduler._get_scanned_data: 2. scanned_data:', scanned_data)
 
         # 3. 生成符合field_name_replace()要求格式的待检测数据集合
         for field_name, field_val in scanned_data.items():
@@ -199,9 +200,9 @@ def operand_finished_handler(sender, **kwargs):
             elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
                 scanned_data[field_name] = f'{field_val}'
             else:  # 如果字段类型是String或关联字段，转换为集合字符串
-                print('From core.models.EventRule._get_scanned_data', field_type, scanned_data[field_name])
+                print('From scheduler._get_scanned_data: String或关联字段', field_type, scanned_data[field_name])
                 scanned_data[field_name] = f'{set(field_val)}'
-        print('From core.models.EventRule._get_scanned_data.scanned_data: 3.', scanned_data)
+        print('From scheduler._get_scanned_data: 3.结果scanned_data：', scanned_data)
         return scanned_data
 
     def _is_rule_satified(event_rule, operation_proc):

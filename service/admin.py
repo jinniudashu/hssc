@@ -6,6 +6,7 @@ from service.models import *
 
 
 class HsscFormAdmin(admin.ModelAdmin):
+    list_fields = ['name', 'id']
     exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", ]
     view_on_site = False
 
