@@ -27,6 +27,8 @@ class DictBase(models.Model):
         super().save(*args, **kwargs)
 
 
+
+
 class An_pai_que_ren(DictBase):
     class Meta:
         verbose_name = '安排确认'

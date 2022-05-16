@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from hssc.site import clinic_site
+from core.admin import clinic_site
 from .views import index
 
 urlpatterns = [

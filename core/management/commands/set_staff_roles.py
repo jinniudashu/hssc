@@ -1,10 +1,7 @@
 from django.core.management import BaseCommand
 from django.contrib.auth.models import User, Group
-import json
 
-from core.models import *
-from icpc.models import Icpc
-
+from core.models import Role
 from .init_core_data import test_user_data
 
 class Command(BaseCommand):

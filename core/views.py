@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 import datetime
 
-from core.models import Customer, OperationProc, Service
-from service.models import *
+from core.models import Service, Customer, OperationProc
+from service.models import create_form_instance
 
 def index_customer(request):
     context = {}
@@ -22,7 +23,7 @@ def index_customer(request):
     return render(request, 'index_customer.html', context)
 
 
-def get_services(request, **kwargs):
+def get_services_list(request, **kwargs):
     '''
     从kwargs获取参数：customer_id
     返回context可用服务列表,customer_id
@@ -45,6 +46,8 @@ def new_service(request, **kwargs):
     operator = User.objects.get(username=request.user).customer
     service = Service.objects.get(id=kwargs['service_id'])
 
+    content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
+
     # 创建新的OperationProc服务作业进程实例
     new_proc=OperationProc.objects.create(
         service=service,  # 服务
@@ -54,16 +57,22 @@ def new_service(request, **kwargs):
         state=1,  # 进程状态为创建
         scheduled_time=datetime.datetime.now(),  # 创建时间
         # contract_service_proc=contract_service_proc,  # 所属合约服务进程
+        content_type=content_type,  # 内容类型
     )
 
+    # 更新允许作业岗位
+    role = service.role.all()
+    new_proc.role.set(role)
+
     # 创建新的model实例
-    form = eval(service.name.capitalize()).objects.create(
-        customer=customer,
-        creater=operator,
-        operator=operator,
-        pid=new_proc,
-        cpid=new_proc.contract_service_proc,
-    )
+    form = create_form_instance(new_proc)
+    # form = eval(service.name.capitalize()).objects.create(
+    #     customer=customer,
+    #     creater=operator,
+    #     operator=operator,
+    #     pid=new_proc,
+    #     cpid=new_proc.contract_service_proc,
+    # )
 
     # 添加model的客户基本信息
     form.characterfield_name = new_proc.customer.name
@@ -73,10 +82,10 @@ def new_service(request, **kwargs):
     form.characterfield_contact_address = new_proc.customer.address
     form.save()
 
-    # 更新OperationProc服务进程的入口url
-    new_proc.entry = f'/clinic/service/{service.name.lower()}/{form.id}/change'
+    # 更新OperationProc服务进程的form实例信息
+    new_proc.object_id = form.id
+    new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
     new_proc.save()
-
 
     # 重定向到/clinic/service/model/id/change
     return redirect(new_proc.entry)

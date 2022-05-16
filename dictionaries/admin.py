@@ -1,6 +1,7 @@
 from django.contrib import admin
-from hssc.site import clinic_site
+from core.admin import clinic_site
 from .models import *
+
 
 
 @admin.register(An_pai_que_ren)

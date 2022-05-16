@@ -5,7 +5,6 @@ import json
 from icpc.models import *
 from dictionaries.models import *
 from core.models import HsscFormModel, Staff
-# from entities.models import *
 
 
 class A6207(HsscFormModel):
