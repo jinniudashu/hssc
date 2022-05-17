@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.shortcuts import redirect
+from enum import Enum
 
 from core.admin import clinic_site
+from core.hsscbase_class import FieldsType
+from core.signals import operand_finished
 from service.models import *
 
 
@@ -18,10 +21,85 @@ class HsscFormAdmin(admin.ModelAdmin):
             request, object_id, form_url, extra_context=extra_context,
         )
 
-    def save(self, request, obj, form, change):
-        # 保存前设置CustomerServiceLog
-        if request == 'POST':
-            print('Admin request:', request.POST, 'Admin obj:', obj)
+    def save_model(self, request, obj, form, change):
+        # 把表单内容存入CustomerServiceLog
+        def _get_set_value(field_type, id_list):
+            # 转换id列表为对应的字典值列表
+            _model_list = field_type.split('.')  # 分割模型名称field_type: app_label.model_name
+            app_label = _model_list[0]  # 应用名称
+            model_name = _model_list[1]  # 模型名称
+            class ConvertIdToValue(Enum):
+                icpc = map(lambda x: eval(model_name).objects.get(id=x).iname, id_list)
+                dictionaries = map(lambda x: eval(model_name).objects.get(id=x).value, id_list)
+                service = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
+            val_iterator = eval(f'ConvertIdToValue.{app_label}').value
+            return f'{set(val_iterator)}'
+
+        def _clear_form_data(_post, _obj):
+            _post.pop('csrfmiddlewaretoken')
+            _post.pop('_save')
+            _data = {**_post, **_obj}
+            _data.pop('_state')
+            _data.pop('id')
+            _data.pop('label')
+            _data.pop('name')
+            _data.pop('hssc_id')
+            _data.pop('customer_id')
+            _data.pop('operator_id')
+            _data.pop('creater_id')
+            _data.pop('pid_id')
+            _data.pop('cpid_id')
+            _data.pop('slug')
+            _data.pop('created_time')
+            _data.pop('updated_time')
+            return _data
+
+        def _preprocess_data_format(form_data):
+            for field_name, field_val in form_data.items():
+                # 先获取字段类型
+                field_type = eval(f'FieldsType.{field_name}').value
+                if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
+                    form_data[field_name] = f'{field_val}'
+                elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
+                    form_data[field_name] = f'{field_val}'
+                elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
+                    form_data[field_name] = f'{set(field_val)}' if field_val else '{}'
+                else:  # 如果字段类型是关联字段，转换为集合字符串
+                    print('From scheduler._get_scanned_data: String或关联字段', field_type, form_data[field_name])
+                    form_data[field_name] = _get_set_value(field_type, field_val) if field_val else '{}'
+            return form_data
+
+        def _add_service_log(form_data, obj):
+            try:
+                log = CustomerServiceLog.objects.get(pid = obj.pid)
+                log.health_record = form_data
+                log.save()
+            except ObjectDoesNotExist:
+                log = CustomerServiceLog.objects.create(
+                    name=obj.name,
+                    label=obj.label,
+                    customer=obj.customer,
+                    operator=obj.operator,
+                    creater=obj.creater,
+                    pid=obj.pid,
+                    cpid=obj.cpid,
+                    data=form_data,
+                )
+            return log
+
+        _post = request.POST.copy()
+        _obj = obj.__dict__
+        _form_data = _clear_form_data(_post, _obj)
+        print('POST + object:', _form_data)
+        form_data = _preprocess_data_format(_form_data)
+        print('form_data:', form_data)
+        _add_service_log(form_data, obj)
+
+        # 发送服务作业完成信号
+        pid = obj.pid
+        operand_finished.send(sender=self, pid=pid)
+        print('发送操作完成信号：', pid)
+        super().save_model(request, obj, form, change)
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({

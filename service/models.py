@@ -706,37 +706,3 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
 
     def __str__(self):
         return self.customer.name
-
-
-# @receiver(post_save, sender=A6218)
-# def models_save_handler(sender, instance, created, **kwargs):
-#     '''
-#     把表单保存到个人健康记录
-#     '''
-#     _health_record = serialize('json', [instance], use_natural_foreign_keys=True)
-#     try:
-#         log = CustomerServiceLog.objects.get(pid = instance.pid)
-#         log.health_record = _health_record
-#         log.save()
-#         # 如果表单没有m2m字段，则发出作业完成信号
-#         # operand_finished.send(sender=models_save_handler, pid=instance.pid)
-#     except ObjectDoesNotExist:
-#         log = CustomerServiceLog.objects.create(
-#             name=instance.name,
-#             label=instance.name,
-#             customer=instance.customer,
-#             operator=instance.operator,
-#             creater=instance.creater,
-#             pid=instance.pid,
-#             cpid=instance.cpid,
-#             data=json.loads(_health_record)[0]['fields'],
-#         )
-
-# @receiver(m2m_changed, sender=A6218.relatedfield_symptom_list.through)
-# def models_m2m_changed_handler(sender, instance, action, reverse, model, pk_set, **kwargs):
-#     _health_record = serialize('json', [instance], use_natural_foreign_keys=True)
-#     log = CustomerServiceLog.objects.get(pid = instance.pid)
-#     log.health_record = _health_record
-#     log.save()
-#     # 发出作业完成信号
-#     # operand_finished.send(sender=models_m2m_changed_handler, pid=instance.pid)

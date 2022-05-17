@@ -133,14 +133,8 @@ def user_post_delete_handler(sender, instance, **kwargs):
 
 @receiver(post_save, sender=OperationProc)
 def operation_proc_post_save_handler(sender, instance, created, **kwargs):
-
-    # if not created and instance.state == 4 and not instance.service.is_system_service :  # 表单作业完成(state=4)
-    #     # 发送服务作业完成信号
-    #     operand_finished.send(sender=operation_proc_post_save_handler, pid=instance)
-
-
     # 根据服务进程创建待办事项: sync_proc_todo_list
-    if instance.operator and instance.customer:
+    if instance.operator and instance.customer and instance.state < 4:
         try :
             todo = instance.stafftodo
             todo.scheduled_time = instance.scheduled_time
@@ -230,21 +224,6 @@ def operand_finished_handler(sender, **kwargs):
             print('表达式字段及值:', expression_fields_val_dict)
             result = eval(field_name_replace(event_rule.expression, expression_fields_val_dict))  # 待检查的字段值带入表达式，并执行返回结果
             return result
-
-    def _get_set_value(field_type, id_list):
-        if not id_list:
-            return ''
-        else:
-            # 转换id列表为对应的字典值列表
-            _model_list = field_type.split('.')  # 分割模型名称field_type: app_label.model_name
-            app_label = _model_list[0]  # 应用名称
-            model_name = _model_list[1]  # 模型名称
-            class ConvertIdToValue(Enum):
-                icpc = map(lambda x: eval(model_name).objects.get(id=x).iname, id_list)
-                dictionaries = map(lambda x: eval(model_name).objects.get(id=x).value, id_list)
-                # medcine = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
-            val_iterator = eval(f'ConvertIdToValue.{app_label}').value
-            return str(set(val_iterator))
 
     def _create_next_service(**kwargs):
         '''
