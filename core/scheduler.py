@@ -11,7 +11,7 @@ from core.hsscbase_class import FieldsType
 from core.models import Service, ServiceRule, Staff, Customer, OperationProc, StaffTodo, RecommendedService, Message
 from core.utils import field_name_replace
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
-from service.models import create_form_instance
+from service.models import *
 
 
 @receiver(user_logged_in)
@@ -134,10 +134,10 @@ def user_post_delete_handler(sender, instance, **kwargs):
 @receiver(post_save, sender=OperationProc)
 def operation_proc_post_save_handler(sender, instance, created, **kwargs):
 
-    if not created and instance.state == 4 and not instance.service.is_system_service :  # 表单作业完成(state=4)
-        # 发送服务作业完成信号
-        print('发送服务作业完成信号:', instance.content_object.relatedfield_symptom_list)
-        operand_finished.send(sender=operation_proc_post_save_handler, pid=instance)
+    # if not created and instance.state == 4 and not instance.service.is_system_service :  # 表单作业完成(state=4)
+    #     # 发送服务作业完成信号
+    #     operand_finished.send(sender=operation_proc_post_save_handler, pid=instance)
+
 
     # 根据服务进程创建待办事项: sync_proc_todo_list
     if instance.operator and instance.customer:
@@ -183,7 +183,7 @@ def operand_finished_handler(sender, **kwargs):
                 end_time = datetime.datetime.now()
                 period = (start_time, end_time)
             _scanned_data = operation_proc.customer.get_health_record_by_period(period)  # 返回客户健康档案记录dict
-        print('From scheduler._get_scanned_data: 1. _scanned_data:', _scanned_data)
+        print('From scheduler._get_scanned_data: 1. _scanned_data:', event_rule.detection_scope, _scanned_data)
 
         # 2. 根据表达式字段集合剪裁生成待检测数据字典
         scanned_data = {}
@@ -201,7 +201,10 @@ def operand_finished_handler(sender, **kwargs):
                 scanned_data[field_name] = f'{field_val}'
             else:  # 如果字段类型是String或关联字段，转换为集合字符串
                 print('From scheduler._get_scanned_data: String或关联字段', field_type, scanned_data[field_name])
-                scanned_data[field_name] = f'{set(field_val)}'
+                if field_val:
+                    scanned_data[field_name] = f'{set(field_val)}'
+                else:
+                    scanned_data[field_name] = '{}'
         print('From scheduler._get_scanned_data: 3.结果scanned_data：', scanned_data)
         return scanned_data
 
@@ -351,12 +354,10 @@ def operand_finished_handler(sender, **kwargs):
 
     operation_proc = kwargs['pid']
 
-    # 1. 非系统内置服务，则为客户表单作业，保存表单记录
-    if not operation_proc.service.is_system_service:
-        print('From secheduler.py: operand_finished_handler: 非系统内置服务, 存入客户健康记录', operation_proc, operation_proc.service.name)
-        operation_proc.customer.add_health_record(operation_proc) # 存入客户健康记录
+    # 更新作业进程状态为RTC
+    operation_proc.update_state('RTC')
 
-    # 2. 根据服务规则检查业务事件是否发生，执行系统作业
+    # 根据服务规则检查业务事件是否发生，执行系统作业
     # 逐一检查service_rule.event_rule.expression是否满足
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True):
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件

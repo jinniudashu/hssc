@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Q
-from django.core.serializers import serialize
 from django.db.models.query import QuerySet
 from django.shortcuts import reverse
 from django.contrib.auth.models import User
@@ -11,7 +10,6 @@ from django.utils.text import slugify
 from enum import Enum
 from time import time
 import datetime
-import json
 
 from rest_framework.utils.encoders import JSONEncoder
 from pypinyin import lazy_pinyin
@@ -400,25 +398,6 @@ class Customer(HsscBase):
             self.label = self.name
         super().save(*args, **kwargs)
 
-    def add_health_record(self, operation_proc):
-        '''
-        保存健康记录
-        '''
-        _health_record = serialize('json', [operation_proc.content_object], use_natural_foreign_keys=True)
-        print('From core.models.Customer.add_health_record:保存健康记录', operation_proc.content_object, _health_record)
-
-        log = CustomerServiceLog.objects.create(
-            name=self.name,
-            label=self.name,
-            customer=self,
-            operator=operation_proc.operator,
-            creater=operation_proc.creater,
-            pid=operation_proc,
-            cpid=operation_proc.contract_service_proc,
-            data=json.loads(_health_record)[0]['fields'],
-        )
-        return log
-
     def get_health_record_by_pid(self, operation_proc):
         '''
         获取一次服务作业的健康记录
@@ -452,7 +431,7 @@ class Customer(HsscBase):
         '''
         获取客户推荐服务列表
         '''
-        return self.recommendedservice_customer.all()
+        return self.recommended_service_customer.all()
 
     def get_scheduled_services(self) -> 'QuerySet[OperationProc]':
         '''
@@ -512,6 +491,80 @@ class Workgroup(HsscBase):
         super().save(*args, **kwargs)
 
 
+class CustomerServiceLogManager(models.Manager):
+    def get_customer_service_log(self, customer, period=None):
+        # 返回客户的给定时间段的服务日志
+        if period:
+            return self.filter(customer=customer, created_time__range=period).order_by('created_time')
+        return self.filter(customer=customer)
+
+# 客户健康记录
+class CustomerServiceLog(HsscBase):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='customer_service_log_customer', verbose_name="客户")
+    operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='customer_service_log_operator', verbose_name="操作员")
+    creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='customer_service_log_creater', verbose_name="创建者")
+    pid = models.OneToOneField(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(editable=False, null=True, verbose_name="更新时间")
+    Log_category = [('Subjective', '主观资料'), ('ObjectiveO', '客观资料'), ('Assessment', '诊断与评价'), ('Plan', '治疗方案'), ('Management', '管理活动')]
+    category = models.CharField(max_length=50, choices=Log_category , blank=True, null=True, verbose_name="记录类别")
+    data = models.JSONField(blank=True, null=True, encoder=JSONEncoder, verbose_name="服务记录")
+
+    logs = CustomerServiceLogManager()
+
+    class Meta:
+        verbose_name = "客户服务记录"
+        verbose_name_plural = verbose_name
+        ordering = ['created_time']
+
+    def __str__(self):
+        return f'{self.name}--{self.created_time}'
+
+
+# 推荐服务
+class RecommendedService(HsscBase):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_customer', verbose_name="客户")
+    operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_operator', verbose_name="操作员")
+    creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_creater', verbose_name="创建者")
+    pid = models.OneToOneField(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(editable=False, null=True, verbose_name="更新时间")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="推荐服务")
+
+    class Meta:
+        verbose_name = "推荐服务"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.service.label)
+
+
+class Message(HsscBase):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='message_customer', verbose_name="客户")
+    operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='message_operator', verbose_name="操作员")
+    creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='message_creater', verbose_name="创建者")
+    pid = models.OneToOneField(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程id")
+    slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    updated_time = models.DateTimeField(editable=False, null=True, verbose_name="更新时间")
+    message = models.CharField(max_length=512, blank=True, null=True, verbose_name="消息")
+    has_read = models.BooleanField(default=False, verbose_name="是否已读")
+
+    class Meta:
+        verbose_name = "消息"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.message)
+
+
 class HsscFormModel(HsscBase):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_customer', verbose_name="客户")
     operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_operator', verbose_name="操作员")
@@ -532,6 +585,7 @@ class HsscFormModel(HsscBase):
         if not self.created_time:
             self.created_time = timezone.now()
         self.updated_time = timezone.now()
+
         return super().save(*args, **kwargs)
 
     def get_autocomplete_fields(self):
@@ -543,56 +597,6 @@ class HsscFormModel(HsscBase):
 
     def get_absolute_url(self):
         return reverse(f'{self.__class__.__name__}_detail_url', kwargs={'slug':self.slug})
-
-
-class CustomerServiceLogManager(models.Manager):
-    def get_customer_service_log(self, customer, period=None):
-        # 返回客户的给定时间段的服务日志
-        if period:
-            return self.filter(customer=customer, created_time__range=period).order_by('created_time')
-        return self.filter(customer=customer)
-
-# 客户健康记录
-class CustomerServiceLog(HsscFormModel):
-    Log_category = [('Subjective', '主观资料'), ('ObjectiveO', '客观资料'), ('Assessment', '诊断与评价'), ('Plan', '治疗方案'), ('Management', '管理活动')]
-    category = models.CharField(max_length=50, choices=Log_category , blank=True, null=True, verbose_name="记录类别")
-    data = models.JSONField(blank=True, null=True, encoder=JSONEncoder, verbose_name="服务记录")
-
-    logs = CustomerServiceLogManager()
-
-    class Meta:
-        verbose_name = "客户服务记录"
-        verbose_name_plural = verbose_name
-        ordering = ['created_time']
-
-    def __str__(self):
-        return f'{self.name}--{self.created_time}'
-
-
-# 推荐服务
-class RecommendedService(HsscFormModel):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="推荐服务")
-
-    class Meta:
-        verbose_name = "推荐服务"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return str(self.service.label)
-
-
-class Message(HsscFormModel):
-    message = models.CharField(max_length=512, blank=True, null=True, verbose_name="消息")
-    has_read = models.BooleanField(default=False, verbose_name="是否已读")
-
-    class Meta:
-        verbose_name = "消息"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return str(self.message)
 
 
 class HsscBaseFormModel(HsscFormModel):

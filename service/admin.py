@@ -18,10 +18,10 @@ class HsscFormAdmin(admin.ModelAdmin):
             request, object_id, form_url, extra_context=extra_context,
         )
 
-    def save_model(self, request, obj, form, change):
-        # 更新作业进程状态为RTC
-        obj.pid.update_state('RTC')
-        super().save_model(request, obj, form, change)
+    def save(self, request, obj, form, change):
+        # 保存前设置CustomerServiceLog
+        if request == 'POST':
+            print('Admin request:', request.POST, 'Admin obj:', obj)
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({

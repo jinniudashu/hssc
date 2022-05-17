@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 import datetime
 
 from core.models import Service, Customer, OperationProc
-from service.models import create_form_instance
+from service.models import *
 
 def index_customer(request):
     context = {}
@@ -65,16 +65,17 @@ def new_service(request, **kwargs):
     new_proc.role.set(role)
 
     # 创建新的model实例
-    form = create_form_instance(new_proc)
-    # form = eval(service.name.capitalize()).objects.create(
-    #     customer=customer,
-    #     creater=operator,
-    #     operator=operator,
-    #     pid=new_proc,
-    #     cpid=new_proc.contract_service_proc,
-    # )
+    # form = create_form_instance(new_proc)
+    form = eval(service.name.capitalize()).objects.create(
+        customer=customer,
+        creater=operator,
+        operator=operator,
+        pid=new_proc,
+        cpid=new_proc.contract_service_proc,
+    )
 
-    # 添加model的客户基本信息
+    # 添加model的表头信息
+    # set_form_header(form)
     form.characterfield_name = new_proc.customer.name
     # form.characterfield_gender = new_proc.customer.a6299_customer.characterfield_gender
     # form.characterfield_age = new_proc.customer.a6299_customer.characterfield_age

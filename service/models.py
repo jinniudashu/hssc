@@ -1,20 +1,26 @@
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save, m2m_changed
+from django.core.serializers import serialize
+from django.forms.models import model_to_dict
+from django.core.exceptions import ObjectDoesNotExist
+import json
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel
+from core.models import HsscFormModel, HsscBaseFormModel, CustomerServiceLog
 
 
 # 创建一个服务表单实例
 def create_form_instance(operation_proc):
     model_name = operation_proc.service.name.capitalize()
-    print('From service.models.create_form_instance, 创建表单实例:', model_name)
     form_instance = eval(model_name).objects.create(
         customer=operation_proc.customer,
         creater=operation_proc.operator,
         pid=operation_proc,
         cpid=operation_proc.contract_service_proc,
     )
+    print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance, model_to_dict(form_instance))
     return form_instance
 
 
@@ -496,7 +502,7 @@ class A6218(HsscFormModel):
     def __str__(self):
         return self.customer.name
 
-        
+
 class A6201(HsscFormModel):
     characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
@@ -701,4 +707,36 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
     def __str__(self):
         return self.customer.name
 
-        
+
+# @receiver(post_save, sender=A6218)
+# def models_save_handler(sender, instance, created, **kwargs):
+#     '''
+#     把表单保存到个人健康记录
+#     '''
+#     _health_record = serialize('json', [instance], use_natural_foreign_keys=True)
+#     try:
+#         log = CustomerServiceLog.objects.get(pid = instance.pid)
+#         log.health_record = _health_record
+#         log.save()
+#         # 如果表单没有m2m字段，则发出作业完成信号
+#         # operand_finished.send(sender=models_save_handler, pid=instance.pid)
+#     except ObjectDoesNotExist:
+#         log = CustomerServiceLog.objects.create(
+#             name=instance.name,
+#             label=instance.name,
+#             customer=instance.customer,
+#             operator=instance.operator,
+#             creater=instance.creater,
+#             pid=instance.pid,
+#             cpid=instance.cpid,
+#             data=json.loads(_health_record)[0]['fields'],
+#         )
+
+# @receiver(m2m_changed, sender=A6218.relatedfield_symptom_list.through)
+# def models_m2m_changed_handler(sender, instance, action, reverse, model, pk_set, **kwargs):
+#     _health_record = serialize('json', [instance], use_natural_foreign_keys=True)
+#     log = CustomerServiceLog.objects.get(pid = instance.pid)
+#     log.health_record = _health_record
+#     log.save()
+#     # 发出作业完成信号
+#     # operand_finished.send(sender=models_m2m_changed_handler, pid=instance.pid)
