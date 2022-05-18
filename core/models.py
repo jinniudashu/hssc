@@ -96,6 +96,7 @@ class Service(HsscPymBase):
         if self.name is None or self.name == '':
             self.name = f'{"_".join(lazy_pinyin(self.label))}'
         super().save(*args, **kwargs)
+    
 
 class BuessinessFormsSetting(HsscBase):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="作业")
@@ -248,6 +249,9 @@ class ContractServiceProc(HsscBase):
 
 
 class OperationProcManager(models.Manager):
+    def get_service_queue_count(self, service):
+        return self.filter(service=service, state__lt=4).count()
+
     def get_unassigned_proc(self, operator):
 	# 获取待分配作业进程: 状态为创建，且未分配操作员，服务岗位为操作员所属岗位，以及用户服务小组为操作员所属服务小组
         return self.filter(state=0, operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
@@ -314,7 +318,7 @@ class OperationProc(HsscBase):
             RTC = 4  # RUNNING TO COMPLETED
         self.state = OperationCode[ocode].value
         self.save()
-
+    
 
 class StaffTodoManager(models.Manager):
 	# 当天常规任务
@@ -397,23 +401,6 @@ class Customer(HsscBase):
         if not self.label:
             self.label = self.name
         super().save(*args, **kwargs)
-
-    def get_health_record_by_pid(self, operation_proc):
-        '''
-        获取一次服务作业的健康记录
-        '''
-        log = CustomerServiceLog.objects.get(pid = operation_proc)            
-        return log.data
-
-    def get_health_record_by_period(self, period):
-        '''
-        获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
-        '''
-        customer_medical_data = {}
-        logs = CustomerServiceLog.logs.get_customer_service_log(self, period)            
-        for log in logs:
-            customer_medical_data = {**customer_medical_data, **log.data}
-        return customer_medical_data
 
     def get_profile(self) -> 'QuerySet[Customer]':
         '''
@@ -522,13 +509,21 @@ class CustomerServiceLog(HsscBase):
     def __str__(self):
         return f'{self.name}--{self.created_time}'
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.created_time:
+            self.created_time = timezone.now()
+        self.updated_time = timezone.now()
+
+        return super().save(*args, **kwargs)
+
 
 # 推荐服务
 class RecommendedService(HsscBase):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_customer', verbose_name="客户")
     operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_operator', verbose_name="操作员")
     creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_creater', verbose_name="创建者")
-    pid = models.OneToOneField(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    pid = models.ForeignKey(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
     cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程id")
     slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
@@ -543,12 +538,20 @@ class RecommendedService(HsscBase):
     def __str__(self):
         return str(self.service.label)
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.created_time:
+            self.created_time = timezone.now()
+        self.updated_time = timezone.now()
+
+        return super().save(*args, **kwargs)
+
 
 class Message(HsscBase):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='message_customer', verbose_name="客户")
     operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='message_operator', verbose_name="操作员")
     creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='message_creater', verbose_name="创建者")
-    pid = models.OneToOneField(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
+    pid = models.ForeignKey(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业进程id")
     cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程id")
     slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
@@ -563,6 +566,14 @@ class Message(HsscBase):
 
     def __str__(self):
         return str(self.message)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.created_time:
+            self.created_time = timezone.now()
+        self.updated_time = timezone.now()
+
+        return super().save(*args, **kwargs)
 
 
 class HsscFormModel(HsscBase):

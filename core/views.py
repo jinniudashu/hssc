@@ -29,10 +29,16 @@ def get_services_list(request, **kwargs):
     返回context可用服务列表,customer_id
     '''
     context = {}
-    # staff_roles = User.objects.get(username=request.user).customer.staff.role.all()
-    # context['services'] = Service.objects.filter(role__in=staff_roles)  
-    context['services'] = Service.objects.filter(is_system_service=False)
+    context['services'] = [
+        {
+            'id': service.id, 
+            'label': service.label,
+            'enable_queue_counter': service.enable_queue_counter,
+            'queue_count': OperationProc.objects.get_service_queue_count(service)
+        } for service in Service.objects.filter(is_system_service=False)
+    ]
     context['customer_id'] = kwargs['customer_id']
+
     return render(request, 'popup_menu.html', context)
 
 

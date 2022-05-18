@@ -166,162 +166,156 @@ def operand_started_handler(sender, **kwargs):
 
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
-    def _get_scanned_data(event_rule, operation_proc, expression_fields_set):
-        # 1. 根据detection_scope生成待检测数据集合
-        if event_rule.detection_scope == 'CURRENT_SERVICE':
-            _scanned_data = operation_proc.customer.get_health_record_by_pid(operation_proc)
-        else:
-            period = None  # 意味着self.detection_scope == 'ALL'表示获取全部健康记录
-            if event_rule.detection_scope == 'LAST_WEEK_SERVICES':  # 获取表示指定时间段内的健康记录
-                start_time = datetime.datetime.now() + datetime.timedelta(days=-7)
-                end_time = datetime.datetime.now()
-                period = (start_time, end_time)
-            _scanned_data = operation_proc.customer.get_health_record_by_period(period)  # 返回客户健康档案记录dict
-        print('From scheduler._get_scanned_data: 1. _scanned_data:', event_rule.detection_scope, _scanned_data)
-
-        # 2. 根据表达式字段集合剪裁生成待检测数据字典
-        scanned_data = {}
-        for field_name in expression_fields_set:
-            scanned_data[field_name] = _scanned_data.get(field_name, '')
-        print('From scheduler._get_scanned_data: 2. scanned_data:', scanned_data)
-
-        # 3. 生成符合field_name_replace()要求格式的待检测数据集合
-        for field_name, field_val in scanned_data.items():
-            # 先获取字段类型
-            field_type = eval(f'FieldsType.{field_name}').value
-            if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
-                scanned_data[field_name] = f'{field_val}'
-            elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
-                scanned_data[field_name] = f'{field_val}'
-            else:  # 如果字段类型是String或关联字段，转换为集合字符串
-                print('From scheduler._get_scanned_data: String或关联字段', field_type, scanned_data[field_name])
-                if field_val:
-                    scanned_data[field_name] = f'{set(field_val)}'
-                else:
-                    scanned_data[field_name] = '{}'
-        print('From scheduler._get_scanned_data: 3.结果scanned_data：', scanned_data)
-        return scanned_data
-
     def _is_rule_satified(event_rule, operation_proc):
         '''
         检查表达式是否满足 return: Boolean
         parameters: form_data, self.expression
 		'''
+        def _get_scanned_data(event_rule, operation_proc, expression_fields_set):
+            print('检测表单范围：', event_rule.detection_scope)
+            # 1. 根据detection_scope生成待检测数据集合
+            if event_rule.detection_scope == 'CURRENT_SERVICE':
+                _scanned_data = operation_proc.customerservicelog.data
+            else:
+                '''
+                获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
+                '''
+                period = None  # 意味着self.detection_scope == 'ALL'表示获取全部健康记录
+                if event_rule.detection_scope == 'LAST_WEEK_SERVICES':  # 获取表示指定时间段内的健康记录
+                    start_time = datetime.datetime.now() + datetime.timedelta(days=-7)
+                    end_time = datetime.datetime.now()
+                    period = (start_time, end_time)
+
+                _scanned_data = {}  # 返回客户健康档案记录dict
+                logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period)            
+                for log in logs:
+                    _scanned_data = {**_scanned_data, **log.data}
+                    
+            print('From scheduler._get_scanned_data: 1. _scanned_data:', event_rule.detection_scope, _scanned_data)
+
+            # 2. 根据表达式字段集合剪裁生成待检测数据字典
+            scanned_data = {}
+            for field_name in expression_fields_set:
+                scanned_data[field_name] = _scanned_data.get(field_name, '')
+            print('From scheduler._get_scanned_data: 2. scanned_data:', scanned_data)
+
+            return scanned_data
+
         if event_rule.expression == 'completed':  # 完成事件直接返回
             return True
         else:  # 判断是否发生其他业务事件
             # 数据预处理
             expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # self.expression_fields: 去除空格，转为数组，再转为集合去重
             scanned_data_dict = _get_scanned_data(event_rule, operation_proc, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
-            print('From EventRule.is_satified 检查表达式:', event_rule.expression)
-            print('检查字段:', expression_fields_set)            
             print('扫描内容:', scanned_data_dict)
 
             expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及值的字典
             for field_name in expression_fields_set:
                 expression_fields_val_dict[field_name] = scanned_data_dict.get(field_name, '')            
 
-            print('表达式字段及值:', expression_fields_val_dict)
-            result = eval(field_name_replace(event_rule.expression, expression_fields_val_dict))  # 待检查的字段值带入表达式，并执行返回结果
+            print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
+            _expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
+            print('eval表达式:', _expression)
+            result = eval(_expression)  # 待检查的字段值带入表达式，并执行返回结果
             return result
-
-    def _create_next_service(**kwargs):
-        '''
-        生成后续服务
-        '''
-        # 准备新的服务作业进程参数
-        operation_proc = kwargs['operation_proc']
-        customer = operation_proc.customer
-        operator = kwargs['operator']
-        service = kwargs['next_service']
-        contract_service_proc = operation_proc.contract_service_proc
-        content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())
-        # 创建新的服务作业进程
-        new_proc=OperationProc.objects.create(
-            service=service,  # 服务
-            customer=customer,  # 客户
-            creater=operator,  # 创建者
-            state=0,  # 进程状态
-            scheduled_time=datetime.datetime.now(),  # 创建时间
-            parent_proc=operation_proc,  # 当前进程是被创建进程的父进程
-            contract_service_proc=contract_service_proc,  # 所属合约服务进程
-            content_type=content_type,  # 表单类型
-        )
-        # Here postsave signal in service.models
-        # 更新允许作业岗位
-        role = service.role.all()
-        new_proc.role.set(role)
-
-        form = create_form_instance(new_proc)
-        # 更新OperationProc服务进程的form实例信息
-        new_proc.object_id = form.id
-        new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
-        new_proc.save()
-
-
-        return f'创建服务作业进程: {new_proc}'
-
-    def _recommend_next_service(**kwargs):
-        '''
-        推荐后续服务
-        '''
-        # 准备新的服务作业进程参数
-        operation_proc = kwargs['operation_proc']
-        # 创建新的服务作业进程
-        _recommended = RecommendedService.objects.create(
-            service=kwargs['next_service'],  # 推荐的服务
-            customer=operation_proc.customer,  # 客户
-            creater=kwargs['operator'],  # 创建者
-            pid=operation_proc,  # 当前进程是被推荐服务的父进程
-            cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-        )
-        return f'推荐服务作业: {_recommended}'
-
-    def _alert_content_violations(self, **kwargs):
-        '''
-        内容违规提示
-        '''
-        print('alert_content_violations:', '内容违规提示')
-        return '内容违规提示'
-
-    def _send_notification(**kwargs):
-        '''
-        发送提醒
-        '''
-        # 准备服务作业进程参数
-        operation_proc = kwargs['operation_proc']
-
-        # 获取提醒人员list
-        _reminders_option = kwargs['reminders']
-        reminders = _get_reminders(_reminders_option)
-
-        # 创建提醒消息
-        for customer in reminders:
-            _ = Message.objects.create(
-                message=kwargs['message'],  # 消息内容
-                customer=customer,  # 客户
-                creater=kwargs['operator'],  # 创建者
-                pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-            )
-
-        def _get_reminders(_option):
-            '''
-            用选项值为list.index获取提醒对象列表
-            '''
-            reminder_option = [
-                operation_proc.customer,  # 0: 发送给当前客户
-                kwargs['operator'],  # 1: 发送给当前作业人员
-                # return workgroup_list,  # 2: 发送给当前作业组成员
-            ]
-            return [reminder_option[_option]]
-
-        return f'生成提醒消息OK'
 
     def _execute_system_operand(system_operand, **kwargs):
         '''
         执行系统自动作业
         '''
+        def _create_next_service(**kwargs):
+            '''
+            生成后续服务
+            '''
+            # 准备新的服务作业进程参数
+            operation_proc = kwargs['operation_proc']
+            customer = operation_proc.customer
+            operator = kwargs['operator']
+            service = kwargs['next_service']
+            contract_service_proc = operation_proc.contract_service_proc
+            content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())
+            # 创建新的服务作业进程
+            new_proc=OperationProc.objects.create(
+                service=service,  # 服务
+                customer=customer,  # 客户
+                creater=operator,  # 创建者
+                state=0,  # 进程状态
+                scheduled_time=datetime.datetime.now(),  # 创建时间
+                parent_proc=operation_proc,  # 当前进程是被创建进程的父进程
+                contract_service_proc=contract_service_proc,  # 所属合约服务进程
+                content_type=content_type,  # 表单类型
+            )
+            # Here postsave signal in service.models
+            # 更新允许作业岗位
+            role = service.role.all()
+            new_proc.role.set(role)
+
+            form = create_form_instance(new_proc)
+            # 更新OperationProc服务进程的form实例信息
+            new_proc.object_id = form.id
+            new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
+            new_proc.save()
+
+
+            return f'创建服务作业进程: {new_proc}'
+
+        def _recommend_next_service(**kwargs):
+            '''
+            推荐后续服务
+            '''
+            # 准备新的服务作业进程参数
+            operation_proc = kwargs['operation_proc']
+            # 创建新的服务作业进程
+            _recommended = RecommendedService.objects.create(
+                service=kwargs['next_service'],  # 推荐的服务
+                customer=operation_proc.customer,  # 客户
+                creater=kwargs['operator'],  # 创建者
+                pid=operation_proc,  # 当前进程是被推荐服务的父进程
+                cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+            )
+            return f'推荐服务作业: {_recommended}'
+
+        def _alert_content_violations(self, **kwargs):
+            '''
+            内容违规提示
+            '''
+            print('alert_content_violations:', '内容违规提示')
+            return '内容违规提示'
+
+        def _send_notification(**kwargs):
+            '''
+            发送提醒
+            '''
+            def _get_reminders(_option):
+                '''
+                用选项值为list.index获取提醒对象列表
+                '''
+                reminder_option = [
+                    operation_proc.customer,  # 0: 发送给当前客户
+                    kwargs['operator'],  # 1: 发送给当前作业人员
+                    # return workgroup_list,  # 2: 发送给当前作业组成员
+                ]
+                return [reminder_option[_option]]
+
+            # 准备服务作业进程参数
+            operation_proc = kwargs['operation_proc']
+
+            # 获取提醒人员list
+            _reminders_option = kwargs['reminders']
+            reminders = _get_reminders(_reminders_option)
+
+            # 创建提醒消息
+            for customer in reminders:
+                _ = Message.objects.create(
+                    message=kwargs['message'],  # 消息内容
+                    customer=customer,  # 客户
+                    creater=kwargs['operator'],  # 创建者
+                    pid=operation_proc,  # 当前进程是被推荐服务的父进程
+                    cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+                )
+
+            return f'生成提醒消息OK'
+
         class SystemOperandFunc(Enum):
             CREATE_NEXT_SERVICE = _create_next_service  # 生成后续服务
             RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
@@ -340,6 +334,8 @@ def operand_finished_handler(sender, **kwargs):
     # 逐一检查service_rule.event_rule.expression是否满足
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True):
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件
+        print('*****************************')
+        print('From check_rules 扫描规则：', service_rule.service, service_rule.event_rule)
         if _is_rule_satified(service_rule.event_rule, operation_proc):
             print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
             # 构造作业参数
