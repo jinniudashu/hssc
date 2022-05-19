@@ -8,11 +8,6 @@ from core.models import HsscFormModel, HsscBaseFormModel
 
 # 创建一个服务表单实例
 def create_form_instance(operation_proc):
-    '''
-    业务逻辑：
-    1、创建空表单
-    2、如果不是基本信息表作业：填入基本信息表头
-    '''
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
@@ -28,13 +23,13 @@ def create_form_instance(operation_proc):
     if service.buessiness_forms.all().first() != service.managed_entity.base_form:
         # 判断当前实体，填入实体基本信息表头字段
         # 通用代码里customer应改为entity
-        base_info = service.managed_entity.base_form.objects.filter(customer=operation_proc.customer).first()
+        base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
         # *********以下应为生成代码！************
-        form_instance.characterfield_contact_address = base_info.characterfield_contact_address
+        form_instance.characterfield_family_address = base_info.characterfield_family_address
         form_instance.characterfield_contact_number = base_info.characterfield_contact_number
         form_instance.characterfield_name = base_info.characterfield_name
-        form_instance.characterfield_gender = base_info.characterfield_gender
-        form_instance.characterfield_age = base_info.characterfield_age
+        form_instance.relatedfield_gender = base_info.relatedfield_gender
+        form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
         form_instance.save()
     return form_instance
 
@@ -55,7 +50,7 @@ class Ji_gou_ji_ben_xin_xi_biao(HsscBaseFormModel):
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
 
     class Meta:
-        verbose_name = '机构基本信息表'
+        verbose_name = '机构基本信息维护'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -74,7 +69,7 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscBaseFormModel):
     relatedfield_service_role = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_relatedfield_service_role_zhi_yuan_ji_ben_xin_xi_biao', verbose_name='服务角色')
 
     class Meta:
-        verbose_name = '职员基本信息表'
+        verbose_name = '职员基本信息维护'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -110,7 +105,7 @@ class She_bei_ji_ben_xin_xi_ji_lu(HsscBaseFormModel):
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_she_bei_shi_yong_fu_wu_gong_neng_she_bei_ji_ben_xin_xi_ji_lu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='设备适用服务功能')
 
     class Meta:
-        verbose_name = '设备基本信息表'
+        verbose_name = '设备基本信息维护'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -135,6 +130,7 @@ class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
 
         
 class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
+    boolfield_yao_pin_tong_yong_zi_duan = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品通用名')
     boolfield_yao_pin_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品名称')
     boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_yao_pin_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品编码')
@@ -157,7 +153,33 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
     def __str__(self):
         return self.customer.name
 
+        
+class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
+    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
+    boolfield_dang_qian_pai_dui_ren_shu = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数')
+    boolfield_dang_qian_pai_dui_ren_shu_standard_value = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数标准值')
+    boolfield_dang_qian_pai_dui_ren_shu_up_limit = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数上限')
+    boolfield_dang_qian_pai_dui_ren_shu_down_limit = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数下限')
+    boolfield_yu_ji_deng_hou_shi_jian = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间')
+    boolfield_yu_ji_deng_hou_shi_jian_standard_value = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间标准值')
+    boolfield_yu_ji_deng_hou_shi_jian_up_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间上限')
+    boolfield_yu_ji_deng_hou_shi_jian_down_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间下限')
+    boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_fu_wu_xiang_mu_ming_cheng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_fu_wu_xiang_mu_ming_cheng_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务项目名称')
+    boolfield_an_pai_que_ren = models.ForeignKey(An_pai_que_ren, related_name='an_pai_que_ren_for_boolfield_an_pai_que_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='安排确认')
 
+    class Meta:
+        verbose_name = '申请空腹血糖检查服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     characterfield_resident_file_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
@@ -183,42 +205,14 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
 
     def __str__(self):
         return self.customer.name
-        
-# **********************************************************************************************************************
-# Service属性表单Model
-# **********************************************************************************************************************
-class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
-    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
-    boolfield_dang_qian_pai_dui_ren_shu = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数')
-    boolfield_dang_qian_pai_dui_ren_shu_standard_value = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数标准值')
-    boolfield_dang_qian_pai_dui_ren_shu_up_limit = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数上限')
-    boolfield_dang_qian_pai_dui_ren_shu_down_limit = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数下限')
-    boolfield_yu_ji_deng_hou_shi_jian = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间')
-    boolfield_yu_ji_deng_hou_shi_jian_standard_value = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间标准值')
-    boolfield_yu_ji_deng_hou_shi_jian_up_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间上限')
-    boolfield_yu_ji_deng_hou_shi_jian_down_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间下限')
-    boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
-    boolfield_fu_wu_xiang_mu_ming_cheng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_fu_wu_xiang_mu_ming_cheng_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务项目名称')
-    boolfield_an_pai_que_ren = models.ForeignKey(An_pai_que_ren, related_name='an_pai_que_ren_for_boolfield_an_pai_que_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='安排确认')
-
-    class Meta:
-        verbose_name = '申请空腹血糖检查服务'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.customer.name
 
         
 class Shu_ye_zhu_she(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_shu_ye_zhu_she', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_yao_pin_gui_ge = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品规格')
     boolfield_chang_yong_chu_fang_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用处方量')
@@ -236,11 +230,11 @@ class Shu_ye_zhu_she(HsscFormModel):
 
         
 class Qian_yue_fu_wu(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭签约服务协议')
     boolfield_qian_yue_que_ren = models.ForeignKey(Qian_yue_que_ren, related_name='qian_yue_que_ren_for_boolfield_qian_yue_que_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约确认')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
@@ -254,11 +248,11 @@ class Qian_yue_fu_wu(HsscFormModel):
 
         
 class T9001(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     relatedfield_yi_lou_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_yi_lou_zhen_duan_T9001', verbose_name='可能诊断')
     relatedfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_pai_chu_zhen_duan_T9001', verbose_name='排除诊断')
@@ -272,11 +266,11 @@ class T9001(HsscFormModel):
 
         
 class Tang_hua_xue_hong_dan_bai_jian_cha_biao(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_tang_hua_xue_hong_dan_bai_jian_cha_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     numberfield_tang_hua_xue_hong_dan_bai = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白')
     numberfield_tang_hua_xue_hong_dan_bai_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白标准值')
     numberfield_tang_hua_xue_hong_dan_bai_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=6.0, null=True, blank=True, verbose_name='糖化血红蛋白上限')
@@ -291,11 +285,11 @@ class Tang_hua_xue_hong_dan_bai_jian_cha_biao(HsscFormModel):
 
         
 class Kong_fu_xue_tang_jian_cha(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_kong_fu_xue_tang_jian_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
     numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
     numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
@@ -310,11 +304,11 @@ class Kong_fu_xue_tang_jian_cha(HsscFormModel):
 
         
 class Xue_ya_jian_ce(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_xue_ya_jian_ce', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     numberfield_systolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
     numberfield_systolic_blood_pressure_standard_value = models.IntegerField(null=True, blank=True, verbose_name='收缩压标准值')
     numberfield_systolic_blood_pressure_up_limit = models.IntegerField(default=139.0, null=True, blank=True, verbose_name='收缩压上限')
@@ -333,11 +327,11 @@ class Xue_ya_jian_ce(HsscFormModel):
 
         
 class Tang_niao_bing_cha_ti(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     relatedfield_fundus = models.ForeignKey(Normality, related_name='normality_for_relatedfield_fundus_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='眼底')
     relatedfield_left_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_left_foot_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左脚')
     relatedfield_right_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_right_foot_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右脚')
@@ -351,11 +345,11 @@ class Tang_niao_bing_cha_ti(HsscFormModel):
 
         
 class A3502(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_niao_tang = models.ForeignKey(Niao_tang, related_name='niao_tang_for_boolfield_niao_tang_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='尿糖')
     boolfield_dan_bai_zhi = models.ForeignKey(Dan_bai_zhi, related_name='dan_bai_zhi_for_boolfield_dan_bai_zhi_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='蛋白质')
     boolfield_tong_ti = models.ForeignKey(Tong_ti, related_name='tong_ti_for_boolfield_tong_ti_A3502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='尿酮体')
@@ -369,11 +363,11 @@ class A3502(HsscFormModel):
 
         
 class A6299(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_yi_chuan_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_yi_chuan_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='遗传性疾病')
     boolfield_yi_chuan_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_yi_chuan_bing_shi_cheng_yuan_A6299', verbose_name='遗传病史成员')
     relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A6299', verbose_name='药品名')
@@ -417,11 +411,11 @@ class A6299(HsscFormModel):
 
         
 class A6220(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6220', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_yuan_wai_jian_kang_ping_gu = models.ForeignKey(Sui_fang_ping_gu, related_name='sui_fang_ping_gu_for_boolfield_yuan_wai_jian_kang_ping_gu_A6220', on_delete=models.CASCADE, null=True, blank=True, verbose_name='监测评估')
 
     class Meta:
@@ -433,11 +427,11 @@ class A6220(HsscFormModel):
 
         
 class A6202(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6202', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6202', verbose_name='症状')
 
@@ -450,11 +444,11 @@ class A6202(HsscFormModel):
 
         
 class T6301(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_yao_pin_dan_wei = models.ForeignKey(Yao_pin_dan_wei, related_name='yao_pin_dan_wei_for_boolfield_yao_pin_dan_wei_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品单位')
     relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
@@ -486,11 +480,11 @@ class T6301(HsscFormModel):
 
         
 class T8901(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_T8901', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_T8901', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     relatedfield_yi_lou_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_yi_lou_zhen_duan_T8901', verbose_name='可能诊断')
     relatedfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_pai_chu_zhen_duan_T8901', verbose_name='排除诊断')
@@ -504,11 +498,11 @@ class T8901(HsscFormModel):
 
         
 class A6218(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6218', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6218', verbose_name='症状')
 
@@ -519,13 +513,13 @@ class A6218(HsscFormModel):
     def __str__(self):
         return self.customer.name
 
-
+        
 class A6201(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6201', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', verbose_name='症状')
     boolfield_chang_yong_zheng_zhuang = models.ManyToManyField(Chang_yong_zheng_zhuang, related_name='chang_yong_zheng_zhuang_for_boolfield_chang_yong_zheng_zhuang_A6201', verbose_name='常用症状')
@@ -539,11 +533,11 @@ class A6201(HsscFormModel):
 
         
 class A6217(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6217', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6217', verbose_name='症状')
 
@@ -556,11 +550,11 @@ class A6217(HsscFormModel):
 
         
 class Tang_niao_bing_zi_wo_jian_ce(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_tang_niao_bing_zi_wo_jian_ce', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
     numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
     numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
@@ -575,11 +569,11 @@ class Tang_niao_bing_zi_wo_jian_ce(HsscFormModel):
 
         
 class Yao_shi_fu_wu(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_yao_shi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_yao_shi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     boolfield_shi_fou_ji_xu_shi_yong = models.ForeignKey(Ji_xu_shi_yong_qing_kuang, related_name='ji_xu_shi_yong_qing_kuang_for_boolfield_shi_fou_ji_xu_shi_yong_yao_shi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否继续使用')
     relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_yao_shi_fu_wu', verbose_name='药品名')
@@ -593,11 +587,11 @@ class Yao_shi_fu_wu(HsscFormModel):
 
         
 class Tang_niao_bing_zhuan_yong_wen_zhen(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_tang_niao_bing_zhuan_yong_wen_zhen', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_tang_niao_bing_zhuan_yong_wen_zhen', verbose_name='症状')
     boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_tang_niao_bing_zhuan_yong_wen_zhen', verbose_name='糖尿病症状')
@@ -611,11 +605,11 @@ class Tang_niao_bing_zhuan_yong_wen_zhen(HsscFormModel):
 
         
 class A3101(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     characterfield_right_eye_vision = models.CharField(max_length=255, null=True, blank=True, verbose_name='右眼视力')
     characterfield_left_eye_vision = models.CharField(max_length=255, null=True, blank=True, verbose_name='左眼视力')
     numberfield_body_temperature = models.IntegerField(null=True, blank=True, verbose_name='体温')
@@ -671,11 +665,11 @@ class A3101(HsscFormModel):
 
         
 class A6502(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, verbose_name='预约时间')
     boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
@@ -689,11 +683,11 @@ class A6502(HsscFormModel):
 
         
 class A6501(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, verbose_name='预约时间')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 
@@ -706,11 +700,11 @@ class A6501(HsscFormModel):
 
         
 class Men_zhen_chu_fang_biao(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=True, verbose_name='性别')
-    characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_men_zhen_chu_fang_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_chang_yong_chu_fang_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用处方量')
     boolfield_yong_yao_zhou_qi = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药疗程')
@@ -723,3 +717,5 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
 
     def __str__(self):
         return self.customer.name
+
+        

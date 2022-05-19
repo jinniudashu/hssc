@@ -149,6 +149,7 @@ class HsscPymBase(HsscBase):
 
 from enum import Enum
 class FieldsType(Enum):
+    boolfield_yao_pin_tong_yong_zi_duan = "String"  # 药品通用名
     characterhssc_identification_number = "String"  # 身份证号码
     boolfield_yao_pin_ming_cheng = "String"  # 药品名称
     boolfield_fu_yong_pin_ci = "String"  # 用药频次
@@ -218,11 +219,11 @@ class FieldsType(Enum):
     boolfield_yao_wei = "Numbers"  # 腰围
     boolfield_dang_qian_pai_dui_ren_shu = "Numbers"  # 当前排队人数
     boolfield_yu_ji_deng_hou_shi_jian = "Numbers"  # 预计等候时间
-    datetimefield_time_of_diagnosis = "Datetime"  # 确诊时间
-    boolfield_bao_zhi_qi = "Date"  # 保质期
     datetimefield_date = "Date"  # 手术日期
     boolfield_shu_xue_ri_qi = "Date"  # 输血日期
     boolfield_wai_shang_ri_qi = "Date"  # 外伤日期
+    datetimefield_time_of_diagnosis = "Datetime"  # 确诊时间
+    boolfield_bao_zhi_qi = "Date"  # 保质期
     datetimefield_date_of_birth = "Date"  # 出生日期
     datetimefield_ri_qi_shi_jian = "Datetime"  # 预约时间
     boolfield_zhu_she_ri_qi = "Datetime"  # 注射日期
@@ -232,7 +233,7 @@ class FieldsType(Enum):
     boolfield_ru_ku_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 入库计量单位
     boolfield_xiao_shou_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 销售计量单位
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = "icpc.Icpc4_physical_examination_and_tests"  # 设备适用服务功能
-    relatedfield_affiliation = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
+    relatedfield_affiliation = "service.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
     relatedfield_symptom_list = "icpc.Icpc3_symptoms_and_problems"  # 症状
     relatedfield_gender = "dictionaries.Gender"  # 性别
     relatedfield_nationality = "dictionaries.Nationality"  # 民族
@@ -242,7 +243,7 @@ class FieldsType(Enum):
     relatedfield_medical_expenses_burden = "dictionaries.Medical_expenses_burden"  # 医疗费用负担
     relatedfield_type_of_residence = "dictionaries.Type_of_residence"  # 居住类型
     relatedfield_blood_type = "dictionaries.Blood_type"  # 血型
-    relatedfield_signed_family_doctor = "core.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
+    relatedfield_signed_family_doctor = "service.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
     relatedfield_athletic_ability = "dictionaries.Exercise_time"  # 运动能力
     relatedfield_personality_tendency = "dictionaries.Character"  # 性格倾向
     relatedfield_are_you_satisfied_with_the_job_and_life = "dictionaries.Satisfaction"  # 对目前生活和工作满意吗
@@ -295,7 +296,7 @@ class FieldsType(Enum):
     boolfield_jian_kang_zhuang_kuang_zi_wo_ping_jia = "dictionaries.Jian_kang_zi_wo_ping_jia"  # 健康状况自我评价
     T4502 = "icpc.Icpc8_other_health_interventions"  # 运动干预
     boolfield_qian_yue_que_ren = "dictionaries.Qian_yue_que_ren"  # 签约确认
-    boolfield_ze_ren_ren = "core.Zhi_yuan_ji_ben_xin_xi_biao"  # 责任人
+    boolfield_ze_ren_ren = "service.Zhi_yuan_ji_ben_xin_xi_biao"  # 责任人
     boolfield_yuan_wai_jian_kang_ping_gu = "dictionaries.Sui_fang_ping_gu"  # 监测评估
     boolfield_niao_tang = "dictionaries.Niao_tang"  # 尿糖
     boolfield_dan_bai_zhi = "dictionaries.Dan_bai_zhi"  # 蛋白质
@@ -311,4 +312,4 @@ class FieldsType(Enum):
     boolfield_yi_chuan_bing_shi_cheng_yuan = "dictionaries.Qin_shu_guan_xi"  # 遗传病史成员
     boolfield_fu_wu_xiang_mu_ming_cheng = "icpc.Icpc4_physical_examination_and_tests"  # 服务项目名称
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
-    relatedfield_drug_name = "entities.Yao_pin_ji_ben_xin_xi_biao"  # 药品名
+    relatedfield_drug_name = "service.Yao_pin_ji_ben_xin_xi_biao"  # 药品名

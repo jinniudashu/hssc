@@ -68,13 +68,13 @@ class Fu_wuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fu_wu
         fields = '__all__'
-class Yao_pin_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yao_pin_ji_ben_xin_xi_biao
-        fields = '__all__'
 class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao
+        fields = '__all__'
+class Yao_pin_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yao_pin_ji_ben_xin_xi_biao
         fields = '__all__'
 class Z6205Serializer(serializers.ModelSerializer):
     class Meta:

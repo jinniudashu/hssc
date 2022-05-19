@@ -362,31 +362,6 @@
             "components_groups": []
         },
         {
-            "label": "药品基本信息表",
-            "name": "yao_pin_ji_ben_xin_xi_biao",
-            "hssc_id": "a2fc46f0-c115-11ec-9685-2617a93150cd",
-            "pym": "ypjbxxb",
-            "name_icpc": null,
-            "description": "",
-            "components": [
-                "18cfcb9a-d11a-11ec-ab0d-823d1f108281",
-                "1bf942da-c5ce-11ec-b9d4-725badf7393d",
-                "afe6851a-c115-11ec-9685-2617a93150cd",
-                "fbdc40fe-c115-11ec-b731-2617a93150cd",
-                "2b80da60-c5ce-11ec-b819-725badf7393d",
-                "33bc581c-c5ce-11ec-b9d4-725badf7393d",
-                "3e18992e-c5ce-11ec-b9d4-725badf7393d",
-                "4a10254e-c5ce-11ec-b9d4-725badf7393d",
-                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
-                "77226cfe-c5ce-11ec-b819-725badf7393d",
-                "654dfc0a-c5ce-11ec-b819-725badf7393d",
-                "6da75824-c5ce-11ec-b819-725badf7393d",
-                "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
-                "5dc1e618-c5ce-11ec-b9d4-725badf7393d"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "物料供应商基本信息表",
             "name": "wu_liu_gong_ying_shang_ji_ben_xin_xi_biao",
             "hssc_id": "63347e8a-c5c9-11ec-b819-725badf7393d",
@@ -401,6 +376,32 @@
                 "7c53c810-c5cb-11ec-b819-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "5f80d88c-c5ca-11ec-b819-725badf7393d"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "药品基本信息表",
+            "name": "yao_pin_ji_ben_xin_xi_biao",
+            "hssc_id": "a2fc46f0-c115-11ec-9685-2617a93150cd",
+            "pym": "ypjbxxb",
+            "name_icpc": null,
+            "description": "",
+            "components": [
+                "2c4ebf36-d5b7-11ec-a897-52d938fbdf73",
+                "18cfcb9a-d11a-11ec-ab0d-823d1f108281",
+                "1bf942da-c5ce-11ec-b9d4-725badf7393d",
+                "afe6851a-c115-11ec-9685-2617a93150cd",
+                "fbdc40fe-c115-11ec-b731-2617a93150cd",
+                "2b80da60-c5ce-11ec-b819-725badf7393d",
+                "33bc581c-c5ce-11ec-b9d4-725badf7393d",
+                "3e18992e-c5ce-11ec-b9d4-725badf7393d",
+                "4a10254e-c5ce-11ec-b9d4-725badf7393d",
+                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
+                "77226cfe-c5ce-11ec-b819-725badf7393d",
+                "654dfc0a-c5ce-11ec-b819-725badf7393d",
+                "6da75824-c5ce-11ec-b819-725badf7393d",
+                "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
+                "5dc1e618-c5ce-11ec-b9d4-725badf7393d"
             ],
             "components_groups": []
         },
@@ -989,15 +990,15 @@
             "name": "customer",
             "hssc_id": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "kh",
-            "app_name": "core",
+            "app_name": "service",
             "model_name": "Customer",
             "base_form": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
             "header_fields": [
-                "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
+                "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
-                "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
-                "de9f4ea4-9aa1-11ec-bde1-8a6e55faf877"
+                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
+                "debcb08e-9aa1-11ec-bde1-8a6e55faf877"
             ]
         },
         {
@@ -1005,7 +1006,7 @@
             "name": "medicine",
             "hssc_id": "de896698-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "yp",
-            "app_name": "entities",
+            "app_name": "service",
             "model_name": "Medicine",
             "base_form": "a2fc46f0-c115-11ec-9685-2617a93150cd",
             "header_fields": []
@@ -1015,7 +1016,7 @@
             "name": "staff",
             "hssc_id": "de87315c-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "zy",
-            "app_name": "core",
+            "app_name": "service",
             "model_name": "Staff",
             "base_form": "bca10e04-c5c7-11ec-b819-725badf7393d",
             "header_fields": []
@@ -1025,7 +1026,7 @@
             "name": "institution",
             "hssc_id": "de8ad1a4-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "jg",
-            "app_name": "entities",
+            "app_name": "service",
             "model_name": "Institution",
             "base_form": "43464b44-c5c9-11ec-b819-725badf7393d",
             "header_fields": []
@@ -1035,7 +1036,7 @@
             "name": "device",
             "hssc_id": "de8a1c64-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "sb",
-            "app_name": "entities",
+            "app_name": "service",
             "model_name": "Device",
             "base_form": "7c8caaba-c5c9-11ec-b9d4-725badf7393d",
             "header_fields": []
@@ -1045,7 +1046,7 @@
             "name": "supplier",
             "hssc_id": "de889948-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "gys",
-            "app_name": "entities",
+            "app_name": "service",
             "model_name": "Supplier",
             "base_form": "63347e8a-c5c9-11ec-b819-725badf7393d",
             "header_fields": []
@@ -2030,10 +2031,10 @@
             ]
         },
         {
-            "label": "设备基本信息表",
+            "label": "设备基本信息维护",
             "name": "she_bei_ji_ben_xin_xi_ji_lu",
             "hssc_id": "f1d556ee-d11a-11ec-b369-823d1f108281",
-            "pym": "sbjbxxb",
+            "pym": "sbjbxxwh",
             "name_icpc": null,
             "managed_entity": "de8a1c64-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -2092,10 +2093,10 @@
             ]
         },
         {
-            "label": "职员基本信息表",
+            "label": "职员基本信息维护",
             "name": "zhi_yuan_ji_ben_xin_xi_biao",
             "hssc_id": "51b8426a-d11b-11ec-ab0d-823d1f108281",
-            "pym": "zyjbxxb",
+            "pym": "zyjbxxwh",
             "name_icpc": null,
             "managed_entity": "de87315c-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -2124,10 +2125,10 @@
             ]
         },
         {
-            "label": "机构基本信息表",
+            "label": "机构基本信息维护",
             "name": "ji_gou_ji_ben_xin_xi_biao",
             "hssc_id": "ae0189fa-d11b-11ec-ab0d-823d1f108281",
-            "pym": "jgjbxxb",
+            "pym": "jgjbxxwh",
             "name_icpc": null,
             "managed_entity": "de8ad1a4-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -2760,11 +2761,11 @@
             "name": "fa_xian_er_lian_tang_niao_bing_zheng_zhuang_qie_xue_tang_chao_biao",
             "hssc_id": "9dd8d736-abdc-11ec-bf5e-1ac10aeebbc4",
             "pym": "extnbzdgz",
-            "description": "糖尿病症状 == {‘烦渴’,‘多尿’} and 空腹血糖 >= 7.0 or 糖尿病症状 == {'烦渴','皮肤感染'} and 空腹血糖 >= 7.0 or 糖尿病症状 == {'多尿','皮肤感染'} and 空腹血糖 >= 7.0",
-            "detection_scope": "CURRENT_SERVICE",
+            "description": "症状 == {‘烦渴’,‘多尿’} and 空腹血糖 >= 7.0 or 症状 == {'烦渴','皮肤感染'}  空腹血糖 >= 7.0 or 症状 == {'多尿','皮肤感染'} and 空腹血糖 >= 7.0",
+            "detection_scope": "LAST_WEEK_SERVICES",
             "weight": 1,
-            "expression": "len({'烦渴','多尿','皮肤感染'}.intersection(boolfield_tang_niao_bing_zheng_zhuang))>=2 and numberfield_kong_fu_xue_tang >= 7.0",
-            "expression_fields": "boolfield_tang_niao_bing_zheng_zhuang,numberfield_kong_fu_xue_tang,boolfield_tang_niao_bing_zheng_zhuang,numberfield_kong_fu_xue_tang,boolfield_tang_niao_bing_zheng_zhuang,numberfield_kong_fu_xue_tang"
+            "expression": "len({'烦渴','多尿','皮肤感染'}.intersection(relatedfield_symptom_list)) >= 2 and numberfield_kong_fu_xue_tang >= 7.0",
+            "expression_fields": "relatedfield_symptom_list,numberfield_kong_fu_xue_tang,relatedfield_symptom_list,numberfield_kong_fu_xue_tang,relatedfield_symptom_list,numberfield_kong_fu_xue_tang"
         },
         {
             "label": "糖尿病酮中毒诊断规则",
@@ -3063,7 +3064,7 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": false,
+            "is_active": true,
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {

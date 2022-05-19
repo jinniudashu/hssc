@@ -182,7 +182,21 @@ class Fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
+class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao(HsscFormModel):
+    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
+    boolfield_gong_ying_shang_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='供应商编码')
+    boolfield_zhu_yao_gong_ying_chan_pin = models.CharField(max_length=255, null=True, blank=True, verbose_name='主要供应产品')
+    boolfield_gong_huo_zhou_qi = models.CharField(max_length=255, null=True, blank=True, verbose_name='供货周期')
+    boolfield_gong_ying_shang_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='供应商名称')
+    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    boolfield_xin_yu_ping_ji = models.ForeignKey(Xin_yu_ping_ji, related_name='xin_yu_ping_ji_for_boolfield_xin_yu_ping_ji_wu_liu_gong_ying_shang_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='信誉评级')
+    class Meta:
+        verbose_name = '物料供应商基本信息表'
+        verbose_name_plural = verbose_name
+        
+
 class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
+    boolfield_yao_pin_tong_yong_zi_duan = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品通用名')
     boolfield_yao_pin_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品名称')
     boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_yao_pin_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品编码')
@@ -199,19 +213,6 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_yao_pin_fen_lei = models.ForeignKey(Yao_pin_fen_lei, related_name='yao_pin_fen_lei_for_boolfield_yao_pin_fen_lei_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品分类')
     class Meta:
         verbose_name = '药品基本信息表'
-        verbose_name_plural = verbose_name
-        
-
-class Wu_liu_gong_ying_shang_ji_ben_xin_xi_biao(HsscFormModel):
-    characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
-    boolfield_gong_ying_shang_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='供应商编码')
-    boolfield_zhu_yao_gong_ying_chan_pin = models.CharField(max_length=255, null=True, blank=True, verbose_name='主要供应产品')
-    boolfield_gong_huo_zhou_qi = models.CharField(max_length=255, null=True, blank=True, verbose_name='供货周期')
-    boolfield_gong_ying_shang_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='供应商名称')
-    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    boolfield_xin_yu_ping_ji = models.ForeignKey(Xin_yu_ping_ji, related_name='xin_yu_ping_ji_for_boolfield_xin_yu_ping_ji_wu_liu_gong_ying_shang_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='信誉评级')
-    class Meta:
-        verbose_name = '物料供应商基本信息表'
         verbose_name_plural = verbose_name
         
 
