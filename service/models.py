@@ -13,6 +13,12 @@ from core.models import HsscFormModel, HsscBaseFormModel, CustomerServiceLog
 
 # 创建一个服务表单实例
 def create_form_instance(operation_proc):
+    '''
+    业务逻辑：
+    1、创建空表单
+    2、如果不是基本信息表作业：填入基本信息表头
+    '''
+    # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
         customer=operation_proc.customer,
@@ -21,11 +27,17 @@ def create_form_instance(operation_proc):
         cpid=operation_proc.contract_service_proc,
     )
     print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance, model_to_dict(form_instance))
+
+    # 2. 如果不是基本信息表作业，则为属性表，填入表头字段
+    # 如何判断当前作业是否是基本信息表？
+    # if operation_proc.service.managed_entity.base_form.name == 
+    # 填入表头字段
+
     return form_instance
 
 
 # **********************************************************************************************************************
-# Service表单Model
+# Service基本信息表单Model
 # **********************************************************************************************************************
 class Ji_gou_ji_ben_xin_xi_biao(HsscBaseFormModel):
     characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
@@ -143,6 +155,9 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
         return self.customer.name
 
         
+# **********************************************************************************************************************
+# Service属性表单Model
+# **********************************************************************************************************************
 class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
     characterfield_contact_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')

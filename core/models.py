@@ -48,7 +48,7 @@ class BuessinessForm(HsscPymBase):
 class ManagedEntity(HsscPymBase):
     app_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="所属app名")
     model_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="模型名")
-    base_form = models.OneToOneField('BuessinessForm', on_delete=models.SET_NULL, null=True, verbose_name="基础表单")
+    base_form = models.OneToOneField(BuessinessForm, on_delete=models.SET_NULL, null=True, verbose_name="基础表单")
 
     class Meta:
         verbose_name = "业务管理实体"
