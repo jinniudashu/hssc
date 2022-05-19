@@ -1,14 +1,9 @@
 from django.db import models
-from django.dispatch import receiver
-from django.db.models.signals import post_save, m2m_changed
-from django.core.serializers import serialize
 from django.forms.models import model_to_dict
-from django.core.exceptions import ObjectDoesNotExist
-import json
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, CustomerServiceLog
+from core.models import HsscFormModel, HsscBaseFormModel
 
 
 # 创建一个服务表单实例
@@ -28,11 +23,19 @@ def create_form_instance(operation_proc):
     )
     print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance, model_to_dict(form_instance))
 
-    # 2. 如果不是基本信息表作业，则为属性表，填入表头字段
-    # 如何判断当前作业是否是基本信息表？
-    # if operation_proc.service.managed_entity.base_form.name == 
-    # 填入表头字段
-
+    # 2. 如果不是基本信息表作业(作业服务表单!=作业服务的实体基本信息表单)，则为属性表，填入表头字段
+    service = operation_proc.service
+    if service.buessiness_forms.all().first() != service.managed_entity.base_form:
+        # 判断当前实体，填入实体基本信息表头字段
+        # 通用代码里customer应改为entity
+        base_info = service.managed_entity.base_form.objects.filter(customer=operation_proc.customer).first()
+        # *********以下应为生成代码！************
+        form_instance.characterfield_contact_address = base_info.characterfield_contact_address
+        form_instance.characterfield_contact_number = base_info.characterfield_contact_number
+        form_instance.characterfield_name = base_info.characterfield_name
+        form_instance.characterfield_gender = base_info.characterfield_gender
+        form_instance.characterfield_age = base_info.characterfield_age
+        form_instance.save()
     return form_instance
 
 
@@ -154,6 +157,32 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
     def __str__(self):
         return self.customer.name
 
+
+class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
+    characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
+    characterfield_resident_file_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
+    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
+    characterfield_medical_ic_card_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
+    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
+    relatedfield_nationality = models.ForeignKey(Nationality, related_name='nationality_for_relatedfield_nationality_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='民族')
+    relatedfield_marital_status = models.ForeignKey(Marital_status, related_name='marital_status_for_relatedfield_marital_status_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='婚姻状况')
+    relatedfield_education = models.ForeignKey(Education, related_name='education_for_relatedfield_education_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='文化程度')
+    relatedfield_occupational_status = models.ForeignKey(Occupational_status, related_name='occupational_status_for_relatedfield_occupational_status_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='职业状况')
+    relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_ju_min_ji_ben_xin_xi_diao_cha', verbose_name='医疗费用负担')
+    relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
+    relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
+    relatedfield_signed_family_doctor = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
+    relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
+
+    class Meta:
+        verbose_name = '居民基本信息调查'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
         
 # **********************************************************************************************************************
 # Service属性表单Model
@@ -178,33 +207,6 @@ class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
 
     class Meta:
         verbose_name = '申请空腹血糖检查服务'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.customer.name
-
-        
-class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
-    characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
-    characterfield_resident_file_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
-    characterfield_family_address = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
-    characterfield_medical_ic_card_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
-    characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
-    datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
-    relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
-    relatedfield_nationality = models.ForeignKey(Nationality, related_name='nationality_for_relatedfield_nationality_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='民族')
-    relatedfield_marital_status = models.ForeignKey(Marital_status, related_name='marital_status_for_relatedfield_marital_status_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='婚姻状况')
-    relatedfield_education = models.ForeignKey(Education, related_name='education_for_relatedfield_education_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='文化程度')
-    relatedfield_occupational_status = models.ForeignKey(Occupational_status, related_name='occupational_status_for_relatedfield_occupational_status_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='职业状况')
-    relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_ju_min_ji_ben_xin_xi_diao_cha', verbose_name='医疗费用负担')
-    relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
-    relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
-    relatedfield_signed_family_doctor = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
-    relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
-
-    class Meta:
-        verbose_name = '居民基本信息调查'
         verbose_name_plural = verbose_name
 
     def __str__(self):
