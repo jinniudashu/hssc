@@ -182,9 +182,9 @@ clinic_site.register(Xue_ya_jian_ce, Xue_ya_jian_ceAdmin)
 
 class Tang_niao_bing_cha_tiAdmin(HsscFormAdmin):
     fieldsets = (("基本信息", {"fields": (("characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ),)}), 
-        ("眼底检查", {"fields": ("relatedfield_fundus", )}), 
-        ("足背动脉检查", {"fields": ("relatedfield_left_foot", "relatedfield_right_foot", )}), )
-    autocomplete_fields = ["relatedfield_fundus", "relatedfield_left_foot", "relatedfield_right_foot", ]
+        ("足背动脉检查", {"fields": ("relatedfield_left_foot", "relatedfield_right_foot", )}), 
+        ("眼底检查", {"fields": ("relatedfield_fundus", )}), )
+    autocomplete_fields = ["relatedfield_left_foot", "relatedfield_right_foot", "relatedfield_fundus", ]
     readonly_fields = ["characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ]
     search_fields = []
 admin.site.register(Tang_niao_bing_cha_ti, Tang_niao_bing_cha_tiAdmin)
@@ -201,19 +201,19 @@ clinic_site.register(A3502, A3502Admin)
 
 class A6299Admin(HsscFormAdmin):
     fieldsets = (("基本信息", {"fields": (("characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ),)}), 
-        ("遗传病史", {"fields": ("boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", )}), 
         ("过敏史", {"fields": ("relatedfield_drug_name", )}), 
-        ("家族病史", {"fields": ("boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", )}), 
-        ("手术史", {"fields": ("datetimefield_date", "relatedfield_name_of_operation", )}), 
-        ("疾病史", {"fields": ("datetimefield_time_of_diagnosis", "boolfield_ge_ren_bing_shi", )}), 
         ("外伤史", {"fields": ("boolfield_wai_shang_ri_qi", "boolfield_wai_shang_xing_ji_bing", )}), 
-        ("输血史", {"fields": ("numberfield_blood_transfusion", "boolfield_shu_xue_ri_qi", )}), 
-        ("个人心理综合素质调查", {"fields": ("relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", )}), 
         ("个人适应能力评估", {"fields": ("characterfield_working_hours_per_day", "relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", )}), 
+        ("社会环境评估", {"fields": ("relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", )}), 
+        ("疾病史", {"fields": ("datetimefield_time_of_diagnosis", "boolfield_ge_ren_bing_shi", )}), 
+        ("输血史", {"fields": ("numberfield_blood_transfusion", "boolfield_shu_xue_ri_qi", )}), 
+        ("手术史", {"fields": ("datetimefield_date", "relatedfield_name_of_operation", )}), 
         ("个人身体健康评估", {"fields": ("relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", )}), 
         ("个人健康行为调查", {"fields": ("characterfield_average_sleep_duration", "characterfield_duration_of_insomnia", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", )}), 
-        ("社会环境评估", {"fields": ("relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", )}), )
-    autocomplete_fields = ["boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", "relatedfield_drug_name", "boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", "relatedfield_name_of_operation", "boolfield_ge_ren_bing_shi", "boolfield_wai_shang_xing_ji_bing", "relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", "relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", "relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", ]
+        ("个人心理综合素质调查", {"fields": ("relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", )}), 
+        ("遗传病史", {"fields": ("boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", )}), 
+        ("家族病史", {"fields": ("boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", )}), )
+    autocomplete_fields = ["relatedfield_drug_name", "boolfield_wai_shang_xing_ji_bing", "relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", "relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", "boolfield_ge_ren_bing_shi", "relatedfield_name_of_operation", "relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", "boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", "boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", ]
     readonly_fields = ["characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ]
     search_fields = []
 admin.site.register(A6299, A6299Admin)
@@ -239,11 +239,11 @@ clinic_site.register(A6202, A6202Admin)
 
 class T6301Admin(HsscFormAdmin):
     fieldsets = (("基本信息", {"fields": (("characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ),)}), 
+        ("空腹血糖检查", {"fields": ("numberfield_kong_fu_xue_tang", )}), 
+        ("血压监测", {"fields": ("numberfield_systolic_blood_pressure", "numberfield_diastolic_blood_pressure", )}), 
         ("糖尿病一般随访", {"fields": ("boolfield_fu_yong_pin_ci", "boolfield_yao_pin_dan_wei", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "boolfield_tang_niao_bing_zheng_zhuang", "relatedfield_drug_name", )}), 
         ("足背动脉检查", {"fields": ("relatedfield_left_foot", "relatedfield_right_foot", )}), 
-        ("眼底检查", {"fields": ("relatedfield_fundus", )}), 
-        ("血压监测", {"fields": ("numberfield_systolic_blood_pressure", "numberfield_diastolic_blood_pressure", )}), 
-        ("空腹血糖检查", {"fields": ("numberfield_kong_fu_xue_tang", )}), )
+        ("眼底检查", {"fields": ("relatedfield_fundus", )}), )
     autocomplete_fields = ["boolfield_yao_pin_dan_wei", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "boolfield_tang_niao_bing_zheng_zhuang", "relatedfield_drug_name", "relatedfield_left_foot", "relatedfield_right_foot", "relatedfield_fundus", ]
     readonly_fields = ["characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ]
     search_fields = []

@@ -1435,7 +1435,7 @@
             "is_system_service": false,
             "history_services_display": 0,
             "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
+            "route_to": "INDEX",
             "suppliers": null,
             "not_suitable": null,
             "execution_time_frame": null,
