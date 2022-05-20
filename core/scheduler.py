@@ -7,11 +7,9 @@ from enum import Enum
 import datetime
 from registration.signals import user_registered, user_activated, user_approved
 
-from core.hsscbase_class import FieldsType
-from core.models import Service, ServiceRule, Staff, Customer, OperationProc, StaffTodo, RecommendedService, Message
-from core.utils import field_name_replace
+from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message
+from core.business_functions import field_name_replace
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
-from service.models import *
 
 
 @receiver(user_logged_in)
@@ -186,7 +184,8 @@ def operand_finished_handler(sender, **kwargs):
                     end_time = datetime.datetime.now()
                     period = (start_time, end_time)
 
-                _scanned_data = {}  # 返回客户健康档案记录dict
+                # 取客户健康档案记录构造检测数据dict
+                _scanned_data = {}
                 logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period)            
                 for log in logs:
                     _scanned_data = {**_scanned_data, **log.data}
@@ -196,7 +195,8 @@ def operand_finished_handler(sender, **kwargs):
             # 2. 根据表达式字段集合剪裁生成待检测数据字典
             scanned_data = {}
             for field_name in expression_fields_set:
-                scanned_data[field_name] = _scanned_data.get(field_name, '')
+                _value = _scanned_data.get(field_name, '')
+                scanned_data[field_name] = _value if bool(_value) else '{}'
             print('From scheduler._get_scanned_data: 2. scanned_data:', scanned_data)
 
             return scanned_data
@@ -227,35 +227,24 @@ def operand_finished_handler(sender, **kwargs):
             '''
             生成后续服务
             '''
+            from core.business_functions import create_service_proc
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
-            customer = operation_proc.customer
-            operator = kwargs['operator']
-            service = kwargs['next_service']
-            contract_service_proc = operation_proc.contract_service_proc
-            content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())
+            content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
+
+            proc_params = {}
+            proc_params['service'] = kwargs['next_service']  # 进程所属服务
+            proc_params['customer'] = operation_proc.customer  # 客户
+            proc_params['creater'] = kwargs['operator']   # 创建者  
+            proc_params['operator'] = None  # 操作者 or 根据 责任人 和 服务作业权限判断 
+            proc_params['state'] = 0  # or 根据服务作业权限判断
+            proc_params['scheduled_time'] = datetime.datetime.now()  # 创建时间 or 根据服务作业逻辑判断
+            proc_params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
+            proc_params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
+            proc_params['content_type'] = content_type
+
             # 创建新的服务作业进程
-            new_proc=OperationProc.objects.create(
-                service=service,  # 服务
-                customer=customer,  # 客户
-                creater=operator,  # 创建者
-                state=0,  # 进程状态
-                scheduled_time=datetime.datetime.now(),  # 创建时间
-                parent_proc=operation_proc,  # 当前进程是被创建进程的父进程
-                contract_service_proc=contract_service_proc,  # 所属合约服务进程
-                content_type=content_type,  # 表单类型
-            )
-            # Here postsave signal in service.models
-            # 更新允许作业岗位
-            role = service.role.all()
-            new_proc.role.set(role)
-
-            form = create_form_instance(new_proc)
-            # 更新OperationProc服务进程的form实例信息
-            new_proc.object_id = form.id
-            new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
-            new_proc.save()
-
+            new_proc = create_service_proc(**proc_params)
 
             return f'创建服务作业进程: {new_proc}'
 

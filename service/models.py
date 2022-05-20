@@ -1,37 +1,8 @@
 from django.db import models
-from django.forms.models import model_to_dict
 
 from icpc.models import *
 from dictionaries.models import *
 from core.models import HsscFormModel, HsscBaseFormModel
-
-
-# 创建一个服务表单实例
-def create_form_instance(operation_proc):
-    # 1. 创建空表单
-    model_name = operation_proc.service.name.capitalize()
-    form_instance = eval(model_name).objects.create(
-        customer=operation_proc.customer,
-        creater=operation_proc.operator,
-        pid=operation_proc,
-        cpid=operation_proc.contract_service_proc,
-    )
-    print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance, model_to_dict(form_instance))
-
-    # 2. 如果不是基本信息表作业(作业服务表单!=作业服务的实体基本信息表单)，则为属性表，填入表头字段
-    service = operation_proc.service
-    if service.buessiness_forms.all().first() != service.managed_entity.base_form:
-        # 判断当前实体，填入实体基本信息表头字段
-        # 通用代码里customer应改为entity
-        base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
-        # *********以下应为生成代码！************
-        form_instance.characterfield_family_address = base_info.characterfield_family_address
-        form_instance.characterfield_contact_number = base_info.characterfield_contact_number
-        form_instance.characterfield_name = base_info.characterfield_name
-        form_instance.relatedfield_gender = base_info.relatedfield_gender
-        form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
-        form_instance.save()
-    return form_instance
 
 
 # **********************************************************************************************************************

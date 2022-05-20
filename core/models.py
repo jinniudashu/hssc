@@ -18,9 +18,6 @@ from icpc.models import *
 from core.hsscbase_class import HsscBase, HsscPymBase
 
 
-def create_operation_proc(service, customer, operator, creator, contract_service_proc):
-    pass
-
 # **********************************************************************************************************************
 # Service配置 Model
 # **********************************************************************************************************************
