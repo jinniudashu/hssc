@@ -119,6 +119,26 @@ def create_customer_service_log(post_data, form_instance):
     return log
 
 
+# 为新服务分配操作员
+def dispatch_operator(customer, service, current_operator):
+    operator = None
+
+    # 当前客户如有责任人，且责任人具有新增服务岗位权限，则开单给责任人
+    charge_staff = customer.charge_staff
+    if charge_staff:
+        if set(charge_staff.staff.role.all()).intersection(set(service.role.all())):
+            operator = charge_staff
+            return operator
+    
+    # 否则，如当前作业员具有新增服否则，如当前作业员具有新增服务岗位权限务岗位权限
+    if set(current_operator.staff.role.all()).intersection(set(service.role.all())):
+        operator = current_operator
+        return operator
+
+    # 否则，操作员为空，进入共享队列
+    return None
+
+
 # KMP算法：查找字段名在表达式（字符串）中的位置，并用字段值替换
 def field_name_replace(s, replace_dict):
     import re

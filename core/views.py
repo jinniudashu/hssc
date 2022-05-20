@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 import datetime
 
 from core.models import Service, Customer, OperationProc
-from core.business_functions import create_service_proc
+from core.business_functions import create_service_proc, dispatch_operator
 
 
 def index_customer(request):
@@ -50,16 +50,17 @@ def new_service(request, **kwargs):
     '''
     # 从request获取参数：customer, service, operator
     customer = Customer.objects.get(id=kwargs['customer_id'])
-    operator = User.objects.get(username=request.user).customer
+    current_operator = User.objects.get(username=request.user).customer
     service = Service.objects.get(id=kwargs['service_id'])
+    service_operator = dispatch_operator(customer, service, current_operator)
     content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
 
     # 准备新的服务作业进程参数
     proc_params = {}
     proc_params['service'] = service
     proc_params['customer'] = customer
-    proc_params['creater'] = operator  
-    proc_params['operator'] = operator  # or None 根据服务作业权限判断
+    proc_params['creater'] = current_operator
+    proc_params['operator'] = service_operator
     proc_params['state'] = 1  # or 0 根据服务作业权限判断
     proc_params['scheduled_time'] = datetime.datetime.now() # or None 根据服务作业权限判断
     proc_params['parent_proc'] = None  # or 作业员登录进程
@@ -69,5 +70,12 @@ def new_service(request, **kwargs):
     # 创建新的OperationProc服务作业进程实例
     new_proc = create_service_proc(**proc_params)
 
-    # 重定向到/clinic/service/model/id/change
-    return redirect(new_proc.entry)
+    # 如果开单给作业员本人，进入修改界面
+    if service_operator == current_operator:
+        # 重定向到/clinic/service/model/id/change
+        return redirect(new_proc.entry)
+    else:  # 否则显示提示消息：开单成功
+        from django.contrib import messages
+        messages.add_message(request, messages.INFO, f'{service.label}已开单')
+        return redirect(customer)
+

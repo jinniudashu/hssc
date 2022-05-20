@@ -43,7 +43,7 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     )
 
     # 发送登录作业完成信号
-    operand_finished.send(sender=user_logged_in_handler, pid=new_proc)
+    operand_finished.send(sender=user_logged_in_handler, pid=new_proc, request=request)
 
 
 # 收到注册成功信号，生成用户注册事件：registration.signals.user_registered
@@ -70,7 +70,7 @@ def user_registered_handler(sender, user, request, **kwargs):
     )
 
     # 发送注册作业完成信号
-    operand_finished.send(sender=user_registered_handler, pid=new_proc)
+    operand_finished.send(sender=user_registered_handler, pid=new_proc, request=request)
 
 
 @receiver(post_save, sender=User)
@@ -227,16 +227,20 @@ def operand_finished_handler(sender, **kwargs):
             '''
             生成后续服务
             '''
-            from core.business_functions import create_service_proc
+            from core.business_functions import create_service_proc, dispatch_operator
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
+            service = kwargs['next_service']
+            customer = operation_proc.customer
+            current_operator = kwargs['operator']
+            service_operator = dispatch_operator(customer, service, current_operator)
             content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
 
             proc_params = {}
-            proc_params['service'] = kwargs['next_service']  # 进程所属服务
-            proc_params['customer'] = operation_proc.customer  # 客户
-            proc_params['creater'] = kwargs['operator']   # 创建者  
-            proc_params['operator'] = None  # 操作者 or 根据 责任人 和 服务作业权限判断 
+            proc_params['service'] = service  # 进程所属服务
+            proc_params['customer'] = customer  # 客户
+            proc_params['creater'] = current_operator   # 创建者  
+            proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
             proc_params['state'] = 0  # or 根据服务作业权限判断
             proc_params['scheduled_time'] = datetime.datetime.now()  # 创建时间 or 根据服务作业逻辑判断
             proc_params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
@@ -245,6 +249,10 @@ def operand_finished_handler(sender, **kwargs):
 
             # 创建新的服务作业进程
             new_proc = create_service_proc(**proc_params)
+
+            # 显示提示消息：开单成功
+            from django.contrib import messages
+            messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单')
 
             return f'创建服务作业进程: {new_proc}'
 
@@ -315,6 +323,7 @@ def operand_finished_handler(sender, **kwargs):
         return eval(f'SystemOperandFunc.{system_operand}')(**kwargs)
 
     operation_proc = kwargs['pid']
+    request = kwargs['request']
 
     # 更新作业进程状态为RTC
     operation_proc.update_state('RTC')
@@ -339,6 +348,7 @@ def operand_finished_handler(sender, **kwargs):
                 'message': service_rule.message,
                 'interval_rule': service_rule.interval_rule,
                 'interval_time': service_rule.interval_time,
+                'request': request,
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
             _result = _execute_system_operand(service_rule.system_operand, **operation_params)
