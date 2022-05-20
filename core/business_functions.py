@@ -1,6 +1,8 @@
 from django.forms.models import model_to_dict
+from django.core.exceptions import ObjectDoesNotExist
 from core.hsscbase_class import FieldsType
 from service.models import *
+
 # 创建服务表单实例
 def create_form_instance(operation_proc):
     # 1. 创建空表单
@@ -62,7 +64,6 @@ def create_service_proc(**kwargs):
 def create_customer_service_log(post_data, form_instance):
     from enum import Enum
     from core.models import CustomerServiceLog
-    from django.core.exceptions import ObjectDoesNotExist
     # 数据格式预处理
     def _preprocess_data_format(post_data):
         def _get_set_value(field_type, id_list):
@@ -131,9 +132,12 @@ def dispatch_operator(customer, service, current_operator):
             return operator
     
     # 否则，如当前作业员具有新增服否则，如当前作业员具有新增服务岗位权限务岗位权限
-    if set(current_operator.staff.role.all()).intersection(set(service.role.all())):
-        operator = current_operator
-        return operator
+    try:
+        if set(current_operator.staff.role.all()).intersection(set(service.role.all())):
+            operator = current_operator
+            return operator
+    except ObjectDoesNotExist:
+        return None
 
     # 否则，操作员为空，进入共享队列
     return None
