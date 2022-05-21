@@ -411,7 +411,7 @@ class Customer(HsscBase):
         '''
         return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(name__in=['Z6201', 'user_login']))
 
-    def get_recommanded_services(self) -> 'QuerySet[RecommendedService]':
+    def get_recommended_services(self) -> 'QuerySet[RecommendedService]':
         '''
         获取客户推荐服务列表
         '''

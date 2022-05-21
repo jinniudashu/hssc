@@ -71,12 +71,8 @@ def new_service(request, **kwargs):
     new_proc = create_service_proc(**proc_params)
 
     # 如果请求来自可选服务，从可选服务队列中删除服务
-    print('kwargs["recommended_service_id"]:', kwargs['recommended_service_id'])
     if kwargs['recommended_service_id']:
-        print('From 可选服务，删除可选服务')
         RecommendedService.objects.get(id=kwargs['recommended_service_id']).delete()
-    else:
-        print('From 新增服务')
 
     # 如果开单给作业员本人，进入修改界面
     if service_operator == current_operator:

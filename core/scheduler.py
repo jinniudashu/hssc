@@ -216,8 +216,11 @@ def operand_finished_handler(sender, **kwargs):
             print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
             _expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
             print('eval表达式:', _expression)
-            result = eval(_expression)  # 待检查的字段值带入表达式，并执行返回结果
-            return result
+            try:
+                result = eval(_expression)  # 待检查的字段值带入表达式，并执行返回结果
+                return result
+            except TypeError:
+                result = False
 
     def _execute_system_operand(system_operand, **kwargs):
         '''

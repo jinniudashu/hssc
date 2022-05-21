@@ -52,10 +52,24 @@ class ClinicSite(admin.AdminSite):
         context = {}
         customer = Customer.objects.get(id = kwargs['customer_id'])
         
-        context['profile'] = customer.get_profile()  # 病例首页
-        context['history_services'] = customer.get_history_services()  # 历史服务
-        context['recommanded_services'] = customer.get_recommanded_services()  # 推荐服务
-        context['scheduled_services'] = customer.get_scheduled_services()  # 已安排服务
+        # 病例首页
+        context['profile'] = customer.get_profile()
+
+        # 已安排服务
+        context['scheduled_services'] = customer.get_scheduled_services()
+
+        # 推荐服务
+        context['recommanded_services'] = [
+            {
+                'id': recommend_service.id, 
+                'service': recommend_service.service,
+                'enable_queue_counter': recommend_service.service.enable_queue_counter,
+                'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service)
+            } for recommend_service in customer.get_recommended_services()
+        ]
+
+        # 历史服务
+        context['history_services'] = customer.get_history_services()
 
         return render(request, 'customer_service.html', context)
 

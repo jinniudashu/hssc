@@ -34,7 +34,7 @@
     <br>
     <h3>可选服务</h3>
     {% for recommanded_service in recommanded_services %}
-        <a href="/core/new_service/{{ profile.id }}/{{ recommanded_service.service.id }}/{{ recommanded_service.id }}">{{ recommanded_service.service.label }}</a>
+        <a href="/core/new_service/{{ profile.id }}/{{ recommanded_service.service.id }}/{{ recommanded_service.id }}/">{{ recommanded_service.service.label }}  ({{ recommanded_service.queue_count }})</a>
         <br>
     {% endfor %}
     <br>
@@ -58,7 +58,7 @@
     <script type="text/javascript">
         function handleSelect(item)
         {
-            window.location = "/core/new_service/"+item.value+"/0";
+            window.location = "/core/new_service/"+item.value+"/0/";
         }
     </script>
 
