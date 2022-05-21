@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 import datetime
 
-from core.models import Service, Customer, OperationProc
+from core.models import Service, Customer, OperationProc, RecommendedService
 from core.business_functions import create_service_proc, dispatch_operator
 
 
@@ -69,6 +69,14 @@ def new_service(request, **kwargs):
 
     # 创建新的OperationProc服务作业进程实例
     new_proc = create_service_proc(**proc_params)
+
+    # 如果请求来自可选服务，从可选服务队列中删除服务
+    print('kwargs["recommended_service_id"]:', kwargs['recommended_service_id'])
+    if kwargs['recommended_service_id']:
+        print('From 可选服务，删除可选服务')
+        RecommendedService.objects.get(id=kwargs['recommended_service_id']).delete()
+    else:
+        print('From 新增服务')
 
     # 如果开单给作业员本人，进入修改界面
     if service_operator == current_operator:
