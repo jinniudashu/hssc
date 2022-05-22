@@ -56,7 +56,13 @@ class ClinicSite(admin.AdminSite):
         context['profile'] = customer.get_profile()
 
         # 已安排服务
-        context['scheduled_services'] = customer.get_scheduled_services()
+        # context['scheduled_services'] = customer.get_scheduled_services()
+        context['scheduled_services'] = [
+            {
+                'entry': proc.entry,
+                'service': proc.service,
+                'permission': bool(set(proc.service.role.all()).intersection(set(customer.staff.role.all()))),
+            } for proc in customer.get_scheduled_services()]
 
         # 推荐服务
         context['recommanded_services'] = [
@@ -115,7 +121,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     fieldsets = (
         ('基本信息', {
-            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority'), 'role', 'history_services_display', 'enable_queue_counter', 'route_to', ('name', 'hssc_id'))
+            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority', 'is_system_service'), 'role', 'history_services_display', 'enable_queue_counter', 'route_to', ('name', 'hssc_id'))
         }),
         ('作业管理', {
             'fields': ('suppliers', 'not_suitable', ('awaiting_time_frame' ,'execution_time_frame'), 'working_hours', 'cost', 'load_feedback')
