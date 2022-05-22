@@ -12,7 +12,6 @@
 {% block nav-sidebar %}{% endblock %}
 
 <script src="htmx.min.js" defer></script>
-
 {% block content %}
     <h3>病例首页</h3>
     {{ profile.name }}
@@ -55,11 +54,47 @@
     </span>
     <input type="submit" value="退出" onclick="location.href='/clinic/';"/>
 
+    {% verbatim %}
+    <div id="app">
+        <h3>{{ message }}</h3>
+        <div v-for="service in services" :key="service.id">
+            {{ service.label }}
+        </div>
+    </div>
+
+    {% endverbatim %}
+    
     <script type="text/javascript">
         function handleSelect(item)
         {
             window.location = "/core/new_service/"+item.value+"/0/";
         }
+    </script>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        const { createApp } = Vue;
+
+        const customerServiceApp = {
+            data() {
+                return {
+                    message: 'Hello Miles',
+                    services: null
+                }
+            },
+            created() {
+                const socket = new WebSocket(`ws://${window.location.host}/ws/core/`);
+                
+                let _this = this;
+
+                socket.onmessage = function (event) {
+                    _this.services = JSON.parse(event.data);
+                    console.log(_this.services);
+                }
+            },
+        };
+
+        createApp(customerServiceApp).mount('#app');
     </script>
 
 {% endblock %}

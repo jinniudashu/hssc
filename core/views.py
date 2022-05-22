@@ -74,6 +74,22 @@ def new_service(request, **kwargs):
     if kwargs['recommended_service_id']:
         RecommendedService.objects.get(id=kwargs['recommended_service_id']).delete()
 
+    '''
+    推荐服务保存后，通过channel发送消息
+    '''
+    from asgiref.sync import async_to_sync
+    from channels.layers import get_channel_layer
+    from django.forms.models import model_to_dict
+    import socket
+    socket.gethostbyname("")
+
+    channel_layer = get_channel_layer()
+
+    services = [{'label': 'service1'}, {'label': 'service2'}]
+    # for reco_service in RecommendedService.objects.all():
+    #     services.append(model_to_dict(reco_service.service))
+    async_to_sync(channel_layer.group_send)('test', {'type': 'send_recommended_service_list', 'data': services})
+
     # 如果开单给作业员本人，进入修改界面
     if service_operator == current_operator:
         # 重定向到/clinic/service/model/id/change
@@ -82,4 +98,3 @@ def new_service(request, **kwargs):
         from django.contrib import messages
         messages.add_message(request, messages.INFO, f'{service.label}已开单')
         return redirect(customer)
-

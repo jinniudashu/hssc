@@ -51,6 +51,7 @@ class ClinicSite(admin.AdminSite):
     def customer_service(self, request, **kwargs):
         context = {}
         customer = Customer.objects.get(id = kwargs['customer_id'])
+        operator = User.objects.get(username=request.user).customer
         
         # 病例首页
         context['profile'] = customer.get_profile()
@@ -61,7 +62,7 @@ class ClinicSite(admin.AdminSite):
             {
                 'entry': proc.entry,
                 'service': proc.service,
-                'permission': bool(set(proc.service.role.all()).intersection(set(customer.staff.role.all()))),
+                'permission': bool(set(proc.service.role.all()).intersection(set(operator.staff.role.all()))),
             } for proc in customer.get_scheduled_services()]
 
         # 推荐服务

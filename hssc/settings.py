@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'channels',
     'crispy_forms',
     # our apps
     'analytics',
@@ -97,6 +97,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'hssc.wsgi.application'
+ASGI_APPLICATION = 'hssc.asgi.application'
 
 
 # Database
@@ -117,6 +118,15 @@ DATABASES = {
     #     'PASSWORD': env('DATABASE_PASSWORD'),
     #     'PORT': env('DATABASE_PORT'),
     # }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
 }
 
 import dj_database_url
