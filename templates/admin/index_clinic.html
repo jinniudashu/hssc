@@ -27,31 +27,63 @@
     <br>
     <hr>
     <br>
-    {% for item in items %}
-    <form method="get">
-        <h3>{{ item.title }}</h3>
-        <div class="proc-item">
-            <span class="proc-item-title-time">居民档案号</span>
-            <span class="proc-item-title-time">姓名</span>
-            <span class="proc-item-title-text">服务项目</span>
-            <span class="proc-item-title-time">联系电话</span>
-            <span class="proc-item-title-time">家庭地址</span>
+    {% verbatim %}
+    <div id="app">
+        <div v-for="item in items" :key="item.title">
+            <h3>{{ item.title }}</h3>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">居民档案号</th>
+                        <th scope="col">姓名</th>
+                        <th scope="col">服务项目</th>
+                        <th scope="col">联系电话</th>
+                        <th scope="col">家庭地址</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="todo in item.todos" :key="todo.id">
+                        <td>{{ todo.customer_number }}</td>
+                        <td><a :href="'customer_service/' + todo.customer_id">{{ todo.customer_name }}</a></td>
+                        <td>{{ todo.service_label }}</td>
+                        <td>{{ todo.customer_phone }}</td>
+                        <td>{{ todo.customer_address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <hr>
+            <br>
         </div>
-        {% for todo in item.todos %}
-        <div class="proc-item">
-            <a href="customer_service/{{ todo.operation_proc.customer.id }}">
-                <span class="proc-item-title-time">{{ todo.customer_number }}</span>
-                <span class="proc-item-title-time">{{ todo.customer_name }}</span>
-                <span class="proc-item-title-text">{{ todo.service_label }}</span>
-                <span class="proc-item-title-time">{{ todo.customer_phone }}</span>
-                <span class="proc-item-title-time">{{ todo.customer_address }}</span>
-            </a>
-        </div>
-        {% endfor %}
-    </form>
-    <br>
-    <hr>
-    <br>    
-    {% endfor %}
+    </div>
+
+    {% endverbatim %}
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        const { createApp } = Vue;
+
+        const customerServiceApp = {
+            data() {
+                return {
+                    message: 'Hello Miles',
+                    items: null
+                }
+            },
+            created() {
+                const socket = new WebSocket(`ws://${window.location.host}/ws/staff_todo_list/`);
+                let _this = this;
+
+                socket.onmessage = function (event) {
+                    _this.items = JSON.parse(event.data);
+                    console.log(_this.items);
+                }
+            },
+        };
+
+        createApp(customerServiceApp).mount('#app');
+    </script>
+
 
 {% endblock %}

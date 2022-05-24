@@ -1,8 +1,4 @@
-from django.forms.models import model_to_dict
-from django.core.exceptions import ObjectDoesNotExist
-from core.hsscbase_class import FieldsType
 from service.models import *
-
 # 创建服务表单实例
 def create_form_instance(operation_proc):
     # 1. 创建空表单
@@ -13,7 +9,7 @@ def create_form_instance(operation_proc):
         pid=operation_proc,
         cpid=operation_proc.contract_service_proc,
     )
-    print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance, model_to_dict(form_instance))
+    print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance)
 
     # 2. 如果不是基本信息表作业(作业服务表单!=作业服务的实体基本信息表单)，则为属性表，填入表头字段
     service = operation_proc.service
@@ -63,6 +59,7 @@ def create_service_proc(**kwargs):
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(post_data, form_instance):
     from enum import Enum
+    from core.hsscbase_class import FieldsType
     from core.models import CustomerServiceLog
     # 数据格式预处理
     def _preprocess_data_format(post_data):
@@ -97,6 +94,7 @@ def create_customer_service_log(post_data, form_instance):
         return form_data
 
     def _add_customer_service_log(form_data, form_instance):
+        from django.core.exceptions import ObjectDoesNotExist
         try:
             log = CustomerServiceLog.objects.get(pid = form_instance.pid)
             log.data = form_data
@@ -122,6 +120,7 @@ def create_customer_service_log(post_data, form_instance):
 
 # 为新服务分配操作员
 def dispatch_operator(customer, service, current_operator):
+    from django.core.exceptions import ObjectDoesNotExist
     operator = None
 
     # 当前客户如有责任人，且责任人具有新增服务岗位权限，则开单给责任人
@@ -143,7 +142,78 @@ def dispatch_operator(customer, service, current_operator):
     return None
 
 
+# 发送channel_message
+def send_channel_message(group_name, message):
+    from asgiref.sync import async_to_sync
+    from channels.layers import get_channel_layer
+    channel_layer = get_channel_layer()
+    print('发送channel信号:', group_name, message)
+    async_to_sync(channel_layer.group_send)(group_name, message)
+
+from core.models import StaffTodo
+# 更新工作台职员任务列表
+def update_staff_todo_list(operator):
+    # 根据operator过滤出操作员的今日安排、紧要安排、本周安排
+    layout_items = [
+        {'title': '今日服务安排', 'todos': StaffTodo.objects.today_todos(operator)},
+        {'title': '紧要服务安排', 'todos': StaffTodo.objects.urgent_todos(operator)},
+        {'title': '本周服务安排', 'todos': StaffTodo.objects.week_todos(operator)},
+    ]
+
+    # 构造channel_message items
+    items = []
+    for _item in layout_items:
+        todos = []
+        for todo in _item['todos']:
+            todos.append({
+                'id': todo.id,
+                'customer_id': todo.operation_proc.customer.id,
+                'customer_number': todo.customer_number,
+                'customer_name': todo.customer_name,
+                'service_label': todo.service_label,
+                'customer_phone': todo.customer_phone,
+                'customer_address': todo.customer_address,
+            })
+        items.append({'title': _item['title'], 'todos': todos})
+
+    # 发送channel_message给操作员
+    send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
+
+
+# 更新客户推荐服务项目列表
+def update_customer_recommended_service_list(customer):
+    pass
+
+
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
+
+@receiver(post_save, sender=StaffTodo)
+def staff_todo_post_save_handler(sender, instance, created, **kwargs):
+    # 根据operator过滤出操作员的今日安排、紧要安排、本周安排
+    update_staff_todo_list(instance.operator)
+
+@receiver(post_delete, sender=StaffTodo)
+def staff_todo_post_delete_handler(sender, instance, **kwargs):
+    # 根据operator过滤出操作员的今日安排、紧要安排、本周安排
+    update_staff_todo_list(instance.operator)
+
+from core.models import RecommendedService
+
+@receiver(post_save, sender=RecommendedService)
+def recommended_service_post_save_handler(sender, instance, created, **kwargs):
+    # 根据customer过滤出用户的可选服务，发送channel_message给“用户服务组”
+    update_customer_recommended_service_list(instance.customer)
+
+@receiver(post_delete, sender=RecommendedService)
+def recommended_service_post_delete_handler(sender, instance, **kwargs):
+    # 根据customer过滤出用户的可选服务，发送channel_message给“用户服务组”
+    update_customer_recommended_service_list(instance.customer)
+
+
+# **********************************************************************************************************************
 # KMP算法：查找字段名在表达式（字符串）中的位置，并用字段值替换
+# **********************************************************************************************************************
 def field_name_replace(s, replace_dict):
     import re
     next = []

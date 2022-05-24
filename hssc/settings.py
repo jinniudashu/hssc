@@ -43,14 +43,12 @@ INSTALLED_APPS = [
     # 'django.contrib.sites',
     'registration',
     'django.contrib.admin',
-    # 'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'crispy_forms',
     # our apps
     'analytics',
     'core',
@@ -58,7 +56,7 @@ INSTALLED_APPS = [
     'icpc',
     # 'forms',
     'service',
-    
+
     'hssc.apps.UniversalManagerApp',
     'rest_framework',
 ]
@@ -99,7 +97,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -124,7 +121,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }

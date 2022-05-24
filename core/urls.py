@@ -8,8 +8,3 @@ urlpatterns = [
 	path('index_customer/', index_customer, name='index_customer'),
     path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', new_service, name='new_service'),
 ]
-
-from core.consumers import TestConsumer
-ws_urlpatterns = [
-    path('ws/core/', TestConsumer.as_asgi())
-]

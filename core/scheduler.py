@@ -5,10 +5,11 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.models import User
 from enum import Enum
 import datetime
+from django.forms import model_to_dict
 from registration.signals import user_registered, user_activated, user_approved
 
 from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message
-from core.business_functions import field_name_replace
+from core.business_functions import field_name_replace, update_staff_todo_list, update_customer_recommended_service_list
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
 
 
@@ -152,6 +153,12 @@ def operation_proc_post_save_handler(sender, instance, created, **kwargs):
                 customer_address=instance.customer.address,
                 priority = instance.priority
             )
+
+    # 如果state=0, operator=None，通知StaffTodoConsumer更新可申领的服务作业
+
+    
+    # 根据customer过滤出用户的已安排服务，发送channel_message给“用户服务组”
+    # 根据customer过滤出用户的历史服务，发送channel_message给“用户服务组”
 
 
 @receiver(operand_started)

@@ -25,7 +25,7 @@
     <br>
     <h3>已安排服务</h3>
     {% for proc in scheduled_services %}
-        <a href="{{ proc.entry }}">{{ proc.service.label }}</a>
+        <a href="{{ proc.entry }}">{{ proc.service.label }}  {{ proc.permisssion }}</a>
         <br>
     {% endfor %}
     <br>
@@ -57,7 +57,7 @@
     {% verbatim %}
     <div id="app">
         <h3>{{ message }}</h3>
-        <div v-for="service in services" :key="service.id">
+        <div v-for="service in recommended_services" :key="service.id">
             {{ service.label }}
         </div>
     </div>
@@ -79,17 +79,25 @@
             data() {
                 return {
                     message: 'Hello Miles',
-                    services: null
+                    recommended_services: null,
+                    services_list: null,
                 }
             },
             created() {
-                const socket = new WebSocket(`ws://${window.location.host}/ws/core/`);
-                
                 let _this = this;
 
-                socket.onmessage = function (event) {
-                    _this.services = JSON.parse(event.data);
-                    console.log(_this.services);
+                // 可选服务信道
+                const recommended_services_socket = new WebSocket(`ws://${window.location.host}/ws/customer_recommended_services_list/`);                
+                recommended_services_socket.onmessage = function (event) {
+                    _this.recommended_services = JSON.parse(event.data);
+                    console.log(_this.recommended_services);
+                }
+
+                // 已安排服务和历史服务信道
+                const services_list_socket = new WebSocket(`ws://${window.location.host}/ws/customer_services_list/`);
+                services_list_socket.onmessage = function (event) {
+                    _this.services_list = JSON.parse(event.data);
+                    console.log(_this.services_list);
                 }
             },
         };
