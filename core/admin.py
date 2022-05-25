@@ -1,3 +1,4 @@
+from urllib import response
 from django.contrib import admin
 from django.shortcuts import render, redirect
 from django.urls import path, reverse
@@ -78,7 +79,12 @@ class ClinicSite(admin.AdminSite):
         # 历史服务
         context['history_services'] = customer.get_history_services()
 
-        return render(request, 'customer_service.html', context)
+        response = render(request, 'customer_service.html', context)
+
+        # 向sessionStorage写入customer_id
+        response.set_cookie('customer_id', kwargs['customer_id'])
+
+        return response
 
 clinic_site = ClinicSite(name = 'ClinicSite')
 

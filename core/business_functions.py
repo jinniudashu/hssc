@@ -56,10 +56,10 @@ def create_service_proc(**kwargs):
     return new_proc
 
 
+from core.hsscbase_class import FieldsType
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(post_data, form_instance):
     from enum import Enum
-    from core.hsscbase_class import FieldsType
     from core.models import CustomerServiceLog
     # 数据格式预处理
     def _preprocess_data_format(post_data):
@@ -179,10 +179,23 @@ def update_staff_todo_list(operator):
     # 发送channel_message给操作员
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
 
-
+from core.models import OperationProc
 # 更新客户推荐服务项目列表
 def update_customer_recommended_service_list(customer):
-    pass
+    # # 推荐服务
+    recommendedServices = [
+        {
+            'id': recommend_service.id,
+            'customer_id': customer.id,
+            'service_id': recommend_service.service.id,
+            'service_name': recommend_service.service.label,
+            'enable_queue_counter': recommend_service.service.enable_queue_counter,
+            'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service)
+        } for recommend_service in customer.get_recommended_services()
+    ]
+
+    # 发送channel_message给操作员
+    send_channel_message(f'customer_recommended_services_{customer.id}', {'type': 'send_customer_recommended_services_list', 'data': recommendedServices})
 
 
 from django.dispatch import receiver

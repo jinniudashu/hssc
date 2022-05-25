@@ -31,14 +31,6 @@
     <br>
     <hr>
     <br>
-    <h3>可选服务</h3>
-    {% for recommanded_service in recommanded_services %}
-        <a href="/core/new_service/{{ profile.id }}/{{ recommanded_service.service.id }}/{{ recommanded_service.id }}/">{{ recommanded_service.service.label }}  ({{ recommanded_service.queue_count }})</a>
-        <br>
-    {% endfor %}
-    <br>
-    <hr>
-    <br>
     <h3>历史服务</h3>
     {% for proc in history_services %}
         <a href="{{ proc.entry }}">{{ proc.service.label }}</a>
@@ -56,10 +48,16 @@
 
     {% verbatim %}
     <div id="app">
-        <h3>{{ message }}</h3>
-        <div v-for="service in recommended_services" :key="service.id">
-            {{ service.label }}
+        <h3>可选服务</h3>
+        <div v-for="service in recommendedServices" :key="service.id">
+            <a :href="'/core/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
+                {{ service.service_name }}
+                <span v-if="service.enable_queue_counter"> ({{ service.queue_count }})</span>
+            </a>
         </div>
+        <br>
+        <hr>
+        <br>    
     </div>
 
     {% endverbatim %}
@@ -72,32 +70,32 @@
     </script>
 
     <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>    
     <script>
         const { createApp } = Vue;
 
         const customerServiceApp = {
             data() {
                 return {
-                    message: 'Hello Miles',
-                    recommended_services: null,
-                    services_list: null,
+                    recommendedServices: null,
+                    servicesList: null,
                 }
             },
             created() {
                 let _this = this;
 
+                customerId = Cookies.get('customer_id')
+
                 // 可选服务信道
-                const recommended_services_socket = new WebSocket(`ws://${window.location.host}/ws/customer_recommended_services_list/`);                
-                recommended_services_socket.onmessage = function (event) {
-                    _this.recommended_services = JSON.parse(event.data);
-                    console.log(_this.recommended_services);
+                const recommendedServicesSocket = new WebSocket(`ws://${window.location.host}/ws/customer_recommended_services_list/${customerId}/`);
+                recommendedServicesSocket.onmessage = function (event) {
+                    _this.recommendedServices = JSON.parse(event.data);
                 }
 
                 // 已安排服务和历史服务信道
-                const services_list_socket = new WebSocket(`ws://${window.location.host}/ws/customer_services_list/`);
-                services_list_socket.onmessage = function (event) {
-                    _this.services_list = JSON.parse(event.data);
-                    console.log(_this.services_list);
+                const servicesListSocket = new WebSocket(`ws://${window.location.host}/ws/customer_services_list/${customerId}/`);
+                servicesListSocket.onmessage = function (event) {
+                    _this.servicesList = JSON.parse(event.data);
                 }
             },
         };
