@@ -61,7 +61,7 @@ def new_service(request, **kwargs):
     proc_params['customer'] = customer
     proc_params['creater'] = current_operator
     proc_params['operator'] = service_operator
-    proc_params['state'] = 1  # or 0 根据服务作业权限判断
+    proc_params['state'] = 0  # or 0 根据服务作业权限判断
     proc_params['scheduled_time'] = datetime.datetime.now() # or None 根据服务作业权限判断
     proc_params['parent_proc'] = None  # or 作业员登录进程
     proc_params['contract_service_proc'] = None

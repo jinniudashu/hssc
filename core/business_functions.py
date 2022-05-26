@@ -142,6 +142,16 @@ def dispatch_operator(customer, service, current_operator):
     return None
 
 
+# 获取操作员有操作权限的服务id列表
+def get_operator_permitted_services(operator):
+    from core.models import Service
+    return [
+        service.id 
+        for service in Service.objects.filter(is_system_service=False) 
+        if set(service.role.all()).intersection(set(operator.staff.role.all()))
+    ]
+
+
 # 发送channel_message
 def send_channel_message(group_name, message):
     from asgiref.sync import async_to_sync
@@ -149,6 +159,24 @@ def send_channel_message(group_name, message):
     channel_layer = get_channel_layer()
     print('发送channel信号:', group_name, message)
     async_to_sync(channel_layer.group_send)(group_name, message)
+
+from core.models import OperationProc
+def update_unassigned_procs():
+    # 可申领的服务作业
+    unassigned_procs = {
+        'unassignedProcs': [
+            {
+                'id': proc.id,
+                'service_id': proc.service.id,
+                'service_name': proc.service.label,
+                'customer_name': proc.customer.name,
+                'workgroup_name': proc.customer.workgroup.label if proc.customer.workgroup else '',
+            } for proc in OperationProc.objects.filter(state=0, operator=None)
+        ]
+    }
+
+    # 发送channel_message给操作员
+    send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': unassigned_procs})
 
 from core.models import StaffTodo
 # 更新工作台职员任务列表
@@ -179,9 +207,35 @@ def update_staff_todo_list(operator):
     # 发送channel_message给操作员
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
 
-from core.models import OperationProc
+# 更新客户服务列表
+def update_customer_services_list(customer):
+    # 已安排服务
+    scheduled_services = [
+        {
+            'service_entry': proc.entry,
+            'service_name': proc.service.label,
+            'service_id': proc.service.id,
+        } for proc in customer.get_scheduled_services()
+    ]
+
+    # 历史服务
+    history_services =  [
+        {
+            'service_entry': proc.entry,
+            'service_name': proc.service.label,
+            'service_id': proc.service.id,
+        } for proc in customer.get_history_services()
+    ]
+
+    servicesList = {
+        'scheduled_services': scheduled_services,
+        'history_services': history_services,
+    }
+    # 发送channel_message给操作员
+    send_channel_message(f'customer_services_{customer.id}', {'type': 'send_customer_services_list', 'data': servicesList})
+
 # 更新客户推荐服务项目列表
-def update_customer_recommended_service_list(customer):
+def update_customer_recommended_services_list(customer):
     # # 推荐服务
     recommendedServices = [
         {
@@ -190,7 +244,8 @@ def update_customer_recommended_service_list(customer):
             'service_id': recommend_service.service.id,
             'service_name': recommend_service.service.label,
             'enable_queue_counter': recommend_service.service.enable_queue_counter,
-            'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service)
+            'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service),
+            'counter': recommend_service.counter,
         } for recommend_service in customer.get_recommended_services()
     ]
 
@@ -216,12 +271,12 @@ from core.models import RecommendedService
 @receiver(post_save, sender=RecommendedService)
 def recommended_service_post_save_handler(sender, instance, created, **kwargs):
     # 根据customer过滤出用户的可选服务，发送channel_message给“用户服务组”
-    update_customer_recommended_service_list(instance.customer)
+    update_customer_recommended_services_list(instance.customer)
 
 @receiver(post_delete, sender=RecommendedService)
 def recommended_service_post_delete_handler(sender, instance, **kwargs):
     # 根据customer过滤出用户的可选服务，发送channel_message给“用户服务组”
-    update_customer_recommended_service_list(instance.customer)
+    update_customer_recommended_services_list(instance.customer)
 
 
 # **********************************************************************************************************************

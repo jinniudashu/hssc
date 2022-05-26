@@ -23,31 +23,20 @@
     <br>
     <hr>
     <br>
-    <h3>已安排服务</h3>
-    {% for proc in scheduled_services %}
-        <a href="{{ proc.entry }}">{{ proc.service.label }}  {{ proc.permisssion }}</a>
-        <br>
-    {% endfor %}
-    <br>
-    <hr>
-    <br>
-    <h3>历史服务</h3>
-    {% for proc in history_services %}
-        <a href="{{ proc.entry }}">{{ proc.service.label }}</a>
-        <br>
-    {% endfor %}
-    <br>
-    <hr>
-    <br>
-    <input type="submit" value="新增服务计划安排" onclick="location.href='/clinic/';"/>
-    <span>
-        <input type="button" value="新增服务" hx-trigger="click" hx-get="/core/get_services_list/{{ profile.id }}" hx-target="#popup_menu" hx-swap="innerHTML" />
-        <select id="popup_menu" onchange="javascript:handleSelect(this)"></select>
-    </span>
-    <input type="submit" value="退出" onclick="location.href='/clinic/';"/>
 
     {% verbatim %}
     <div id="app">
+        <h3>已安排服务</h3>
+        <div v-for="service in servicesList.scheduled_services" :key="service.service_id">
+            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null">
+                {{ service.service_name }}
+            </a>
+            <br>
+        </div>
+        <br>
+        <hr>
+        <br>
+        
         <h3>可选服务</h3>
         <div v-for="service in recommendedServices" :key="service.id">
             <a :href="'/core/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
@@ -57,11 +46,29 @@
         </div>
         <br>
         <hr>
-        <br>    
+        <br>
+
+        <h3>历史服务</h3>
+        <div v-for="service in servicesList.history_services" :key="service.service_id">
+            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null">
+                {{ service.service_name }}
+            </a>
+            <br>
+        </div>
+        <br>
+        <hr>
+        <br>
     </div>
 
     {% endverbatim %}
     
+    <input type="submit" value="新增服务计划安排" onclick="location.href='/clinic/';"/>
+    <span>
+        <input type="button" value="新增服务" hx-trigger="click" hx-get="/core/get_services_list/{{ profile.id }}" hx-target="#popup_menu" hx-swap="innerHTML" />
+        <select id="popup_menu" onchange="javascript:handleSelect(this)"></select>
+    </span>
+    <input type="submit" value="退出" onclick="location.href='/clinic/';"/>
+
     <script type="text/javascript">
         function handleSelect(item)
         {
@@ -77,14 +84,21 @@
         const customerServiceApp = {
             data() {
                 return {
-                    recommendedServices: null,
-                    servicesList: null,
+                    recommendedServices: null,     // 可选服务
+                    servicesList: {
+                        'scheduled_services': [],  // 已安排服务
+                        'history_services': [],    // 历史服务
+                    },
+                    permittedServicesId: [5, 15, 16, 18, 25, 27, 28],  // 当前操作员可以操作的服务id
                 }
             },
+
             created() {
                 let _this = this;
-
-                customerId = Cookies.get('customer_id')
+                customerId = Cookies.get('customer_id');
+                permitted_services_id = Cookies.get('permitted_services_id');
+                console.log('Cookies:', permitted_services_id);
+                // this.permittedServicesId = permitted_services_id
 
                 // 可选服务信道
                 const recommendedServicesSocket = new WebSocket(`ws://${window.location.host}/ws/customer_recommended_services_list/${customerId}/`);
@@ -101,6 +115,7 @@
         };
 
         createApp(customerServiceApp).mount('#app');
+
     </script>
 
 {% endblock %}

@@ -13,7 +13,6 @@ class ClinicSite(admin.AdminSite):
     index_title = '诊所工作台'
     enable_nav_sidebar = False
     index_template = 'admin/index_clinic.html'
-    enable_nav_sidebar = False
     site_url = None
 
     def get_urls(self):
@@ -79,10 +78,16 @@ class ClinicSite(admin.AdminSite):
         # 历史服务
         context['history_services'] = customer.get_history_services()
 
+        # 生成响应对象
         response = render(request, 'customer_service.html', context)
 
         # 向sessionStorage写入customer_id
         response.set_cookie('customer_id', kwargs['customer_id'])
+        
+        # 获取操作员有操作权限的服务id列表, 写入cookie
+        from core.business_functions import get_operator_permitted_services
+        permitted_services_id = get_operator_permitted_services(operator)
+        response.set_cookie('permitted_services_id', permitted_services_id)
 
         return response
 

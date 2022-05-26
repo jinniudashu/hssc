@@ -12,24 +12,31 @@
 {% block nav-sidebar %}{% endblock %}
 
 {% block content %}
-    <form method="get">
-        <h3>共享服务</h3>
-        {% for proc in unassigned_procs %}
-            <div class="proc-item">
-                <a href="receive_task/{{ proc.id }}">
-                    <span class="proc-item-title-time">{{ proc.customer.name }}</span>
-                    <span class="proc-item-title-text">{{ proc.service.label }}</span>
-                    <span class="proc-item-title-text">{{ proc.customer.workgroup.label }}</span>
-                </a>
-            </div>
-        {% endfor %}
-    </form>
-    <br>
-    <hr>
-    <br>
     {% verbatim %}
     <div id="app">
-        <div v-for="item in items" :key="item.title">
+        <h3>共享服务</h3>
+        <br>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">客户姓名</th>
+                    <th scope="col">服务项目</th>
+                    <th scope="col">负责小组</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="proc in permittedUnassignedProcs" :key="proc.id">
+                    <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
+                    <td>{{ proc.service_name }} {{ proc.service_id}}</td>
+                    <td>{{ proc.workgroup_name }}</td>
+                </tr>
+            </tbody>
+        </table>        
+        <br>
+        <hr>
+        <br>
+
+        <div v-for="item in staffTodos" :key="item.title">
             <h3>{{ item.title }}</h3>
             <br>
             <table class="table table-hover">
@@ -67,19 +74,45 @@
         const customerServiceApp = {
             data() {
                 return {
-                    message: 'Hello Miles',
-                    items: null
+                    staffTodos: null,
+                    permittedServicesId: [],
+                    unassignedProcs: [],
+                }
+            },
+            computed: {
+                // 用permittedServicesId过滤unassignedProcs，返回当前操作员有操作权限的进程列表
+                permittedUnassignedProcs() {
+                    return this.unassignedProcs.filter(
+                        proc => this.permittedServicesId.includes(proc.service_id)
+                    )
                 }
             },
             created() {
-                const socket = new WebSocket(`ws://${window.location.host}/ws/staff_todo_list/`);
                 let _this = this;
+                
+                // 建立信道：操作员任务列表
+                const staffTodosListSocket = new WebSocket(`ws://${window.location.host}/ws/staff_todos_list/`);
+                staffTodosListSocket.onmessage = function (event) {
+                    _this.staffTodos = JSON.parse(event.data);
+                    console.log('staffTodos:', _this.staffTodos);
+                };
 
-                socket.onmessage = function (event) {
-                    _this.items = JSON.parse(event.data);
-                    console.log(_this.items);
-                }
-            },
+                // 建立信道：未分配服务进程
+                const unassignedProcsSocket = new WebSocket(`ws://${window.location.host}/ws/unassigned_procs/`);
+                unassignedProcsSocket.onmessage = function (event) {
+                    _data = JSON.parse(event.data);
+                    // 区分后台发来的内容，赋给各自的响应式变量：
+                    // 未分配服务进程unassignedProcs
+                    // 有操作权限的服务id列表permittedServicesId
+                    if (_data.hasOwnProperty('unassignedProcs')) {
+                        _this.unassignedProcs = _data.unassignedProcs;
+                        console.log('unassignedProcs:', _this.unassignedProcs);
+                    } else {
+                        _this.permittedServicesId = _data.permittedServicesId
+                        console.log('permittedServicesId:', _this.permittedServicesId);
+                    }
+                };
+            }
         };
 
         createApp(customerServiceApp).mount('#app');
