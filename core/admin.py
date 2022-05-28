@@ -54,7 +54,8 @@ class ClinicSite(admin.AdminSite):
         operator = User.objects.get(username=request.user).customer
         
         # 病例首页
-        context['profile'] = customer.get_profile()
+        from core.business_functions import get_customer_profile
+        context['profile'] = get_customer_profile(customer)
 
         # 已安排服务
         # context['scheduled_services'] = customer.get_scheduled_services()

@@ -399,12 +399,6 @@ class Customer(HsscBase):
             self.label = self.name
         super().save(*args, **kwargs)
 
-    def get_profile(self) -> 'QuerySet[Customer]':
-        '''
-        获取客户基本信息
-        '''
-        return self
-
     def get_history_services(self) -> 'QuerySet[OperationProc]':
         '''
         获取客户历史服务列表

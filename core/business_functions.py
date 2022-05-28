@@ -117,6 +117,11 @@ def create_customer_service_log(post_data, form_instance):
 
     return log
 
+# 获取客户基本信息
+def get_customer_profile(customer):
+    # Ju_min_ji_ben_xin_xi_diao_cha
+    return customer
+
 
 # 为新服务分配操作员
 def dispatch_operator(customer, service, current_operator):
