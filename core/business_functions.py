@@ -73,6 +73,7 @@ def create_customer_service_log(post_data, form_instance):
                 icpc = map(lambda x: eval(model_name).objects.get(id=x).iname, id_list)
                 dictionaries = map(lambda x: eval(model_name).objects.get(id=x).value, id_list)
                 service = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
+                core = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
             val_iterator = eval(f'ConvertIdToValue.{app_label}').value
             return f'{set(val_iterator)}'
 
@@ -119,8 +120,20 @@ def create_customer_service_log(post_data, form_instance):
 
 # 获取客户基本信息
 def get_customer_profile(customer):
-    # Ju_min_ji_ben_xin_xi_diao_cha
-    return customer
+    instance = Ju_min_ji_ben_xin_xi_diao_cha.objects.filter(customer=customer).last()
+
+    url = f'/clinic/service/ju_min_ji_ben_xin_xi_diao_cha/{instance.id}/change'
+
+    profile = {
+        'name': instance.characterfield_name,
+        'phone': instance.characterfield_contact_number,
+        'address': instance.characterfield_family_address,
+        'charge_staff': instance.relatedfield_signed_family_doctor,
+        'workgroup': instance.customer.workgroup.label if instance.customer.workgroup else '',
+        'url': url,
+    }
+
+    return profile
 
 
 # 为新服务分配操作员

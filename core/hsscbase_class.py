@@ -243,7 +243,7 @@ class FieldsType(Enum):
     relatedfield_medical_expenses_burden = "dictionaries.Medical_expenses_burden"  # 医疗费用负担
     relatedfield_type_of_residence = "dictionaries.Type_of_residence"  # 居住类型
     relatedfield_blood_type = "dictionaries.Blood_type"  # 血型
-    relatedfield_signed_family_doctor = "service.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
+    relatedfield_signed_family_doctor = "core.Staff"  # 签约家庭医生
     relatedfield_athletic_ability = "dictionaries.Exercise_time"  # 运动能力
     relatedfield_personality_tendency = "dictionaries.Character"  # 性格倾向
     relatedfield_are_you_satisfied_with_the_job_and_life = "dictionaries.Satisfaction"  # 对目前生活和工作满意吗

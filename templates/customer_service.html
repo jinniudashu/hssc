@@ -14,12 +14,28 @@
 <script src="htmx.min.js" defer></script>
 {% block content %}
     <h3>病例首页</h3>
-    {{ profile.name }}
-    {{ profile.phone }}
-    {{ profile.address }}
-    {{ profile.charge_staff }}
-    {{ profile.workgroup.label }}
-    <a href="{{ profile.get_absolute_url }}">查看详情</a>
+    <br>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">姓名</th>
+                <th scope="col">电话</th>
+                <th scope="col">家庭住址</th>
+                <th scope="col">签约医生</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr >
+                <td> {{ profile.name }} </td>
+                <td> {{ profile.phone }} </td>
+                <td> {{ profile.address }} </td>
+                <td> {{ profile.charge_staff }} </td>
+            </tr>
+        </tbody>
+    </table>        
+    <br>
+    <a href="{{ profile.url }}">...查看完整档案</a>
+    <br>
     <br>
     <hr>
     <br>
