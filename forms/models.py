@@ -8,14 +8,14 @@ from core.models import HsscFormModel, Staff
 
 
 class A6207(HsscFormModel):
-    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A6207', verbose_name='药品名')
+    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A6207', blank=True, verbose_name='药品名')
     class Meta:
         verbose_name = '过敏史'
         verbose_name_plural = verbose_name
         
 
 class T4501(HsscFormModel):
-    T4501 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4501_T4501', verbose_name='营养干预')
+    T4501 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4501_T4501', blank=True, verbose_name='营养干预')
     class Meta:
         verbose_name = '营养干预'
         verbose_name_plural = verbose_name
@@ -112,7 +112,7 @@ class A3105(HsscFormModel):
 
 class A6217(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6217', verbose_name='症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6217', blank=True, verbose_name='症状')
     class Meta:
         verbose_name = '院内辅助问诊'
         verbose_name_plural = verbose_name
@@ -130,7 +130,7 @@ class T3405(HsscFormModel):
 
 class A6202(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6202', verbose_name='症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6202', blank=True, verbose_name='症状')
     class Meta:
         verbose_name = '院外辅助问诊'
         verbose_name_plural = verbose_name
@@ -138,8 +138,8 @@ class A6202(HsscFormModel):
 
 class A6201(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', verbose_name='症状')
-    boolfield_chang_yong_zheng_zhuang = models.ManyToManyField(Chang_yong_zheng_zhuang, related_name='chang_yong_zheng_zhuang_for_boolfield_chang_yong_zheng_zhuang_A6201', verbose_name='常用症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6201', blank=True, verbose_name='症状')
+    boolfield_chang_yong_zheng_zhuang = models.ManyToManyField(Chang_yong_zheng_zhuang, related_name='chang_yong_zheng_zhuang_for_boolfield_chang_yong_zheng_zhuang_A6201', blank=True, verbose_name='常用症状')
     class Meta:
         verbose_name = '院外咨询'
         verbose_name_plural = verbose_name
@@ -158,8 +158,8 @@ class T6301(HsscFormModel):
     boolfield_yao_pin_dan_wei = models.ForeignKey(Yao_pin_dan_wei, related_name='yao_pin_dan_wei_for_boolfield_yao_pin_dan_wei_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品单位')
     relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
     relatedfield_smoking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_smoking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='吸烟频次')
-    boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_T6301', verbose_name='糖尿病症状')
-    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_T6301', verbose_name='药品名')
+    boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_T6301', blank=True, verbose_name='糖尿病症状')
+    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_T6301', blank=True, verbose_name='药品名')
     class Meta:
         verbose_name = '糖尿病一般随访'
         verbose_name_plural = verbose_name
@@ -229,7 +229,7 @@ class Z6205(HsscFormModel):
     characterfield_age = models.CharField(max_length=255, null=True, blank=True, verbose_name='年龄')
     datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_affiliation = models.ForeignKey(Ji_gou_ji_ben_xin_xi_biao, related_name='ji_gou_ji_ben_xin_xi_biao_for_relatedfield_affiliation_Z6205', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
-    relatedfield_service_role = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_relatedfield_service_role_Z6205', verbose_name='服务角色')
+    relatedfield_service_role = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_relatedfield_service_role_Z6205', blank=True, verbose_name='服务角色')
     class Meta:
         verbose_name = '医生注册'
         verbose_name_plural = verbose_name
@@ -253,7 +253,7 @@ class A3108(HsscFormModel):
         
 
 class T4502(HsscFormModel):
-    T4502 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4502_T4502', verbose_name='运动干预')
+    T4502 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4502_T4502', blank=True, verbose_name='运动干预')
     class Meta:
         verbose_name = '运动干预'
         verbose_name_plural = verbose_name
@@ -284,7 +284,7 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     relatedfield_affiliation = models.ForeignKey(Ji_gou_ji_ben_xin_xi_biao, related_name='ji_gou_ji_ben_xin_xi_biao_for_relatedfield_affiliation_zhi_yuan_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
-    relatedfield_service_role = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_relatedfield_service_role_zhi_yuan_ji_ben_xin_xi_biao', verbose_name='服务角色')
+    relatedfield_service_role = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_relatedfield_service_role_zhi_yuan_ji_ben_xin_xi_biao', blank=True, verbose_name='服务角色')
     class Meta:
         verbose_name = '职员基本信息表'
         verbose_name_plural = verbose_name
@@ -305,7 +305,7 @@ class She_bei_ji_ben_xin_xi_biao(HsscFormModel):
         
 
 class Yong_yao_diao_cha_biao(HsscFormModel):
-    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_yong_yao_diao_cha_biao', verbose_name='药品名')
+    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_yong_yao_diao_cha_biao', blank=True, verbose_name='药品名')
     class Meta:
         verbose_name = '用药调查表'
         verbose_name_plural = verbose_name
@@ -364,14 +364,14 @@ class A5001(HsscFormModel):
     boolfield_chang_yong_chu_fang_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用处方量')
     boolfield_yong_yao_zhou_qi = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药疗程')
     boolfield_yong_yao_tu_jing = models.ForeignKey(Yong_yao_tu_jing, related_name='yong_yao_tu_jing_for_boolfield_yong_yao_tu_jing_A5001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='用药途径')
-    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A5001', verbose_name='药品名')
+    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A5001', blank=True, verbose_name='药品名')
     class Meta:
         verbose_name = '药物处方'
         verbose_name_plural = verbose_name
         
 
 class T4504(HsscFormModel):
-    T4504 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4504_T4504', verbose_name='健康教育')
+    T4504 = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_T4504_T4504', blank=True, verbose_name='健康教育')
     class Meta:
         verbose_name = '健康教育'
         verbose_name_plural = verbose_name
@@ -383,8 +383,8 @@ class Shu_ye_zhu_she_dan(HsscFormModel):
     boolfield_chang_yong_chu_fang_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用处方量')
     boolfield_zhi_xing_qian_ming = models.CharField(max_length=255, null=True, blank=True, verbose_name='执行签名')
     boolfield_yong_yao_zhou_qi = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药疗程')
-    boolfield_zhu_she_ri_qi = models.DateTimeField(null=True, verbose_name='注射日期')
-    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_shu_ye_zhu_she_dan', verbose_name='药品名')
+    boolfield_zhu_she_ri_qi = models.DateTimeField(null=True, blank=True, verbose_name='注射日期')
+    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_shu_ye_zhu_she_dan', blank=True, verbose_name='药品名')
     class Meta:
         verbose_name = '输液注射单'
         verbose_name_plural = verbose_name
@@ -392,8 +392,8 @@ class Shu_ye_zhu_she_dan(HsscFormModel):
 
 class A6219(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6219', verbose_name='症状')
-    boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_A6219', verbose_name='糖尿病症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6219', blank=True, verbose_name='症状')
+    boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_A6219', blank=True, verbose_name='糖尿病症状')
     class Meta:
         verbose_name = '糖尿病专用问诊'
         verbose_name_plural = verbose_name
@@ -412,7 +412,7 @@ class A6203(HsscFormModel):
     relatedfield_marital_status = models.ForeignKey(Marital_status, related_name='marital_status_for_relatedfield_marital_status_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='婚姻状况')
     relatedfield_education = models.ForeignKey(Education, related_name='education_for_relatedfield_education_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='文化程度')
     relatedfield_occupational_status = models.ForeignKey(Occupational_status, related_name='occupational_status_for_relatedfield_occupational_status_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='职业状况')
-    relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_A6203', verbose_name='医疗费用负担')
+    relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_A6203', blank=True, verbose_name='医疗费用负担')
     relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
     relatedfield_signed_family_doctor = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
@@ -492,7 +492,7 @@ class A3101(HsscFormModel):
         
 
 class A6501(HsscFormModel):
-    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, verbose_name='预约时间')
+    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     class Meta:
         verbose_name = '代人预约挂号'
@@ -511,7 +511,7 @@ class T4505(HsscFormModel):
 
 class A6211(HsscFormModel):
     datetimefield_date = models.DateField(null=True, blank=True, verbose_name='手术日期')
-    relatedfield_major_life = models.ManyToManyField(Life_event, related_name='life_event_for_relatedfield_major_life_A6211', verbose_name='生活事件')
+    relatedfield_major_life = models.ManyToManyField(Life_event, related_name='life_event_for_relatedfield_major_life_A6211', blank=True, verbose_name='生活事件')
     class Meta:
         verbose_name = '重大生活事件调查'
         verbose_name_plural = verbose_name
@@ -528,7 +528,7 @@ class A3502(HsscFormModel):
 
 class A6218(HsscFormModel):
     characterfield_supplementary_description_of_the_condition = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6218', verbose_name='症状')
+    relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_A6218', blank=True, verbose_name='症状')
     class Meta:
         verbose_name = '门诊医生问诊'
         verbose_name_plural = verbose_name
@@ -543,11 +543,11 @@ class A6205(HsscFormModel):
         
 
 class A6214(HsscFormModel):
-    relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='觉得自身健康状况如何')
-    relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='较之过去一年状态如何')
+    relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6214', on_delete=models.CASCADE, null=True, blank=False, verbose_name='觉得自身健康状况如何')
+    relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6214', on_delete=models.CASCADE, null=True, blank=False, verbose_name='较之过去一年状态如何')
     relatedfield_sports_preference = models.ForeignKey(Sports_preference, related_name='sports_preference_for_relatedfield_sports_preference_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动偏好')
     relatedfield_exercise_time = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_exercise_time_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动时长')
-    relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_A6214', verbose_name='近来有无身体不适症状')
+    relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_A6214', blank=True, verbose_name='近来有无身体不适症状')
     class Meta:
         verbose_name = '个人身体健康评估'
         verbose_name_plural = verbose_name
@@ -580,8 +580,8 @@ class A6212(HsscFormModel):
 
 class T9001(HsscFormModel):
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
-    relatedfield_yi_lou_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_yi_lou_zhen_duan_T9001', verbose_name='可能诊断')
-    relatedfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_pai_chu_zhen_duan_T9001', verbose_name='排除诊断')
+    relatedfield_yi_lou_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_yi_lou_zhen_duan_T9001', blank=True, verbose_name='可能诊断')
+    relatedfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_pai_chu_zhen_duan_T9001', blank=True, verbose_name='排除诊断')
     class Meta:
         verbose_name = '非胰岛素依赖性糖尿病'
         verbose_name_plural = verbose_name
@@ -590,7 +590,7 @@ class T9001(HsscFormModel):
 class A5002(HsscFormModel):
     relatedfield_disease_name = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_relatedfield_disease_name_A5002', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     boolfield_shi_fou_ji_xu_shi_yong = models.ForeignKey(Ji_xu_shi_yong_qing_kuang, related_name='ji_xu_shi_yong_qing_kuang_for_boolfield_shi_fou_ji_xu_shi_yong_A5002', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否继续使用')
-    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A5002', verbose_name='药品名')
+    relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A5002', blank=True, verbose_name='药品名')
     class Meta:
         verbose_name = '药事服务'
         verbose_name_plural = verbose_name
@@ -623,7 +623,7 @@ class Z6261(HsscFormModel):
 
 class A6210(HsscFormModel):
     boolfield_yi_chuan_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_yi_chuan_ji_bing_A6210', on_delete=models.CASCADE, null=True, blank=True, verbose_name='遗传性疾病')
-    boolfield_yi_chuan_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_yi_chuan_bing_shi_cheng_yuan_A6210', verbose_name='遗传病史成员')
+    boolfield_yi_chuan_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_yi_chuan_bing_shi_cheng_yuan_A6210', blank=True, verbose_name='遗传病史成员')
     class Meta:
         verbose_name = '遗传病史'
         verbose_name_plural = verbose_name
@@ -631,14 +631,14 @@ class A6210(HsscFormModel):
 
 class A6209(HsscFormModel):
     boolfield_jia_zu_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_jia_zu_xing_ji_bing_A6209', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家族性疾病')
-    boolfield_jia_zu_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_jia_zu_bing_shi_cheng_yuan_A6209', verbose_name='家族病史成员')
+    boolfield_jia_zu_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_jia_zu_bing_shi_cheng_yuan_A6209', blank=True, verbose_name='家族病史成员')
     class Meta:
         verbose_name = '家族病史'
         verbose_name_plural = verbose_name
         
 
 class A6502(HsscFormModel):
-    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, verbose_name='预约时间')
+    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
     boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     class Meta:

@@ -275,6 +275,7 @@ def operand_finished_handler(sender, **kwargs):
             '''
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
+            print("kwargs['operator']:", type(kwargs['operator']))
             # 创建新的服务作业进程
             _recommended, created = RecommendedService.objects.get_or_create(
                 service=kwargs['next_service'],  # 推荐的服务
@@ -282,6 +283,7 @@ def operand_finished_handler(sender, **kwargs):
                 cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
             )
             if created:
+                print('_recommended:', _recommended, _recommended.__dict__)
                 _recommended.creater=kwargs['operator'],  # 创建者
                 _recommended.pid=operation_proc,  # 当前进程是被推荐服务的父进程
                 _recommended.save()
@@ -356,6 +358,7 @@ def operand_finished_handler(sender, **kwargs):
         if _is_rule_satified(service_rule.event_rule, operation_proc):
             print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
             # 构造作业参数
+            print('operation_proc.operator:', type(operation_proc.operator))
             operation_params = {
                 'operation_proc': operation_proc,
                 'operator': operation_proc.operator,
