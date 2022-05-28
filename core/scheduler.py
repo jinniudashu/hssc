@@ -275,23 +275,27 @@ def operand_finished_handler(sender, **kwargs):
             '''
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
-            print("kwargs['operator']:", type(kwargs['operator']))
             # 创建新的服务作业进程
-            _recommended, created = RecommendedService.objects.get_or_create(
-                service=kwargs['next_service'],  # 推荐的服务
-                customer=operation_proc.customer,  # 客户
-                cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-            )
-            if created:
-                print('_recommended:', _recommended, _recommended.__dict__)
-                _recommended.creater=kwargs['operator'],  # 创建者
-                _recommended.pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                _recommended.save()
-            else:
-                _recommended.counter += 1
-                _recommended.save()
 
-            return f'推荐服务作业: {_recommended}'
+            try:
+                obj = RecommendedService.objects.get(
+                    service=kwargs['next_service'],  # 推荐的服务
+                    customer=operation_proc.customer,  # 客户
+                    cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+                )
+                obj.counter += 1
+                obj.save()
+            except RecommendedService.DoesNotExist:
+                obj = RecommendedService(
+                    service=kwargs['next_service'],  # 推荐的服务
+                    customer=operation_proc.customer,  # 客户
+                    creater=kwargs['operator'],  # 创建者
+                    pid=operation_proc,  # 当前进程是被推荐服务的父进程
+                    cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+                )
+                obj.save()
+
+            return f'推荐服务作业: {obj}'
 
         def _alert_content_violations(self, **kwargs):
             '''

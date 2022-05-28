@@ -146,7 +146,7 @@ def dispatch_operator(customer, service, current_operator):
 def get_operator_permitted_services(operator):
     from core.models import Service
     return [
-        service.id 
+        service.id
         for service in Service.objects.filter(is_system_service=False) 
         if set(service.role.all()).intersection(set(operator.staff.role.all()))
     ]

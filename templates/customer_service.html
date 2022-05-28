@@ -89,16 +89,17 @@
                         'scheduled_services': [],  // 已安排服务
                         'history_services': [],    // 历史服务
                     },
-                    permittedServicesId: [5, 15, 16, 18, 25, 27, 28],  // 当前操作员可以操作的服务id
+                    permittedServicesId: [],  // 当前操作员可以操作的服务id
                 }
             },
 
             created() {
                 let _this = this;
+
                 customerId = Cookies.get('customer_id');
-                permitted_services_id = Cookies.get('permitted_services_id');
-                console.log('Cookies:', permitted_services_id);
-                // this.permittedServicesId = permitted_services_id
+
+                permitted_services_id = Cookies.get('permitted_services_id').slice(1,-1).replace(/\\054 /g, ',').split(',')
+                this.permittedServicesId = permitted_services_id.map(id => parseInt(id))
 
                 // 可选服务信道
                 const recommendedServicesSocket = new WebSocket(`ws://${window.location.host}/ws/customer_recommended_services_list/${customerId}/`);
