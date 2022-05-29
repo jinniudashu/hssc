@@ -2,7 +2,7 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, Staff
+from core.models import HsscFormModel, HsscBaseFormModel
 
 
 # **********************************************************************************************************************
@@ -139,7 +139,7 @@ class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
     boolfield_yu_ji_deng_hou_shi_jian_standard_value = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间标准值')
     boolfield_yu_ji_deng_hou_shi_jian_up_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间上限')
     boolfield_yu_ji_deng_hou_shi_jian_down_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间下限')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     boolfield_fu_wu_xiang_mu_ming_cheng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_fu_wu_xiang_mu_ming_cheng_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务项目名称')
     boolfield_an_pai_que_ren = models.ForeignKey(An_pai_que_ren, related_name='an_pai_que_ren_for_boolfield_an_pai_que_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='安排确认')
 
@@ -167,7 +167,7 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     relatedfield_medical_expenses_burden = models.ManyToManyField(Medical_expenses_burden, related_name='medical_expenses_burden_for_relatedfield_medical_expenses_burden_ju_min_ji_ben_xin_xi_diao_cha', blank=True, verbose_name='医疗费用负担')
     relatedfield_type_of_residence = models.ForeignKey(Type_of_residence, related_name='type_of_residence_for_relatedfield_type_of_residence_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='居住类型')
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
-    relatedfield_signed_family_doctor = models.ForeignKey(Staff, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
+    relatedfield_signed_family_doctor = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
     relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
 
     class Meta:
@@ -208,7 +208,7 @@ class Qian_yue_fu_wu(HsscFormModel):
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭签约服务协议')
     boolfield_qian_yue_que_ren = models.ForeignKey(Qian_yue_que_ren, related_name='qian_yue_que_ren_for_boolfield_qian_yue_que_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约确认')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 
     class Meta:
         verbose_name = '签约服务'
@@ -643,7 +643,7 @@ class A6502(HsscFormModel):
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
     boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 
     class Meta:
         verbose_name = '门诊分诊'
@@ -660,7 +660,7 @@ class A6501(HsscFormModel):
     datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 
     class Meta:
         verbose_name = '代人预约挂号'
