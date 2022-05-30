@@ -259,6 +259,7 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
             proc_params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
             proc_params['content_type'] = content_type
+            proc_params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
 
             # 创建新的服务作业进程
             new_proc = create_service_proc(**proc_params)

@@ -27,7 +27,7 @@
             <tbody>
                 <tr v-for="proc in permittedUnassignedProcs" :key="proc.id">
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
-                    <td>{{ proc.service_name }} {{ proc.service_id}}</td>
+                    <td>{{ proc.service_name }}</td>
                     <td>{{ proc.workgroup_name }}</td>
                 </tr>
             </tbody>
