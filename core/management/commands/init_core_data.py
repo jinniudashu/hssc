@@ -1,9 +1,9 @@
 from django.core.management import BaseCommand
-from django.contrib.auth.models import User
 import json
 
 from core.models import *
 from icpc.models import Icpc
+from service.models import Yao_pin_ji_ben_xin_xi_biao
 
 test_user_data = {
     'user': [
@@ -100,6 +100,7 @@ class Command(BaseCommand):
             EventRule,
             ServiceSpec,
             ServiceRule,
+            Yao_pin_ji_ben_xin_xi_biao,
         ]
         for model in initial_models:
             print(model._meta.model_name)
@@ -108,6 +109,10 @@ class Command(BaseCommand):
             
         print('恢复设计数据完成！')
 
+        from django.contrib.auth.models import User, Group, Permission
+        # 创建管理员组, 赋权管理员组所有权限
+        admin_group, created = Group.objects.get_or_create(name='admin')
+        admin_group.permissions.add(*Permission.objects.all())
 
         # 导入测试用户数据
         User.objects.all().exclude(username='admin').delete()
@@ -121,3 +126,15 @@ class Command(BaseCommand):
                 first_name=user_data['first_name'],
                 last_name=user_data['last_name'],
             )
+
+            # 把测试用户增加到管理员组
+            user.groups.add(admin_group)
+
+            # 为测试用户的职员表增加角色
+            staff = user.customer.staff
+            for role_name in user_data['role']:
+                role = Role.objects.get(label=role_name)
+                staff.role.add(role)
+            staff.save()
+
+        print('导入测试用户数据完成！')
