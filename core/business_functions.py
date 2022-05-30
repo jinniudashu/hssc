@@ -1,6 +1,20 @@
+def copy_parent_proc_form_data(form):
+    # 获取父进程表单
+    parent_proc_form = form.pid.parent_proc.content_object
+    # 获取父进程表单和当前进程表单交集字段内容
+    intersection_fields = set(parent_proc_form.content_object._meta.fields).intersection(set(form._meta.fields))    
+    # 向当前进程表单写入交集字段内容
+    for field in intersection_fields:
+        print(field.name)
+        
+
+    # form.save()
+    return form
+
+
 from service.models import *
 # 创建服务表单实例
-def create_form_instance(operation_proc):
+def create_form_instance(operation_proc, passing_data):
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
@@ -24,6 +38,11 @@ def create_form_instance(operation_proc):
         form_instance.relatedfield_gender = base_info.relatedfield_gender
         form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
         form_instance.save()
+
+    # 3. 如果passing_data>0, copy父进程表单数据
+    if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+        copy_parent_proc_form_data(form_instance)
+
     return form_instance
 
 
@@ -47,7 +66,7 @@ def create_service_proc(**kwargs):
     role = kwargs['service'].role.all()
     new_proc.role.set(role)
 
-    form = create_form_instance(new_proc)
+    form = create_form_instance(new_proc, kwargs['passing_data'])
     # 更新OperationProc服务进程的form实例信息
     new_proc.object_id = form.id
     new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
