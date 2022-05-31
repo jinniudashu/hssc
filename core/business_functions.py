@@ -1,14 +1,34 @@
-def copy_parent_proc_form_data(form):
-    # 获取父进程表单
-    parent_proc_form = form.pid.parent_proc.content_object
-    # 获取父进程表单和当前进程表单交集字段内容
-    intersection_fields = set(parent_proc_form.content_object._meta.fields).intersection(set(form._meta.fields))    
-    # 向当前进程表单写入交集字段内容
-    for field in intersection_fields:
-        print(field.name)
-        
+def get_base_fields_name():
+    from core.models import HsscFormModel
+    # 获取表单基础类
+    base_fields_name = {field.name for field in HsscFormModel._meta.fields}
+    return base_fields_name.add('id')
 
-    # form.save()
+def copy_previous_form_data(form):
+    # 获取父进程表单
+    previous_form = form.pid.parent_proc.content_object
+    # 获取父进程表单和当前进程表单字段的交集
+    base_fields_name = get_base_fields_name()  # 表单基础字段集合
+    previous_form_fields_name = {field.name for field in previous_form._meta.fields} - base_fields_name
+    form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
+    copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
+
+    previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
+    form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+    copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+
+    # 向当前进程表单写入交集字段内容
+    for field_name in copy_fields_name:
+        print(field_name, '值：', eval(f'previous_form.{field_name}'))
+        eval(f'form.{field_name} = previous_form.{field_name}')
+    form.save()
+
+    # 向当前进程表单写入交集多对多字段内容
+    for field_name in copy_fields_name_m2m:
+        print(field_name, '值：', eval(f'previous_form.{field_name}.all()'))
+        for obj in eval(f'previous_form.{field_name}.all()'):
+            eval(f'form.{field_name}.add(obj)')
+
     return form
 
 
@@ -31,7 +51,7 @@ def create_form_instance(operation_proc, passing_data):
         # 判断当前实体，填入实体基本信息表头字段
         # 通用代码里customer应改为entity
         base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
-        # *********以下应为生成代码！************
+        # *********以下应为生成代码！生成所属实体表头信息************
         form_instance.characterfield_family_address = base_info.characterfield_family_address
         form_instance.characterfield_contact_number = base_info.characterfield_contact_number
         form_instance.characterfield_name = base_info.characterfield_name
@@ -41,7 +61,7 @@ def create_form_instance(operation_proc, passing_data):
 
     # 3. 如果passing_data>0, copy父进程表单数据
     if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
-        copy_parent_proc_form_data(form_instance)
+        copy_previous_form_data(form_instance)
 
     return form_instance
 
