@@ -1,10 +1,10 @@
-from core.models import HsscFormModel
 def copy_previous_form_data(form):
     # 获取父进程表单
     previous_form = form.pid.parent_proc.content_object
     if not previous_form:
         return
     else:        
+        from core.models import HsscFormModel
         # 获取父进程表单和当前进程表单字段的交集
         base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
         base_fields_name.add('id')
@@ -93,13 +93,13 @@ def create_service_proc(**kwargs):
     return new_proc
 
 
-from core.hsscbase_class import FieldsType
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(post_data, form_instance):
     from enum import Enum
     from core.models import CustomerServiceLog
     # 数据格式预处理
     def _preprocess_data_format(post_data):
+        from core.hsscbase_class import FieldsType
         def _get_set_value(field_type, id_list):
             print('field_type:', field_type, 'id_list:', id_list)
             # 转换id列表为对应的字典值列表

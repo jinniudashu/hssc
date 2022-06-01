@@ -31,17 +31,8 @@ class A6206(HsscFormModel):
 
 class A3103(HsscFormModel):
     numberfield_body_temperature = models.IntegerField(null=True, blank=True, verbose_name='体温')
-    numberfield_body_temperature_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体温标准值')
-    numberfield_body_temperature_up_limit = models.IntegerField(default=37.4, null=True, blank=True, verbose_name='体温上限')
-    numberfield_body_temperature_down_limit = models.IntegerField(default=36.0, null=True, blank=True, verbose_name='体温下限')
     numberfield_pulse = models.IntegerField(null=True, blank=True, verbose_name='脉搏')
-    numberfield_pulse_standard_value = models.IntegerField(null=True, blank=True, verbose_name='脉搏标准值')
-    numberfield_pulse_up_limit = models.IntegerField(default=100.0, null=True, blank=True, verbose_name='脉搏上限')
-    numberfield_pulse_down_limit = models.IntegerField(default=60.0, null=True, blank=True, verbose_name='脉搏下限')
     numberfield_respiratory_rate = models.IntegerField(null=True, blank=True, verbose_name='呼吸频率')
-    numberfield_respiratory_rate_standard_value = models.IntegerField(null=True, blank=True, verbose_name='呼吸频率标准值')
-    numberfield_respiratory_rate_up_limit = models.IntegerField(default=20.0, null=True, blank=True, verbose_name='呼吸频率上限')
-    numberfield_respiratory_rate_down_limit = models.IntegerField(default=10.0, null=True, blank=True, verbose_name='呼吸频率下限')
     class Meta:
         verbose_name = '生命体征检查'
         verbose_name_plural = verbose_name
@@ -72,9 +63,6 @@ class Z6201(HsscFormModel):
 
 class T3404(HsscFormModel):
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
-    numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
-    numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
-    numberfield_kong_fu_xue_tang_down_limit = models.DecimalField(max_digits=10, decimal_places=2, default=3.9, null=True, blank=True, verbose_name='空腹血糖下限')
     class Meta:
         verbose_name = '空腹血糖检查'
         verbose_name_plural = verbose_name
@@ -98,13 +86,7 @@ class A6216(HsscFormModel):
 
 class A3105(HsscFormModel):
     numberfield_systolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
-    numberfield_systolic_blood_pressure_standard_value = models.IntegerField(null=True, blank=True, verbose_name='收缩压标准值')
-    numberfield_systolic_blood_pressure_up_limit = models.IntegerField(default=139.0, null=True, blank=True, verbose_name='收缩压上限')
-    numberfield_systolic_blood_pressure_down_limit = models.IntegerField(default=90.0, null=True, blank=True, verbose_name='收缩压下限')
     numberfield_diastolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='舒张压')
-    numberfield_diastolic_blood_pressure_standard_value = models.IntegerField(null=True, blank=True, verbose_name='舒张压标准值')
-    numberfield_diastolic_blood_pressure_up_limit = models.IntegerField(default=89.0, null=True, blank=True, verbose_name='舒张压上限')
-    numberfield_diastolic_blood_pressure_down_limit = models.IntegerField(default=60.0, null=True, blank=True, verbose_name='舒张压下限')
     class Meta:
         verbose_name = '血压监测'
         verbose_name_plural = verbose_name
@@ -120,9 +102,6 @@ class A6217(HsscFormModel):
 
 class T3405(HsscFormModel):
     numberfield_tang_hua_xue_hong_dan_bai = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白')
-    numberfield_tang_hua_xue_hong_dan_bai_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='糖化血红蛋白标准值')
-    numberfield_tang_hua_xue_hong_dan_bai_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=6.0, null=True, blank=True, verbose_name='糖化血红蛋白上限')
-    numberfield_tang_hua_xue_hong_dan_bai_down_limit = models.DecimalField(max_digits=10, decimal_places=2, default=4.0, null=True, blank=True, verbose_name='糖化血红蛋白下限')
     class Meta:
         verbose_name = '糖化血红蛋白检查'
         verbose_name_plural = verbose_name
@@ -167,13 +146,7 @@ class T6301(HsscFormModel):
 
 class Fu_wu(HsscFormModel):
     boolfield_dang_qian_pai_dui_ren_shu = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数')
-    boolfield_dang_qian_pai_dui_ren_shu_standard_value = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数标准值')
-    boolfield_dang_qian_pai_dui_ren_shu_up_limit = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数上限')
-    boolfield_dang_qian_pai_dui_ren_shu_down_limit = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数下限')
     boolfield_yu_ji_deng_hou_shi_jian = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间')
-    boolfield_yu_ji_deng_hou_shi_jian_standard_value = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间标准值')
-    boolfield_yu_ji_deng_hou_shi_jian_up_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间上限')
-    boolfield_yu_ji_deng_hou_shi_jian_down_limit = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间下限')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     boolfield_fu_wu_xiang_mu_ming_cheng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_fu_wu_xiang_mu_ming_cheng_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务项目名称')
     boolfield_an_pai_que_ren = models.ForeignKey(An_pai_que_ren, related_name='an_pai_que_ren_for_boolfield_an_pai_que_ren_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='安排确认')
@@ -342,9 +315,6 @@ class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
 
 class A6208(HsscFormModel):
     numberfield_blood_transfusion = models.IntegerField(null=True, blank=True, verbose_name='输血量')
-    numberfield_blood_transfusion_standard_value = models.IntegerField(null=True, blank=True, verbose_name='输血量标准值')
-    numberfield_blood_transfusion_up_limit = models.IntegerField(default=400.0, null=True, blank=True, verbose_name='输血量上限')
-    numberfield_blood_transfusion_down_limit = models.IntegerField(null=True, blank=True, verbose_name='输血量下限')
     boolfield_shu_xue_ri_qi = models.DateField(null=True, blank=True, verbose_name='输血日期')
     class Meta:
         verbose_name = '输血史'
@@ -426,41 +396,14 @@ class A3001(HsscFormModel):
     characterfield_right_eye_vision = models.CharField(max_length=255, null=True, blank=True, verbose_name='右眼视力')
     characterfield_left_eye_vision = models.CharField(max_length=255, null=True, blank=True, verbose_name='左眼视力')
     numberfield_body_temperature = models.IntegerField(null=True, blank=True, verbose_name='体温')
-    numberfield_body_temperature_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体温标准值')
-    numberfield_body_temperature_up_limit = models.IntegerField(default=37.4, null=True, blank=True, verbose_name='体温上限')
-    numberfield_body_temperature_down_limit = models.IntegerField(default=36.0, null=True, blank=True, verbose_name='体温下限')
     numberfield_pulse = models.IntegerField(null=True, blank=True, verbose_name='脉搏')
-    numberfield_pulse_standard_value = models.IntegerField(null=True, blank=True, verbose_name='脉搏标准值')
-    numberfield_pulse_up_limit = models.IntegerField(default=100.0, null=True, blank=True, verbose_name='脉搏上限')
-    numberfield_pulse_down_limit = models.IntegerField(default=60.0, null=True, blank=True, verbose_name='脉搏下限')
     numberfield_respiratory_rate = models.IntegerField(null=True, blank=True, verbose_name='呼吸频率')
-    numberfield_respiratory_rate_standard_value = models.IntegerField(null=True, blank=True, verbose_name='呼吸频率标准值')
-    numberfield_respiratory_rate_up_limit = models.IntegerField(default=20.0, null=True, blank=True, verbose_name='呼吸频率上限')
-    numberfield_respiratory_rate_down_limit = models.IntegerField(default=10.0, null=True, blank=True, verbose_name='呼吸频率下限')
     numberfield_hight = models.IntegerField(null=True, blank=True, verbose_name='身高')
-    numberfield_hight_standard_value = models.IntegerField(null=True, blank=True, verbose_name='身高标准值')
-    numberfield_hight_up_limit = models.IntegerField(null=True, blank=True, verbose_name='身高上限')
-    numberfield_hight_down_limit = models.IntegerField(null=True, blank=True, verbose_name='身高下限')
     numberfield_weight = models.IntegerField(null=True, blank=True, verbose_name='体重')
-    numberfield_weight_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体重标准值')
-    numberfield_weight_up_limit = models.IntegerField(null=True, blank=True, verbose_name='体重上限')
-    numberfield_weight_down_limit = models.IntegerField(null=True, blank=True, verbose_name='体重下限')
     numberfield_body_mass_index = models.IntegerField(null=True, blank=True, verbose_name='体质指数')
-    numberfield_body_mass_index_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体质指数标准值')
-    numberfield_body_mass_index_up_limit = models.IntegerField(default=23.9, null=True, blank=True, verbose_name='体质指数上限')
-    numberfield_body_mass_index_down_limit = models.IntegerField(default=18.5, null=True, blank=True, verbose_name='体质指数下限')
     numberfield_systolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
-    numberfield_systolic_blood_pressure_standard_value = models.IntegerField(null=True, blank=True, verbose_name='收缩压标准值')
-    numberfield_systolic_blood_pressure_up_limit = models.IntegerField(default=139.0, null=True, blank=True, verbose_name='收缩压上限')
-    numberfield_systolic_blood_pressure_down_limit = models.IntegerField(default=90.0, null=True, blank=True, verbose_name='收缩压下限')
     numberfield_diastolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='舒张压')
-    numberfield_diastolic_blood_pressure_standard_value = models.IntegerField(null=True, blank=True, verbose_name='舒张压标准值')
-    numberfield_diastolic_blood_pressure_up_limit = models.IntegerField(default=89.0, null=True, blank=True, verbose_name='舒张压上限')
-    numberfield_diastolic_blood_pressure_down_limit = models.IntegerField(default=60.0, null=True, blank=True, verbose_name='舒张压下限')
     boolfield_yao_wei = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='腰围')
-    boolfield_yao_wei_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='腰围标准值')
-    boolfield_yao_wei_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=85.0, null=True, blank=True, verbose_name='腰围上限')
-    boolfield_yao_wei_down_limit = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='腰围下限')
     relatedfield_athletic_ability = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_athletic_ability_A3001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动能力')
     relatedfield_left_ear_hearing = models.ForeignKey(Hearing, related_name='hearing_for_relatedfield_left_ear_hearing_A3001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左耳听力')
     relatedfield_right_ear_hearing = models.ForeignKey(Hearing, related_name='hearing_for_relatedfield_right_ear_hearing_A3001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右耳听力')
@@ -475,17 +418,8 @@ class A3001(HsscFormModel):
 
 class A3101(HsscFormModel):
     numberfield_hight = models.IntegerField(null=True, blank=True, verbose_name='身高')
-    numberfield_hight_standard_value = models.IntegerField(null=True, blank=True, verbose_name='身高标准值')
-    numberfield_hight_up_limit = models.IntegerField(null=True, blank=True, verbose_name='身高上限')
-    numberfield_hight_down_limit = models.IntegerField(null=True, blank=True, verbose_name='身高下限')
     numberfield_weight = models.IntegerField(null=True, blank=True, verbose_name='体重')
-    numberfield_weight_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体重标准值')
-    numberfield_weight_up_limit = models.IntegerField(null=True, blank=True, verbose_name='体重上限')
-    numberfield_weight_down_limit = models.IntegerField(null=True, blank=True, verbose_name='体重下限')
     numberfield_body_mass_index = models.IntegerField(null=True, blank=True, verbose_name='体质指数')
-    numberfield_body_mass_index_standard_value = models.IntegerField(null=True, blank=True, verbose_name='体质指数标准值')
-    numberfield_body_mass_index_up_limit = models.IntegerField(default=23.9, null=True, blank=True, verbose_name='体质指数上限')
-    numberfield_body_mass_index_down_limit = models.IntegerField(default=18.5, null=True, blank=True, verbose_name='体质指数下限')
     class Meta:
         verbose_name = '身高体重测量'
         verbose_name_plural = verbose_name
@@ -501,9 +435,6 @@ class A6501(HsscFormModel):
 
 class T4505(HsscFormModel):
     numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
-    numberfield_kong_fu_xue_tang_standard_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖标准值')
-    numberfield_kong_fu_xue_tang_up_limit = models.DecimalField(max_digits=10, decimal_places=2, default=7.0, null=True, blank=True, verbose_name='空腹血糖上限')
-    numberfield_kong_fu_xue_tang_down_limit = models.DecimalField(max_digits=10, decimal_places=2, default=3.9, null=True, blank=True, verbose_name='空腹血糖下限')
     class Meta:
         verbose_name = '糖尿病自我监测'
         verbose_name_plural = verbose_name
