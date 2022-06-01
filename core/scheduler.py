@@ -261,6 +261,8 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['content_type'] = content_type
             proc_params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
 
+            print('Debug: _create_next_service: proc_params:', proc_params['passing_data'])
+
             # 创建新的服务作业进程
             new_proc = create_service_proc(**proc_params)
 
@@ -363,7 +365,7 @@ def operand_finished_handler(sender, **kwargs):
         if _is_rule_satified(service_rule.event_rule, operation_proc):
             print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
             # 构造作业参数
-            print('operation_proc.operator:', type(operation_proc.operator))
+            print('operation_proc.operator:', operation_proc.operator)
             operation_params = {
                 'operation_proc': operation_proc,
                 'operator': operation_proc.operator,
@@ -378,6 +380,7 @@ def operand_finished_handler(sender, **kwargs):
                 'request': request,
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
+            print('Debug from check_rules:operation_params["passing_data"]', operation_params['passing_data'])
             _result = _execute_system_operand(service_rule.system_operand, **operation_params)
             print('From check_rules 执行结果:', _result)
     

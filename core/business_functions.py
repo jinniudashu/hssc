@@ -1,35 +1,33 @@
-def get_base_fields_name():
-    from core.models import HsscFormModel
-    # 获取表单基础类
-    base_fields_name = {field.name for field in HsscFormModel._meta.fields}
-    return base_fields_name.add('id')
-
+from core.models import HsscFormModel
 def copy_previous_form_data(form):
     # 获取父进程表单
     previous_form = form.pid.parent_proc.content_object
-    # 获取父进程表单和当前进程表单字段的交集
-    base_fields_name = get_base_fields_name()  # 表单基础字段集合
-    previous_form_fields_name = {field.name for field in previous_form._meta.fields} - base_fields_name
-    form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
-    copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
+    if not previous_form:
+        return
+    else:        
+        # 获取父进程表单和当前进程表单字段的交集
+        base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
+        base_fields_name.add('id')
 
-    previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
-    form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
-    copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+        previous_form_fields_name = {field.name for field in previous_form._meta.fields} - base_fields_name
+        form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
+        copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
 
-    # 向当前进程表单写入交集字段内容
-    for field_name in copy_fields_name:
-        print(field_name, '值：', eval(f'previous_form.{field_name}'))
-        eval(f'form.{field_name} = previous_form.{field_name}')
-    form.save()
+        previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
+        form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+        copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
 
-    # 向当前进程表单写入交集多对多字段内容
-    for field_name in copy_fields_name_m2m:
-        print(field_name, '值：', eval(f'previous_form.{field_name}.all()'))
-        for obj in eval(f'previous_form.{field_name}.all()'):
-            eval(f'form.{field_name}.add(obj)')
+        # 向当前进程表单写入交集字段内容
+        for field_name in copy_fields_name:
+            exec(f'form.{field_name} = previous_form.{field_name}')
+        form.save()
 
-    return form
+        # 向当前进程表单写入交集多对多字段内容
+        for field_name in copy_fields_name_m2m:
+            for obj in exec(f'previous_form.{field_name}.all()'):
+                exec(f'form.{field_name}.add(obj)')
+
+        return form
 
 
 from service.models import *
@@ -164,6 +162,7 @@ def get_customer_profile(customer):
     url = f'/clinic/service/ju_min_ji_ben_xin_xi_diao_cha/{instance.id}/change'
 
     profile = {
+        'id': customer.id,
         'name': instance.characterfield_name,
         'phone': instance.characterfield_contact_number,
         'address': instance.characterfield_family_address,
@@ -187,7 +186,7 @@ def dispatch_operator(customer, service, current_operator):
             operator = charge_staff
             return operator
     
-    # 否则，如当前作业员具有新增服否则，如当前作业员具有新增服务岗位权限务岗位权限
+    # 否则，如当前作业员具有新增服务岗位权限务岗位权限，则开单给作业员
     try:
         if set(current_operator.staff.role.all()).intersection(set(service.role.all())):
             operator = current_operator

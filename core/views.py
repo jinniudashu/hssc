@@ -63,9 +63,18 @@ def new_service(request, **kwargs):
     proc_params['operator'] = service_operator
     proc_params['state'] = 0  # or 0 根据服务作业权限判断
     proc_params['scheduled_time'] = datetime.datetime.now() # or None 根据服务作业权限判断
-    proc_params['parent_proc'] = None  # or 作业员登录进程
     proc_params['contract_service_proc'] = None
     proc_params['content_type'] = content_type
+    
+
+    # 如果是推荐服务，处理passing_data
+    if service.is_recommended_service:
+        proc_params['parent_proc'] = None  # or 作业员登录进程
+        proc_params['passing_data'] = 0
+    else:
+        proc_params['parent_proc'] = None
+        proc_params['passing_data'] = 0
+
 
     # 创建新的OperationProc服务作业进程实例
     new_proc = create_service_proc(**proc_params)
