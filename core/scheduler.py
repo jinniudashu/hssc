@@ -278,15 +278,17 @@ def operand_finished_handler(sender, **kwargs):
             '''
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
-            # 创建新的服务作业进程
-
+            
+            # 创建新的推荐服务条目
             try:
                 obj = RecommendedService.objects.get(
                     service=kwargs['next_service'],  # 推荐的服务
                     customer=operation_proc.customer,  # 客户
                     cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
                 )
+                obj.pid=operation_proc,  # 当前进程是被推荐服务的父进程
                 obj.counter += 1
+                obj.passing_data=kwargs['passing_data']
                 obj.save()
             except RecommendedService.DoesNotExist:
                 obj = RecommendedService(
@@ -295,6 +297,7 @@ def operand_finished_handler(sender, **kwargs):
                     creater=kwargs['operator'],  # 创建者
                     pid=operation_proc,  # 当前进程是被推荐服务的父进程
                     cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+                    passing_data=kwargs['passing_data']
                 )
                 obj.save()
 

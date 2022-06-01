@@ -67,10 +67,11 @@ def new_service(request, **kwargs):
     proc_params['content_type'] = content_type
     
 
-    # 如果是推荐服务，处理passing_data
-    if service.is_recommended_service:
-        proc_params['parent_proc'] = None  # or 作业员登录进程
-        proc_params['passing_data'] = 0
+    # 如果是推荐服务，解析parent_proc和passing_data
+    if kwargs['recommended_service_id']:
+        recommended_service = RecommendedService.objects.get(id=kwargs['recommended_service_id'])
+        proc_params['parent_proc'] = recommended_service.pid
+        proc_params['passing_data'] = recommended_service.passing_data
     else:
         proc_params['parent_proc'] = None
         proc_params['passing_data'] = 0

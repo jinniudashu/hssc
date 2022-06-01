@@ -522,6 +522,8 @@ class RecommendedService(HsscBase):
     updated_time = models.DateTimeField(editable=False, null=True, verbose_name="更新时间")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="推荐服务")
     counter = models.PositiveSmallIntegerField(default=0, verbose_name="推荐次数")
+    Receive_form = [(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')]  # 接收表单数据
+    passing_data = models.PositiveSmallIntegerField(choices=Receive_form, default=0,  blank=True, null=True, verbose_name='接收表单')
 
     class Meta:
         verbose_name = "推荐服务"
