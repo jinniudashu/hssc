@@ -383,7 +383,7 @@ class Customer(HsscBase):
     charge_staff = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='负责人')
     workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, related_name='customer_workgroup', verbose_name='服务小组')
     health_record = models.JSONField(blank=True, null=True, verbose_name="健康记录")
-    upload = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    upload = models.ImageField(upload_to='uploads/', blank=True, null=True, verbose_name="个人照片")
 
     class Meta:
         verbose_name = "客户注册信息"
