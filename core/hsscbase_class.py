@@ -313,3 +313,4 @@ class FieldsType(Enum):
     boolfield_fu_wu_xiang_mu_ming_cheng = "icpc.Icpc4_physical_examination_and_tests"  # 服务项目名称
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
     relatedfield_drug_name = "service.Yao_pin_ji_ben_xin_xi_biao"  # 药品名
+    personal_picture = "None"  # 个人照片

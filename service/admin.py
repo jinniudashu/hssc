@@ -9,7 +9,7 @@ from service.models import *
 
 class HsscFormAdmin(admin.ModelAdmin):
     list_fields = ['name', 'id']
-    exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", ]
+    exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
     view_on_site = False
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -116,7 +116,7 @@ clinic_site.register(Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu, Shen_qing_kong_f
 
 class Ju_min_ji_ben_xin_xi_diao_chaAdmin(HsscFormAdmin):
     fieldssets = [
-        ("个人基本信息", {"fields": ("characterhssc_identification_number", "characterfield_resident_file_number", "characterfield_family_address", "characterfield_medical_ic_card_number", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", )}), ]
+        ("个人基本信息", {"fields": ("characterhssc_identification_number", "characterfield_resident_file_number", "characterfield_family_address", "characterfield_medical_ic_card_number", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", "personal_picture", )}), ]
     autocomplete_fields = ["relatedfield_signed_family_doctor", ]
     radio_fields = {"relatedfield_gender": admin.VERTICAL, "relatedfield_marital_status": admin.VERTICAL, "relatedfield_occupational_status": admin.VERTICAL, }
     search_fields = ["name", "pym", ]
