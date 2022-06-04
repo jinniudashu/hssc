@@ -116,9 +116,8 @@ clinic_site.register(Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu, Shen_qing_kong_f
 
 class Ju_min_ji_ben_xin_xi_diao_chaAdmin(HsscFormAdmin):
     fieldssets = [
-        ("个人基本信息", {"fields": ("characterhssc_identification_number", "characterfield_resident_file_number", "characterfield_family_address", "characterfield_medical_ic_card_number", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", "personal_picture", )}), ]
+        ("个人基本信息", {"fields": ("characterhssc_identification_number", "characterfield_resident_file_number", "characterfield_family_address", "characterfield_medical_ic_card_number", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", "relatedfield_nationality", "relatedfield_marital_status", "relatedfield_education", "relatedfield_occupational_status", "relatedfield_medical_expenses_burden", "relatedfield_type_of_residence", "relatedfield_blood_type", "relatedfield_signed_family_doctor", "relatedfield_family_relationship", )}), ]
     autocomplete_fields = ["relatedfield_signed_family_doctor", ]
-    radio_fields = {"relatedfield_gender": admin.VERTICAL, "relatedfield_marital_status": admin.VERTICAL, "relatedfield_occupational_status": admin.VERTICAL, }
     search_fields = ["name", "pym", ]
 
 admin.site.register(Ju_min_ji_ben_xin_xi_diao_cha, Ju_min_ji_ben_xin_xi_diao_chaAdmin)
@@ -184,8 +183,8 @@ clinic_site.register(Xue_ya_jian_ce, Xue_ya_jian_ceAdmin)
 class Tang_niao_bing_cha_tiAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": (("characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ),)}), 
-        ("眼底检查", {"fields": ("relatedfield_fundus", )}), 
-        ("足背动脉检查", {"fields": ("relatedfield_left_foot", "relatedfield_right_foot", )}), ]
+        ("足背动脉检查", {"fields": ("relatedfield_left_foot", "relatedfield_right_foot", )}), 
+        ("眼底检查", {"fields": ("relatedfield_fundus", )}), ]
     radio_fields = {"relatedfield_left_foot": admin.VERTICAL, "relatedfield_right_foot": admin.VERTICAL, }
     readonly_fields = ["characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ]
 
@@ -204,20 +203,20 @@ clinic_site.register(A3502, A3502Admin)
 class A6299Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": (("characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ),)}), 
-        ("遗传病史", {"fields": ("boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", )}), 
         ("过敏史", {"fields": ("relatedfield_drug_name", )}), 
-        ("家族病史", {"fields": ("boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", )}), 
-        ("手术史", {"fields": ("datetimefield_date", "relatedfield_name_of_operation", )}), 
-        ("疾病史", {"fields": ("datetimefield_time_of_diagnosis", "boolfield_ge_ren_bing_shi", )}), 
         ("外伤史", {"fields": ("boolfield_wai_shang_ri_qi", "boolfield_wai_shang_xing_ji_bing", )}), 
-        ("输血史", {"fields": ("numberfield_blood_transfusion", "boolfield_shu_xue_ri_qi", )}), 
-        ("个人心理综合素质调查", {"fields": ("relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", )}), 
         ("个人适应能力评估", {"fields": ("characterfield_working_hours_per_day", "relatedfield_are_you_satisfied_with_the_job_and_life", "relatedfield_are_you_satisfied_with_your_adaptability", )}), 
+        ("社会环境评估", {"fields": ("relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", )}), 
+        ("疾病史", {"fields": ("datetimefield_time_of_diagnosis", "boolfield_ge_ren_bing_shi", )}), 
+        ("输血史", {"fields": ("numberfield_blood_transfusion", "boolfield_shu_xue_ri_qi", )}), 
+        ("手术史", {"fields": ("datetimefield_date", "relatedfield_name_of_operation", )}), 
         ("个人身体健康评估", {"fields": ("relatedfield_own_health", "relatedfield_compared_to_last_year", "relatedfield_sports_preference", "relatedfield_exercise_time", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", )}), 
         ("个人健康行为调查", {"fields": ("characterfield_average_sleep_duration", "characterfield_duration_of_insomnia", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", )}), 
-        ("社会环境评估", {"fields": ("relatedfield_is_the_living_environment_satisfactory", "relatedfield_is_the_transportation_convenient", )}), ]
-    autocomplete_fields = ["boolfield_yi_chuan_ji_bing", "relatedfield_drug_name", "boolfield_jia_zu_xing_ji_bing", "relatedfield_name_of_operation", "boolfield_ge_ren_bing_shi", "boolfield_wai_shang_xing_ji_bing", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", ]
-    radio_fields = {"relatedfield_personality_tendency": admin.VERTICAL, "boolfield_shi_mian_qing_kuang": admin.VERTICAL, "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang": admin.VERTICAL, "relatedfield_own_health": admin.VERTICAL, "relatedfield_exercise_time": admin.VERTICAL, "relatedfield_drinking_frequency": admin.VERTICAL, "relatedfield_smoking_frequency": admin.VERTICAL, }
+        ("个人心理综合素质调查", {"fields": ("relatedfield_personality_tendency", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", )}), 
+        ("遗传病史", {"fields": ("boolfield_yi_chuan_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", )}), 
+        ("家族病史", {"fields": ("boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", )}), ]
+    autocomplete_fields = ["relatedfield_drug_name", "boolfield_wai_shang_xing_ji_bing", "boolfield_ge_ren_bing_shi", "relatedfield_name_of_operation", "relatedfield_have_any_recent_symptoms_of_physical_discomfort", "boolfield_yi_chuan_ji_bing", "boolfield_jia_zu_xing_ji_bing", ]
+    radio_fields = {"relatedfield_own_health": admin.VERTICAL, "relatedfield_exercise_time": admin.VERTICAL, "relatedfield_drinking_frequency": admin.VERTICAL, "relatedfield_smoking_frequency": admin.VERTICAL, "relatedfield_personality_tendency": admin.VERTICAL, "boolfield_shi_mian_qing_kuang": admin.VERTICAL, "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang": admin.VERTICAL, }
     readonly_fields = ["characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ]
 
 admin.site.register(A6299, A6299Admin)
@@ -245,11 +244,11 @@ clinic_site.register(A6202, A6202Admin)
 class T6301Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": (("characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ),)}), 
+        ("空腹血糖检查", {"fields": ("numberfield_kong_fu_xue_tang", )}), 
+        ("血压监测", {"fields": ("numberfield_systolic_blood_pressure", "numberfield_diastolic_blood_pressure", )}), 
         ("糖尿病一般随访", {"fields": ("boolfield_fu_yong_pin_ci", "boolfield_yao_pin_dan_wei", "relatedfield_drinking_frequency", "relatedfield_smoking_frequency", "boolfield_tang_niao_bing_zheng_zhuang", "relatedfield_drug_name", )}), 
         ("足背动脉检查", {"fields": ("relatedfield_left_foot", "relatedfield_right_foot", )}), 
-        ("眼底检查", {"fields": ("relatedfield_fundus", )}), 
-        ("血压监测", {"fields": ("numberfield_systolic_blood_pressure", "numberfield_diastolic_blood_pressure", )}), 
-        ("空腹血糖检查", {"fields": ("numberfield_kong_fu_xue_tang", )}), ]
+        ("眼底检查", {"fields": ("relatedfield_fundus", )}), ]
     autocomplete_fields = ["relatedfield_drug_name", ]
     radio_fields = {"relatedfield_drinking_frequency": admin.VERTICAL, "relatedfield_smoking_frequency": admin.VERTICAL, "relatedfield_left_foot": admin.VERTICAL, "relatedfield_right_foot": admin.VERTICAL, }
     readonly_fields = ["characterfield_family_address", "characterfield_contact_number", "characterfield_name", "datetimefield_date_of_birth", "relatedfield_gender", ]

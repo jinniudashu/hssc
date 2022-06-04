@@ -117,6 +117,12 @@ DATABASES = {
     # }
 }
 
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(db_from_env)
+
+DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -127,12 +133,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-DATABASES['default'].update(db_from_env)
-
-DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

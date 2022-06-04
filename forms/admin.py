@@ -168,8 +168,7 @@ class A6219Admin(admin.ModelAdmin):
 admin.site.register(A6219, A6219Admin)
 
 class A6203Admin(admin.ModelAdmin):
-        radio_fields = {"relatedfield_gender": admin.VERTICAL, "relatedfield_marital_status": admin.VERTICAL, "relatedfield_occupational_status": admin.VERTICAL, }
-    autocomplete_fields = ["relatedfield_signed_family_doctor", ]
+        autocomplete_fields = ["relatedfield_signed_family_doctor", ]
 
 admin.site.register(A6203, A6203Admin)
 

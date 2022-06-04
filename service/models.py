@@ -163,7 +163,6 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
     relatedfield_signed_family_doctor = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
     relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
-    personal_picture = models.ImageField(upload_to='uploads/', null=True, blank=True, verbose_name='个人照片')
 
     class Meta:
         verbose_name = '居民基本信息调查'
@@ -286,9 +285,9 @@ class Tang_niao_bing_cha_ti(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
-    relatedfield_fundus = models.ForeignKey(Normality, related_name='normality_for_relatedfield_fundus_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='眼底')
     relatedfield_left_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_left_foot_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左脚')
     relatedfield_right_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_right_foot_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右脚')
+    relatedfield_fundus = models.ForeignKey(Normality, related_name='normality_for_relatedfield_fundus_tang_niao_bing_cha_ti', on_delete=models.CASCADE, null=True, blank=True, verbose_name='眼底')
 
     class Meta:
         verbose_name = '糖尿病查体'
@@ -322,27 +321,22 @@ class A6299(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
-    boolfield_yi_chuan_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_yi_chuan_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='遗传性疾病')
-    boolfield_yi_chuan_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_yi_chuan_bing_shi_cheng_yuan_A6299', blank=True, verbose_name='遗传病史成员')
     relatedfield_drug_name = models.ManyToManyField(Yao_pin_ji_ben_xin_xi_biao, related_name='yao_pin_ji_ben_xin_xi_biao_for_relatedfield_drug_name_A6299', blank=True, verbose_name='药品名')
-    boolfield_jia_zu_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_jia_zu_xing_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家族性疾病')
-    boolfield_jia_zu_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_jia_zu_bing_shi_cheng_yuan_A6299', blank=True, verbose_name='家族病史成员')
-    datetimefield_date = models.DateField(null=True, blank=True, verbose_name='手术日期')
-    relatedfield_name_of_operation = models.ForeignKey(Icpc7_treatments, related_name='icpc7_treatments_for_relatedfield_name_of_operation_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='手术名称')
-    datetimefield_time_of_diagnosis = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
-    boolfield_ge_ren_bing_shi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ge_ren_bing_shi_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='个人病史')
     boolfield_wai_shang_ri_qi = models.DateField(null=True, blank=True, verbose_name='外伤日期')
     boolfield_wai_shang_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_wai_shang_xing_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='外伤性疾病')
-    numberfield_blood_transfusion = models.IntegerField(null=True, blank=True, verbose_name='输血量')
-    boolfield_shu_xue_ri_qi = models.DateField(null=True, blank=True, verbose_name='输血日期')
-    relatedfield_personality_tendency = models.ForeignKey(Character, related_name='character_for_relatedfield_personality_tendency_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性格倾向')
-    boolfield_shi_mian_qing_kuang = models.ForeignKey(Shi_mian_qing_kuang, related_name='shi_mian_qing_kuang_for_boolfield_shi_mian_qing_kuang_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='失眠情况')
-    boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = models.ForeignKey(Ya_li_qing_kuang, related_name='ya_li_qing_kuang_for_boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='生活工作压力情况')
     characterfield_working_hours_per_day = models.TextField(max_length=255, null=True, blank=True, verbose_name='每天工作及工作往返总时长')
     relatedfield_are_you_satisfied_with_the_job_and_life = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_the_job_and_life_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对目前生活和工作满意吗')
     relatedfield_are_you_satisfied_with_your_adaptability = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_are_you_satisfied_with_your_adaptability_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='对自己的适应能力满意吗')
-    relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6299', on_delete=models.CASCADE, null=True, blank=False, verbose_name='觉得自身健康状况如何')
-    relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6299', on_delete=models.CASCADE, null=True, blank=False, verbose_name='较之过去一年状态如何')
+    relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
+    relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
+    datetimefield_time_of_diagnosis = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
+    boolfield_ge_ren_bing_shi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ge_ren_bing_shi_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='个人病史')
+    numberfield_blood_transfusion = models.IntegerField(null=True, blank=True, verbose_name='输血量')
+    boolfield_shu_xue_ri_qi = models.DateField(null=True, blank=True, verbose_name='输血日期')
+    datetimefield_date = models.DateField(null=True, blank=True, verbose_name='手术日期')
+    relatedfield_name_of_operation = models.ForeignKey(Icpc7_treatments, related_name='icpc7_treatments_for_relatedfield_name_of_operation_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='手术名称')
+    relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='觉得自身健康状况如何')
+    relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='较之过去一年状态如何')
     relatedfield_sports_preference = models.ForeignKey(Sports_preference, related_name='sports_preference_for_relatedfield_sports_preference_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动偏好')
     relatedfield_exercise_time = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_exercise_time_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动时长')
     relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_A6299', blank=True, verbose_name='近来有无身体不适症状')
@@ -350,8 +344,13 @@ class A6299(HsscFormModel):
     characterfield_duration_of_insomnia = models.CharField(max_length=255, null=True, blank=True, verbose_name='持续失眠时间')
     relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
     relatedfield_smoking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_smoking_frequency_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='吸烟频次')
-    relatedfield_is_the_living_environment_satisfactory = models.ForeignKey(Satisfaction, related_name='satisfaction_for_relatedfield_is_the_living_environment_satisfactory_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您对居住环境满意吗')
-    relatedfield_is_the_transportation_convenient = models.ForeignKey(Convenience, related_name='convenience_for_relatedfield_is_the_transportation_convenient_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您所在的社区交通方便吗')
+    relatedfield_personality_tendency = models.ForeignKey(Character, related_name='character_for_relatedfield_personality_tendency_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性格倾向')
+    boolfield_shi_mian_qing_kuang = models.ForeignKey(Shi_mian_qing_kuang, related_name='shi_mian_qing_kuang_for_boolfield_shi_mian_qing_kuang_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='失眠情况')
+    boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = models.ForeignKey(Ya_li_qing_kuang, related_name='ya_li_qing_kuang_for_boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='生活工作压力情况')
+    boolfield_yi_chuan_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_yi_chuan_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='遗传性疾病')
+    boolfield_yi_chuan_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_yi_chuan_bing_shi_cheng_yuan_A6299', blank=True, verbose_name='遗传病史成员')
+    boolfield_jia_zu_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_jia_zu_xing_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家族性疾病')
+    boolfield_jia_zu_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_jia_zu_bing_shi_cheng_yuan_A6299', blank=True, verbose_name='家族病史成员')
 
     class Meta:
         verbose_name = '居民健康信息调查'
@@ -400,6 +399,9 @@ class T6301(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
+    numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
+    numberfield_systolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
+    numberfield_diastolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='舒张压')
     boolfield_fu_yong_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_yao_pin_dan_wei = models.ForeignKey(Yao_pin_dan_wei, related_name='yao_pin_dan_wei_for_boolfield_yao_pin_dan_wei_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品单位')
     relatedfield_drinking_frequency = models.ForeignKey(Frequency, related_name='frequency_for_relatedfield_drinking_frequency_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='饮酒频次')
@@ -409,9 +411,6 @@ class T6301(HsscFormModel):
     relatedfield_left_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_left_foot_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左脚')
     relatedfield_right_foot = models.ForeignKey(Dorsal_artery_pulsation, related_name='dorsal_artery_pulsation_for_relatedfield_right_foot_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右脚')
     relatedfield_fundus = models.ForeignKey(Normality, related_name='normality_for_relatedfield_fundus_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='眼底')
-    numberfield_systolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
-    numberfield_diastolic_blood_pressure = models.IntegerField(null=True, blank=True, verbose_name='舒张压')
-    numberfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
 
     class Meta:
         verbose_name = '糖尿病一般随访'
@@ -582,7 +581,7 @@ class A6502(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     datetimefield_date_of_birth = models.DateField(null=True, blank=True, verbose_name='出生日期')
     relatedfield_gender = models.ForeignKey(Gender, related_name='gender_for_relatedfield_gender_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
-    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
+    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
     boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 

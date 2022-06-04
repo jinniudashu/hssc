@@ -387,7 +387,6 @@ class A6203(HsscFormModel):
     relatedfield_blood_type = models.ForeignKey(Blood_type, related_name='blood_type_for_relatedfield_blood_type_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
     relatedfield_signed_family_doctor = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_relatedfield_signed_family_doctor_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
     relatedfield_family_relationship = models.ForeignKey(Family_relationship, related_name='family_relationship_for_relatedfield_family_relationship_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
-    personal_picture = models.ImageField(upload_to='uploads/', null=True, blank=True, verbose_name='个人照片')
     class Meta:
         verbose_name = '个人基本信息'
         verbose_name_plural = verbose_name
@@ -475,8 +474,8 @@ class A6205(HsscFormModel):
         
 
 class A6214(HsscFormModel):
-    relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6214', on_delete=models.CASCADE, null=True, blank=False, verbose_name='觉得自身健康状况如何')
-    relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6214', on_delete=models.CASCADE, null=True, blank=False, verbose_name='较之过去一年状态如何')
+    relatedfield_own_health = models.ForeignKey(State_degree, related_name='state_degree_for_relatedfield_own_health_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='觉得自身健康状况如何')
+    relatedfield_compared_to_last_year = models.ForeignKey(Comparative_expression, related_name='comparative_expression_for_relatedfield_compared_to_last_year_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='较之过去一年状态如何')
     relatedfield_sports_preference = models.ForeignKey(Sports_preference, related_name='sports_preference_for_relatedfield_sports_preference_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动偏好')
     relatedfield_exercise_time = models.ForeignKey(Exercise_time, related_name='exercise_time_for_relatedfield_exercise_time_A6214', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动时长')
     relatedfield_have_any_recent_symptoms_of_physical_discomfort = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_have_any_recent_symptoms_of_physical_discomfort_A6214', blank=True, verbose_name='近来有无身体不适症状')
@@ -570,7 +569,7 @@ class A6209(HsscFormModel):
         
 
 class A6502(HsscFormModel):
-    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
+    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
     boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
     boolfield_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     class Meta:

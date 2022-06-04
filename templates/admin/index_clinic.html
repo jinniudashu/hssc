@@ -90,26 +90,25 @@
             created() {
                 let _this = this;
                 
+                var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws"
+
                 // 建立信道：操作员任务列表
-                const staffTodosListSocket = new WebSocket(`ws://${window.location.host}/ws/staff_todos_list/`);
+                const staffTodosListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/staff_todos_list/`);
                 staffTodosListSocket.onmessage = function (event) {
-                    _this.staffTodos = JSON.parse(event.data);
-                    console.log('staffTodos:', _this.staffTodos);
+                    _this.staffTodos = JSON.parse(event.data)
                 };
 
                 // 建立信道：未分配服务进程
-                const unassignedProcsSocket = new WebSocket(`ws://${window.location.host}/ws/unassigned_procs/`);
+                const unassignedProcsSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/unassigned_procs/`);
                 unassignedProcsSocket.onmessage = function (event) {
                     _data = JSON.parse(event.data);
                     // 区分后台发来的内容，赋给各自的响应式变量：
                     // 未分配服务进程unassignedProcs
                     // 有操作权限的服务id列表permittedServicesId
                     if (_data.hasOwnProperty('unassignedProcs')) {
-                        _this.unassignedProcs = _data.unassignedProcs;
-                        console.log('unassignedProcs:', _this.unassignedProcs);
+                        _this.unassignedProcs = _data.unassignedProcs
                     } else {
                         _this.permittedServicesId = _data.permittedServicesId
-                        console.log('permittedServicesId:', _this.permittedServicesId);
                     }
                 };
             }
