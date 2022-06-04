@@ -275,3 +275,58 @@ class Qin_shu_guan_xiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Qin_shu_guan_xi
         fields = 'value'
+
+class Bao_xian_chan_pinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bao_xian_chan_pin
+        fields = 'value'
+
+class Jie_dan_que_renSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Jie_dan_que_ren
+        fields = 'value'
+
+class Gou_tong_qing_kuangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gou_tong_qing_kuang
+        fields = 'value'
+
+class Deng_hou_shi_jianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Deng_hou_shi_jian
+        fields = 'value'
+
+class Jie_dai_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Jie_dai_fu_wu
+        fields = 'value'
+
+class Fu_wu_xiao_guo_ping_jiaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fu_wu_xiao_guo_ping_jia
+        fields = 'value'
+
+class Fu_wu_xiang_muSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fu_wu_xiang_mu
+        fields = 'value'
+
+class Yu_chu_xian_ren_guan_xiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yu_chu_xian_ren_guan_xi
+        fields = 'value'
+
+class Ping_fenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ping_fen
+        fields = 'value'
+
+class Zheng_jian_lei_xingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zheng_jian_lei_xing
+        fields = 'value'
+
+class Qian_shu_que_renSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Qian_shu_que_ren
+        fields = 'value'

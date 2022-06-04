@@ -357,3 +357,69 @@ class Qin_shu_guan_xi(DictBase):
     class Meta:
         verbose_name = '亲属关系'
         verbose_name_plural = verbose_name
+
+
+class Bao_xian_chan_pin(DictBase):
+    class Meta:
+        verbose_name = '保险产品'
+        verbose_name_plural = verbose_name
+
+
+class Jie_dan_que_ren(DictBase):
+    class Meta:
+        verbose_name = '接单确认'
+        verbose_name_plural = verbose_name
+
+
+class Gou_tong_qing_kuang(DictBase):
+    class Meta:
+        verbose_name = '沟通情况'
+        verbose_name_plural = verbose_name
+
+
+class Deng_hou_shi_jian(DictBase):
+    class Meta:
+        verbose_name = '等候时间'
+        verbose_name_plural = verbose_name
+
+
+class Jie_dai_fu_wu(DictBase):
+    class Meta:
+        verbose_name = '接待服务'
+        verbose_name_plural = verbose_name
+
+
+class Fu_wu_xiao_guo_ping_jia(DictBase):
+    class Meta:
+        verbose_name = '治疗效果评价'
+        verbose_name_plural = verbose_name
+
+
+class Fu_wu_xiang_mu(DictBase):
+    class Meta:
+        verbose_name = '服务项目'
+        verbose_name_plural = verbose_name
+
+
+class Yu_chu_xian_ren_guan_xi(DictBase):
+    class Meta:
+        verbose_name = '与出险人关系'
+        verbose_name_plural = verbose_name
+
+
+class Ping_fen(DictBase):
+    class Meta:
+        verbose_name = '评分'
+        verbose_name_plural = verbose_name
+
+
+class Zheng_jian_lei_xing(DictBase):
+    class Meta:
+        verbose_name = '证件类型'
+        verbose_name_plural = verbose_name
+
+
+class Qian_shu_que_ren(DictBase):
+    class Meta:
+        verbose_name = '签署确认'
+        verbose_name_plural = verbose_name

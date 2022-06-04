@@ -164,9 +164,9 @@ def get_customer_profile(customer):
     profile = {
         'id': customer.id,
         'name': instance.characterfield_name,
-        'phone': instance.characterfield_contact_number,
-        'address': instance.characterfield_family_address,
-        'charge_staff': instance.relatedfield_signed_family_doctor,
+        'phone': instance.boolfield_lian_xi_dian_hua,
+        'address': instance.boolfield_chang_zhu_di_zhi,
+        'charge_staff': '',
         'workgroup': instance.customer.workgroup.label if instance.customer.workgroup else '',
         'url': url,
     }
