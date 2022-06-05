@@ -77,6 +77,26 @@ test_user_data = {
             'last_name': '林',
             'role': ['检验师'],
         },
+        {
+            'username': '金盘口腔诊所',
+            'password': 'info1234',
+            'email': 'test@test.com',
+            'is_superuser': False,
+            'is_staff': True,
+            'first_name': '口腔诊所',
+            'last_name': '金盘',
+            'role': ['牙科诊所'],
+        },
+        {
+            'username': '张三',
+            'password': 'info1234',
+            'email': 'test@test.com',
+            'is_superuser': False,
+            'is_staff': True,
+            'first_name': '三',
+            'last_name': '张',
+            'role': ['保险人员'],
+        },
     ],
 }
 
