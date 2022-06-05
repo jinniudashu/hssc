@@ -54,6 +54,35 @@ class HsscFormAdmin(admin.ModelAdmin):
 # Service表单Admin
 # **********************************************************************************************************************
 
+class Ti_jiao_he_bao_zi_liaoAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ),)}), 
+        ("人身险理赔申请书", {"fields": ("characterhssc_identification_number", "relatedfield_gender", "boolfield_zheng_jian_lei_xing", "boolfield_shen_qing_ren_xing_ming", "boolfield_yu_chu_xian_ren_guan_xi", "boolfield_zheng_jian_you_xiao_qi", "boolfield_guo_ji_di_qu", "boolfield_hang_ye", "boolfield_zhi_ye", "boolfield_chang_zhu_di_zhi", "boolfield_lian_xi_dian_hua", )}), 
+        ("门诊服务记录单", {"fields": ("relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", "boolfield_fei_yong_he_ji", "boolfield_men_zhen_bing_li_fu_jian", )}), 
+        ("治疗费用汇总单", {"fields": ("boolfield_fei_yong_he_ji", "boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu", "boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu", "boolfield_fei_yong", "boolfield_bao_dan_wai_fu_wu_fei_yong", "boolfield_fei_yong_qing_dan_fu_jian", )}), 
+        ("签署确认单", {"fields": ("boolfield_qian_shu_que_ren", "boolfield_tui_dan_yuan_yin", )}), 
+        ("理赔对账单", {"fields": ("characterfield_age", "datetimefield_date_of_birth", "relatedfield_gender", "boolfield_zheng_jian_lei_xing", "boolfield_xu_hao", "boolfield_bao_dan_hao", "boolfield_bao_an_shi_jian", "boolfield_chu_xian_shi_jian", "boolfield_bao_an_ren_lian_xi_dian_hua", "boolfield_chu_xian_ren_xing_ming", "boolfield_chu_xian_di_dian", "boolfield_chu_xian_di_dian_sheng_ji_bie", "boolfield_chu_xian_di_dian_shi_ji_bie", "boolfield_shi_gu_gai_kuo", "boolfield_bei_bao_xian_ren_zheng_jian_hao_ma", "boolfield_gui_shu_cheng_shi", "boolfield_yi_yuan_xin_xi", "boolfield_ji_bing_xin_xi", "boolfield_li_pei_jin_e_bao_xiao_jian_mian_jin_e", "boolfield_li_pei_fang_shi", "boolfield_bei_zhu", "boolfield_bao_an_ren", )}), ]
+    autocomplete_fields = ["relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", ]
+    radio_fields = {"boolfield_yu_chu_xian_ren_guan_xi": admin.VERTICAL, "boolfield_qian_shu_que_ren": admin.VERTICAL, }
+    readonly_fields = ["characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ]
+
+admin.site.register(Ti_jiao_he_bao_zi_liao, Ti_jiao_he_bao_zi_liaoAdmin)
+clinic_site.register(Ti_jiao_he_bao_zi_liao, Ti_jiao_he_bao_zi_liaoAdmin)
+
+class Li_pei_shen_qing_fu_wuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ),)}), 
+        ("人身险理赔申请书", {"fields": ("characterhssc_identification_number", "relatedfield_gender", "boolfield_zheng_jian_lei_xing", "boolfield_shen_qing_ren_xing_ming", "boolfield_yu_chu_xian_ren_guan_xi", "boolfield_zheng_jian_you_xiao_qi", "boolfield_guo_ji_di_qu", "boolfield_hang_ye", "boolfield_zhi_ye", "boolfield_chang_zhu_di_zhi", "boolfield_lian_xi_dian_hua", )}), 
+        ("门诊服务记录单", {"fields": ("relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", "boolfield_fei_yong_he_ji", "boolfield_men_zhen_bing_li_fu_jian", )}), 
+        ("治疗费用汇总单", {"fields": ("boolfield_fei_yong_he_ji", "boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu", "boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu", "boolfield_fei_yong", "boolfield_bao_dan_wai_fu_wu_fei_yong", "boolfield_fei_yong_qing_dan_fu_jian", )}), 
+        ("理赔对账单", {"fields": ("characterfield_age", "datetimefield_date_of_birth", "relatedfield_gender", "boolfield_zheng_jian_lei_xing", "boolfield_xu_hao", "boolfield_bao_dan_hao", "boolfield_bao_an_shi_jian", "boolfield_chu_xian_shi_jian", "boolfield_bao_an_ren_lian_xi_dian_hua", "boolfield_chu_xian_ren_xing_ming", "boolfield_chu_xian_di_dian", "boolfield_chu_xian_di_dian_sheng_ji_bie", "boolfield_chu_xian_di_dian_shi_ji_bie", "boolfield_shi_gu_gai_kuo", "boolfield_bei_bao_xian_ren_zheng_jian_hao_ma", "boolfield_gui_shu_cheng_shi", "boolfield_yi_yuan_xin_xi", "boolfield_ji_bing_xin_xi", "boolfield_li_pei_jin_e_bao_xiao_jian_mian_jin_e", "boolfield_li_pei_fang_shi", "boolfield_bei_zhu", "boolfield_bao_an_ren", )}), ]
+    autocomplete_fields = ["relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", ]
+    radio_fields = {"boolfield_yu_chu_xian_ren_guan_xi": admin.VERTICAL, }
+    readonly_fields = ["characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ]
+
+admin.site.register(Li_pei_shen_qing_fu_wu, Li_pei_shen_qing_fu_wuAdmin)
+clinic_site.register(Li_pei_shen_qing_fu_wu, Li_pei_shen_qing_fu_wuAdmin)
+
 class Li_pei_shen_qing_shu_shen_heAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ),)}), 
@@ -78,10 +107,12 @@ clinic_site.register(Li_pei_dui_zhang_dan_shen_he, Li_pei_dui_zhang_dan_shen_heA
 
 class Li_pei_men_zhen_ji_lu_shen_heAdmin(HsscFormAdmin):
     fieldssets = [
-        ("设备基本信息表", {"fields": ("boolfield_she_bei_bian_ma", "boolfield_sheng_chan_chang_jia", "boolfield_she_bei_fu_wu_dan_wei_hao_shi", "boolfield_she_bei_jian_xiu_zhou_qi", "boolfield_she_bei_shi_yong_cheng_ben", "boolfield_she_bei_ming_cheng", "characterfield_contact_number", "boolfield_she_bei_shi_yong_fu_wu_gong_neng", )}), 
-        ("门诊服务记录单", {"fields": ("relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", "boolfield_fei_yong_he_ji", "boolfield_men_zhen_bing_li_fu_jian", )}), ]
-    autocomplete_fields = ["boolfield_she_bei_shi_yong_fu_wu_gong_neng", "relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", ]
-    search_fields = ["name", "pym", ]
+        ("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ),)}), 
+        ("门诊服务记录单", {"fields": ("relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", "boolfield_fei_yong_he_ji", "boolfield_men_zhen_bing_li_fu_jian", )}), 
+        ("签署确认单", {"fields": ("boolfield_qian_shu_que_ren", "boolfield_tui_dan_yuan_yin", )}), ]
+    autocomplete_fields = ["relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", ]
+    radio_fields = {"boolfield_qian_shu_que_ren": admin.VERTICAL, }
+    readonly_fields = ["characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ]
 
 admin.site.register(Li_pei_men_zhen_ji_lu_shen_he, Li_pei_men_zhen_ji_lu_shen_heAdmin)
 clinic_site.register(Li_pei_men_zhen_ji_lu_shen_he, Li_pei_men_zhen_ji_lu_shen_heAdmin)
