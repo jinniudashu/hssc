@@ -179,14 +179,6 @@ class Man_yi_du_diao_cha_biao(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Qian_shu_que_ren_dan(HsscFormModel):
-    boolfield_qian_shu_que_ren = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_qian_shu_que_ren_qian_shu_que_ren_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='签署确认')
-    boolfield_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='退单原因')
-    class Meta:
-        verbose_name = '签署确认单'
-        verbose_name_plural = verbose_name
-        
-
 class A6203(HsscFormModel):
     characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
     characterfield_name = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
@@ -237,6 +229,46 @@ class Li_pei_dui_zhang_dan(HsscFormModel):
     boolfield_bao_an_ren = models.CharField(max_length=255, null=True, blank=False, verbose_name='报案人')
     class Meta:
         verbose_name = '理赔对账单'
+        verbose_name_plural = verbose_name
+        
+
+class Qian_shu_que_ren_dan(HsscFormModel):
+    boolfield_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_qian_shu_que_ren_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
+    class Meta:
+        verbose_name = '人身险理赔申请书审核单'
+        verbose_name_plural = verbose_name
+        
+
+class Men_zhen_ji_lu_dan_shen_he_dan(HsscFormModel):
+    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_men_zhen_ji_lu_dan_shen_he_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
+    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
+    class Meta:
+        verbose_name = '门诊记录单审核单'
+        verbose_name_plural = verbose_name
+        
+
+class Li_pei_dui_zhang_dan_shen_he_dan(HsscFormModel):
+    boolfield_qian_shu_que_ren = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_qian_shu_que_ren_li_pei_dui_zhang_dan_shen_he_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔对账单签署')
+    boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔对账单退单原因')
+    class Meta:
+        verbose_name = '理赔对账单审核单'
+        verbose_name_plural = verbose_name
+        
+
+class Li_pei_fei_yong_hui_zong_dan_shen_he(HsscFormModel):
+    boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu_li_pei_fei_yong_hui_zong_dan_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔费用汇总单签署')
+    boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔费用汇总单退单原因')
+    class Meta:
+        verbose_name = '理赔费用汇总单审核'
+        verbose_name_plural = verbose_name
+        
+
+class He_bao_dan(HsscFormModel):
+    boolfield_shi_fou_tong_guo_he_bao = models.ForeignKey(Shi_fou_tong_guo, related_name='shi_fou_tong_guo_for_boolfield_shi_fou_tong_guo_he_bao_he_bao_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否通过核保')
+    boolfield_li_pei_shen_qing_tui_hui_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔申请退回原因')
+    class Meta:
+        verbose_name = '核保单'
         verbose_name_plural = verbose_name
         
 

@@ -330,3 +330,8 @@ class Qian_shu_que_renSerializer(serializers.ModelSerializer):
     class Meta:
         model = Qian_shu_que_ren
         fields = 'value'
+
+class Shi_fou_tong_guoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shi_fou_tong_guo
+        fields = 'value'

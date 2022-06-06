@@ -2836,5 +2836,27 @@
             "value": "否",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Shi_fou_tong_guo",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "fdbdd08a-e551-11ec-b262-4e30b92064b6",
+            "pym": null,
+            "value": "是",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_tong_guo",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "fdbf2962-e551-11ec-b262-4e30b92064b6",
+            "pym": null,
+            "value": "否",
+            "icpc": null
+        }
     }
 ]

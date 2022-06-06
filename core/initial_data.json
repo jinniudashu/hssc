@@ -378,19 +378,6 @@
             "components_groups": []
         },
         {
-            "label": "签署确认单",
-            "name": "qian_shu_que_ren_dan",
-            "hssc_id": "03a35490-e406-11ec-9eb0-42585b16dcd4",
-            "pym": "qsqrd",
-            "name_icpc": null,
-            "description": "",
-            "components": [
-                "db789638-e405-11ec-9d3a-42585b16dcd4",
-                "13a4fa38-e406-11ec-9d3a-42585b16dcd4"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "被保个人基本信息表",
             "name": "A6203",
             "hssc_id": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
@@ -455,6 +442,71 @@
                 "02b10ba8-e402-11ec-9d3a-42585b16dcd4",
                 "08480558-e402-11ec-9d3a-42585b16dcd4",
                 "d69e97e8-e40a-11ec-9eb0-42585b16dcd4"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "人身险理赔申请书审核单",
+            "name": "qian_shu_que_ren_dan",
+            "hssc_id": "03a35490-e406-11ec-9eb0-42585b16dcd4",
+            "pym": "rsxlpsqsshd",
+            "name_icpc": null,
+            "description": "",
+            "components": [
+                "13a4fa38-e406-11ec-9d3a-42585b16dcd4",
+                "0778f938-e548-11ec-91a5-4e30b92064b6"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "门诊记录单审核单",
+            "name": "men_zhen_ji_lu_dan_shen_he_dan",
+            "hssc_id": "1210eee8-e54b-11ec-91a5-4e30b92064b6",
+            "pym": "mzjldshd",
+            "name_icpc": null,
+            "description": "",
+            "components": [
+                "cb61b44a-e546-11ec-b262-4e30b92064b6",
+                "ddbc095c-e54a-11ec-b262-4e30b92064b6"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "理赔对账单审核单",
+            "name": "li_pei_dui_zhang_dan_shen_he_dan",
+            "hssc_id": "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+            "pym": "lpdzdshd",
+            "name_icpc": null,
+            "description": "",
+            "components": [
+                "db789638-e405-11ec-9d3a-42585b16dcd4",
+                "b9d68936-e54a-11ec-91a5-4e30b92064b6"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "理赔费用汇总单审核",
+            "name": "li_pei_fei_yong_hui_zong_dan_shen_he",
+            "hssc_id": "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
+            "pym": "lpfyhzdsh",
+            "name_icpc": null,
+            "description": "",
+            "components": [
+                "b2588c12-e546-11ec-b262-4e30b92064b6",
+                "c8f7a940-e54a-11ec-91a5-4e30b92064b6"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "核保单",
+            "name": "he_bao_dan",
+            "hssc_id": "64ad92b2-e552-11ec-b262-4e30b92064b6",
+            "pym": "hbd",
+            "name_icpc": null,
+            "description": "",
+            "components": [
+                "2251f368-e552-11ec-b262-4e30b92064b6",
+                "4999304e-e552-11ec-b262-4e30b92064b6"
             ],
             "components_groups": []
         },
@@ -1137,106 +1189,10 @@
             ]
         },
         {
-            "label": "理赔费用汇总单审核",
-            "name": "li_pei_fei_yong_hui_zong_dan_shen_he",
-            "hssc_id": "15552078-e407-11ec-9eb0-42585b16dcd4",
-            "pym": "lpfyhzdsh",
-            "name_icpc": null,
-            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
-            "priority": 3,
-            "is_system_service": false,
-            "history_services_display": 0,
-            "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
-            "suppliers": null,
-            "not_suitable": null,
-            "execution_time_frame": null,
-            "awaiting_time_frame": null,
-            "working_hours": null,
-            "frequency": null,
-            "cost": null,
-            "load_feedback": false,
-            "resource_materials": null,
-            "resource_devices": null,
-            "resource_knowledge": null,
-            "generate_script_order": 100,
-            "buessiness_forms": [
-                "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
-                "03a35490-e406-11ec-9eb0-42585b16dcd4"
-            ],
-            "role": [
-                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
-            ]
-        },
-        {
-            "label": "理赔门诊记录审核",
-            "name": "li_pei_men_zhen_ji_lu_shen_he",
-            "hssc_id": "494b3336-e407-11ec-9d3a-42585b16dcd4",
-            "pym": "lpmzjlsh",
-            "name_icpc": null,
-            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
-            "priority": 3,
-            "is_system_service": false,
-            "history_services_display": 0,
-            "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
-            "suppliers": null,
-            "not_suitable": null,
-            "execution_time_frame": null,
-            "awaiting_time_frame": null,
-            "working_hours": null,
-            "frequency": null,
-            "cost": null,
-            "load_feedback": false,
-            "resource_materials": null,
-            "resource_devices": null,
-            "resource_knowledge": null,
-            "generate_script_order": 100,
-            "buessiness_forms": [
-                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-                "03a35490-e406-11ec-9eb0-42585b16dcd4"
-            ],
-            "role": [
-                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
-            ]
-        },
-        {
-            "label": "理赔对账单审核",
-            "name": "li_pei_dui_zhang_dan_shen_he",
-            "hssc_id": "6276fe80-e407-11ec-9eb0-42585b16dcd4",
-            "pym": "lpdzdsh",
-            "name_icpc": null,
-            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
-            "priority": 3,
-            "is_system_service": false,
-            "history_services_display": 0,
-            "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
-            "suppliers": null,
-            "not_suitable": null,
-            "execution_time_frame": null,
-            "awaiting_time_frame": null,
-            "working_hours": null,
-            "frequency": null,
-            "cost": null,
-            "load_feedback": false,
-            "resource_materials": null,
-            "resource_devices": null,
-            "resource_knowledge": null,
-            "generate_script_order": 100,
-            "buessiness_forms": [
-                "03a35490-e406-11ec-9eb0-42585b16dcd4",
-                "dc327a94-e400-11ec-9eb0-42585b16dcd4"
-            ],
-            "role": [
-                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
-            ]
-        },
-        {
-            "label": "理赔申请书审核",
+            "label": "理赔申请审核",
             "name": "li_pei_shen_qing_shu_shen_he",
             "hssc_id": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-            "pym": "lpsqssh",
+            "pym": "lpsqsh",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1258,17 +1214,23 @@
             "generate_script_order": 100,
             "buessiness_forms": [
                 "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
-                "03a35490-e406-11ec-9eb0-42585b16dcd4"
+                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
+                "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
+                "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+                "03a35490-e406-11ec-9eb0-42585b16dcd4",
+                "1210eee8-e54b-11ec-91a5-4e30b92064b6",
+                "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+                "4736ad9c-e54b-11ec-91a5-4e30b92064b6"
             ],
             "role": [
                 "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
             ]
         },
         {
-            "label": "理赔申请服务",
+            "label": "发起理赔申请",
             "name": "li_pei_shen_qing_fu_wu",
             "hssc_id": "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
-            "pym": "lpsqfw",
+            "pym": "fqlpsq",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1328,8 +1290,8 @@
                 "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
                 "15de6896-dfbc-11ec-9eb2-26a028640b2f",
                 "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
-                "03a35490-e406-11ec-9eb0-42585b16dcd4",
-                "dc327a94-e400-11ec-9eb0-42585b16dcd4"
+                "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+                "64ad92b2-e552-11ec-b262-4e30b92064b6"
             ],
             "role": [
                 "de1daa3e-9aa1-11ec-bde1-8a6e55faf877"
@@ -1366,6 +1328,44 @@
                 "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
                 "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "理赔申请重审",
+            "name": "li_pei_shen_qing_chong_shen",
+            "hssc_id": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "pym": "lpsqcs",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "is_system_service": false,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "suppliers": null,
+            "not_suitable": null,
+            "execution_time_frame": null,
+            "awaiting_time_frame": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "buessiness_forms": [
+                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
+                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
+                "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
+                "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+                "03a35490-e406-11ec-9eb0-42585b16dcd4",
+                "1210eee8-e54b-11ec-91a5-4e30b92064b6",
+                "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+                "4736ad9c-e54b-11ec-91a5-4e30b92064b6"
+            ],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
             ]
         }
     ],
@@ -1549,54 +1549,6 @@
         {
             "label": null,
             "name": null,
-            "hssc_id": "1556abf0-e407-11ec-9eb0-42585b16dcd4",
-            "service": "15552078-e407-11ec-9eb0-42585b16dcd4",
-            "buessiness_form": "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "1556da08-e407-11ec-9eb0-42585b16dcd4",
-            "service": "15552078-e407-11ec-9eb0-42585b16dcd4",
-            "buessiness_form": "03a35490-e406-11ec-9eb0-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "494c46fe-e407-11ec-9d3a-42585b16dcd4",
-            "service": "494b3336-e407-11ec-9d3a-42585b16dcd4",
-            "buessiness_form": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "494c75ca-e407-11ec-9d3a-42585b16dcd4",
-            "service": "494b3336-e407-11ec-9d3a-42585b16dcd4",
-            "buessiness_form": "03a35490-e406-11ec-9eb0-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "62779a52-e407-11ec-9eb0-42585b16dcd4",
-            "service": "6276fe80-e407-11ec-9eb0-42585b16dcd4",
-            "buessiness_form": "dc327a94-e400-11ec-9eb0-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "6277c464-e407-11ec-9eb0-42585b16dcd4",
-            "service": "6276fe80-e407-11ec-9eb0-42585b16dcd4",
-            "buessiness_form": "03a35490-e406-11ec-9eb0-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
             "hssc_id": "7dbe123c-e407-11ec-9d3a-42585b16dcd4",
             "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
             "buessiness_form": "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
@@ -1679,7 +1631,7 @@
             "name": null,
             "hssc_id": "553a4bf0-e4cf-11ec-b4b1-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "buessiness_form": "03a35490-e406-11ec-9eb0-42585b16dcd4",
+            "buessiness_form": "64ad92b2-e552-11ec-b262-4e30b92064b6",
             "is_list": false
         },
         {
@@ -1688,6 +1640,118 @@
             "hssc_id": "d1503368-e537-11ec-bc0a-ee06e95295ac",
             "service": "d14d858c-e537-11ec-bc0a-ee06e95295ac",
             "buessiness_form": "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "9d16e29a-e54b-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "9d17ca20-e54b-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "9d17f75c-e54b-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "9d18231c-e54b-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "1210eee8-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "9d184f54-e54b-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "9d187bdc-e54b-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "f4210610-e54b-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb5b824-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "03a35490-e406-11ec-9eb0-42585b16dcd4",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb5eaf6-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb614ea-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "1210eee8-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb63d3a-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb66440-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb68a2e-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "bbb6b60c-e54c-11ec-91a5-4e30b92064b6",
+            "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "buessiness_form": "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
             "is_list": false
         }
     ],
@@ -1703,9 +1767,6 @@
             "execution_time_frame": null,
             "awaiting_time_frame": null,
             "services": [
-                "15552078-e407-11ec-9eb0-42585b16dcd4",
-                "494b3336-e407-11ec-9d3a-42585b16dcd4",
-                "6276fe80-e407-11ec-9eb0-42585b16dcd4",
                 "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
                 "945606fa-e4c8-11ec-b4b1-1a2f7481020f"
             ]
@@ -1719,45 +1780,6 @@
             "pym": null,
             "servicepackage": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
             "service": "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
-            "cycle_option": 0,
-            "cycle_times": 1,
-            "reference_start_tim": null,
-            "duration": null,
-            "check_awaiting_timeout": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "2726350c-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": null,
-            "servicepackage": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "service": "15552078-e407-11ec-9eb0-42585b16dcd4",
-            "cycle_option": 0,
-            "cycle_times": 1,
-            "reference_start_tim": null,
-            "duration": null,
-            "check_awaiting_timeout": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "27266126-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": null,
-            "servicepackage": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "service": "494b3336-e407-11ec-9d3a-42585b16dcd4",
-            "cycle_option": 0,
-            "cycle_times": 1,
-            "reference_start_tim": null,
-            "duration": null,
-            "check_awaiting_timeout": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "27268b42-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": null,
-            "servicepackage": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "service": "6276fe80-e407-11ec-9eb0-42585b16dcd4",
             "cycle_option": 0,
             "cycle_times": 1,
             "reference_start_tim": null,
@@ -1891,26 +1913,26 @@
             "expression_fields": "boolfield_fen_zhen_que_ren"
         },
         {
-            "label": "签署通过",
+            "label": "理赔审核通过",
             "name": "qian_shu_tong_guo",
             "hssc_id": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
-            "pym": "qstg",
-            "description": "签署确认 == ''是''",
+            "pym": "lpshtg",
+            "description": "理赔对账单签署 == ''是'' and 理赔费用汇总单签署 == ''是'' and 理赔门诊记录签署 == ''是'' and 人身险理赔申请书签署 == ''是''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'是'}.intersection(boolfield_qian_shu_que_ren)) == 1",
-            "expression_fields": "boolfield_qian_shu_que_ren"
+            "expression": "len({'是'}.intersection(boolfield_qian_shu_que_ren)) == 1 and len({'是'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 and len({'是'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 and len({'是'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
+            "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
         },
         {
-            "label": "签署不通过",
+            "label": "理赔审核不通过",
             "name": "qian_shu_bu_tong_guo",
             "hssc_id": "f85807cc-e4cb-11ec-9f7b-1a2f7481020f",
-            "pym": "qsbtg",
-            "description": "签署确认 == ''否''",
+            "pym": "lpshbtg",
+            "description": "理赔对账单签署 == ''否'' or 理赔费用汇总单签署 == ''否'' or 理赔门诊记录签署 == ''否'' or 人身险理赔申请书签署 == ''否''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'否'}.intersection(boolfield_qian_shu_que_ren)) == 1",
-            "expression_fields": "boolfield_qian_shu_que_ren"
+            "expression": "len({'否'}.intersection(boolfield_qian_shu_que_ren)) == 1 or len({'否'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 or len({'否'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 or len({'否'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
+            "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
         }
     ],
     "servicespec": [
@@ -2058,57 +2080,6 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "理赔门诊记录审核成功",
-            "name": null,
-            "hssc_id": "a4282c9c-e4c9-11ec-b4b1-1a2f7481020f",
-            "service": "494b3336-e407-11ec-9d3a-42585b16dcd4",
-            "event_rule": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "15552078-e407-11ec-9eb0-42585b16dcd4",
-            "passing_data": 1,
-            "complete_feedback": 1,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
-            "label": "理赔对账单审核成功",
-            "name": null,
-            "hssc_id": "fabc86a2-e4c9-11ec-b4b1-1a2f7481020f",
-            "service": "6276fe80-e407-11ec-9eb0-42585b16dcd4",
-            "event_rule": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "494b3336-e407-11ec-9d3a-42585b16dcd4",
-            "passing_data": 1,
-            "complete_feedback": 1,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
-            "label": "理赔申请书审核完成",
-            "name": null,
-            "hssc_id": "3def17aa-e4ca-11ec-b4b1-1a2f7481020f",
-            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-            "event_rule": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "6276fe80-e407-11ec-9eb0-42585b16dcd4",
-            "passing_data": 1,
-            "complete_feedback": 1,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
             "label": "理赔申请提交成功",
             "name": null,
             "hssc_id": "672ca0ec-e4ca-11ec-b4b1-1a2f7481020f",
@@ -2126,40 +2097,6 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "理赔申请书审核不通过",
-            "name": null,
-            "hssc_id": "b6b48590-e4ce-11ec-b4b1-1a2f7481020f",
-            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-            "event_rule": "f85807cc-e4cb-11ec-9f7b-1a2f7481020f",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
-            "passing_data": 2,
-            "complete_feedback": 1,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
-            "label": "理赔费用汇总单审核通过",
-            "name": null,
-            "hssc_id": "8d1c9c3a-e4cf-11ec-b4b1-1a2f7481020f",
-            "service": "15552078-e407-11ec-9eb0-42585b16dcd4",
-            "event_rule": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "passing_data": 2,
-            "complete_feedback": 1,
-            "reminders": 1,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
             "label": "保险核保通过",
             "name": null,
             "hssc_id": "cc3397fc-e4cf-11ec-9f7b-1a2f7481020f",
@@ -2169,8 +2106,8 @@
             "next_service": null,
             "passing_data": 1,
             "complete_feedback": 1,
-            "reminders": 0,
-            "message": null,
+            "reminders": 1,
+            "message": "理赔申请成功",
             "interval_rule": null,
             "interval_time": null,
             "is_active": true,
@@ -2183,7 +2120,92 @@
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
             "event_rule": "f85807cc-e4cb-11ec-9f7b-1a2f7481020f",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
+            "next_service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
+            "passing_data": 2,
+            "complete_feedback": 1,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "门诊结束",
+            "name": null,
+            "hssc_id": "46ce13fe-e550-11ec-b262-4e30b92064b6",
+            "service": "bf73968c-dfbd-11ec-9597-26a028640b2f",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "门诊结束",
+            "name": null,
+            "hssc_id": "46e7590e-e550-11ec-b262-4e30b92064b6",
+            "service": "bf73968c-dfbd-11ec-9597-26a028640b2f",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "门诊结束",
+            "name": null,
+            "hssc_id": "a30a9b6a-e550-11ec-91a5-4e30b92064b6",
+            "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "理赔申请审核通过",
+            "name": null,
+            "hssc_id": "88eeabee-e551-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "event_rule": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "理赔申请审核不通过",
+            "name": null,
+            "hssc_id": "add4279a-e551-11ec-91a5-4e30b92064b6",
+            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
+            "event_rule": "f85807cc-e4cb-11ec-9f7b-1a2f7481020f",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
             "passing_data": 2,
             "complete_feedback": 1,
             "reminders": 0,

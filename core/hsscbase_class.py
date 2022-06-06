@@ -378,6 +378,14 @@ class FieldsType(Enum):
     boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu = "String"  # 希望增加的服务项目
     boolfield_fu_wu_xiao_lv_ping_fen = "dictionaries.Ping_fen"  # 服务效率评分
     boolfield_fu_wu_liu_cheng_ping_fen = "dictionaries.Ping_fen"  # 服务流程评分
-    boolfield_qian_shu_que_ren = "dictionaries.Qian_shu_que_ren"  # 签署确认
-    boolfield_tui_dan_yuan_yin = "String"  # 退单原因
+    boolfield_qian_shu_que_ren = "dictionaries.Qian_shu_que_ren"  # 理赔对账单签署
+    boolfield_tui_dan_yuan_yin = "String"  # 人身险理赔申请书退单原因
     boolfield_bao_an_ren = "String"  # 报案人
+    boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = "dictionaries.Qian_shu_que_ren"  # 理赔费用汇总单签署
+    boolfield_li_pei_men_zhen_ji_lu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 理赔门诊记录签署
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 人身险理赔申请书签署
+    boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = "String"  # 理赔对账单退单原因
+    boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = "String"  # 理赔费用汇总单退单原因
+    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = "String"  # 门诊记录单退单原因
+    boolfield_shi_fou_tong_guo_he_bao = "dictionaries.Shi_fou_tong_guo"  # 是否通过核保
+    boolfield_li_pei_shen_qing_tui_hui_yuan_yin = "String"  # 理赔申请退回原因
