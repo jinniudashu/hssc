@@ -28,6 +28,25 @@ class Ji_gou_ji_ben_xin_xi_biao(HsscBaseFormModel):
         return self.customer.name
 
         
+class Yu_yue_zi_xun(HsscFormModel):
+    characterfield_name = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
+    characterfield_gender = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人性别')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=False, verbose_name='出生日期')
+    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
+    datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
+    boolfield_ze_ren_ren = models.ForeignKey(Ji_gou_ji_ben_xin_xi_biao, related_name='ji_gou_ji_ben_xin_xi_biao_for_boolfield_ze_ren_ren_yu_yue_zi_xun', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构')
+    boolfield_jiu_zhen_wen_ti = models.CharField(max_length=255, null=True, blank=False, verbose_name='就诊问题')
+    boolfield_shi_yong_bao_xian_chan_pin = models.ManyToManyField(Bao_xian_chan_pin, related_name='bao_xian_chan_pin_for_boolfield_shi_yong_bao_xian_chan_pin_yu_yue_zi_xun', blank=True, verbose_name='使用服务产品')
+    boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
+
+    class Meta:
+        verbose_name = '预约咨询'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Ti_jiao_he_bao_zi_liao(HsscFormModel):
     characterfield_name = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
     characterfield_gender = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人性别')

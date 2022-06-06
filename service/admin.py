@@ -54,6 +54,16 @@ class HsscFormAdmin(admin.ModelAdmin):
 # Service表单Admin
 # **********************************************************************************************************************
 
+class Yu_yue_zi_xunAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ),)}), 
+        ("预约申请单", {"fields": ("datetimefield_ri_qi_shi_jian", "boolfield_ze_ren_ren", "boolfield_jiu_zhen_wen_ti", "boolfield_shi_yong_bao_xian_chan_pin", "boolfield_fu_jia_fu_wu_yao_qiu", )}), ]
+    autocomplete_fields = ["boolfield_ze_ren_ren", ]
+    readonly_fields = ["characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ]
+
+admin.site.register(Yu_yue_zi_xun, Yu_yue_zi_xunAdmin)
+clinic_site.register(Yu_yue_zi_xun, Yu_yue_zi_xunAdmin)
+
 class Ti_jiao_he_bao_zi_liaoAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": (("characterfield_name", "characterfield_gender", "datetimefield_date_of_birth", "boolfield_chang_zhu_di_zhi", ),)}), 
