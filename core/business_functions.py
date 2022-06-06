@@ -50,10 +50,10 @@ def create_form_instance(operation_proc, passing_data):
         # 通用代码里customer应改为entity
         base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
         # *********以下应为生成代码！生成所属实体表头信息************
-        form_instance.characterfield_family_address = base_info.characterfield_family_address
-        form_instance.characterfield_contact_number = base_info.characterfield_contact_number
+        form_instance.boolfield_chang_zhu_di_zhi = base_info.boolfield_chang_zhu_di_zhi
+        # form_instance.characterfield_contact_number = base_info.boolfield_lian_xi_dian_hua
         form_instance.characterfield_name = base_info.characterfield_name
-        form_instance.relatedfield_gender = base_info.relatedfield_gender
+        form_instance.characterfield_gender = base_info.characterfield_gender
         form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
         form_instance.save()
 
