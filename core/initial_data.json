@@ -127,10 +127,10 @@
             "description": null
         },
         {
-            "label": "牙科诊所",
+            "label": "牙科诊所管理员",
             "name": "ya_ke_zhen_suo",
             "hssc_id": "e862fdba-de2f-11ec-8b9f-323f52c35ca4",
-            "pym": "ykzs",
+            "pym": "ykzsgly",
             "description": null
         }
     ],
@@ -142,6 +142,7 @@
             "pym": "yhzcb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "dea37b46-9aa1-11ec-bde1-8a6e55faf877",
                 "dea437ac-9aa1-11ec-bde1-8a6e55faf877",
@@ -156,6 +157,7 @@
             "pym": "yhdlb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
                 "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
@@ -169,6 +171,7 @@
             "pym": "jdqrb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b"
             ],
@@ -181,12 +184,13 @@
             "pym": "yysqd",
             "name_icpc": null,
             "description": "",
+            "api_fields": "",
             "components": [
-                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
-                "401d33d8-aa49-11ec-9f15-ee7ade4bced6",
                 "e8d5ecfc-de2b-11ec-8b9f-323f52c35ca4",
+                "c3bbf9f6-de2c-11ec-8b9f-323f52c35ca4",
+                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "3f72696e-de2c-11ec-b7a6-323f52c35ca4",
-                "c3bbf9f6-de2c-11ec-8b9f-323f52c35ca4"
+                "ceecaf40-e576-11ec-8a69-ca4030bb64ad"
             ],
             "components_groups": []
         },
@@ -197,13 +201,14 @@
             "pym": "yytzd",
             "name_icpc": null,
             "description": "",
+            "api_fields": "",
             "components": [
-                "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
-                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
-                "401d33d8-aa49-11ec-9f15-ee7ade4bced6",
+                "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
                 "ac0018f8-dfba-11ec-9597-26a028640b2f",
-                "a342101c-dfbb-11ec-9597-26a028640b2f"
+                "a342101c-dfbb-11ec-9597-26a028640b2f",
+                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
+                "401d33d8-aa49-11ec-9f15-ee7ade4bced6"
             ],
             "components_groups": []
         },
@@ -214,14 +219,15 @@
             "pym": "zjsfb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
-                "0f874b3c-dfbe-11ec-9eb2-26a028640b2f",
-                "d8286684-dfbe-11ec-9597-26a028640b2f",
-                "e4c91686-dfbe-11ec-9597-26a028640b2f",
                 "3174614a-e2d8-11ec-9a2f-dae07feb8058",
                 "39603050-e2d8-11ec-9a2f-dae07feb8058",
                 "49879662-e2d8-11ec-9a2f-dae07feb8058",
                 "515da070-e2d8-11ec-9a2f-dae07feb8058",
+                "0f874b3c-dfbe-11ec-9eb2-26a028640b2f",
+                "e4c91686-dfbe-11ec-9597-26a028640b2f",
+                "d8286684-dfbe-11ec-9597-26a028640b2f",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
             ],
             "components_groups": []
@@ -233,18 +239,19 @@
             "pym": "rsxlpsqs",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
-                "debcb08e-9aa1-11ec-bde1-8a6e55faf877",
-                "8fa7f370-de29-11ec-b7a6-323f52c35ca4",
                 "9d621d6e-e2df-11ec-912b-dae07feb8058",
-                "bf57c78e-e2df-11ec-9a2f-dae07feb8058",
                 "5f2eb182-e2e0-11ec-912b-dae07feb8058",
-                "72628bac-e2e0-11ec-912b-dae07feb8058",
                 "80c26bcc-e2e0-11ec-912b-dae07feb8058",
                 "86e9fdee-e2e0-11ec-912b-dae07feb8058",
                 "cce93df4-e2e1-11ec-9a2f-dae07feb8058",
-                "f0df63c8-e2e1-11ec-912b-dae07feb8058"
+                "f0df63c8-e2e1-11ec-912b-dae07feb8058",
+                "72628bac-e2e0-11ec-912b-dae07feb8058",
+                "debcb08e-9aa1-11ec-bde1-8a6e55faf877",
+                "8fa7f370-de29-11ec-b7a6-323f52c35ca4",
+                "bf57c78e-e2df-11ec-9a2f-dae07feb8058"
             ],
             "components_groups": []
         },
@@ -255,8 +262,8 @@
             "pym": "jgjbxxb",
             "name_icpc": null,
             "description": null,
+            "api_fields": null,
             "components": [
-                "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
                 "b65a7d04-c5c8-11ec-b819-725badf7393d",
                 "d31f31aa-c5c8-11ec-b819-725badf7393d",
                 "d8aa48a8-c5c8-11ec-b9d4-725badf7393d",
@@ -265,7 +272,8 @@
                 "0443bd28-c5c9-11ec-b819-725badf7393d",
                 "0b72d3cc-c5c9-11ec-b819-725badf7393d",
                 "13299560-c5c9-11ec-b9d4-725badf7393d",
-                "deab5d16-9aa1-11ec-bde1-8a6e55faf877"
+                "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
+                "dea1797c-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "components_groups": []
         },
@@ -276,13 +284,14 @@
             "pym": "zyjbxxb",
             "name_icpc": null,
             "description": null,
+            "api_fields": null,
             "components": [
-                "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
                 "dea24708-9aa1-11ec-bde1-8a6e55faf877",
                 "dea4f05c-9aa1-11ec-bde1-8a6e55faf877",
                 "dea5a43e-9aa1-11ec-bde1-8a6e55faf877",
                 "f586a648-c5c7-11ec-b9d4-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
+                "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
                 "ded78062-9aa1-11ec-bde1-8a6e55faf877",
                 "ded69094-9aa1-11ec-bde1-8a6e55faf877"
@@ -296,6 +305,7 @@
             "pym": "sbjbxxb",
             "name_icpc": null,
             "description": null,
+            "api_fields": null,
             "components": [
                 "6f02d90c-c5cc-11ec-b9d4-725badf7393d",
                 "761f6a66-c5cc-11ec-b819-725badf7393d",
@@ -315,13 +325,14 @@
             "pym": "mzfwjld",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
+                "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "785896e0-dfbc-11ec-9eb2-26a028640b2f",
                 "946d2bc0-dfbc-11ec-9597-26a028640b2f",
                 "ab41e426-dfbc-11ec-9597-26a028640b2f",
                 "028de0d6-dfbd-11ec-9597-26a028640b2f",
-                "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
                 "fff58ea4-e3ff-11ec-9eb0-42585b16dcd4"
             ],
             "components_groups": []
@@ -333,12 +344,13 @@
             "pym": "zlfyhzd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
-                "97f9bacc-e2d9-11ec-9a2f-dae07feb8058",
-                "ab2a9314-e2d9-11ec-912b-dae07feb8058",
                 "f2a75238-e3fe-11ec-9eb0-42585b16dcd4",
                 "3d8ad0c2-e3ff-11ec-9eb0-42585b16dcd4",
+                "97f9bacc-e2d9-11ec-9a2f-dae07feb8058",
+                "ab2a9314-e2d9-11ec-912b-dae07feb8058",
                 "bf2911ac-e3ff-11ec-9d3a-42585b16dcd4"
             ],
             "components_groups": []
@@ -350,13 +362,14 @@
             "pym": "zhhfd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
-                "d8286684-dfbe-11ec-9597-26a028640b2f",
                 "3174614a-e2d8-11ec-9a2f-dae07feb8058",
                 "49879662-e2d8-11ec-9a2f-dae07feb8058",
-                "a9a03950-e2d8-11ec-912b-dae07feb8058",
                 "a80571f6-e403-11ec-9eb0-42585b16dcd4",
-                "b5b9b8ca-e403-11ec-9eb0-42585b16dcd4"
+                "b5b9b8ca-e403-11ec-9eb0-42585b16dcd4",
+                "d8286684-dfbe-11ec-9597-26a028640b2f",
+                "a9a03950-e2d8-11ec-912b-dae07feb8058"
             ],
             "components_groups": []
         },
@@ -367,12 +380,13 @@
             "pym": "myddcb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "a80571f6-e403-11ec-9eb0-42585b16dcd4",
-                "95f5faa2-e404-11ec-9eb0-42585b16dcd4",
-                "a47b3736-e404-11ec-9eb0-42585b16dcd4",
                 "b891a5ac-e404-11ec-9eb0-42585b16dcd4",
                 "39922168-e405-11ec-9eb0-42585b16dcd4",
+                "95f5faa2-e404-11ec-9eb0-42585b16dcd4",
+                "a47b3736-e404-11ec-9eb0-42585b16dcd4",
                 "4c7839d4-e405-11ec-9d3a-42585b16dcd4"
             ],
             "components_groups": []
@@ -384,18 +398,19 @@
             "pym": "bbgrjbxxb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
+                "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
-                "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
-                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
-                "739bbdb0-de29-11ec-8b9f-323f52c35ca4",
-                "8fa7f370-de29-11ec-b7a6-323f52c35ca4",
                 "afe94fa8-de29-11ec-8b9f-323f52c35ca4",
                 "b70b902a-de29-11ec-8b9f-323f52c35ca4",
                 "c3afc81e-de29-11ec-8b9f-323f52c35ca4",
                 "cce93df4-e2e1-11ec-9a2f-dae07feb8058",
-                "f0df63c8-e2e1-11ec-912b-dae07feb8058"
+                "f0df63c8-e2e1-11ec-912b-dae07feb8058",
+                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
+                "739bbdb0-de29-11ec-8b9f-323f52c35ca4",
+                "8fa7f370-de29-11ec-b7a6-323f52c35ca4"
             ],
             "components_groups": []
         },
@@ -406,6 +421,7 @@
             "pym": "ddqrb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "a0fc960a-a506-11ec-a7bb-cecec7a0e139",
                 "b5bae6fe-e3ff-11ec-9eb0-42585b16dcd4"
@@ -419,29 +435,30 @@
             "pym": "lpdzd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "de9f4ea4-9aa1-11ec-bde1-8a6e55faf877",
-                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
-                "debcb08e-9aa1-11ec-bde1-8a6e55faf877",
-                "8fa7f370-de29-11ec-b7a6-323f52c35ca4",
                 "afe94fa8-de29-11ec-8b9f-323f52c35ca4",
                 "b70b902a-de29-11ec-8b9f-323f52c35ca4",
-                "f4a81764-e400-11ec-9d3a-42585b16dcd4",
-                "07425948-e401-11ec-9d3a-42585b16dcd4",
                 "16ba7202-e401-11ec-9d3a-42585b16dcd4",
                 "3173a50a-e401-11ec-9eb0-42585b16dcd4",
                 "45e71300-e401-11ec-9eb0-42585b16dcd4",
-                "5cf94360-e401-11ec-9eb0-42585b16dcd4",
-                "66eaa012-e401-11ec-9eb0-42585b16dcd4",
                 "76bc9c20-e401-11ec-9eb0-42585b16dcd4",
                 "c2ea12c6-e401-11ec-9eb0-42585b16dcd4",
                 "cd781800-e401-11ec-9d3a-42585b16dcd4",
                 "d4c50dde-e401-11ec-9d3a-42585b16dcd4",
                 "da287784-e401-11ec-9d3a-42585b16dcd4",
-                "f6b10812-e401-11ec-9eb0-42585b16dcd4",
                 "02b10ba8-e402-11ec-9d3a-42585b16dcd4",
                 "08480558-e402-11ec-9d3a-42585b16dcd4",
-                "d69e97e8-e40a-11ec-9eb0-42585b16dcd4"
+                "d69e97e8-e40a-11ec-9eb0-42585b16dcd4",
+                "f6b10812-e401-11ec-9eb0-42585b16dcd4",
+                "66eaa012-e401-11ec-9eb0-42585b16dcd4",
+                "5cf94360-e401-11ec-9eb0-42585b16dcd4",
+                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
+                "f4a81764-e400-11ec-9d3a-42585b16dcd4",
+                "07425948-e401-11ec-9d3a-42585b16dcd4",
+                "debcb08e-9aa1-11ec-bde1-8a6e55faf877",
+                "8fa7f370-de29-11ec-b7a6-323f52c35ca4"
             ],
             "components_groups": []
         },
@@ -452,6 +469,7 @@
             "pym": "rsxlpsqsshd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "13a4fa38-e406-11ec-9d3a-42585b16dcd4",
                 "0778f938-e548-11ec-91a5-4e30b92064b6"
@@ -465,9 +483,10 @@
             "pym": "mzjldshd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
-                "cb61b44a-e546-11ec-b262-4e30b92064b6",
-                "ddbc095c-e54a-11ec-b262-4e30b92064b6"
+                "ddbc095c-e54a-11ec-b262-4e30b92064b6",
+                "cb61b44a-e546-11ec-b262-4e30b92064b6"
             ],
             "components_groups": []
         },
@@ -478,9 +497,10 @@
             "pym": "lpdzdshd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
-                "db789638-e405-11ec-9d3a-42585b16dcd4",
-                "b9d68936-e54a-11ec-91a5-4e30b92064b6"
+                "b9d68936-e54a-11ec-91a5-4e30b92064b6",
+                "db789638-e405-11ec-9d3a-42585b16dcd4"
             ],
             "components_groups": []
         },
@@ -491,9 +511,10 @@
             "pym": "lpfyhzdsh",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
-                "b2588c12-e546-11ec-b262-4e30b92064b6",
-                "c8f7a940-e54a-11ec-91a5-4e30b92064b6"
+                "c8f7a940-e54a-11ec-91a5-4e30b92064b6",
+                "b2588c12-e546-11ec-b262-4e30b92064b6"
             ],
             "components_groups": []
         },
@@ -504,9 +525,10 @@
             "pym": "hbd",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
-                "2251f368-e552-11ec-b262-4e30b92064b6",
-                "4999304e-e552-11ec-b262-4e30b92064b6"
+                "4999304e-e552-11ec-b262-4e30b92064b6",
+                "2251f368-e552-11ec-b262-4e30b92064b6"
             ],
             "components_groups": []
         },
@@ -517,6 +539,7 @@
             "pym": "zsdlb",
             "name_icpc": null,
             "description": "",
+            "api_fields": null,
             "components": [
                 "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
                 "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
@@ -525,6 +548,26 @@
         }
     ],
     "managedentity": [
+        {
+            "label": "药品",
+            "name": "medicine",
+            "hssc_id": "de896698-9aa1-11ec-bde1-8a6e55faf877",
+            "pym": "yp",
+            "app_name": "service",
+            "model_name": "Medicine",
+            "base_form": null,
+            "header_fields": []
+        },
+        {
+            "label": "供应商",
+            "name": "supplier",
+            "hssc_id": "de889948-9aa1-11ec-bde1-8a6e55faf877",
+            "pym": "gys",
+            "app_name": "service",
+            "model_name": "Supplier",
+            "base_form": null,
+            "header_fields": []
+        },
         {
             "label": "职员",
             "name": "staff",
@@ -556,26 +599,6 @@
             "header_fields": []
         },
         {
-            "label": "药品",
-            "name": "medicine",
-            "hssc_id": "de896698-9aa1-11ec-bde1-8a6e55faf877",
-            "pym": "yp",
-            "app_name": "service",
-            "model_name": "Medicine",
-            "base_form": null,
-            "header_fields": []
-        },
-        {
-            "label": "供应商",
-            "name": "supplier",
-            "hssc_id": "de889948-9aa1-11ec-bde1-8a6e55faf877",
-            "pym": "gys",
-            "app_name": "service",
-            "model_name": "Supplier",
-            "base_form": null,
-            "header_fields": []
-        },
-        {
             "label": "客户",
             "name": "customer",
             "hssc_id": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
@@ -584,10 +607,10 @@
             "model_name": "Customer",
             "base_form": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
             "header_fields": [
-                "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
                 "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
-                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
-                "cce93df4-e2e1-11ec-9a2f-dae07feb8058"
+                "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
+                "cce93df4-e2e1-11ec-9a2f-dae07feb8058",
+                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877"
             ]
         }
     ],
@@ -938,7 +961,7 @@
             "hssc_id": "dfacb992-de5f-11ec-be26-9a796a47c5af",
             "pym": "yyap",
             "name_icpc": null,
-            "managed_entity": "de87315c-9aa1-11ec-bde1-8a6e55faf877",
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
             "is_system_service": false,
             "history_services_display": 0,
@@ -970,7 +993,7 @@
             "hssc_id": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
             "pym": "yyqr",
             "name_icpc": null,
-            "managed_entity": "de8ad1a4-9aa1-11ec-bde1-8a6e55faf877",
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
             "is_system_service": false,
             "history_services_display": 0,
@@ -1291,6 +1314,10 @@
                 "15de6896-dfbc-11ec-9eb2-26a028640b2f",
                 "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
                 "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+                "03a35490-e406-11ec-9eb0-42585b16dcd4",
+                "1210eee8-e54b-11ec-91a5-4e30b92064b6",
+                "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+                "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
                 "64ad92b2-e552-11ec-b262-4e30b92064b6"
             ],
             "role": [
@@ -1366,6 +1393,37 @@
             ],
             "role": [
                 "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "诊所预约",
+            "name": "zhen_suo_yu_yue",
+            "hssc_id": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
+            "pym": "zsyy",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "is_system_service": false,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "suppliers": null,
+            "not_suitable": null,
+            "execution_time_frame": null,
+            "awaiting_time_frame": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "buessiness_forms": [
+                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd"
+            ],
+            "role": [
+                "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
             ]
         }
     ],
@@ -1607,7 +1665,7 @@
             "name": null,
             "hssc_id": "271a1098-e4cf-11ec-b4b1-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "buessiness_form": "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+            "buessiness_form": "03a35490-e406-11ec-9eb0-42585b16dcd4",
             "is_list": false
         },
         {
@@ -1623,7 +1681,7 @@
             "name": null,
             "hssc_id": "271a5c56-e4cf-11ec-b4b1-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "buessiness_form": "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
+            "buessiness_form": "1210eee8-e54b-11ec-91a5-4e30b92064b6",
             "is_list": false
         },
         {
@@ -1631,7 +1689,7 @@
             "name": null,
             "hssc_id": "553a4bf0-e4cf-11ec-b4b1-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "buessiness_form": "64ad92b2-e552-11ec-b262-4e30b92064b6",
+            "buessiness_form": "dc327a94-e400-11ec-9eb0-42585b16dcd4",
             "is_list": false
         },
         {
@@ -1752,6 +1810,46 @@
             "hssc_id": "bbb6b60c-e54c-11ec-91a5-4e30b92064b6",
             "service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
             "buessiness_form": "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "4f4989aa-e5a0-11ec-8838-da3a431a38b1",
+            "service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
+            "buessiness_form": "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "918a6e32-e5a1-11ec-9966-da3a431a38b1",
+            "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
+            "buessiness_form": "2e70d896-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "918a9e7a-e5a1-11ec-9966-da3a431a38b1",
+            "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
+            "buessiness_form": "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "918ac2a6-e5a1-11ec-9966-da3a431a38b1",
+            "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
+            "buessiness_form": "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "918ae632-e5a1-11ec-9966-da3a431a38b1",
+            "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
+            "buessiness_form": "64ad92b2-e552-11ec-b262-4e30b92064b6",
             "is_list": false
         }
     ],
@@ -1933,6 +2031,39 @@
             "weight": 1,
             "expression": "len({'否'}.intersection(boolfield_qian_shu_que_ren)) == 1 or len({'否'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 or len({'否'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 or len({'否'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
             "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
+        },
+        {
+            "label": "核保通过",
+            "name": "he_bao_tong_guo",
+            "hssc_id": "140fb0da-e569-11ec-8a69-ca4030bb64ad",
+            "pym": "hbtg",
+            "description": "是否通过核保 == ''是''",
+            "detection_scope": "CURRENT_SERVICE",
+            "weight": 1,
+            "expression": "len({'是'}.intersection(boolfield_shi_fou_tong_guo_he_bao)) == 1",
+            "expression_fields": "boolfield_shi_fou_tong_guo_he_bao"
+        },
+        {
+            "label": "核保不通过",
+            "name": "he_bao_bu_tong_guo",
+            "hssc_id": "2c91f05a-e569-11ec-8c49-ca4030bb64ad",
+            "pym": "hbbtg",
+            "description": "是否通过核保 == ''否''",
+            "detection_scope": "CURRENT_SERVICE",
+            "weight": 1,
+            "expression": "len({'否}.intersection(boolfield_shi_fou_tong_guo_he_bao)) == 1",
+            "expression_fields": "boolfield_shi_fou_tong_guo_he_bao"
+        },
+        {
+            "label": "未完成",
+            "name": "wei_wan_cheng",
+            "hssc_id": "9362929e-e5a0-11ec-9966-da3a431a38b1",
+            "pym": "wwc",
+            "description": "未完成",
+            "detection_scope": "CURRENT_SERVICE",
+            "weight": 1,
+            "expression": "undone",
+            "expression_fields": null
         }
     ],
     "servicespec": [
@@ -1987,7 +2118,7 @@
             "next_service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
             "passing_data": 1,
             "complete_feedback": 1,
-            "reminders": null,
+            "reminders": 0,
             "message": null,
             "interval_rule": null,
             "interval_time": null,
@@ -2101,7 +2232,7 @@
             "name": null,
             "hssc_id": "cc3397fc-e4cf-11ec-9f7b-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "event_rule": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
+            "event_rule": "140fb0da-e569-11ec-8a69-ca4030bb64ad",
             "system_operand": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
             "next_service": null,
             "passing_data": 1,
@@ -2118,7 +2249,7 @@
             "name": null,
             "hssc_id": "f4695cb6-e4cf-11ec-b4b1-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "event_rule": "f85807cc-e4cb-11ec-9f7b-1a2f7481020f",
+            "event_rule": "2c91f05a-e569-11ec-8c49-ca4030bb64ad",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "f1604c2e-e54b-11ec-91a5-4e30b92064b6",
             "passing_data": 2,
@@ -2169,7 +2300,7 @@
             "name": null,
             "hssc_id": "a30a9b6a-e550-11ec-91a5-4e30b92064b6",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "event_rule": "140fb0da-e569-11ec-8a69-ca4030bb64ad",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
             "passing_data": 1,
@@ -2209,6 +2340,40 @@
             "passing_data": 2,
             "complete_feedback": 1,
             "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "门诊未结束",
+            "name": null,
+            "hssc_id": "c1cad010-e5a0-11ec-9966-da3a431a38b1",
+            "service": "bf73968c-dfbd-11ec-9597-26a028640b2f",
+            "event_rule": "9362929e-e5a0-11ec-9966-da3a431a38b1",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "诊所预约成功",
+            "name": null,
+            "hssc_id": "32f997c6-e5a1-11ec-9966-da3a431a38b1",
+            "service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
             "message": null,
             "interval_rule": null,
             "interval_time": null,

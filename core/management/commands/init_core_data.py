@@ -85,7 +85,7 @@ test_user_data = {
             'is_staff': True,
             'first_name': '口腔诊所',
             'last_name': '金盘',
-            'role': ['牙科诊所'],
+            'role': ['牙科诊所管理员'],
         },
         {
             'username': '张三',
@@ -153,6 +153,7 @@ class Command(BaseCommand):
             # 为测试用户的职员表增加角色
             staff = user.customer.staff
             for role_name in user_data['role']:
+                print('role_name:', role_name)
                 role = Role.objects.get(label=role_name)
                 staff.role.add(role)
             staff.save()

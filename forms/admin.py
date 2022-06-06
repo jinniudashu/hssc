@@ -16,7 +16,7 @@ class A6502Admin(admin.ModelAdmin):
 admin.site.register(A6502, A6502Admin)
 
 class A6401Admin(admin.ModelAdmin):
-        autocomplete_fields = ["boolfield_ze_ren_ren", ]
+        autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
 
 admin.site.register(A6401, A6401Admin)
 
@@ -26,7 +26,7 @@ class Yu_yue_tong_zhi_danAdmin(admin.ModelAdmin):
 admin.site.register(Yu_yue_tong_zhi_dan, Yu_yue_tong_zhi_danAdmin)
 
 class Zhen_jian_sui_fang_biaoAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_zhi_liao_jian_gou_tong_qing_kuang": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_jie_dai_fu_wu": admin.VERTICAL, "boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, }
+        radio_fields = {"boolfield_zhi_liao_jian_gou_tong_qing_kuang": admin.VERTICAL, "boolfield_jie_dai_fu_wu": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, }
 
 admin.site.register(Zhen_jian_sui_fang_biao, Zhen_jian_sui_fang_biaoAdmin)
 
@@ -64,7 +64,7 @@ class Zhen_hou_hui_fang_danAdmin(admin.ModelAdmin):
 admin.site.register(Zhen_hou_hui_fang_dan, Zhen_hou_hui_fang_danAdmin)
 
 class Man_yi_du_diao_cha_biaoAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_ping_tai_fu_wu_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_fu_wu_xiao_lv_ping_fen": admin.VERTICAL, "boolfield_fu_wu_liu_cheng_ping_fen": admin.VERTICAL, }
+        radio_fields = {"boolfield_fu_wu_xiao_lv_ping_fen": admin.VERTICAL, "boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_ping_tai_fu_wu_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_fu_wu_liu_cheng_ping_fen": admin.VERTICAL, }
 
 admin.site.register(Man_yi_du_diao_cha_biao, Man_yi_du_diao_cha_biaoAdmin)
 

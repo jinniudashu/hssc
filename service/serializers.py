@@ -1,5 +1,9 @@
 from rest_framework import serializers
 from .models import *
+class Zhen_suo_yu_yueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zhen_suo_yu_yue
+        fields = '__all__'
 class Li_pei_shen_qing_chong_shenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Li_pei_shen_qing_chong_shen

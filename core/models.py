@@ -35,6 +35,7 @@ class Role(HsscPymBase):
 class BuessinessForm(HsscPymBase):
     name_icpc = models.OneToOneField(Icpc, on_delete=models.CASCADE, blank=True, null=True, verbose_name="ICPC编码")
     description = models.TextField(max_length=255, null=True, blank=True, verbose_name="表单说明")
+    api_fields = models.JSONField(null=True, blank=True, verbose_name="API字段")
     
     class Meta:
         verbose_name = '业务表单'
