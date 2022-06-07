@@ -118,23 +118,6 @@ class Man_yi_du_diao_cha_biao(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class A6203(HsscFormModel):
-    characterfield_gender = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人性别')
-    characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
-    characterfield_name = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
-    boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
-    boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
-    boolfield_bao_xian_ze_ren = models.CharField(max_length=255, null=True, blank=False, verbose_name='保险责任')
-    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
-    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
-    datetimefield_date_of_birth = models.DateField(null=True, blank=False, verbose_name='出生日期')
-    boolfield_bao_xian_you_xiao_qi = models.DateField(null=True, blank=False, verbose_name='保险有效期')
-    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_A6203', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
-    class Meta:
-        verbose_name = '被保个人基本信息表'
-        verbose_name_plural = verbose_name
-        
-
 class Fen_zhen_que_ren_biao(HsscFormModel):
     boolfield_fen_zhen_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_fen_zhen_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
     boolfield_shen_fen_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='身份证件附件')
@@ -232,8 +215,8 @@ class A6502(HsscFormModel):
         
 
 class Bang_ding_que_ren_biao(HsscFormModel):
-    boolfield_ju_jue_bang_ding_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='拒绝绑定原因')
     boolfield_que_ren_ji_ben_xin_xi = models.ForeignKey(Xin_xi_que_ren, related_name='xin_xi_que_ren_for_boolfield_que_ren_ji_ben_xin_xi_bang_ding_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否绑定被保人信息')
+    boolfield_ju_jue_bang_ding_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='拒绝绑定原因')
     class Meta:
         verbose_name = '绑定确认表'
         verbose_name_plural = verbose_name
@@ -286,6 +269,23 @@ class A6401(HsscFormModel):
     boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_A6401', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
     class Meta:
         verbose_name = '预约单'
+        verbose_name_plural = verbose_name
+        
+
+class A6203(HsscFormModel):
+    characterfield_gender = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人性别')
+    characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
+    characterfield_name = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
+    boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
+    boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
+    boolfield_bao_xian_ze_ren = models.CharField(max_length=255, null=True, blank=False, verbose_name='保险责任')
+    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
+    datetimefield_date_of_birth = models.DateField(null=True, blank=False, verbose_name='出生日期')
+    boolfield_bao_xian_you_xiao_qi = models.DateField(null=True, blank=False, verbose_name='保险有效期')
+    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_A6203', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
+    class Meta:
+        verbose_name = '个人基本信息表'
         verbose_name_plural = verbose_name
         
 

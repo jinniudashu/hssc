@@ -36,10 +36,6 @@ class Man_yi_du_diao_cha_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Man_yi_du_diao_cha_biao
         fields = '__all__'
-class A6203Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6203
-        fields = '__all__'
 class Fen_zhen_que_ren_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fen_zhen_que_ren_biao
@@ -95,4 +91,8 @@ class Ren_shen_xian_li_pei_shen_qing_shuSerializer(serializers.ModelSerializer):
 class A6401Serializer(serializers.ModelSerializer):
     class Meta:
         model = A6401
+        fields = '__all__'
+class A6203Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6203
         fields = '__all__'

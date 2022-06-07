@@ -43,10 +43,6 @@ class Man_yi_du_diao_cha_biaoAdmin(admin.ModelAdmin):
 
 admin.site.register(Man_yi_du_diao_cha_biao, Man_yi_du_diao_cha_biaoAdmin)
 
-class A6203Admin(admin.ModelAdmin):
-    pass
-admin.site.register(A6203, A6203Admin)
-
 class Fen_zhen_que_ren_biaoAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_fen_zhen_que_ren": admin.VERTICAL, }
 
@@ -114,3 +110,7 @@ class A6401Admin(admin.ModelAdmin):
         autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
 
 admin.site.register(A6401, A6401Admin)
+
+class A6203Admin(admin.ModelAdmin):
+    pass
+admin.site.register(A6203, A6203Admin)

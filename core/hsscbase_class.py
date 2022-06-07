@@ -248,7 +248,6 @@ class FieldsType(Enum):
     boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = "String"  # 理赔费用汇总单退单原因
     boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = "String"  # 门诊记录单退单原因
     boolfield_li_pei_shen_qing_tui_hui_yuan_yin = "String"  # 理赔申请退回原因
-    boolfield_ju_jue_bang_ding_yuan_yin = "String"  # 拒绝绑定原因
     numberfield_body_temperature = "Numbers"  # 体温
     numberfield_pulse = "Numbers"  # 脉搏
     numberfield_respiratory_rate = "Numbers"  # 呼吸频率
@@ -361,7 +360,7 @@ class FieldsType(Enum):
     boolfield_yi_chuan_bing_shi_cheng_yuan = "dictionaries.Qin_shu_guan_xi"  # 遗传病史成员
     boolfield_fu_wu_xiang_mu_ming_cheng = "icpc.Icpc4_physical_examination_and_tests"  # 服务项目名称
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
-    relatedfield_drug_name = "service.None"  # 药品名
+    relatedfield_drug_name = "entities.None"  # 药品名
     boolfield_zheng_jian_lei_xing = "dictionaries.Zheng_jian_lei_xing"  # 证件类型
     boolfield_ze_ren_ren = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 就诊机构
     boolfield_shi_yong_bao_xian_chan_pin = "dictionaries.Bao_xian_chan_pin"  # 使用服务产品
@@ -388,7 +387,8 @@ class FieldsType(Enum):
     boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 人身险理赔申请书签署
     boolfield_shi_fou_tong_guo_he_bao = "dictionaries.Shi_fou_tong_guo"  # 是否通过核保
     boolfield_jiu_zhen_ji_gou_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 就诊机构责任人
-    boolfield_que_ren_ji_ben_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
     boolfield_shen_fen_zheng_jian_fu_jian = "None"  # 身份证件附件
     boolfield_fei_yong_qing_dan_fu_jian = "None"  # 费用清单附件
     boolfield_men_zhen_bing_li_fu_jian = "None"  # 门诊病历附件
+    boolfield_que_ren_ji_ben_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
+    boolfield_ju_jue_bang_ding_yuan_yin = "String"  # 拒绝绑定原因

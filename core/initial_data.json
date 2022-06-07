@@ -301,29 +301,6 @@
             "components_groups": []
         },
         {
-            "label": "被保个人基本信息表",
-            "name": "A6203",
-            "hssc_id": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
-            "pym": "bbgrjbxxb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": null,
-            "components": [
-                "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
-                "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
-                "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
-                "afe94fa8-de29-11ec-8b9f-323f52c35ca4",
-                "b70b902a-de29-11ec-8b9f-323f52c35ca4",
-                "c3afc81e-de29-11ec-8b9f-323f52c35ca4",
-                "cce93df4-e2e1-11ec-9a2f-dae07feb8058",
-                "f0df63c8-e2e1-11ec-912b-dae07feb8058",
-                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
-                "739bbdb0-de29-11ec-8b9f-323f52c35ca4",
-                "8fa7f370-de29-11ec-b7a6-323f52c35ca4"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "到店确认表",
             "name": "fen_zhen_que_ren_biao",
             "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
@@ -482,8 +459,8 @@
             "description": "",
             "api_fields": "[]",
             "components": [
-                "e9f64680-e633-11ec-9abb-c2da47347ca3",
-                "14856b52-e633-11ec-9abb-c2da47347ca3"
+                "14856b52-e633-11ec-9abb-c2da47347ca3",
+                "e9f64680-e633-11ec-9abb-c2da47347ca3"
             ],
             "components_groups": []
         },
@@ -558,6 +535,29 @@
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "3f72696e-de2c-11ec-b7a6-323f52c35ca4",
                 "ceecaf40-e576-11ec-8a69-ca4030bb64ad"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "个人基本信息表",
+            "name": "A6203",
+            "hssc_id": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
+            "pym": "grjbxxb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": null,
+            "components": [
+                "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
+                "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
+                "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
+                "afe94fa8-de29-11ec-8b9f-323f52c35ca4",
+                "b70b902a-de29-11ec-8b9f-323f52c35ca4",
+                "c3afc81e-de29-11ec-8b9f-323f52c35ca4",
+                "cce93df4-e2e1-11ec-9a2f-dae07feb8058",
+                "f0df63c8-e2e1-11ec-912b-dae07feb8058",
+                "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
+                "739bbdb0-de29-11ec-8b9f-323f52c35ca4",
+                "8fa7f370-de29-11ec-b7a6-323f52c35ca4"
             ],
             "components_groups": []
         }
@@ -995,9 +995,9 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
                 "0d1b5014-9e23-11ec-aa2c-fe35a7065cdd",
-                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd"
+                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
+                "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd"
             ],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
@@ -1028,9 +1028,9 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
+                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
                 "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
-                "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
-                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd"
+                "09be9cb8-df1a-11ec-b4b2-02377abc76d6"
             ],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
@@ -1257,10 +1257,10 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
+                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
                 "15de6896-dfbc-11ec-9eb2-26a028640b2f",
                 "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
-                "dc327a94-e400-11ec-9eb0-42585b16dcd4",
-                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058"
+                "dc327a94-e400-11ec-9eb0-42585b16dcd4"
             ],
             "role": [
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
@@ -1955,20 +1955,7 @@
             "is_list": false
         }
     ],
-    "servicepackage": [
-        {
-            "label": "种植牙理赔服务包",
-            "name": "zhong_zhi_ya_li_pei_fu_wu_bao",
-            "hssc_id": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": "zzylpfwb",
-            "name_icpc": null,
-            "begin_time_setting": 0,
-            "duration": null,
-            "execution_time_frame": null,
-            "awaiting_time_frame": null,
-            "services": []
-        }
-    ],
+    "servicepackage": [],
     "servicepackagedetail": [],
     "systemoperand": [
         {
