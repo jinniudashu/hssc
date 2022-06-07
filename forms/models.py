@@ -48,7 +48,7 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
     characterfield_contact_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构联系电话')
     characterhssc_identification_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='证件号码')
     characterfield_name = models.CharField(max_length=255, null=True, blank=True, verbose_name='被保人姓名')
-    relatedfield_affiliation = models.ForeignKey(Ji_gou_ji_ben_xin_xi_biao, related_name='ji_gou_ji_ben_xin_xi_biao_for_relatedfield_affiliation_zhi_yuan_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
+    relatedfield_affiliation = models.ForeignKey(Institution, related_name='institution_for_relatedfield_affiliation_zhi_yuan_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
     relatedfield_service_role = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_relatedfield_service_role_zhi_yuan_ji_ben_xin_xi_biao', blank=True, verbose_name='服务角色')
     class Meta:
         verbose_name = '职员基本信息表'
@@ -218,7 +218,7 @@ class Yu_yue_tong_zhi_dan(HsscFormModel):
     boolfield_jiu_zhen_yi_sheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='就诊医生')
     boolfield_yu_yue_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='预约序号')
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_yu_yue_tong_zhi_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='就诊机构责任人')
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_yu_yue_tong_zhi_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='就诊机构责任人')
     class Meta:
         verbose_name = '预约通知单'
         verbose_name_plural = verbose_name
@@ -232,8 +232,8 @@ class A6502(HsscFormModel):
         
 
 class Bang_ding_que_ren_biao(HsscFormModel):
-    boolfield_que_ren_ji_ben_xin_xi = models.ForeignKey(Xin_xi_que_ren, related_name='xin_xi_que_ren_for_boolfield_que_ren_ji_ben_xin_xi_bang_ding_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否绑定被保人信息')
     boolfield_ju_jue_bang_ding_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='拒绝绑定原因')
+    boolfield_que_ren_ji_ben_xin_xi = models.ForeignKey(Xin_xi_que_ren, related_name='xin_xi_que_ren_for_boolfield_que_ren_ji_ben_xin_xi_bang_ding_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否绑定被保人信息')
     class Meta:
         verbose_name = '绑定确认表'
         verbose_name_plural = verbose_name
@@ -283,7 +283,7 @@ class A6401(HsscFormModel):
     boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
     datetimefield_ri_qi_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
     boolfield_shi_yong_bao_xian_chan_pin = models.ManyToManyField(Bao_xian_chan_pin, related_name='bao_xian_chan_pin_for_boolfield_shi_yong_bao_xian_chan_pin_A6401', blank=True, verbose_name='使用服务产品')
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Zhi_yuan_ji_ben_xin_xi_biao, related_name='zhi_yuan_ji_ben_xin_xi_biao_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_A6401', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_A6401', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
     class Meta:
         verbose_name = '预约单'
         verbose_name_plural = verbose_name

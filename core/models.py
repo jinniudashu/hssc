@@ -459,7 +459,22 @@ class Workgroup(HsscBase):
 
     class Meta:
         verbose_name = "服务小组"
-        verbose_name_plural = "服务小组"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}'
+        super().save(*args, **kwargs)
+
+
+class Institution(HsscBase):
+    class Meta:
+        verbose_name = "机构"
+        verbose_name_plural = verbose_name
         ordering = ['id']
 
     def __str__(self):

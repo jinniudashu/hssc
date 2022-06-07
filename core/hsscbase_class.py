@@ -248,6 +248,7 @@ class FieldsType(Enum):
     boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = "String"  # 理赔费用汇总单退单原因
     boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = "String"  # 门诊记录单退单原因
     boolfield_li_pei_shen_qing_tui_hui_yuan_yin = "String"  # 理赔申请退回原因
+    boolfield_ju_jue_bang_ding_yuan_yin = "String"  # 拒绝绑定原因
     numberfield_body_temperature = "Numbers"  # 体温
     numberfield_pulse = "Numbers"  # 脉搏
     numberfield_respiratory_rate = "Numbers"  # 呼吸频率
@@ -283,7 +284,7 @@ class FieldsType(Enum):
     boolfield_ru_ku_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 入库计量单位
     boolfield_xiao_shou_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 销售计量单位
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = "icpc.Icpc4_physical_examination_and_tests"  # 设备适用服务功能
-    relatedfield_affiliation = "service.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
+    relatedfield_affiliation = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
     relatedfield_symptom_list = "icpc.Icpc3_symptoms_and_problems"  # 症状
     relatedfield_gender = "dictionaries.Gender"  # 性别
     relatedfield_nationality = "dictionaries.Nationality"  # 民族
@@ -293,7 +294,7 @@ class FieldsType(Enum):
     relatedfield_medical_expenses_burden = "dictionaries.Medical_expenses_burden"  # 医疗费用负担
     relatedfield_type_of_residence = "dictionaries.Type_of_residence"  # 居住类型
     relatedfield_blood_type = "dictionaries.Blood_type"  # 血型
-    relatedfield_signed_family_doctor = "service.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
+    relatedfield_signed_family_doctor = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
     relatedfield_athletic_ability = "dictionaries.Exercise_time"  # 运动能力
     relatedfield_personality_tendency = "dictionaries.Character"  # 性格倾向
     relatedfield_are_you_satisfied_with_the_job_and_life = "dictionaries.Satisfaction"  # 对目前生活和工作满意吗
@@ -362,7 +363,7 @@ class FieldsType(Enum):
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
     relatedfield_drug_name = "service.None"  # 药品名
     boolfield_zheng_jian_lei_xing = "dictionaries.Zheng_jian_lei_xing"  # 证件类型
-    boolfield_ze_ren_ren = "service.Ji_gou_ji_ben_xin_xi_biao"  # 就诊机构
+    boolfield_ze_ren_ren = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 就诊机构
     boolfield_shi_yong_bao_xian_chan_pin = "dictionaries.Bao_xian_chan_pin"  # 使用服务产品
     boolfield_qian_dao_que_ren = "dictionaries.Jie_dan_que_ren"  # 接单确认
     boolfield_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 诊断
@@ -386,9 +387,8 @@ class FieldsType(Enum):
     boolfield_li_pei_men_zhen_ji_lu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 理赔门诊记录签署
     boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 人身险理赔申请书签署
     boolfield_shi_fou_tong_guo_he_bao = "dictionaries.Shi_fou_tong_guo"  # 是否通过核保
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = "service.Zhi_yuan_ji_ben_xin_xi_biao"  # 就诊机构责任人
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 就诊机构责任人
+    boolfield_que_ren_ji_ben_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
     boolfield_shen_fen_zheng_jian_fu_jian = "None"  # 身份证件附件
     boolfield_fei_yong_qing_dan_fu_jian = "None"  # 费用清单附件
     boolfield_men_zhen_bing_li_fu_jian = "None"  # 门诊病历附件
-    boolfield_que_ren_ji_ben_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
-    boolfield_ju_jue_bang_ding_yuan_yin = "String"  # 拒绝绑定原因

@@ -231,6 +231,11 @@ class WorkgroupAdmin(admin.ModelAdmin):
     readonly_fields = ['name']
 clinic_site.register(Workgroup, WorkgroupAdmin)
 
+@admin.register(Institution)
+class InstitutionAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+clinic_site.register(Institution, InstitutionAdmin)
+
 admin.site.register(CustomerServiceLog)
 clinic_site.register(CustomerServiceLog)
 
