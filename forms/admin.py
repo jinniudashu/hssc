@@ -43,11 +43,6 @@ class Man_yi_du_diao_cha_biaoAdmin(admin.ModelAdmin):
 
 admin.site.register(Man_yi_du_diao_cha_biao, Man_yi_du_diao_cha_biaoAdmin)
 
-class Fen_zhen_que_ren_biaoAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_fen_zhen_que_ren": admin.VERTICAL, }
-
-admin.site.register(Fen_zhen_que_ren_biao, Fen_zhen_que_ren_biaoAdmin)
-
 class Li_pei_dui_zhang_danAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Li_pei_dui_zhang_dan, Li_pei_dui_zhang_danAdmin)
@@ -76,6 +71,11 @@ class He_bao_danAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_shi_fou_tong_guo_he_bao": admin.VERTICAL, }
 
 admin.site.register(He_bao_dan, He_bao_danAdmin)
+
+class Fen_zhen_que_ren_biaoAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_fen_zhen_que_ren": admin.VERTICAL, }
+
+admin.site.register(Fen_zhen_que_ren_biao, Fen_zhen_que_ren_biaoAdmin)
 
 class Yu_yue_tong_zhi_danAdmin(admin.ModelAdmin):
         autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]

@@ -118,14 +118,6 @@ class Man_yi_du_diao_cha_biao(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Fen_zhen_que_ren_biao(HsscFormModel):
-    boolfield_fen_zhen_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_fen_zhen_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
-    boolfield_shen_fen_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='身份证件附件')
-    class Meta:
-        verbose_name = '到店确认表'
-        verbose_name_plural = verbose_name
-        
-
 class Li_pei_dui_zhang_dan(HsscFormModel):
     characterfield_age = models.CharField(max_length=255, null=True, blank=False, verbose_name='年龄')
     boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
@@ -191,6 +183,14 @@ class He_bao_dan(HsscFormModel):
     boolfield_shi_fou_tong_guo_he_bao = models.ForeignKey(Shi_fou_tong_guo, related_name='shi_fou_tong_guo_for_boolfield_shi_fou_tong_guo_he_bao_he_bao_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否通过核保')
     class Meta:
         verbose_name = '核保单'
+        verbose_name_plural = verbose_name
+        
+
+class Fen_zhen_que_ren_biao(HsscFormModel):
+    boolfield_fen_zhen_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_fen_zhen_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
+    boolfield_shen_fen_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='身份证件附件')
+    class Meta:
+        verbose_name = '到店确认表'
         verbose_name_plural = verbose_name
         
 

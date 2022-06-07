@@ -3,7 +3,7 @@ def copy_previous_form_data(form):
     previous_form = form.pid.parent_proc.content_object
     if not previous_form:
         return
-    else:        
+    else:
         from core.models import HsscFormModel
         # 获取父进程表单和当前进程表单字段的交集
         base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
@@ -26,8 +26,7 @@ def copy_previous_form_data(form):
         for field_name in copy_fields_name_m2m:
             m2m_objs = exec(f'previous_form.{field_name}.all()')
             if m2m_objs:
-                for obj in m2m_objs:
-                    exec(f'form.{field_name}.add(obj)')
+                exec(f'form.{field_name}.add(*m2m_objs)')
 
         return form
 
@@ -71,16 +70,16 @@ def create_service_proc(**kwargs):
     import json
     # 判断是否需要从父进程表单的api_fields获取进程控制信息
     # Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
-    if kwargs['passing_data'] > 0:
-        # 获取父进程中api_fields不为空的表单
-        _forms = kwargs['parent_proc'].service.buessiness_forms.all()
-        for _form in _forms:
-            if _form.api_fields:
-                # 获取父进程表单的api_fields
-                api_fields = json.loads(_form.api_fields)
+    # if kwargs['passing_data'] > 0:
+    #     # 获取父进程中api_fields不为空的表单
+    #     _forms = kwargs['parent_proc'].service.buessiness_forms.all()
+    #     for _form in _forms:
+    #         if _form.api_fields:
+    #             # 获取父进程表单的api_fields
+    #             api_fields = json.loads(_form.api_fields)
 
-                for api_field in api_fields:
-                    pass
+    #             for api_field in api_fields:
+    #                 pass
 
         # 获取系统接口字段的字典
 
@@ -90,7 +89,6 @@ def create_service_proc(**kwargs):
         # kwargs['scheduled_time']
         # kwargs['operator']
         # 责任人
-        pass
 
     # 创建新的服务作业进程
     from core.models import OperationProc
@@ -155,7 +153,7 @@ def create_customer_service_log(form_data, form_instance):
         if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
             form_data[field_name] = f'{field_val}'
         elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
-            form_data[field_name] = field_val[0]
+            form_data[field_name] = str({field_val}) if field_val != None else '{}'
         elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
             form_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
         else:  # 如果字段类型是关联字段，转换为集合字符串
@@ -238,7 +236,6 @@ def send_channel_message(group_name, message):
     from asgiref.sync import async_to_sync
     from channels.layers import get_channel_layer
     channel_layer = get_channel_layer()
-    print('发送channel信号:', group_name, message)
     async_to_sync(channel_layer.group_send)(group_name, message)
 
 from core.models import OperationProc
