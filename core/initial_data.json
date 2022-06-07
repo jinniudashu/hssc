@@ -1955,51 +1955,8 @@
             "is_list": false
         }
     ],
-    "servicepackage": [
-        {
-            "label": "种植牙理赔服务包",
-            "name": "zhong_zhi_ya_li_pei_fu_wu_bao",
-            "hssc_id": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": "zzylpfwb",
-            "name_icpc": null,
-            "begin_time_setting": 0,
-            "duration": "30 days, 0:00:00",
-            "execution_time_frame": null,
-            "awaiting_time_frame": "2 days, 0:00:00",
-            "services": [
-                "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-                "945606fa-e4c8-11ec-b4b1-1a2f7481020f"
-            ]
-        }
-    ],
-    "servicepackagedetail": [
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "272608d4-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": null,
-            "servicepackage": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "service": "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
-            "cycle_option": 0,
-            "cycle_times": 1,
-            "reference_start_tim": "P0DT00H00M00S",
-            "duration": "15 days, 0:00:00",
-            "check_awaiting_timeout": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "2726b6c6-e4c6-11ec-9f7b-1a2f7481020f",
-            "pym": null,
-            "servicepackage": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
-            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-            "cycle_option": 0,
-            "cycle_times": 1,
-            "reference_start_tim": "15 days, 0:00:00",
-            "duration": "3 days, 0:00:00",
-            "check_awaiting_timeout": true
-        }
-    ],
+    "servicepackage": [],
+    "servicepackagedetail": [],
     "systemoperand": [
         {
             "label": "推荐后续作业",
