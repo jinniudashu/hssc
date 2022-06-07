@@ -112,11 +112,11 @@ class BuessinessFormAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     fieldsets = (
         (None, {
-            'fields': (('label', 'name_icpc'), 'description', ('name', 'hssc_id'), )
+            'fields': (('label', 'name_icpc'), 'description', ('api_fields', 'name', 'hssc_id'), )
         }),
     )
     search_fields = ['name', 'label', 'pym']
-    readonly_fields = ['name', 'hssc_id']
+    readonly_fields = ['api_fields', 'name', 'hssc_id']
     autocomplete_fields = ['name_icpc',]
 
 

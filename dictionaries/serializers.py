@@ -335,3 +335,8 @@ class Shi_fou_tong_guoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shi_fou_tong_guo
         fields = 'value'
+
+class Xin_xi_que_renSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Xin_xi_que_ren
+        fields = 'value'

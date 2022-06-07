@@ -10,31 +10,6 @@ class Z6230Admin(admin.ModelAdmin):
     pass
 admin.site.register(Z6230, Z6230Admin)
 
-class A6502Admin(admin.ModelAdmin):
-        radio_fields = {"boolfield_qian_dao_que_ren": admin.VERTICAL, }
-
-admin.site.register(A6502, A6502Admin)
-
-class A6401Admin(admin.ModelAdmin):
-        autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
-
-admin.site.register(A6401, A6401Admin)
-
-class Yu_yue_tong_zhi_danAdmin(admin.ModelAdmin):
-        autocomplete_fields = ["boolfield_ze_ren_ren", ]
-
-admin.site.register(Yu_yue_tong_zhi_dan, Yu_yue_tong_zhi_danAdmin)
-
-class Zhen_jian_sui_fang_biaoAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_zhi_liao_jian_gou_tong_qing_kuang": admin.VERTICAL, "boolfield_jie_dai_fu_wu": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, }
-
-admin.site.register(Zhen_jian_sui_fang_biao, Zhen_jian_sui_fang_biaoAdmin)
-
-class Ren_shen_xian_li_pei_shen_qing_shuAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_yu_chu_xian_ren_guan_xi": admin.VERTICAL, }
-
-admin.site.register(Ren_shen_xian_li_pei_shen_qing_shu, Ren_shen_xian_li_pei_shen_qing_shuAdmin)
-
 class Ji_gou_ji_ben_xin_xi_biaoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
@@ -106,6 +81,36 @@ class He_bao_danAdmin(admin.ModelAdmin):
 
 admin.site.register(He_bao_dan, He_bao_danAdmin)
 
+class Yu_yue_tong_zhi_danAdmin(admin.ModelAdmin):
+        autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
+
+admin.site.register(Yu_yue_tong_zhi_dan, Yu_yue_tong_zhi_danAdmin)
+
+class A6502Admin(admin.ModelAdmin):
+        radio_fields = {"boolfield_qian_dao_que_ren": admin.VERTICAL, }
+
+admin.site.register(A6502, A6502Admin)
+
+class Bang_ding_que_ren_biaoAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_que_ren_ji_ben_xin_xi": admin.VERTICAL, }
+
+admin.site.register(Bang_ding_que_ren_biao, Bang_ding_que_ren_biaoAdmin)
+
 class Z6233Admin(admin.ModelAdmin):
     pass
 admin.site.register(Z6233, Z6233Admin)
+
+class Zhen_jian_sui_fang_biaoAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_zhi_liao_jian_gou_tong_qing_kuang": admin.VERTICAL, "boolfield_jie_dai_fu_wu": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, }
+
+admin.site.register(Zhen_jian_sui_fang_biao, Zhen_jian_sui_fang_biaoAdmin)
+
+class Ren_shen_xian_li_pei_shen_qing_shuAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_yu_chu_xian_ren_guan_xi": admin.VERTICAL, }
+
+admin.site.register(Ren_shen_xian_li_pei_shen_qing_shu, Ren_shen_xian_li_pei_shen_qing_shuAdmin)
+
+class A6401Admin(admin.ModelAdmin):
+        autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
+
+admin.site.register(A6401, A6401Admin)

@@ -2858,5 +2858,27 @@
             "value": "否",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Xin_xi_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "fbe9f9be-e632-11ec-9186-c2da47347ca3",
+            "pym": null,
+            "value": "是",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Xin_xi_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "fbeda794-e632-11ec-9186-c2da47347ca3",
+            "pym": null,
+            "value": "否",
+            "icpc": null
+        }
     }
 ]

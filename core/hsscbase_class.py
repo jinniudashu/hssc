@@ -390,3 +390,5 @@ class FieldsType(Enum):
     boolfield_shen_fen_zheng_jian_fu_jian = "None"  # 身份证件附件
     boolfield_fei_yong_qing_dan_fu_jian = "None"  # 费用清单附件
     boolfield_men_zhen_bing_li_fu_jian = "None"  # 门诊病历附件
+    boolfield_que_ren_ji_ben_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
+    boolfield_ju_jue_bang_ding_yuan_yin = "String"  # 拒绝绑定原因

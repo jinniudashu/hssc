@@ -538,3 +538,11 @@ class Shi_fou_tong_guoAdmin(admin.ModelAdmin):
     list_display = ["value"]
 
 clinic_site.register(Shi_fou_tong_guo, Shi_fou_tong_guoAdmin)
+
+
+@admin.register(Xin_xi_que_ren)
+class Xin_xi_que_renAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+clinic_site.register(Xin_xi_que_ren, Xin_xi_que_renAdmin)

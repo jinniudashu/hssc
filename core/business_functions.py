@@ -24,8 +24,10 @@ def copy_previous_form_data(form):
 
         # 向当前进程表单写入交集多对多字段内容
         for field_name in copy_fields_name_m2m:
-            for obj in exec(f'previous_form.{field_name}.all()'):
-                exec(f'form.{field_name}.add(obj)')
+            m2m_objs = exec(f'previous_form.{field_name}.all()')
+            if m2m_objs:
+                for obj in m2m_objs:
+                    exec(f'form.{field_name}.add(obj)')
 
         return form
 
@@ -66,8 +68,32 @@ def create_form_instance(operation_proc, passing_data):
 
 # 创建服务进程实例
 def create_service_proc(**kwargs):
-    from core.models import OperationProc
+    import json
+    # 判断是否需要从父进程表单的api_fields获取进程控制信息
+    # Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
+    if kwargs['passing_data'] > 0:
+        # 获取父进程中api_fields不为空的表单
+        _forms = kwargs['parent_proc'].service.buessiness_forms.all()
+        for _form in _forms:
+            if _form.api_fields:
+                # 获取父进程表单的api_fields
+                api_fields = json.loads(_form.api_fields)
+
+                for api_field in api_fields:
+                    pass
+
+        # 获取系统接口字段的字典
+
+        # 将多张表单的结果汇合成一个集合
+
+        # api_fields = 
+        # kwargs['scheduled_time']
+        # kwargs['operator']
+        # 责任人
+        pass
+
     # 创建新的服务作业进程
+    from core.models import OperationProc
     new_proc=OperationProc.objects.create(
         service=kwargs['service'],
         customer=kwargs['customer'],
@@ -94,66 +120,65 @@ def create_service_proc(**kwargs):
 
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
-def create_customer_service_log(post_data, form_instance):
-    from enum import Enum
+def create_customer_service_log(form_data, form_instance):
+    from django.db.models.query import QuerySet
+    from django.core.exceptions import ObjectDoesNotExist
     from core.models import CustomerServiceLog
+    from core.hsscbase_class import FieldsType
+
+    def _get_set_value(field_type, id_list):
+        print('field_type:', field_type, 'id_list:', id_list)
+        # 转换id列表为对应的字典值列表
+        app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
+        val_iterator = []
+        if isinstance(id_list, QuerySet):
+            if app_label == 'icpc':
+                val_iterator = map(lambda x: x.iname, id_list)
+            elif app_label == 'dictionaries':
+                val_iterator = map(lambda x: x.value, id_list)
+            else:
+                val_iterator = map(lambda x: x.name, id_list)
+        else:
+            if app_label == 'icpc':
+                val_iterator = [id_list.iname]
+            elif app_label == 'dictionaries':
+                val_iterator = [id_list.value]
+            else:
+                val_iterator = [id_list.name]
+        return f'{set(val_iterator)}'
+
     # 数据格式预处理
-    def _preprocess_data_format(post_data):
-        from core.hsscbase_class import FieldsType
-        def _get_set_value(field_type, id_list):
-            print('field_type:', field_type, 'id_list:', id_list)
-            # 转换id列表为对应的字典值列表
-            _model_list = field_type.split('.')  # 分割模型名称field_type: app_label.model_name
-            app_label = _model_list[0]  # 应用名称
-            model_name = _model_list[1]  # 模型名称
-            class ConvertIdToValue(Enum):
-                icpc = map(lambda x: eval(model_name).objects.get(id=x).iname, id_list)
-                dictionaries = map(lambda x: eval(model_name).objects.get(id=x).value, id_list)
-                service = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
-                core = map(lambda x: eval(model_name).objects.get(id=x).name, id_list)
-            val_iterator = eval(f'ConvertIdToValue.{app_label}').value
-            return f'{set(val_iterator)}'
+    for field_name, field_val in form_data.items():
+        # 根据字段类型做字段值的格式转换
+        field_type = eval(f'FieldsType.{field_name}').value
+        print('field_name:', field_name, 'field_val:', field_val, 'field_type', field_type)
+        if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
+            form_data[field_name] = f'{field_val}'
+        elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
+            form_data[field_name] = field_val[0]
+        elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
+            form_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
+        else:  # 如果字段类型是关联字段，转换为集合字符串
+            form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
 
-        post_data.pop('csrfmiddlewaretoken')
-        post_data.pop('_save')
-        form_data = {**post_data}  # 把QuerySet对象转为Dict
-        for field_name, field_val in form_data.items():
-            print('field_name:', field_name, 'field_val:', field_val)
-            # 根据字段类型做字段值的格式转换
-            field_type = eval(f'FieldsType.{field_name}').value
-            if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
-                form_data[field_name] = f'{field_val}'
-            elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
-                form_data[field_name] = field_val[0]
-            elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
-                form_data[field_name] = f'{set(field_val)}' if field_val and field_val!=[''] else '{}'
-            else:  # 如果字段类型是关联字段，转换为集合字符串
-                form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
-        return form_data
+    print('完成预处理form_data:', form_data)
+    # 保存form_data
+    try:
+        log = CustomerServiceLog.objects.get(pid = form_instance.pid)
+        log.data = form_data
+        log.save()
+    except ObjectDoesNotExist:
+        log = CustomerServiceLog.objects.create(
+            name=form_instance.name,
+            label=form_instance.label,
+            customer=form_instance.customer,
+            operator=form_instance.operator,
+            creater=form_instance.creater,
+            pid=form_instance.pid,
+            cpid=form_instance.cpid,
+            data=form_data,
+        )
 
-    def _add_customer_service_log(form_data, form_instance):
-        from django.core.exceptions import ObjectDoesNotExist
-        try:
-            log = CustomerServiceLog.objects.get(pid = form_instance.pid)
-            log.data = form_data
-            log.save()
-        except ObjectDoesNotExist:
-            log = CustomerServiceLog.objects.create(
-                name=form_instance.name,
-                label=form_instance.label,
-                customer=form_instance.customer,
-                operator=form_instance.operator,
-                creater=form_instance.creater,
-                pid=form_instance.pid,
-                cpid=form_instance.cpid,
-                data=form_data,
-            )
-        return log
-
-    _form_data = _preprocess_data_format(post_data)
-    log = _add_customer_service_log(_form_data, form_instance)
-
-    return log
 
 # 获取客户基本信息
 def get_customer_profile(customer):

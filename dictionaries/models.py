@@ -429,3 +429,9 @@ class Shi_fou_tong_guo(DictBase):
     class Meta:
         verbose_name = '是否通过'
         verbose_name_plural = verbose_name
+
+
+class Xin_xi_que_ren(DictBase):
+    class Meta:
+        verbose_name = '绑定确认'
+        verbose_name_plural = verbose_name

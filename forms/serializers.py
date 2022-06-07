@@ -8,26 +8,6 @@ class Z6230Serializer(serializers.ModelSerializer):
     class Meta:
         model = Z6230
         fields = '__all__'
-class A6502Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6502
-        fields = '__all__'
-class A6401Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = A6401
-        fields = '__all__'
-class Yu_yue_tong_zhi_danSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yu_yue_tong_zhi_dan
-        fields = '__all__'
-class Zhen_jian_sui_fang_biaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Zhen_jian_sui_fang_biao
-        fields = '__all__'
-class Ren_shen_xian_li_pei_shen_qing_shuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ren_shen_xian_li_pei_shen_qing_shu
-        fields = '__all__'
 class Ji_gou_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ji_gou_ji_ben_xin_xi_biao
@@ -88,7 +68,31 @@ class He_bao_danSerializer(serializers.ModelSerializer):
     class Meta:
         model = He_bao_dan
         fields = '__all__'
+class Yu_yue_tong_zhi_danSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yu_yue_tong_zhi_dan
+        fields = '__all__'
+class A6502Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6502
+        fields = '__all__'
+class Bang_ding_que_ren_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bang_ding_que_ren_biao
+        fields = '__all__'
 class Z6233Serializer(serializers.ModelSerializer):
     class Meta:
         model = Z6233
+        fields = '__all__'
+class Zhen_jian_sui_fang_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zhen_jian_sui_fang_biao
+        fields = '__all__'
+class Ren_shen_xian_li_pei_shen_qing_shuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ren_shen_xian_li_pei_shen_qing_shu
+        fields = '__all__'
+class A6401Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6401
         fields = '__all__'
