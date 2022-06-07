@@ -423,6 +423,21 @@ class Customer(HsscBase):
         return reverse('customer_homepage', args=[self.id])
 
 
+class Institution(HsscBase):
+    class Meta:
+        verbose_name = "机构"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.label)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}'
+        super().save(*args, **kwargs)
+
+
 # 职员基本信息
 class Staff(HsscBase):
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE, null=True, verbose_name='员工')
@@ -436,6 +451,7 @@ class Staff(HsscBase):
     service_lever = models.PositiveSmallIntegerField(choices=Service_Lever, blank=True, null=True, verbose_name='服务级别')
     registration_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='挂号费')
     standardized_workload = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='标化工作量')
+    institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="隶属机构")
 
     class Meta:
         verbose_name = "员工基本信息"
@@ -459,21 +475,6 @@ class Workgroup(HsscBase):
 
     class Meta:
         verbose_name = "服务小组"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return str(self.label)
-
-    def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = f'{"_".join(lazy_pinyin(self.label))}'
-        super().save(*args, **kwargs)
-
-
-class Institution(HsscBase):
-    class Meta:
-        verbose_name = "机构"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
