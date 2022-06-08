@@ -388,7 +388,10 @@ class FieldsType(Enum):
     boolfield_shi_fou_tong_guo_he_bao = "dictionaries.Shi_fou_tong_guo"  # 是否通过核保
     boolfield_jiu_zhen_ji_gou_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 就诊机构责任人
     boolfield_shen_fen_zheng_jian_fu_jian = "None"  # 身份证件附件
-    boolfield_fei_yong_qing_dan_fu_jian = "None"  # 费用清单附件
+    boolfield_fei_yong_qing_dan_fu_jian = "None"  # 汇总费用清单附件
     boolfield_men_zhen_bing_li_fu_jian = "None"  # 门诊病历附件
     boolfield_que_ren_ji_ben_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
     boolfield_ju_jue_bang_ding_yuan_yin = "String"  # 拒绝绑定原因
+    boolfield_ju_jue_jie_dan_yuan_yin = "String"  # 拒绝接单原因
+    boolfield_shen_qing_ren_zheng_jian_fu_jian = "None"  # 申请人证件附件
+    boolfield_bei_bao_ren_zheng_jian_fu_jian = "None"  # 被保人证件附件

@@ -383,7 +383,6 @@ def operand_finished_handler(sender, **kwargs):
                 'request': request,
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
-            print('Debug from check_rules:operation_params["passing_data"]', operation_params['passing_data'])
             _result = _execute_system_operand(service_rule.system_operand, **operation_params)
             print('From check_rules 执行结果:', _result)
     

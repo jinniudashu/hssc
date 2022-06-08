@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import *
-class Bei_bao_ren_ji_ben_xin_xi_que_renSerializer(serializers.ModelSerializer):
+class Men_zhen_ji_lu_hui_zongSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Bei_bao_ren_ji_ben_xin_xi_que_ren
+        model = Men_zhen_ji_lu_hui_zong
         fields = '__all__'
 class Bao_xian_yong_hu_zhu_ceSerializer(serializers.ModelSerializer):
     class Meta:

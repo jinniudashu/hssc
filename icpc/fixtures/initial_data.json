@@ -102918,6 +102918,23 @@
         }
     },
     {
+        "model": "icpc.Icpc7_treatments",
+        "fields": {
+            "icpc_code": "A5102",
+            "icode": "A51",
+            "iname": "种植牙",
+            "iename": null,
+            "include": null,
+            "criteria": null,
+            "exclude": null,
+            "consider": null,
+            "icd10": null,
+            "icpc2": null,
+            "note": null,
+            "pym": "zzy"
+        }
+    },
+    {
         "model": "icpc.Icpc8_other_health_interventions",
         "fields": {
             "icpc_code": "A4501",
