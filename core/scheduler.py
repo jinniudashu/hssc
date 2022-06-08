@@ -286,9 +286,8 @@ def operand_finished_handler(sender, **kwargs):
                     customer=operation_proc.customer,  # 客户
                     cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
                 )
-                print('推荐服务已存在：', obj, 'obj.pid:', obj.pid, '类型:', type(obj.pid), '父进程:', operation_proc, '类型:', type(operation_proc))
-                obj.pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                obj.counter += 1
+                obj.pid=operation_proc
+                obj.counter+=1
                 obj.passing_data=kwargs['passing_data']
                 obj.save()
             except RecommendedService.DoesNotExist:

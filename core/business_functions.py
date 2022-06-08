@@ -125,7 +125,6 @@ def create_customer_service_log(form_data, form_instance):
     from core.hsscbase_class import FieldsType
 
     def _get_set_value(field_type, id_list):
-        print('field_type:', field_type, 'id_list:', id_list)
         # 转换id列表为对应的字典值列表
         app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
         val_iterator = []
@@ -149,7 +148,6 @@ def create_customer_service_log(form_data, form_instance):
     for field_name, field_val in form_data.items():
         # 根据字段类型做字段值的格式转换
         field_type = eval(f'FieldsType.{field_name}').value
-        print('field_name:', field_name, 'field_val:', field_val, 'field_type', field_type)
         if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
             form_data[field_name] = f'{field_val}'
         elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
