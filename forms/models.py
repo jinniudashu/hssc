@@ -125,14 +125,6 @@ class Li_pei_fei_yong_hui_zong_dan_shen_he(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class He_bao_dan(HsscFormModel):
-    boolfield_li_pei_shen_qing_tui_hui_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔申请退回原因')
-    boolfield_shi_fou_tong_guo_he_bao = models.ForeignKey(Shi_fou_tong_guo, related_name='shi_fou_tong_guo_for_boolfield_shi_fou_tong_guo_he_bao_he_bao_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否通过核保')
-    class Meta:
-        verbose_name = '核保单'
-        verbose_name_plural = verbose_name
-        
-
 class Men_zhen_fu_wu_ji_lu_dan(HsscFormModel):
     boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='症状')
@@ -247,6 +239,14 @@ class Z6233(HsscFormModel):
     characterfield_password = models.CharField(max_length=255, null=True, blank=True, verbose_name='密码')
     class Meta:
         verbose_name = '诊所登陆表'
+        verbose_name_plural = verbose_name
+        
+
+class He_bao_dan(HsscFormModel):
+    boolfield_li_pei_shen_qing_tui_hui_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔申请退回原因')
+    boolfield_shi_fou_tong_guo_he_bao = models.ForeignKey(Shi_fou_shen_he_tong_guo, related_name='shi_fou_shen_he_tong_guo_for_boolfield_shi_fou_tong_guo_he_bao_he_bao_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否审核通过')
+    class Meta:
+        verbose_name = '保险审核单'
         verbose_name_plural = verbose_name
         
 

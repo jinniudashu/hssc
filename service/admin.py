@@ -139,7 +139,7 @@ class Ti_jiao_he_bao_zi_liaoAdmin(HsscFormAdmin):
         ("理赔对账单审核单", {"fields": ("boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin", "boolfield_qian_shu_que_ren", )}), 
         ("治疗费用汇总单", {"fields": ("boolfield_fei_yong_he_ji", "boolfield_fei_yong", "boolfield_bao_dan_wai_fu_wu_fei_yong", "boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu", "boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu", "boolfield_fei_yong_qing_dan_fu_jian", )}), 
         ("理赔费用汇总单审核", {"fields": ("boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin", "boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu", )}), 
-        ("核保单", {"fields": ("boolfield_li_pei_shen_qing_tui_hui_yuan_yin", "boolfield_shi_fou_tong_guo_he_bao", )}), ]
+        ("保险审核单", {"fields": ("boolfield_li_pei_shen_qing_tui_hui_yuan_yin", "boolfield_shi_fou_tong_guo_he_bao", )}), ]
     autocomplete_fields = ["relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", ]
     radio_fields = {"boolfield_yu_chu_xian_ren_guan_xi": admin.VERTICAL, "boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu": admin.VERTICAL, "boolfield_li_pei_men_zhen_ji_lu_qian_shu": admin.VERTICAL, "boolfield_qian_shu_que_ren": admin.VERTICAL, "boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu": admin.VERTICAL, "boolfield_shi_fou_tong_guo_he_bao": admin.VERTICAL, }
     readonly_fields = ["characterfield_gender", "characterfield_name", "boolfield_chang_zhu_di_zhi", "datetimefield_date_of_birth", ]

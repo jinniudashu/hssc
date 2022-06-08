@@ -419,12 +419,6 @@ class Zheng_jian_lei_xing(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Qian_shu_que_ren(DictBase):
-    class Meta:
-        verbose_name = '签署确认'
-        verbose_name_plural = verbose_name
-
-
 class Shi_fou_tong_guo(DictBase):
     class Meta:
         verbose_name = '是否通过'
@@ -434,4 +428,16 @@ class Shi_fou_tong_guo(DictBase):
 class Xin_xi_que_ren(DictBase):
     class Meta:
         verbose_name = '绑定确认'
+        verbose_name_plural = verbose_name
+
+
+class Qian_shu_que_ren(DictBase):
+    class Meta:
+        verbose_name = '签署确认'
+        verbose_name_plural = verbose_name
+
+
+class Shi_fou_shen_he_tong_guo(DictBase):
+    class Meta:
+        verbose_name = '是否审核通过'
         verbose_name_plural = verbose_name

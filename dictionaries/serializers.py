@@ -326,11 +326,6 @@ class Zheng_jian_lei_xingSerializer(serializers.ModelSerializer):
         model = Zheng_jian_lei_xing
         fields = 'value'
 
-class Qian_shu_que_renSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Qian_shu_que_ren
-        fields = 'value'
-
 class Shi_fou_tong_guoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shi_fou_tong_guo
@@ -339,4 +334,14 @@ class Shi_fou_tong_guoSerializer(serializers.ModelSerializer):
 class Xin_xi_que_renSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xin_xi_que_ren
+        fields = 'value'
+
+class Qian_shu_que_renSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Qian_shu_que_ren
+        fields = 'value'
+
+class Shi_fou_shen_he_tong_guoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shi_fou_shen_he_tong_guo
         fields = 'value'

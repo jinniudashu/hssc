@@ -320,20 +320,6 @@
             "components_groups": []
         },
         {
-            "label": "核保单",
-            "name": "he_bao_dan",
-            "hssc_id": "64ad92b2-e552-11ec-b262-4e30b92064b6",
-            "pym": "hbd",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": null,
-            "components": [
-                "4999304e-e552-11ec-b262-4e30b92064b6",
-                "2251f368-e552-11ec-b262-4e30b92064b6"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "门诊服务记录单",
             "name": "men_zhen_fu_wu_ji_lu_dan",
             "hssc_id": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
@@ -501,6 +487,20 @@
             "components": [
                 "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
                 "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "保险审核单",
+            "name": "he_bao_dan",
+            "hssc_id": "64ad92b2-e552-11ec-b262-4e30b92064b6",
+            "pym": "bxshd",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": null,
+            "components": [
+                "4999304e-e552-11ec-b262-4e30b92064b6",
+                "2251f368-e552-11ec-b262-4e30b92064b6"
             ],
             "components_groups": []
         },
@@ -1288,10 +1288,10 @@
             ]
         },
         {
-            "label": "保险核保服务",
+            "label": "保险理赔审核服务",
             "name": "ti_jiao_he_bao_zi_liao",
             "hssc_id": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "pym": "bxhbfw",
+            "pym": "bxlpshfw",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1317,10 +1317,10 @@
                 "1210eee8-e54b-11ec-91a5-4e30b92064b6",
                 "2e70d896-e54b-11ec-91a5-4e30b92064b6",
                 "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
-                "64ad92b2-e552-11ec-b262-4e30b92064b6",
                 "15de6896-dfbc-11ec-9eb2-26a028640b2f",
                 "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
-                "dc327a94-e400-11ec-9eb0-42585b16dcd4"
+                "dc327a94-e400-11ec-9eb0-42585b16dcd4",
+                "64ad92b2-e552-11ec-b262-4e30b92064b6"
             ],
             "role": [
                 "de1daa3e-9aa1-11ec-bde1-8a6e55faf877"
@@ -2060,10 +2060,10 @@
             "name": "qian_shu_tong_guo",
             "hssc_id": "ce047b04-e4cb-11ec-b4b1-1a2f7481020f",
             "pym": "lpshtg",
-            "description": "理赔对账单签署 == ''是'' and 理赔费用汇总单签署 == ''是'' and 理赔门诊记录签署 == ''是'' and 人身险理赔申请书签署 == ''是''",
+            "description": "理赔对账单签署 == ''通过'' and 理赔费用汇总单签署 == ''通过'' and 理赔门诊记录签署 == ''通过'' and 人身险理赔申请书签署 == ''通过''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'是'}.intersection(boolfield_qian_shu_que_ren)) == 1 and len({'是'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 and len({'是'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 and len({'是'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
+            "expression": "boolfield_qian_shu_que_ren == ''通过'' and boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu == ''通过'' and boolfield_li_pei_men_zhen_ji_lu_qian_shu == ''通过'' and boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu == ''通过''",
             "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
         },
         {
@@ -2071,32 +2071,32 @@
             "name": "qian_shu_bu_tong_guo",
             "hssc_id": "f85807cc-e4cb-11ec-9f7b-1a2f7481020f",
             "pym": "lpshbtg",
-            "description": "理赔对账单签署 == ''否'' or 理赔费用汇总单签署 == ''否'' or 理赔门诊记录签署 == ''否'' or 人身险理赔申请书签署 == ''否''",
+            "description": "理赔对账单签署 == ''不通过'' or 理赔费用汇总单签署 == ''不通过'' or 理赔门诊记录签署 == ''不通过'' or 人身险理赔申请书签署 == ''不通过''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'否'}.intersection(boolfield_qian_shu_que_ren)) == 1 or len({'否'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 or len({'否'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 or len({'否'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
+            "expression": "boolfield_qian_shu_que_ren == ''不通过'' or boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu == ''不通过'' or boolfield_li_pei_men_zhen_ji_lu_qian_shu == ''不通过'' or boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu == ''不通过''",
             "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
         },
         {
-            "label": "核保通过",
+            "label": "保险理赔审核通过",
             "name": "he_bao_tong_guo",
             "hssc_id": "140fb0da-e569-11ec-8a69-ca4030bb64ad",
-            "pym": "hbtg",
-            "description": "是否通过核保 == ''是''",
+            "pym": "bxlpshtg",
+            "description": "是否审核通过 == ''通过''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'是'}.intersection(boolfield_shi_fou_tong_guo_he_bao)) == 1",
+            "expression": "len({'通过'}.intersection(boolfield_shi_fou_tong_guo_he_bao)) == 1",
             "expression_fields": "boolfield_shi_fou_tong_guo_he_bao"
         },
         {
-            "label": "核保不通过",
+            "label": "保险理赔审核不通过",
             "name": "he_bao_bu_tong_guo",
             "hssc_id": "2c91f05a-e569-11ec-8c49-ca4030bb64ad",
-            "pym": "hbbtg",
-            "description": "是否通过核保 == ''否''",
+            "pym": "bxlpshbtg",
+            "description": "是否审核通过 == ''不通过''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'否}.intersection(boolfield_shi_fou_tong_guo_he_bao)) == 1",
+            "expression": "len({'不通过'}.intersection(boolfield_shi_fou_tong_guo_he_bao)) == 1",
             "expression_fields": "boolfield_shi_fou_tong_guo_he_bao"
         },
         {
@@ -2107,7 +2107,7 @@
             "description": "是否绑定被保人信息 == ''是''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'是}.intersection(boolfield_que_ren_ji_ben_xin_xi)) == 1",
+            "expression": "len({'是'}.intersection(boolfield_que_ren_ji_ben_xin_xi)) == 1",
             "expression_fields": "boolfield_que_ren_ji_ben_xin_xi"
         },
         {
@@ -2118,7 +2118,7 @@
             "description": "是否绑定被保人信息 == ''否''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'否}.intersection(boolfield_que_ren_ji_ben_xin_xi)) == 1",
+            "expression": "len({'否'}.intersection(boolfield_que_ren_ji_ben_xin_xi)) == 1",
             "expression_fields": "boolfield_que_ren_ji_ben_xin_xi"
         }
     ],
@@ -2284,7 +2284,7 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "保险核保不通过",
+            "label": "保险理赔审核不通过",
             "name": null,
             "hssc_id": "f4695cb6-e4cf-11ec-b4b1-1a2f7481020f",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
@@ -2306,7 +2306,7 @@
             "hssc_id": "46e7590e-e550-11ec-b262-4e30b92064b6",
             "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
             "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
             "passing_data": 1,
             "complete_feedback": 1,
@@ -2318,7 +2318,7 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "门诊结束",
+            "label": "保险审核通过",
             "name": null,
             "hssc_id": "a30a9b6a-e550-11ec-91a5-4e30b92064b6",
             "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",

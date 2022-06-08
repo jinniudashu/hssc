@@ -2816,28 +2816,6 @@
         }
     },
     {
-        "model": "dictionaries.Qian_shu_que_ren",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "c8377c2e-e405-11ec-9d3a-42585b16dcd4",
-            "pym": null,
-            "value": "是",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Qian_shu_que_ren",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "c837bf5e-e405-11ec-9d3a-42585b16dcd4",
-            "pym": null,
-            "value": "否",
-            "icpc": null
-        }
-    },
-    {
         "model": "dictionaries.Shi_fou_tong_guo",
         "fields": {
             "label": null,
@@ -2878,6 +2856,50 @@
             "hssc_id": "fbeda794-e632-11ec-9186-c2da47347ca3",
             "pym": null,
             "value": "否",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qian_shu_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "c8377c2e-e405-11ec-9d3a-42585b16dcd4",
+            "pym": null,
+            "value": "通过",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Qian_shu_que_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "c837bf5e-e405-11ec-9d3a-42585b16dcd4",
+            "pym": null,
+            "value": "不通过",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_shen_he_tong_guo",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "594992d6-e700-11ec-91b8-3625e21b9b18",
+            "pym": null,
+            "value": "通过",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_shen_he_tong_guo",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "595aafe4-e700-11ec-91b8-3625e21b9b18",
+            "pym": null,
+            "value": "不通过",
             "icpc": null
         }
     }

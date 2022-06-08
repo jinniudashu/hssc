@@ -237,10 +237,10 @@ class Ti_jiao_he_bao_zi_liao(HsscFormModel):
     boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔费用汇总单退单原因')
     boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔费用汇总单签署')
     boolfield_li_pei_shen_qing_tui_hui_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔申请退回原因')
-    boolfield_shi_fou_tong_guo_he_bao = models.ForeignKey(Shi_fou_tong_guo, related_name='shi_fou_tong_guo_for_boolfield_shi_fou_tong_guo_he_bao_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否通过核保')
+    boolfield_shi_fou_tong_guo_he_bao = models.ForeignKey(Shi_fou_shen_he_tong_guo, related_name='shi_fou_shen_he_tong_guo_for_boolfield_shi_fou_tong_guo_he_bao_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否审核通过')
 
     class Meta:
-        verbose_name = '保险核保服务'
+        verbose_name = '保险理赔审核服务'
         verbose_name_plural = verbose_name
 
     def __str__(self):
