@@ -2063,7 +2063,7 @@
             "description": "理赔对账单签署 == ''通过'' and 理赔费用汇总单签署 == ''通过'' and 理赔门诊记录签署 == ''通过'' and 人身险理赔申请书签署 == ''通过''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "boolfield_qian_shu_que_ren == ''通过'' and boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu == ''通过'' and boolfield_li_pei_men_zhen_ji_lu_qian_shu == ''通过'' and boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu == ''通过''",
+            "expression": "len({'通过'}.intersection(boolfield_qian_shu_que_ren)) == 1 and len({'通过'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 and len({'通过'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 and len({'通过'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
             "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
         },
         {
@@ -2074,7 +2074,7 @@
             "description": "理赔对账单签署 == ''不通过'' or 理赔费用汇总单签署 == ''不通过'' or 理赔门诊记录签署 == ''不通过'' or 人身险理赔申请书签署 == ''不通过''",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "boolfield_qian_shu_que_ren == ''不通过'' or boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu == ''不通过'' or boolfield_li_pei_men_zhen_ji_lu_qian_shu == ''不通过'' or boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu == ''不通过''",
+            "expression": "len({'不通过'}.intersection(boolfield_qian_shu_que_ren)) == 1 and len({'不通过'}.intersection(boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu)) == 1 and len({'不通过'}.intersection(boolfield_li_pei_men_zhen_ji_lu_qian_shu)) == 1 and len({'不通过'}.intersection(boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu)) == 1",
             "expression_fields": "boolfield_qian_shu_que_ren,boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu,boolfield_li_pei_men_zhen_ji_lu_qian_shu,boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu"
         },
         {
