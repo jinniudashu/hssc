@@ -347,8 +347,8 @@
             "description": "",
             "api_fields": "[]",
             "components": [
-                "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b",
-                "b44ec16c-e6c7-11ec-b27f-0e45e7e36a4e"
+                "b44ec16c-e6c7-11ec-b27f-0e45e7e36a4e",
+                "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b"
             ],
             "components_groups": []
         },
@@ -412,25 +412,6 @@
             "components_groups": []
         },
         {
-            "label": "预约通知单",
-            "name": "yu_yue_tong_zhi_dan",
-            "hssc_id": "9c66c3f4-df1c-11ec-b28d-02377abc76d6",
-            "pym": "yytzd",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[{\"scheduled_time\": \"datetimefield_ri_qi_shi_jian\"}, {\"charge_staff\": \"boolfield_jiu_zhen_ji_gou_ze_ren_ren\"}]",
-            "components": [
-                "d31f31aa-c5c8-11ec-b819-725badf7393d",
-                "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
-                "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
-                "ac0018f8-dfba-11ec-9597-26a028640b2f",
-                "a342101c-dfbb-11ec-9597-26a028640b2f",
-                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
-                "ceecaf40-e576-11ec-8a69-ca4030bb64ad"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "诊后回访单",
             "name": "zhen_hou_hui_fang_dan",
             "hssc_id": "937920f2-e403-11ec-9eb0-42585b16dcd4",
@@ -449,20 +430,6 @@
             "components_groups": []
         },
         {
-            "label": "到店确认表",
-            "name": "fen_zhen_que_ren_biao",
-            "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
-            "pym": "ddqrb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[]",
-            "components": [
-                "97358b46-df1b-11ec-b4b2-02377abc76d6",
-                "a0fc960a-a506-11ec-a7bb-cecec7a0e139"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "绑定确认表",
             "name": "bang_ding_que_ren_biao",
             "hssc_id": "a669b316-e633-11ec-9abb-c2da47347ca3",
@@ -471,8 +438,8 @@
             "description": "",
             "api_fields": "[]",
             "components": [
-                "14856b52-e633-11ec-9abb-c2da47347ca3",
-                "e9f64680-e633-11ec-9abb-c2da47347ca3"
+                "e9f64680-e633-11ec-9abb-c2da47347ca3",
+                "14856b52-e633-11ec-9abb-c2da47347ca3"
             ],
             "components_groups": []
         },
@@ -505,6 +472,23 @@
             "components_groups": []
         },
         {
+            "label": "预约通知单",
+            "name": "yu_yue_tong_zhi_dan",
+            "hssc_id": "9c66c3f4-df1c-11ec-b28d-02377abc76d6",
+            "pym": "yytzd",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[{\"scheduled_time\": \"datetimefield_ri_qi_shi_jian\"}, {\"charge_staff\": \"boolfield_jiu_zhen_ji_gou_ze_ren_ren\"}]",
+            "components": [
+                "d31f31aa-c5c8-11ec-b819-725badf7393d",
+                "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
+                "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
+                "ac0018f8-dfba-11ec-9597-26a028640b2f",
+                "a342101c-dfbb-11ec-9597-26a028640b2f"
+            ],
+            "components_groups": []
+        },
+        {
             "label": "诊间随访表",
             "name": "zhen_jian_sui_fang_biao",
             "hssc_id": "0bbfa36a-e2d8-11ec-9a2f-dae07feb8058",
@@ -521,6 +505,20 @@
                 "e4c91686-dfbe-11ec-9597-26a028640b2f",
                 "d8286684-dfbe-11ec-9597-26a028640b2f",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "到店确认表",
+            "name": "fen_zhen_que_ren_biao",
+            "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
+            "pym": "ddqrb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[]",
+            "components": [
+                "a0fc960a-a506-11ec-a7bb-cecec7a0e139",
+                "ac7bb410-e715-11ec-8fdc-9a0420f173f1"
             ],
             "components_groups": []
         },
@@ -962,10 +960,10 @@
             ]
         },
         {
-            "label": "平台安排责任人",
+            "label": "平台预约安排",
             "name": "yu_yue_an_pai",
             "hssc_id": "dfacb992-de5f-11ec-be26-9a796a47c5af",
-            "pym": "ptapzrr",
+            "pym": "ptyyap",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1941,7 +1939,20 @@
             "is_list": false
         }
     ],
-    "servicepackage": [],
+    "servicepackage": [
+        {
+            "label": "种植牙理赔服务包",
+            "name": "zhong_zhi_ya_li_pei_fu_wu_bao",
+            "hssc_id": "2722ba30-e4c6-11ec-9f7b-1a2f7481020f",
+            "pym": "zzylpfwb",
+            "name_icpc": null,
+            "begin_time_setting": 0,
+            "duration": null,
+            "execution_time_frame": null,
+            "awaiting_time_frame": null,
+            "services": []
+        }
+    ],
     "servicepackagedetail": [],
     "systemoperand": [
         {
@@ -2182,23 +2193,6 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "确认接单",
-            "name": null,
-            "hssc_id": "507bfae0-de68-11ec-be26-9a796a47c5af",
-            "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
-            "event_rule": "8a2b1c90-de67-11ec-990e-9a796a47c5af",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
-            "passing_data": 1,
-            "complete_feedback": 1,
-            "reminders": 0,
-            "message": "预约成功信息",
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
             "label": "拒绝接单",
             "name": null,
             "hssc_id": "9a70cca2-de68-11ec-be26-9a796a47c5af",
@@ -2216,7 +2210,7 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "分诊确认",
+            "label": "按时到店",
             "name": null,
             "hssc_id": "eb551440-df1a-11ec-b28d-02377abc76d6",
             "service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
@@ -2318,11 +2312,11 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "保险审核通过",
+            "label": "门诊结束",
             "name": null,
             "hssc_id": "a30a9b6a-e550-11ec-91a5-4e30b92064b6",
-            "service": "2719273c-e4cf-11ec-b4b1-1a2f7481020f",
-            "event_rule": "140fb0da-e569-11ec-8a69-ca4030bb64ad",
+            "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
             "passing_data": 1,
@@ -2392,7 +2386,7 @@
             "service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
+            "next_service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
             "passing_data": 1,
             "complete_feedback": 1,
             "reminders": 1,
@@ -2406,7 +2400,7 @@
             "label": "发预约信息",
             "name": null,
             "hssc_id": "a46be55c-e606-11ec-9ff2-cec25659f4ce",
-            "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
+            "service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
             "next_service": null,
@@ -2420,7 +2414,7 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "出现预约完成",
+            "label": "重新预约完成",
             "name": null,
             "hssc_id": "15a832fe-e632-11ec-9186-c2da47347ca3",
             "service": "40e7b878-e631-11ec-9186-c2da47347ca3",
@@ -2481,6 +2475,40 @@
             "passing_data": 2,
             "complete_feedback": 1,
             "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "预约确认后发送通知",
+            "name": null,
+            "hssc_id": "04f4661a-e70b-11ec-b504-9a0420f173f1",
+            "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
+            "event_rule": "8a2b1c90-de67-11ec-990e-9a796a47c5af",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "预约通知完成",
+            "name": null,
+            "hssc_id": "47f2b8cc-e715-11ec-b504-9a0420f173f1",
+            "service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
             "message": null,
             "interval_rule": null,
             "interval_time": null,
