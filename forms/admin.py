@@ -58,11 +58,6 @@ class He_bao_danAdmin(admin.ModelAdmin):
 
 admin.site.register(He_bao_dan, He_bao_danAdmin)
 
-class Fen_zhen_que_ren_biaoAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_fen_zhen_que_ren": admin.VERTICAL, }
-
-admin.site.register(Fen_zhen_que_ren_biao, Fen_zhen_que_ren_biaoAdmin)
-
 class Men_zhen_fu_wu_ji_lu_danAdmin(admin.ModelAdmin):
         autocomplete_fields = ["relatedfield_symptom_list", "boolfield_zhen_duan", "boolfield_jian_cha_xiang_mu", "boolfield_zhi_liao_xiang_mu", "boolfield_qi_ta_fu_wu_xiang_mu", ]
 
@@ -91,6 +86,11 @@ class Zhen_hou_hui_fang_danAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, }
 
 admin.site.register(Zhen_hou_hui_fang_dan, Zhen_hou_hui_fang_danAdmin)
+
+class Fen_zhen_que_ren_biaoAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_fen_zhen_que_ren": admin.VERTICAL, }
+
+admin.site.register(Fen_zhen_que_ren_biao, Fen_zhen_que_ren_biaoAdmin)
 
 class Bang_ding_que_ren_biaoAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_que_ren_ji_ben_xin_xi": admin.VERTICAL, }

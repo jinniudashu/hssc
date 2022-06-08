@@ -232,7 +232,7 @@ clinic_site.register(Yu_yue_tong_zhi, Yu_yue_tong_zhiAdmin)
 class Fen_zhen_que_renAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": (("characterfield_gender", "characterfield_name", "boolfield_chang_zhu_di_zhi", "datetimefield_date_of_birth", ),)}), 
-        ("到店确认表", {"fields": ("boolfield_fen_zhen_que_ren", "boolfield_shen_fen_zheng_jian_fu_jian", )}), 
+        ("到店确认表", {"fields": ("boolfield_shen_fen_xin_xi_yan_zheng", "boolfield_fen_zhen_que_ren", )}), 
         ("预约单", {"fields": ("boolfield_jiu_zhen_wen_ti", "boolfield_fu_jia_fu_wu_yao_qiu", "datetimefield_ri_qi_shi_jian", "boolfield_shi_yong_bao_xian_chan_pin", "boolfield_jiu_zhen_ji_gou_ze_ren_ren", )}), ]
     autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
     radio_fields = {"boolfield_fen_zhen_que_ren": admin.VERTICAL, }

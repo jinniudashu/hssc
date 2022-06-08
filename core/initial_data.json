@@ -334,20 +334,6 @@
             "components_groups": []
         },
         {
-            "label": "到店确认表",
-            "name": "fen_zhen_que_ren_biao",
-            "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
-            "pym": "ddqrb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": null,
-            "components": [
-                "a0fc960a-a506-11ec-a7bb-cecec7a0e139",
-                "b5bae6fe-e3ff-11ec-9eb0-42585b16dcd4"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "门诊服务记录单",
             "name": "men_zhen_fu_wu_ji_lu_dan",
             "hssc_id": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
@@ -473,6 +459,20 @@
                 "b5b9b8ca-e403-11ec-9eb0-42585b16dcd4",
                 "d8286684-dfbe-11ec-9597-26a028640b2f",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "到店确认表",
+            "name": "fen_zhen_que_ren_biao",
+            "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
+            "pym": "ddqrb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[]",
+            "components": [
+                "97358b46-df1b-11ec-b4b2-02377abc76d6",
+                "a0fc960a-a506-11ec-a7bb-cecec7a0e139"
             ],
             "components_groups": []
         },
@@ -2188,7 +2188,7 @@
             "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
             "event_rule": "8a2b1c90-de67-11ec-990e-9a796a47c5af",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
             "passing_data": 1,
             "complete_feedback": 1,
             "reminders": 0,
@@ -2303,25 +2303,8 @@
         {
             "label": "门诊结束",
             "name": null,
-            "hssc_id": "46ce13fe-e550-11ec-b262-4e30b92064b6",
-            "service": "bf73968c-dfbd-11ec-9597-26a028640b2f",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
-            "passing_data": 1,
-            "complete_feedback": 1,
-            "reminders": 1,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
-            "label": "门诊结束",
-            "name": null,
             "hssc_id": "46e7590e-e550-11ec-b262-4e30b92064b6",
-            "service": "bf73968c-dfbd-11ec-9597-26a028640b2f",
+            "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
@@ -2409,7 +2392,7 @@
             "service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
             "passing_data": 1,
             "complete_feedback": 1,
             "reminders": 1,
@@ -2423,14 +2406,14 @@
             "label": "发预约信息",
             "name": null,
             "hssc_id": "a46be55c-e606-11ec-9ff2-cec25659f4ce",
-            "service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
+            "system_operand": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
+            "next_service": null,
             "passing_data": 1,
             "complete_feedback": 1,
             "reminders": 0,
-            "message": null,
+            "message": "预约成功信息",
             "interval_rule": null,
             "interval_time": null,
             "is_active": true,

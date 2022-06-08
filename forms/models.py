@@ -133,14 +133,6 @@ class He_bao_dan(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Fen_zhen_que_ren_biao(HsscFormModel):
-    boolfield_fen_zhen_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_fen_zhen_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
-    boolfield_shen_fen_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='身份证件附件')
-    class Meta:
-        verbose_name = '到店确认表'
-        verbose_name_plural = verbose_name
-        
-
 class Men_zhen_fu_wu_ji_lu_dan(HsscFormModel):
     boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
     relatedfield_symptom_list = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_relatedfield_symptom_list_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='症状')
@@ -231,6 +223,14 @@ class Zhen_hou_hui_fang_dan(HsscFormModel):
     boolfield_fu_wu_xiao_guo_ping_jia = models.ForeignKey(Fu_wu_xiao_guo_ping_jia, related_name='fu_wu_xiao_guo_ping_jia_for_boolfield_fu_wu_xiao_guo_ping_jia_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='治疗感受/效果评价')
     class Meta:
         verbose_name = '诊后回访单'
+        verbose_name_plural = verbose_name
+        
+
+class Fen_zhen_que_ren_biao(HsscFormModel):
+    boolfield_shen_fen_xin_xi_yan_zheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份信息验证')
+    boolfield_fen_zhen_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_fen_zhen_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
+    class Meta:
+        verbose_name = '到店确认表'
         verbose_name_plural = verbose_name
         
 
