@@ -345,3 +345,13 @@ class Shi_fou_shen_he_tong_guoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shi_fou_shen_he_tong_guo
         fields = 'value'
+
+class Nin_cong_he_chu_zhi_dao_wo_menSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nin_cong_he_chu_zhi_dao_wo_men
+        fields = 'value'
+
+class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu
+        fields = 'value'

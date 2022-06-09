@@ -193,18 +193,6 @@ class Li_pei_dui_zhang_dan(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Zhen_hou_hui_fang_dan(HsscFormModel):
-    boolfield_fu_wu_xiao_guo_ping_jia = models.ForeignKey(Fu_wu_xiao_guo_ping_jia, related_name='fu_wu_xiao_guo_ping_jia_for_boolfield_fu_wu_xiao_guo_ping_jia_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='治疗感受/效果评价')
-    boolfield_deng_hou_qing_kuang = models.ForeignKey(Deng_hou_shi_jian, related_name='deng_hou_shi_jian_for_boolfield_deng_hou_qing_kuang_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='等候情况')
-    boolfield_cun_zai_de_wen_ti = models.CharField(max_length=255, null=True, blank=True, verbose_name='存在的问题')
-    boolfield_you_dai_gai_jin_de_fu_wu = models.CharField(max_length=255, null=True, blank=True, verbose_name='有待改进的服务')
-    boolfield_nin_de_dan_xin_he_gu_lv = models.CharField(max_length=255, null=True, blank=True, verbose_name='您的担心和顾虑')
-    boolfield_nin_hai_xu_yao_de_fu_wu = models.CharField(max_length=255, null=True, blank=True, verbose_name='您还需要的服务')
-    class Meta:
-        verbose_name = '诊后回访单'
-        verbose_name_plural = verbose_name
-        
-
 class Bang_ding_que_ren_biao(HsscFormModel):
     boolfield_que_ren_ji_ben_xin_xi = models.ForeignKey(Xin_xi_que_ren, related_name='xin_xi_que_ren_for_boolfield_que_ren_ji_ben_xin_xi_bang_ding_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否绑定被保人信息')
     boolfield_ju_jue_bang_ding_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='拒绝绑定原因')
@@ -287,6 +275,20 @@ class A6203(HsscFormModel):
     boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
     class Meta:
         verbose_name = '个人基本信息表'
+        verbose_name_plural = verbose_name
+        
+
+class Zhen_hou_hui_fang_dan(HsscFormModel):
+    boolfield_fu_wu_xiao_guo_ping_jia = models.ForeignKey(Fu_wu_xiao_guo_ping_jia, related_name='fu_wu_xiao_guo_ping_jia_for_boolfield_fu_wu_xiao_guo_ping_jia_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='治疗感受/效果评价')
+    boolfield_deng_hou_qing_kuang = models.ForeignKey(Deng_hou_shi_jian, related_name='deng_hou_shi_jian_for_boolfield_deng_hou_qing_kuang_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='等候情况')
+    boolfield_cun_zai_de_wen_ti = models.CharField(max_length=255, null=True, blank=True, verbose_name='存在的问题')
+    boolfield_you_dai_gai_jin_de_fu_wu = models.CharField(max_length=255, null=True, blank=True, verbose_name='有待改进的服务')
+    boolfield_nin_de_dan_xin_he_gu_lv = models.CharField(max_length=255, null=True, blank=True, verbose_name='您的担心和顾虑')
+    boolfield_nin_hai_xu_yao_de_fu_wu = models.CharField(max_length=255, null=True, blank=True, verbose_name='您还需要的服务')
+    boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu = models.ForeignKey(Nin_cong_he_chu_zhi_dao_wo_men, related_name='nin_cong_he_chu_zhi_dao_wo_men_for_boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您从何处知道我们的服务')
+    boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu = models.ForeignKey(Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu, related_name='shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu_for_boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu_zhen_hou_hui_fang_dan', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您是否愿意向亲朋好友推荐我们的服务')
+    class Meta:
+        verbose_name = '诊后回访单'
         verbose_name_plural = verbose_name
         
 

@@ -184,8 +184,8 @@ clinic_site.register(Man_yi_du_diao_cha, Man_yi_du_diao_chaAdmin)
 class Zhen_hou_sui_fangAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("诊后回访单", {"fields": ("boolfield_fu_wu_xiao_guo_ping_jia", "boolfield_deng_hou_qing_kuang", "boolfield_cun_zai_de_wen_ti", "boolfield_you_dai_gai_jin_de_fu_wu", "boolfield_nin_de_dan_xin_he_gu_lv", "boolfield_nin_hai_xu_yao_de_fu_wu", )}), ]
-    radio_fields = {"boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, }
+        ("诊后回访单", {"fields": ("boolfield_fu_wu_xiao_guo_ping_jia", "boolfield_deng_hou_qing_kuang", "boolfield_cun_zai_de_wen_ti", "boolfield_you_dai_gai_jin_de_fu_wu", "boolfield_nin_de_dan_xin_he_gu_lv", "boolfield_nin_hai_xu_yao_de_fu_wu", "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu", "boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu", )}), ]
+    radio_fields = {"boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu": admin.VERTICAL, "boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu": admin.VERTICAL, }
 
 admin.site.register(Zhen_hou_sui_fang, Zhen_hou_sui_fangAdmin)
 clinic_site.register(Zhen_hou_sui_fang, Zhen_hou_sui_fangAdmin)

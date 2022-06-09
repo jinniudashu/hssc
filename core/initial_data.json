@@ -412,24 +412,6 @@
             "components_groups": []
         },
         {
-            "label": "诊后回访单",
-            "name": "zhen_hou_hui_fang_dan",
-            "hssc_id": "937920f2-e403-11ec-9eb0-42585b16dcd4",
-            "pym": "zhhfd",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[]",
-            "components": [
-                "3174614a-e2d8-11ec-9a2f-dae07feb8058",
-                "49879662-e2d8-11ec-9a2f-dae07feb8058",
-                "a80571f6-e403-11ec-9eb0-42585b16dcd4",
-                "b5b9b8ca-e403-11ec-9eb0-42585b16dcd4",
-                "d8286684-dfbe-11ec-9597-26a028640b2f",
-                "a9a03950-e2d8-11ec-912b-dae07feb8058"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "绑定确认表",
             "name": "bang_ding_que_ren_biao",
             "hssc_id": "a669b316-e633-11ec-9abb-c2da47347ca3",
@@ -559,6 +541,26 @@
                 "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877",
                 "739bbdb0-de29-11ec-8b9f-323f52c35ca4",
                 "8fa7f370-de29-11ec-b7a6-323f52c35ca4"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "诊后回访单",
+            "name": "zhen_hou_hui_fang_dan",
+            "hssc_id": "937920f2-e403-11ec-9eb0-42585b16dcd4",
+            "pym": "zhhfd",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[]",
+            "components": [
+                "3174614a-e2d8-11ec-9a2f-dae07feb8058",
+                "49879662-e2d8-11ec-9a2f-dae07feb8058",
+                "a80571f6-e403-11ec-9eb0-42585b16dcd4",
+                "b5b9b8ca-e403-11ec-9eb0-42585b16dcd4",
+                "d8286684-dfbe-11ec-9597-26a028640b2f",
+                "a9a03950-e2d8-11ec-912b-dae07feb8058",
+                "33f72e3e-e78d-11ec-8127-065284c7e455",
+                "5338730c-e78d-11ec-af5f-065284c7e455"
             ],
             "components_groups": []
         },
