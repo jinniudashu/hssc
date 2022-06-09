@@ -65,6 +65,7 @@ def new_service(request, **kwargs):
     proc_params['scheduled_time'] = datetime.datetime.now() # or None 根据服务作业权限判断
     proc_params['contract_service_proc'] = None
     proc_params['content_type'] = content_type
+    proc_params['form_data'] = None
     
 
     # 如果是推荐服务，解析parent_proc和passing_data
@@ -73,7 +74,9 @@ def new_service(request, **kwargs):
         proc_params['parent_proc'] = recommended_service.pid
         proc_params['passing_data'] = recommended_service.passing_data
     else:
+        # 人工创建服务，没有父进程
         proc_params['parent_proc'] = None
+        # 人工创建服务，没有传递数据
         proc_params['passing_data'] = 0
 
 

@@ -44,7 +44,7 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     )
 
     # 发送登录作业完成信号
-    operand_finished.send(sender=user_logged_in_handler, pid=new_proc, request=request)
+    operand_finished.send(sender=user_logged_in_handler, pid=new_proc, request=request, form_data=None)
 
 
 # 收到注册成功信号，生成用户注册事件：registration.signals.user_registered
@@ -71,7 +71,7 @@ def user_registered_handler(sender, user, request, **kwargs):
     )
 
     # 发送注册作业完成信号
-    operand_finished.send(sender=user_registered_handler, pid=new_proc, request=request)
+    operand_finished.send(sender=user_registered_handler, pid=new_proc, request=request, form_data=None)
 
 
 @receiver(post_save, sender=User)
@@ -260,6 +260,7 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
             proc_params['content_type'] = content_type
             proc_params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+            proc_params['form_data'] = kwargs['form_data']  # 表单数据
 
             print('Debug: _create_next_service: proc_params:', proc_params['passing_data'])
 
@@ -356,9 +357,6 @@ def operand_finished_handler(sender, **kwargs):
     operation_proc = kwargs['pid']
     request = kwargs['request']
 
-    # 更新作业进程状态为RTC
-    operation_proc.update_state('RTC')
-
     # 根据服务规则检查业务事件是否发生，执行系统作业
     # 逐一检查service_rule.event_rule.expression是否满足
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True):
@@ -381,6 +379,7 @@ def operand_finished_handler(sender, **kwargs):
                 'interval_rule': service_rule.interval_rule,
                 'interval_time': service_rule.interval_time,
                 'request': request,
+                'form_data': kwargs['form_data'],
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
             _result = _execute_system_operand(service_rule.system_operand, **operation_params)

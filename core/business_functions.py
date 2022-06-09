@@ -1,4 +1,4 @@
-def copy_previous_form_data(form):
+def copy_previous_form_data(form, previous_form_data):
     # 获取父进程表单
     previous_form = form.pid.parent_proc.content_object
     if not previous_form:
@@ -19,12 +19,14 @@ def copy_previous_form_data(form):
 
         # 向当前进程表单写入交集字段内容
         for field_name in copy_fields_name:
-            exec(f'form.{field_name} = previous_form.{field_name}')
+            field_value = previous_form_data.get(field_name)
+            if field_value:
+                exec(f'form.{field_name} = field_value')
         form.save()
 
         # 向当前进程表单写入交集多对多字段内容
         for field_name in copy_fields_name_m2m:
-            m2m_objs = exec(f'previous_form.{field_name}.all()')
+            m2m_objs = previous_form_data.get(field_name)
             if m2m_objs:
                 exec(f'form.{field_name}.add(*m2m_objs)')
 
@@ -33,7 +35,7 @@ def copy_previous_form_data(form):
 
 from service.models import *
 # 创建服务表单实例
-def create_form_instance(operation_proc, passing_data):
+def create_form_instance(operation_proc, passing_data, form_data):
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
@@ -42,7 +44,6 @@ def create_form_instance(operation_proc, passing_data):
         pid=operation_proc,
         cpid=operation_proc.contract_service_proc,
     )
-    print('From service.models.create_form_instance, 创建表单实例:', model_name, form_instance)
 
     # 2. 如果不是基本信息表作业(作业服务表单!=作业服务的实体基本信息表单)，则为属性表，填入表头字段
     service = operation_proc.service
@@ -60,7 +61,7 @@ def create_form_instance(operation_proc, passing_data):
 
     # 3. 如果passing_data>0, copy父进程表单数据
     if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
-        copy_previous_form_data(form_instance)
+        copy_previous_form_data(form_instance, form_data)
 
     return form_instance
 
@@ -68,27 +69,31 @@ def create_form_instance(operation_proc, passing_data):
 # 创建服务进程实例
 def create_service_proc(**kwargs):
     import json
-    # 判断是否需要从父进程表单的api_fields获取进程控制信息
-    # Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
-    # if kwargs['passing_data'] > 0:
-    #     # 获取父进程中api_fields不为空的表单
-    #     _forms = kwargs['parent_proc'].service.buessiness_forms.all()
-    #     for _form in _forms:
-    #         if _form.api_fields:
-    #             # 获取父进程表单的api_fields
-    #             api_fields = json.loads(_form.api_fields)
-
-    #             for api_field in api_fields:
-    #                 pass
-
-        # 获取系统接口字段的字典
-
-        # 将多张表单的结果汇合成一个集合
-
-        # api_fields = 
-        # kwargs['scheduled_time']
-        # kwargs['operator']
-        # 责任人
+    # 检查父进程表单是否携带进程控制信息(检查api_fields字段)，如果有，整合所有表单的进程控制信息(charge_staff, operator, scheduled_time)
+    # 提取进程控制信息，更新相应控制项内容。Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
+    form_data = kwargs['form_data']
+    if kwargs['passing_data'] > 0:
+        # 获取父进程中api_fields不为空的表单, 并获取其中的进程控制信息api_fields
+        _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields]
+        api_fields = []
+        for _form in _forms:
+            api_fields.extend(json.loads(_form.api_fields))
+        # 逐一获取api接口字段的值，赋给相应控制字段
+        for api_field in api_fields:
+            for system_field, form_field in api_field.items():
+                if form_data.get(form_field):
+                    if system_field == 'operator':  # operator: 作业人员                    
+                        operator = form_data.get(form_field).customer
+                        kwargs['operator'] = operator
+                    elif system_field == 'scheduled_time':  # scheduled_time: 计划执行时间
+                        scheduled_time = form_data.get(form_field)
+                        kwargs['scheduled_time'] = scheduled_time
+                    elif system_field=='charge_staff':  # charge_staff: 责任人
+                        charge_staff = form_data.get(form_field).customer
+                        kwargs['customer'].charge_staff = charge_staff
+                        kwargs['customer'].save()                        
+                    else:
+                        pass
 
     # 创建新的服务作业进程
     from core.models import OperationProc
@@ -108,7 +113,7 @@ def create_service_proc(**kwargs):
     role = kwargs['service'].role.all()
     new_proc.role.set(role)
 
-    form = create_form_instance(new_proc, kwargs['passing_data'])
+    form = create_form_instance(new_proc, kwargs['passing_data'], form_data)
     # 更新OperationProc服务进程的form实例信息
     new_proc.object_id = form.id
     new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'

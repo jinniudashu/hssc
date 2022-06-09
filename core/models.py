@@ -316,7 +316,13 @@ class OperationProc(HsscBase):
             RTC = 4  # RUNNING TO COMPLETED
         self.state = OperationCode[ocode].value
         self.save()
+
+        # 更新作业进程对应的职员任务队列状态
+        if self.stafftodo:
+            self.stafftodo.state = 4
+            self.stafftodo.save()
     
+
 
 class StaffTodoManager(models.Manager):
 	# 当天常规任务
