@@ -367,7 +367,7 @@ class Zhen_hou_sui_fang(HsscFormModel):
     boolfield_nin_de_dan_xin_he_gu_lv = models.CharField(max_length=255, null=True, blank=True, verbose_name='您的担心和顾虑')
     boolfield_nin_hai_xu_yao_de_fu_wu = models.CharField(max_length=255, null=True, blank=True, verbose_name='您还需要的服务')
     boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu = models.ForeignKey(Nin_cong_he_chu_zhi_dao_wo_men, related_name='nin_cong_he_chu_zhi_dao_wo_men_for_boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu_zhen_hou_sui_fang', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您从何处知道我们的服务')
-    boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu = models.ForeignKey(Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu, related_name='shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu_for_boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu_zhen_hou_sui_fang', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您是否愿意向他人推荐我们')
+    boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men = models.ForeignKey(Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu, related_name='shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu_for_boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men_zhen_hou_sui_fang', on_delete=models.CASCADE, null=True, blank=True, verbose_name='您是否愿意向他人推荐我们')
 
     class Meta:
         verbose_name = '诊后回访'
