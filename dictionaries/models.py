@@ -451,5 +451,5 @@ class Nin_cong_he_chu_zhi_dao_wo_men(DictBase):
 
 class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu(DictBase):
     class Meta:
-        verbose_name = '是否愿意向家人朋友推荐我们的服务'
+        verbose_name = '是否愿意向他人推荐我们'
         verbose_name_plural = verbose_name

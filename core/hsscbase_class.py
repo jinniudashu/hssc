@@ -397,4 +397,4 @@ class FieldsType(Enum):
     boolfield_bei_bao_ren_zheng_jian_fu_jian = "None"  # 被保人证件附件
     boolfield_dao_dian_shen_fen_yan_zheng = "None"  # 到店身份验证
     boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu = "dictionaries.Nin_cong_he_chu_zhi_dao_wo_men"  # 您从何处知道我们的服务
-    boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu = "dictionaries.Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu"  # 您是否愿意向亲朋好友推荐我们的服务
+    boolfield_nin_shi_fou_yuan_yi_xiang_qin_peng_hao_you_tui_jian_wo_men_de_fu_wu = "dictionaries.Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu"  # 您是否愿意向他人推荐我们
