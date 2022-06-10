@@ -1,3 +1,5 @@
+from urllib import response
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -95,3 +97,15 @@ def new_service(request, **kwargs):
         from django.contrib import messages
         messages.add_message(request, messages.INFO, f'{service.label}已开单')
         return redirect(customer)
+
+
+def jinshuju_test(request, **kwargs):
+    '''
+    测试用：
+    '''
+    print('kwargs:', kwargs)
+    print('request.POST:', request.POST)
+    response = HttpResponse(content_type='text/plain;charset=utf-8')
+    response.content = 'Hi, this is Jinshuju Test'
+    # response.status_code = 200 # 默认值是200
+    return response
