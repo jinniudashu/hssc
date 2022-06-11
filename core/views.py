@@ -99,13 +99,58 @@ def new_service(request, **kwargs):
         return redirect(customer)
 
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def jinshuju_test(request, **kwargs):
     '''
     测试用：
     '''
-    print('kwargs:', kwargs)
-    print('request.POST:', request.POST)
-    response = HttpResponse(content_type='text/plain;charset=utf-8')
-    response.content = 'Hi, this is Jinshuju Test'
+    import json
+    # xmlhttp.setRequestHeader("Content-type","application/json")
+
+    if(request.method == 'POST'):
+            print("收到POST请求")
+            print('Headers:', request.headers)
+            postBody = request.body
+            json_result = json.loads(postBody)
+            print(json_result)
+
+    response = HttpResponse()
+    response.content = 'Hi, this is Jinshuju Test 127.0.0.1:8000'
     # response.status_code = 200 # 默认值是200
+
+    r1 = {
+            'form': 'E92p3G', 
+            'form_name': '预约服务', 
+            'entry': {
+                'serial_number': 10, 
+                'field_1': '10:00', 
+                'field_2': '检查', 
+                'field_3': '笛特口腔小李', 
+                'field_4': '华安种植牙', 
+                'field_5': '测试', 
+                'x_field_1': '', 
+                'creator_name': '', 
+                'created_at': 
+                '2022-06-10T13:41:34.496Z', 
+                'updated_at': '2022-06-10T13:41:34.496Z', 
+                'info_remote_ip': '115.42.121.166'
+            }
+        }
+
+    r2 = {
+            'form': 'BUQZAw', 
+            'form_name': '天气调查', 
+            'entry': {
+                'serial_number': 4, 
+                'field_1': '晴', 
+                'field_2': '东风', 
+                'x_field_1': '', 
+                'creator_name': '小麦', 
+                'created_at': '2022-06-10T13:48:42.132Z', 
+                'updated_at': '2022-06-10T13:48:42.132Z', 
+                'info_remote_ip': '115.42.122.94'
+            }
+        }
+
     return response

@@ -188,3 +188,4 @@ LOGIN_REDIRECT_URL = '/core/index_customer/' # The page you want users to arrive
 LOGIN_URL = 'accounts/login/' # The page users are directed to if they are not logged in,
 SIMPLE_BACKEND_REDIRECT_URL = '/'
 
+APPEND_SLASH=False
