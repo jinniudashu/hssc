@@ -8,8 +8,11 @@ import datetime
 
 from requests import Response
 
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
+
 from core.models import Service, Customer, OperationProc, RecommendedService
 from core.business_functions import create_service_proc, dispatch_operator
+
 
 def test_celery(request):
     from core.tasks import test_task

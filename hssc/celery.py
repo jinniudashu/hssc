@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
+from celery.schedules import crontab
 from django.conf import settings
 from pytz import timezone
 
@@ -15,7 +16,11 @@ app.config_from_object(settings, namespace='CELERY')
 
 # Celery Beat Settings
 app.conf.beat_schedule = {
-    
+    'test_print_every_1_minute': {
+        'task': 'hssc.tasks.test_task',
+        'schedule': crontab(minute='*/1'),
+        # 'args': ()
+    }
 }
 
 app.autodiscover_tasks()
