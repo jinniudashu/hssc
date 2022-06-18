@@ -59,6 +59,8 @@ INSTALLED_APPS = [
 
     'hssc.apps.UniversalManagerApp',
     'rest_framework',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -188,4 +190,15 @@ LOGIN_REDIRECT_URL = '/core/index_customer/' # The page you want users to arrive
 LOGIN_URL = 'accounts/login/' # The page users are directed to if they are not logged in,
 SIMPLE_BACKEND_REDIRECT_URL = '/'
 
-APPEND_SLASH=False
+# APPEND_SLASH=False
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_RESULT_BACKEND = 'django-db'
+
+# CELERY BEAT SETTINGS
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

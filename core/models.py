@@ -224,6 +224,21 @@ class ContractService(HsscPymBase):
         return str(self.label)
 
 
+class ExternalServiceMapping(HsscBase):
+    external_form_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="外部表单标识")
+    external_form_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="外部表单名称")
+    Form_source = [('jinshuju', '金数据'), ('other', '其它')]
+    form_source = models.CharField(max_length=50, choices=Form_source, null=True, blank=True, verbose_name="来源名称")
+    service = models.OneToOneField(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name="对应服务")
+    fields_mapping = models.JSONField(null=True, blank=True, verbose_name="字段映射")
+
+    class Meta:
+        verbose_name = '外部服务映射'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return str(self.external_form_name)
+
 # **********************************************************************************************************************
 # Service进程管理Model
 # **********************************************************************************************************************
@@ -390,7 +405,7 @@ class Customer(HsscBase):
     charge_staff = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='负责人')
     workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, related_name='customer_workgroup', verbose_name='服务小组')
     health_record = models.JSONField(blank=True, null=True, verbose_name="健康记录")
-    upload = models.ImageField(upload_to='uploads/', blank=True, null=True, verbose_name="个人照片")
+    weixin_openid = models.CharField(max_length=255, blank=True, null=True, verbose_name="微信openid")
 
     class Meta:
         verbose_name = "客户注册信息"

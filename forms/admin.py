@@ -2,14 +2,6 @@ from django.contrib import admin
 from .models import *
 
 
-class Yong_hu_zhu_ce_biaoAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Yong_hu_zhu_ce_biao, Yong_hu_zhu_ce_biaoAdmin)
-
-class Z6230Admin(admin.ModelAdmin):
-    pass
-admin.site.register(Z6230, Z6230Admin)
-
 class Ji_gou_ji_ben_xin_xi_biaoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
@@ -77,10 +69,6 @@ class Bang_ding_que_ren_biaoAdmin(admin.ModelAdmin):
 
 admin.site.register(Bang_ding_que_ren_biao, Bang_ding_que_ren_biaoAdmin)
 
-class Z6233Admin(admin.ModelAdmin):
-    pass
-admin.site.register(Z6233, Z6233Admin)
-
 class He_bao_danAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_shi_fou_tong_guo_he_bao": admin.VERTICAL, }
 
@@ -91,7 +79,7 @@ class Yu_yue_tong_zhi_danAdmin(admin.ModelAdmin):
 admin.site.register(Yu_yue_tong_zhi_dan, Yu_yue_tong_zhi_danAdmin)
 
 class Zhen_jian_sui_fang_biaoAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_jie_dai_fu_wu": admin.VERTICAL, "boolfield_zhi_liao_jian_gou_tong_qing_kuang": admin.VERTICAL, "boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, }
+        radio_fields = {"boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_jie_dai_fu_wu": admin.VERTICAL, "boolfield_zhi_liao_jian_gou_tong_qing_kuang": admin.VERTICAL, "boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia": admin.VERTICAL, }
 
 admin.site.register(Zhen_jian_sui_fang_biao, Zhen_jian_sui_fang_biaoAdmin)
 
@@ -110,7 +98,7 @@ class A6203Admin(admin.ModelAdmin):
 admin.site.register(A6203, A6203Admin)
 
 class Zhen_hou_hui_fang_danAdmin(admin.ModelAdmin):
-        radio_fields = {"boolfield_fu_wu_xiao_guo_ping_jia": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu": admin.VERTICAL, "boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men": admin.VERTICAL, }
+        radio_fields = {"boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu": admin.VERTICAL, "boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men": admin.VERTICAL, }
 
 admin.site.register(Zhen_hou_hui_fang_dan, Zhen_hou_hui_fang_danAdmin)
 

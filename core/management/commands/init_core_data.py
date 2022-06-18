@@ -140,6 +140,7 @@ class Command(BaseCommand):
             EventRule,
             ServiceSpec,
             ServiceRule,
+            ExternalServiceMapping,
             Yao_pin_ji_ben_xin_xi_biao,
         ]
         for model in initial_models:

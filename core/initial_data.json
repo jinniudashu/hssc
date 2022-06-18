@@ -136,35 +136,6 @@
     ],
     "buessinessform": [
         {
-            "label": "用户注册表",
-            "name": "yong_hu_zhu_ce_biao",
-            "hssc_id": "e28e9d5c-de5e-11ec-be26-9a796a47c5af",
-            "pym": "yhzcb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": null,
-            "components": [
-                "dea37b46-9aa1-11ec-bde1-8a6e55faf877",
-                "dea437ac-9aa1-11ec-bde1-8a6e55faf877",
-                "dea654a6-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
-        },
-        {
-            "label": "用户登录表",
-            "name": "Z6230",
-            "hssc_id": "0bcb1fc8-9e23-11ec-aa2c-fe35a7065cdd",
-            "pym": "yhdlb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": null,
-            "components": [
-                "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
-                "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "机构基本信息表",
             "name": "ji_gou_ji_ben_xin_xi_biao",
             "hssc_id": "43464b44-c5c9-11ec-b819-725badf7393d",
@@ -426,20 +397,6 @@
             "components_groups": []
         },
         {
-            "label": "诊所登陆表",
-            "name": "Z6233",
-            "hssc_id": "0bcfcb9a-9e23-11ec-aa2c-fe35a7065cdd",
-            "pym": "zsdlb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[]",
-            "components": [
-                "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
-                "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "保险审核单",
             "name": "he_bao_dan",
             "hssc_id": "64ad92b2-e552-11ec-b262-4e30b92064b6",
@@ -676,9 +633,7 @@
             "resource_devices": null,
             "resource_knowledge": null,
             "generate_script_order": 100,
-            "buessiness_forms": [
-                "e28e9d5c-de5e-11ec-be26-9a796a47c5af"
-            ],
+            "buessiness_forms": [],
             "role": [
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -707,9 +662,7 @@
             "resource_devices": null,
             "resource_knowledge": null,
             "generate_script_order": 100,
-            "buessiness_forms": [
-                "0bcb1fc8-9e23-11ec-aa2c-fe35a7065cdd"
-            ],
+            "buessiness_forms": [],
             "role": [
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -738,9 +691,7 @@
             "resource_devices": null,
             "resource_knowledge": null,
             "generate_script_order": 100,
-            "buessiness_forms": [
-                "0bcfcb9a-9e23-11ec-aa2c-fe35a7065cdd"
-            ],
+            "buessiness_forms": [],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
             ]
@@ -1469,7 +1420,7 @@
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
-            "is_system_service": false,
+            "is_system_service": true,
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
@@ -1485,9 +1436,7 @@
             "resource_devices": null,
             "resource_knowledge": null,
             "generate_script_order": 100,
-            "buessiness_forms": [
-                "e28e9d5c-de5e-11ec-be26-9a796a47c5af"
-            ],
+            "buessiness_forms": [],
             "role": [
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -1528,22 +1477,6 @@
         {
             "label": null,
             "name": null,
-            "hssc_id": "f766705e-b354-11ec-b38b-468daa7d16bf",
-            "service": "e03291f4-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0bcb1fc8-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "1900897a-b355-11ec-941d-468daa7d16bf",
-            "service": "e032db46-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0bcfcb9a-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
             "hssc_id": "d09197cc-cb7f-11ec-8161-aa5274efe6de",
             "service": "d090a8a8-cb7f-11ec-8161-aa5274efe6de",
             "buessiness_form": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
@@ -1579,14 +1512,6 @@
             "hssc_id": "dfad9eac-de5f-11ec-be26-9a796a47c5af",
             "service": "dfacb992-de5f-11ec-be26-9a796a47c5af",
             "buessiness_form": "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "204fc32c-de60-11ec-be26-9a796a47c5af",
-            "service": "e0317224-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "e28e9d5c-de5e-11ec-be26-9a796a47c5af",
             "is_list": false
         },
         {
@@ -1923,14 +1848,6 @@
             "hssc_id": "410ff612-e631-11ec-9186-c2da47347ca3",
             "service": "40e7b878-e631-11ec-9186-c2da47347ca3",
             "buessiness_form": "0d1b5014-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "904ddd56-e632-11ec-9abb-c2da47347ca3",
-            "service": "904d1b78-e632-11ec-9abb-c2da47347ca3",
-            "buessiness_form": "e28e9d5c-de5e-11ec-be26-9a796a47c5af",
             "is_list": false
         },
         {
@@ -2512,6 +2429,18 @@
             "interval_time": null,
             "is_active": true,
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        }
+    ],
+    "externalservicemapping": [
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "b1fd0172-ecb1-11ec-8053-7ee18faca55e",
+            "external_form_id": "E92p3G",
+            "external_form_name": "预约服务",
+            "form_source": "jinshuju",
+            "service": "d14d858c-e537-11ec-bc0a-ee06e95295ac",
+            "fields_mapping": "[{\"field_1\": \"datetimefield_ri_qi_shi_jian\"}, {\"field_2\": \"boolfield_jiu_zhen_wen_ti\"}, {\"field_3\": \"boolfield_jiu_zhen_ji_gou_ze_ren_ren\"}, {\"field_4\": \"boolfield_shi_yong_bao_xian_chan_pin\"}, {\"field_5\": \"boolfield_fu_jia_fu_wu_yao_qiu\"}]"
         }
     ],
     "yao_pin_ji_ben_xin_xi_biao": []

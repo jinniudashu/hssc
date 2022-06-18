@@ -158,12 +158,8 @@ class FieldsType(Enum):
     characterfield_average_sleep_duration = "String"  # 平均睡眠时长
     characterfield_duration_of_insomnia = "String"  # 持续失眠时间
     characterfield_practice_qualification = "String"  # 执业资质
-    characterfield_password_setting = "String"  # 密码设置
-    characterfield_confirm_password = "String"  # 确认密码
     characterfield_expertise = "String"  # 专长
     characterfield_practice_time = "String"  # 执业时间
-    characterfield_username = "String"  # 用户名
-    characterfield_password = "String"  # 密码
     characterfield_left_eye_vision = "String"  # 左眼视力
     characterfield_resident_file_number = "String"  # 居民档案号
     characterfield_family_address = "String"  # 家庭地址
@@ -209,9 +205,6 @@ class FieldsType(Enum):
     boolfield_bao_xian_ze_ren = "String"  # 保险责任
     boolfield_jiu_zhen_wen_ti = "String"  # 就诊问题
     boolfield_fu_jia_fu_wu_yao_qiu = "String"  # 附加服务要求
-    boolfield_yong_hu_ming = "String"  # 用户名
-    boolfield_mi_ma_she_zhi = "String"  # 密码设置
-    boolfield_que_ren_mi_ma = "String"  # 确认密码
     boolfield_shen_fen_xin_xi_yan_zheng = "String"  # 身份信息验证
     boolfield_jiu_zhen_yi_sheng = "String"  # 就诊医生
     boolfield_yu_yue_xu_hao = "String"  # 预约序号
@@ -239,10 +232,10 @@ class FieldsType(Enum):
     boolfield_nin_hai_xu_yao_de_fu_wu = "String"  # 您还需要的服务
     boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu = "String"  # 希望增加的服务项目
     boolfield_bao_an_ren = "String"  # 报案人
-    boolfield_guo_ji_di_qu = "String"  # 国籍/地区
-    boolfield_li_pei_jin_e_bao_xiao_jian_mian_jin_e = "String"  # 理赔金额_报销/减免金额
-    boolfield_chu_xian_di_dian_shi_ji_bie = "String"  # 出险地点_市级别
-    boolfield_chu_xian_di_dian_sheng_ji_bie = "String"  # 出险地点_省级别
+    boolfield_guo_ji_di_qu = "String"  # 国籍地区
+    boolfield_li_pei_jin_e = "String"  # 理赔金额
+    boolfield_chu_xian_di_dian_shi_ji_bie = "String"  # 出险地点市级别
+    boolfield_chu_xian_di_dian_sheng_ji_bie = "String"  # 出险地点省级别
     boolfield_tui_dan_yuan_yin = "String"  # 人身险理赔申请书退单原因
     boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = "String"  # 理赔对账单退单原因
     boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = "String"  # 理赔费用汇总单退单原因
@@ -375,7 +368,7 @@ class FieldsType(Enum):
     boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu = "dictionaries.Fu_wu_xiang_mu"  # 保单内服务收费项目
     boolfield_jie_dai_fu_wu = "dictionaries.Jie_dai_fu_wu"  # 接待服务
     boolfield_deng_hou_qing_kuang = "dictionaries.Deng_hou_shi_jian"  # 等候情况
-    boolfield_fu_wu_xiao_guo_ping_jia = "dictionaries.Fu_wu_xiao_guo_ping_jia"  # 治疗感受/效果评价
+    boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia = "dictionaries.Fu_wu_xiao_guo_ping_jia"  # 治疗感受和效果评价
     boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu = "dictionaries.Fu_wu_xiang_mu"  # 保单外服务收费项目
     boolfield_yu_chu_xian_ren_guan_xi = "dictionaries.Yu_chu_xian_ren_guan_xi"  # 与出险人关系
     boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen = "dictionaries.Ping_fen"  # 医疗服务技能项目评分

@@ -6,8 +6,15 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 import datetime
 
+from requests import Response
+
 from core.models import Service, Customer, OperationProc, RecommendedService
 from core.business_functions import create_service_proc, dispatch_operator
+
+def test_celery(request):
+    from core.tasks import test_task
+    test_task.delay()
+    return HttpResponse('ok')
 
 
 def index_customer(request):
@@ -43,6 +50,28 @@ def get_services_list(request, **kwargs):
     context['customer_id'] = kwargs['customer_id']
 
     return render(request, 'popup_menu.html', context)
+
+def search_services(request, **kwargs):
+    from django.db.models import Q
+    # 从request.POST获取search
+    print('request.POST:', request.POST)
+    search_text = request.POST.get('search')
+    context = {}
+    if search_text is None or search_text == '':
+        context['services'] = None
+    else:
+        context['services'] = [
+            {
+                'id': service.id, 
+                'label': service.label,
+                'enable_queue_counter': service.enable_queue_counter,
+                'queue_count': OperationProc.objects.get_service_queue_count(service)
+            } for service in Service.objects.filter(Q(is_system_service=False) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
+        ]
+
+    context['customer_id'] = kwargs['customer_id']
+
+    return render(request, 'services_list.html', context)
 
 
 def new_service(request, **kwargs):
@@ -102,55 +131,46 @@ def new_service(request, **kwargs):
 from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def jinshuju_test(request, **kwargs):
-    '''
-    测试用：
-    '''
+    # 测试接口
     import json
+    from django.core.exceptions import ObjectDoesNotExist
+    from core.models import ExternalServiceMapping    
     # xmlhttp.setRequestHeader("Content-type","application/json")
+    print("收到请求")
 
     if(request.method == 'POST'):
             print("收到POST请求")
             print('Headers:', request.headers)
             postBody = request.body
             json_result = json.loads(postBody)
-            print(json_result)
+
+            # 接收到外部表单处理步骤：查找用户，判断服务状态，查找表单，复制表单内容，或创建错误日志
+            external_form_id = json_result.get('form')
+            external_form_name = json_result.get('form_name')
+            entry = json_result.get('entry')
+            # 1. 用微信OpenID查找是否有对应的用户：open_id = json_result.get('x_field_weixin_openid')
+            weixin_openid = entry.get('x_field_weixin_openid')
+            print('收到微信OpenID：', weixin_openid)
+
+            # 2. 如果查到对应用户，判断是否在服务期内，如果不在服务期，则不处理，如果在服务期，则开始处理表单
+            # 3. 用外部表单名称在表单映射表中查找内部对应表单，如果查到，则复制表单内容，如果没查到，则创建新的映射记录，并通知管理员补充映射表
+            try:
+                mapping = ExternalServiceMapping.objects.get(external_form_id = external_form_id)
+                print('查到映射记录：', mapping)
+                fields_mapping = json.loads(mapping.fields_mapping)
+                print(fields_mapping)
+                for field_map in fields_mapping:
+                    (external_field, internal_field), = field_map.items()
+                    form_data = {internal_field: entry.get(external_field)}
+                    print(form_data)
+                
+                # 新建mapping.service，传递表单内容form_data
+
+            except ObjectDoesNotExist:
+                pass
 
     response = HttpResponse()
     response.content = 'Hi, this is Jinshuju Test 127.0.0.1:8000'
     # response.status_code = 200 # 默认值是200
-
-    r1 = {
-            'form': 'E92p3G', 
-            'form_name': '预约服务', 
-            'entry': {
-                'serial_number': 10, 
-                'field_1': '10:00', 
-                'field_2': '检查', 
-                'field_3': '笛特口腔小李', 
-                'field_4': '华安种植牙', 
-                'field_5': '测试', 
-                'x_field_1': '', 
-                'creator_name': '', 
-                'created_at': 
-                '2022-06-10T13:41:34.496Z', 
-                'updated_at': '2022-06-10T13:41:34.496Z', 
-                'info_remote_ip': '115.42.121.166'
-            }
-        }
-
-    r2 = {
-            'form': 'BUQZAw', 
-            'form_name': '天气调查', 
-            'entry': {
-                'serial_number': 4, 
-                'field_1': '晴', 
-                'field_2': '东风', 
-                'x_field_1': '', 
-                'creator_name': '小麦', 
-                'created_at': '2022-06-10T13:48:42.132Z', 
-                'updated_at': '2022-06-10T13:48:42.132Z', 
-                'info_remote_ip': '115.42.122.94'
-            }
-        }
 
     return response

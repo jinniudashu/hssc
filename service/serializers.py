@@ -4,10 +4,6 @@ class Men_zhen_ji_lu_hui_zongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Men_zhen_ji_lu_hui_zong
         fields = '__all__'
-class Bao_xian_yong_hu_zhu_ceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Bao_xian_yong_hu_zhu_ce
-        fields = '__all__'
 class Chong_xin_yu_yue_an_paiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chong_xin_yu_yue_an_pai

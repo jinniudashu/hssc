@@ -20,6 +20,7 @@ class ClinicSite(admin.AdminSite):
         my_urls = [
             path('receive_task/<int:proc_id>', self.receive_task),
             path('customer_service/<int:customer_id>', self.customer_service),
+            path('search_customers/', self.search_customers),
         ]
         return my_urls + urls
 
@@ -27,16 +28,9 @@ class ClinicSite(admin.AdminSite):
     def index(self, request, extra_context=None):
         # extra_context = extra_context or {}
         # user = User.objects.get(username=request.user).customer
-
+        
         # # 可申领的服务作业
         # extra_context['unassigned_procs'] = OperationProc.objects.get_unassigned_proc(user)
-
-        # # 今日服务安排,紧要服务安排,本周服务安排
-        # items = []
-        # items.append({'title': '今日服务安排', 'todos': StaffTodo.objects.today_todos(user)})
-        # items.append({'title': '紧要服务安排', 'todos': StaffTodo.objects.urgent_todos(user)})
-        # items.append({'title': '本周服务安排', 'todos': StaffTodo.objects.week_todos(user)})
-        # extra_context['items'] = items
 
         return super().index(request, extra_context=extra_context)
 
@@ -47,7 +41,6 @@ class ClinicSite(admin.AdminSite):
         operation_proc.state = 1
         operation_proc.save()
         return redirect('/clinic/')
-        
 
     # 客户服务首页
     def customer_service(self, request, **kwargs):
@@ -58,28 +51,6 @@ class ClinicSite(admin.AdminSite):
         # 病例首页
         from core.business_functions import get_customer_profile
         context['profile'] = get_customer_profile(customer)
-
-        # # 已安排服务
-        # # context['scheduled_services'] = customer.get_scheduled_services()
-        # context['scheduled_services'] = [
-        #     {
-        #         'entry': proc.entry,
-        #         'service': proc.service,
-        #         'permission': bool(set(proc.service.role.all()).intersection(set(operator.staff.role.all()))),
-        #     } for proc in customer.get_scheduled_services()]
-
-        # # 推荐服务
-        # context['recommanded_services'] = [
-        #     {
-        #         'id': recommend_service.id, 
-        #         'service': recommend_service.service,
-        #         'enable_queue_counter': recommend_service.service.enable_queue_counter,
-        #         'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service)
-        #     } for recommend_service in customer.get_recommended_services()
-        # ]
-
-        # # 历史服务
-        # context['history_services'] = customer.get_history_services()
 
         # 生成响应对象
         response = render(request, 'customer_service.html', context)
@@ -93,6 +64,19 @@ class ClinicSite(admin.AdminSite):
         response.set_cookie('permitted_services_id', permitted_services_id)
 
         return response
+
+    def search_customers(self, request):
+        from django.db.models import Q
+        # 从request.POST获取search
+        print('request.POST:', request.POST)
+        search_text = request.POST.get('search')
+        context = {}
+        if search_text is None or search_text == '':
+            context['customers'] = None
+        else:
+            context['customers'] = Customer.objects.filter(name__icontains=search_text)
+        return render(request, 'customers_list.html', context)
+
 
 clinic_site = ClinicSite(name = 'ClinicSite')
 
@@ -244,3 +228,6 @@ clinic_site.register(RecommendedService)
 
 admin.site.register(Message)
 clinic_site.register(Message)
+
+admin.site.register(ExternalServiceMapping)
+clinic_site.register(ExternalServiceMapping)
