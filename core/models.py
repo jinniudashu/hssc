@@ -263,11 +263,11 @@ class ContractServiceProc(HsscBase):
 
 class OperationProcManager(models.Manager):
     def get_service_queue_count(self, service):
-        return self.filter(service=service, state__lt=4).count()
+        return self.filter(service=service).exclude(state=4).count()
 
     def get_unassigned_proc(self, operator):
 	# 获取待分配作业进程: 状态为创建，且未分配操作员，服务岗位为操作员所属岗位，以及用户服务小组为操作员所属服务小组
-        return self.filter(state=0, operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
+        return self.filter(state__in=[0,10], operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
     
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):

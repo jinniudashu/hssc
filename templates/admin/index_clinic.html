@@ -22,6 +22,7 @@
                     <th scope="col">客户姓名</th>
                     <th scope="col">服务项目</th>
                     <th scope="col">负责小组</th>
+                    <th scope="col">状态</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,7 @@
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
                     <td>{{ proc.service_name }}</td>
                     <td>{{ proc.workgroup_name }}</td>
+                    <td>{{ proc.state }}</td>
                 </tr>
             </tbody>
         </table>        

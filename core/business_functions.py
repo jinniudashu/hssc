@@ -252,7 +252,8 @@ def update_unassigned_procs():
                 'service_name': proc.service.label,
                 'customer_name': proc.customer.name,
                 'workgroup_name': proc.customer.workgroup.label if proc.customer.workgroup else '',
-            } for proc in OperationProc.objects.filter(state=0, operator=None)
+                'state': proc.state,
+            } for proc in OperationProc.objects.filter(state__in=[0,10], operator=None)
         ]
     }
 
