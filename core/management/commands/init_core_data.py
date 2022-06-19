@@ -180,3 +180,12 @@ class Command(BaseCommand):
             staff.save()
 
         print('导入测试用户数据完成！')
+
+        # 创建周期任务
+        from django_celery_beat.models import PeriodicTask, IntervalSchedule
+        # 创建检查服务进程等待超时的周期任务
+        schedule, create = IntervalSchedule.objects.get_or_create(every=30, period='seconds')
+        task, create = PeriodicTask.objects.get_or_create(interval=schedule, name='check_proc_awaiting_timeout', task='core.tasks.check_proc_awaiting_timeout')
+
+        print('创建周期任务完成！')
+

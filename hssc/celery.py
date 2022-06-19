@@ -15,13 +15,7 @@ app.conf.update(timezone = 'Asia/Shanghai')
 app.config_from_object(settings, namespace='CELERY')
 
 # Celery Beat Settings
-app.conf.beat_schedule = {
-    'test_print_every_1_minute': {
-        'task': 'hssc.tasks.test_task',
-        'schedule': crontab(minute='*/1'),
-        # 'args': ()
-    }
-}
+app.conf.beat_schedule = {}
 
 app.autodiscover_tasks()
 
