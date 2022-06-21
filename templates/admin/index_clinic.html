@@ -27,7 +27,7 @@
             <tbody>
                 <tr v-for="proc in permittedUnassignedProcs" :key="proc.id">
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
-                    <td :class="{'red': proc.state==10 }">{{ proc.service_name }}</td>
+                    <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
                     <td>{{ proc.workgroup_name }}</td>
                 </tr>
             </tbody>
@@ -53,7 +53,7 @@
                     <tr v-for="todo in item.todos" :key="todo.id">
                         <td>{{ todo.customer_number }}</td>
                         <td><a :href="'customer_service/' + todo.customer_id">{{ todo.customer_name }}</a></td>
-                        <td>{{ todo.service_label }}</td>
+                        <td :class="{'red': todo.completion_timeout}">{{ todo.service_label }}</td>
                         <td>{{ todo.customer_phone }}</td>
                         <td>{{ todo.customer_address }}</td>
                     </tr>
@@ -66,8 +66,6 @@
     </div>
 
     {% endverbatim %}
-
-    <script src="htmx.min.js" defer></script>
 
     <label value="客户">客户：</label> <input class="form-control" type="search" 
     name="search" placeholder="查找客户..." 

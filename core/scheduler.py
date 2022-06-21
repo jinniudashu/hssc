@@ -3,9 +3,10 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.models import User
-from enum import Enum
+from django.utils import timezone
 import datetime
 from django.forms import model_to_dict
+from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
 
 from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message
@@ -190,8 +191,8 @@ def operand_finished_handler(sender, **kwargs):
                 '''
                 period = None  # 意味着self.detection_scope == 'ALL'表示获取全部健康记录
                 if event_rule.detection_scope == 'LAST_WEEK_SERVICES':  # 获取表示指定时间段内的健康记录
-                    start_time = datetime.datetime.now() + datetime.timedelta(days=-7)
-                    end_time = datetime.datetime.now()
+                    start_time = timezone.now() + datetime.timedelta(days=-7)
+                    end_time = timezone.now()
                     period = (start_time, end_time)
 
                 # 取客户健康档案记录构造检测数据dict
@@ -255,7 +256,7 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['creater'] = current_operator   # 创建者  
             proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
             proc_params['state'] = 0  # or 根据服务作业权限判断
-            proc_params['scheduled_time'] = datetime.datetime.now()  # 创建时间 or 根据服务作业逻辑判断
+            proc_params['scheduled_time'] = timezone.now()  # 创建时间 or 根据服务作业逻辑判断
             proc_params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
             proc_params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
             proc_params['content_type'] = content_type

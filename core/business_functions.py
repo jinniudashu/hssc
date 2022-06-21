@@ -249,11 +249,11 @@ def update_unassigned_procs():
             {
                 'id': proc.id,
                 'service_id': proc.service.id,
-                'service_name': proc.service.label,
+                'service_label': proc.service.label,
                 'customer_name': proc.customer.name,
                 'workgroup_name': proc.customer.workgroup.label if proc.customer.workgroup else '',
-                'state': proc.state,
-            } for proc in OperationProc.objects.filter(state__in=[0,10], operator=None)
+                'acceptance_timeout': proc.acceptance_timeout,
+            } for proc in OperationProc.objects.filter(state=0, operator=None)
         ]
     }
 
@@ -283,6 +283,7 @@ def update_staff_todo_list(operator):
                 'service_label': todo.service_label,
                 'customer_phone': todo.customer_phone,
                 'customer_address': todo.customer_address,
+                'completion_timeout': todo.operation_proc.completion_timeout,
             })
         items.append({'title': _item['title'], 'todos': todos})
 
@@ -295,8 +296,9 @@ def update_customer_services_list(customer):
     scheduled_services = [
         {
             'service_entry': proc.entry,
-            'service_name': proc.service.label,
+            'service_label': proc.service.label,
             'service_id': proc.service.id,
+            'completion_timeout': proc.completion_timeout,
         } for proc in customer.get_scheduled_services()
     ]
 
@@ -304,7 +306,7 @@ def update_customer_services_list(customer):
     history_services =  [
         {
             'service_entry': proc.entry,
-            'service_name': proc.service.label,
+            'service_label': proc.service.label,
             'service_id': proc.service.id,
         } for proc in customer.get_history_services()
     ]
@@ -324,7 +326,7 @@ def update_customer_recommended_services_list(customer):
             'id': recommend_service.id,
             'customer_id': customer.id,
             'service_id': recommend_service.service.id,
-            'service_name': recommend_service.service.label,
+            'service_label': recommend_service.service.label,
             'enable_queue_counter': recommend_service.service.enable_queue_counter,
             'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service),
             'counter': recommend_service.counter,

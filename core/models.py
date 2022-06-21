@@ -5,11 +5,12 @@ from django.shortcuts import reverse
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.utils import timezone
 from django.utils.text import slugify
-from enum import Enum
-from time import time
+
+from django.utils import timezone
 import datetime
+from time import time
+from enum import Enum
 
 from rest_framework.utils.encoders import JSONEncoder
 from pypinyin import lazy_pinyin
@@ -69,8 +70,7 @@ class Service(HsscPymBase):
     route_to = models.CharField(max_length=50, choices=Route_to, default='CUSTOMER_HOMEPAGE', blank=True, null=True, verbose_name='完成跳转至')
     suppliers = models.CharField(max_length=255, blank=True, null=True, verbose_name="供应商")
     not_suitable = models.CharField(max_length=255, blank=True, null=True, verbose_name='不适用对象')
-    execution_time_frame = models.DurationField(blank=True, null=True, verbose_name='完成时限')
-    awaiting_time_frame = models.DurationField(blank=True, null=True, verbose_name='受理时限')
+    overtime = models.DurationField(blank=True, null=True, verbose_name='超期时限')
     working_hours = models.DurationField(blank=True, null=True, verbose_name='工时')
     frequency = models.CharField(max_length=255, blank=True, null=True, verbose_name='频次')
     cost = models.DecimalField(blank=True, null=True, max_digits=9, decimal_places=2, verbose_name='成本')
@@ -111,7 +111,7 @@ class BuessinessFormsSetting(HsscBase):
 class ServicePackage(HsscPymBase):
     name_icpc = models.OneToOneField(Icpc, on_delete=models.CASCADE, blank=True, null=True, verbose_name="ICPC编码")
     services = models.ManyToManyField(Service, through='ServicePackageDetail', verbose_name="服务项目")
-    execution_time_frame = models.DurationField(blank=True, null=True, verbose_name='执行时限')
+    overtime = models.DurationField(blank=True, null=True, verbose_name='超期时限')
 
     class Meta:
         verbose_name = "服务包"
@@ -264,7 +264,7 @@ class OperationProcManager(models.Manager):
 
     def get_unassigned_proc(self, operator):
 	# 获取待分配作业进程: 状态为创建，且未分配操作员，服务岗位为操作员所属岗位，以及用户服务小组为操作员所属服务小组
-        return self.filter(state__in=[0,10], operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
+        return self.filter(state=0, operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
     
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
@@ -283,6 +283,8 @@ class OperationProc(HsscBase):
     contract_service_proc = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程")  # 服务进程id: spid
     form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划执行时间")
+    acceptance_timeout = models.BooleanField(default=False, blank=True, null=True, verbose_name="受理超时")
+    completion_timeout = models.BooleanField(default=False, blank=True, null=True, verbose_name="完成超时")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
     updated_time = models.DateTimeField(editable=False, null=True, verbose_name="修改时间")
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=Q(app_label='service') , null=True, blank=True)
@@ -339,7 +341,7 @@ class OperationProc(HsscBase):
 class StaffTodoManager(models.Manager):
 	# 当天常规任务
     def today_todos(self, operator):
-        today = datetime.date.today()
+        today = timezone.now().date()
         return self.filter(
             operator=operator, 
             priority=3,
@@ -354,9 +356,8 @@ class StaffTodoManager(models.Manager):
 
 	# 未来七天任务
     def week_todos(self, operator):
-        # today = datetime.date.today()
-        startTime = datetime.datetime.now() + datetime.timedelta(days=1)
-        endTime = datetime.datetime.now() + datetime.timedelta(days=7)
+        startTime = timezone.now() + datetime.timedelta(days=1)
+        endTime = timezone.now() + datetime.timedelta(days=7)
         return self.filter(
             operator=operator, 
             priority=3, 

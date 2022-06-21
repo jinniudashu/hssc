@@ -16,34 +16,34 @@ def check_proc_awaiting_timeout(self):
 
     # 受理超时检查
     # 获取所有等待中的服务进程
-    procs = OperationProc.objects.filter(state=0)
+    procs = OperationProc.objects.filter(state=0, acceptance_timeout=False)
     for proc in procs:
         # 获取进程的计划执行时间
         scheduled_time = proc.scheduled_time
         # 获取受理时限
-        awaiting_timeout = proc.service.awaiting_time_frame
-        if awaiting_timeout:
+        working_hours = proc.service.working_hours
+        if working_hours:
             # 计算超时时间
-            timeout_time = scheduled_time + awaiting_timeout
+            timeout_time = scheduled_time + working_hours
             # 如果超时时间小于当前时间，则设置进程为超时状态
             if timeout_time < timezone.now():
-                proc.state = 10
+                proc.acceptance_timeout = True
                 proc.save()
-                print('服务进程等待超时')
+                print('受理超时')
 
-    # 执行超时检查execution_time_frame
+    # 执行超时检查overtime
     # 获取所有已安排的服务进程
-    procs = OperationProc.objects.filter(state__in=[1, 2, 3,])
+    procs = OperationProc.objects.filter(state__in=[1, 2, 3,], completion_timeout=False)
     for proc in procs:
         # 获取进程的计划执行时间
         scheduled_time = proc.scheduled_time
-        # 获取执行时限
-        execution_timeout = proc.service.execution_time_frame
-        if execution_timeout:
+        # 获取超时时限
+        overtime = proc.service.overtime
+        if overtime:
             # 计算超时时间
-            timeout_time = scheduled_time + execution_timeout
+            timeout_time = scheduled_time + overtime
             # 如果超时时间小于当前时间，则设置进程为超时状态
             if timeout_time < timezone.now():
-                # proc.state = 20
-                # proc.save()
-                print('服务进程执行超时')
+                proc.completion_timeout = True
+                proc.save()
+                print('超期超时')

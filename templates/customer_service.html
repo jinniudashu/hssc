@@ -44,8 +44,10 @@
     <div id="app">
         <h3>已安排服务</h3>
         <div v-for="service in servicesList.scheduled_services" :key="service.service_id">
-            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null">
-                {{ service.service_name }}
+            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null"
+                :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
+            >
+                {{ service.service_label }}
             </a>
             <br>
         </div>
@@ -56,7 +58,7 @@
         <h3>可选服务</h3>
         <div v-for="service in recommendedServices" :key="service.id">
             <a :href="'/core/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
-                {{ service.service_name }}
+                {{ service.service_label }}
                 <span v-if="service.enable_queue_counter"> ({{ service.queue_count }})</span>
             </a>
         </div>
@@ -67,7 +69,7 @@
         <h3>历史服务</h3>
         <div v-for="service in servicesList.history_services" :key="service.service_id">
             <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null">
-                {{ service.service_name }}
+                {{ service.service_label }}
             </a>
             <br>
         </div>
@@ -126,6 +128,7 @@
                 const servicesListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/customer_services_list/${customerId}/`);
                 servicesListSocket.onmessage = function (event) {
                     _this.servicesList = JSON.parse(event.data);
+                    console.log(_this.servicesList);
                 }
             },
         };

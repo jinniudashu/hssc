@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-import datetime
+from django.utils import timezone
 
 from requests import Response
 
@@ -96,7 +96,7 @@ def new_service(request, **kwargs):
     proc_params['creater'] = current_operator
     proc_params['operator'] = service_operator
     proc_params['state'] = 0  # or 0 根据服务作业权限判断
-    proc_params['scheduled_time'] = datetime.datetime.now() # or None 根据服务作业权限判断
+    proc_params['scheduled_time'] = timezone.now() # or None 根据服务作业权限判断
     proc_params['contract_service_proc'] = None
     proc_params['content_type'] = content_type
     proc_params['form_data'] = None
