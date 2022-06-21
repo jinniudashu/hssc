@@ -189,7 +189,7 @@ def get_customer_profile(customer):
 
     profile = {
         'id': customer.id,
-        'name': instance.characterfield_name,
+        'name': instance.boolfield_bei_bao_ren_xing_ming,
         'phone': instance.boolfield_lian_xi_dian_hua,
         'address': instance.boolfield_chang_zhu_di_zhi,
         'charge_staff': '',
