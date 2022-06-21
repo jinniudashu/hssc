@@ -46,18 +46,18 @@ def create_form_instance(operation_proc, passing_data, form_data):
     )
 
     # 2. 如果不是基本信息表作业(作业服务表单!=作业服务的实体基本信息表单)，则为属性表，填入表头字段
-    service = operation_proc.service
-    if service.buessiness_forms.all().first() != service.managed_entity.base_form:
-        # 判断当前实体，填入实体基本信息表头字段
-        # 通用代码里customer应改为entity
-        base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
-        # *********以下应为生成代码！生成所属实体表头信息************
-        form_instance.boolfield_chang_zhu_di_zhi = base_info.boolfield_chang_zhu_di_zhi
-        # form_instance.characterfield_contact_number = base_info.boolfield_lian_xi_dian_hua
-        form_instance.characterfield_name = base_info.characterfield_name
-        form_instance.characterfield_gender = base_info.characterfield_gender
-        form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
-        form_instance.save()
+    # service = operation_proc.service
+    # if service.buessiness_forms.all().first() != service.managed_entity.base_form:
+    #     # 判断当前实体，填入实体基本信息表头字段
+    #     # 通用代码里customer应改为entity
+    #     base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
+    #     # *********以下应为生成代码！生成所属实体表头信息************
+    #     form_instance.boolfield_chang_zhu_di_zhi = base_info.boolfield_chang_zhu_di_zhi
+    #     # form_instance.characterfield_contact_number = base_info.boolfield_lian_xi_dian_hua
+    #     form_instance.characterfield_name = base_info.characterfield_name
+    #     form_instance.characterfield_gender = base_info.characterfield_gender
+    #     form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
+    #     form_instance.save()
 
     # 3. 如果passing_data>0, copy父进程表单数据
     if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
@@ -183,18 +183,24 @@ def create_customer_service_log(form_data, form_instance):
 
 # 获取客户基本信息
 def get_customer_profile(customer):
-    instance = Ju_min_ji_ben_xin_xi_diao_cha.objects.filter(customer=customer).last()
+    import json
+    from core.models import ManagedEntity
+    # 获取客户的基本信息表名
+    base_form = ManagedEntity.objects.get(name='customer').base_form
+    base_form_service_name = base_form.service_set.all().first().name
+    instance = eval(f'{base_form_service_name.capitalize()}.objects.filter(customer=customer).last()')
+    url = f'/clinic/service/{base_form_service_name}/{instance.id}/change'
 
-    url = f'/clinic/service/ju_min_ji_ben_xin_xi_diao_cha/{instance.id}/change'
+    header_fields = json.loads(ManagedEntity.objects.get(name='customer').header_fields_json)
+
+    profile_headers = [{'label': field['label'], 'value': instance.__dict__.get(field["name"])} for field in header_fields]
 
     profile = {
         'id': customer.id,
-        'name': instance.boolfield_bei_bao_ren_xing_ming,
-        'phone': instance.boolfield_lian_xi_dian_hua,
-        'address': instance.boolfield_chang_zhu_di_zhi,
         'charge_staff': '',
         'workgroup': instance.customer.workgroup.label if instance.customer.workgroup else '',
         'url': url,
+        'profile_headers': profile_headers,
     }
 
     return profile

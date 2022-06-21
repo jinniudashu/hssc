@@ -550,6 +550,7 @@
             "app_name": "service",
             "model_name": "Medicine",
             "base_form": null,
+            "header_fields_json": null,
             "header_fields": []
         },
         {
@@ -560,6 +561,7 @@
             "app_name": "service",
             "model_name": "Supplier",
             "base_form": null,
+            "header_fields_json": null,
             "header_fields": []
         },
         {
@@ -570,6 +572,7 @@
             "app_name": "service",
             "model_name": "Staff",
             "base_form": "bca10e04-c5c7-11ec-b819-725badf7393d",
+            "header_fields_json": null,
             "header_fields": []
         },
         {
@@ -580,6 +583,7 @@
             "app_name": "service",
             "model_name": "Institution",
             "base_form": "43464b44-c5c9-11ec-b819-725badf7393d",
+            "header_fields_json": null,
             "header_fields": []
         },
         {
@@ -590,6 +594,7 @@
             "app_name": "service",
             "model_name": "Device",
             "base_form": "7c8caaba-c5c9-11ec-b9d4-725badf7393d",
+            "header_fields_json": null,
             "header_fields": []
         },
         {
@@ -600,6 +605,7 @@
             "app_name": "service",
             "model_name": "Customer",
             "base_form": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
+            "header_fields_json": "[{\"name\": \"boolfield_bei_bao_ren_xing_bie\", \"label\": \"\\u88ab\\u4fdd\\u4eba\\u6027\\u522b\"}, {\"name\": \"boolfield_bei_bao_ren_xing_ming\", \"label\": \"\\u88ab\\u4fdd\\u4eba\\u59d3\\u540d\"}, {\"name\": \"boolfield_chang_zhu_di_zhi\", \"label\": \"\\u5e38\\u4f4f\\u5730\\u5740\"}, {\"name\": \"boolfield_chu_sheng_ri_qi\", \"label\": \"\\u51fa\\u751f\\u65e5\\u671f\"}]",
             "header_fields": [
                 "de9e99dc-9aa1-11ec-bde1-8a6e55faf877",
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",

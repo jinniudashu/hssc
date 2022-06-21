@@ -48,6 +48,7 @@ class ManagedEntity(HsscPymBase):
     app_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="所属app名")
     model_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="模型名")
     base_form = models.OneToOneField(BuessinessForm, on_delete=models.SET_NULL, null=True, verbose_name="基础表单")
+    header_fields_json = models.JSONField(null=True, blank=True, verbose_name="表头字段json")
 
     class Meta:
         verbose_name = "业务管理实体"
