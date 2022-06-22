@@ -14,13 +14,10 @@
 <script src="htmx.min.js" defer></script>
 {% block content %}
     <h3>病例首页</h3>
-    <div class="row">
-    {% for field in profile.profile_headers %}
-        <label>{{ field.label }} ：</label>
-        <input type="text" class="form-control" value="{{ field.value }}">
-    {% endfor %}
-    </div>
     <br>
+    <div class="row">
+        {{ profile.form.as_p }}
+    </div>
     <a href="{{ profile.url }}">...查看完整档案</a>
     <br>
     <br>
