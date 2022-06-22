@@ -507,7 +507,7 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscBaseFormModel):
         return self.customer.name
 
         
-class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
+class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_cha(HsscFormModel):
 
     class Meta:
         verbose_name = '服务分供机构基本信息维护'
@@ -535,7 +535,7 @@ class She_bei_ji_ben_xin_xi_ji_lu(HsscBaseFormModel):
         return self.customer.name
 
         
-class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
+class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscFormModel):
 
     class Meta:
         verbose_name = '物料供应商基本信息维护'
@@ -545,7 +545,7 @@ class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
         return self.customer.name
 
         
-class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
+class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
 
     class Meta:
         verbose_name = '药品基本信息维护'

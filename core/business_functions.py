@@ -181,20 +181,10 @@ def create_customer_service_log(form_data, form_instance):
         )
 
 
-from django.forms import ModelForm
-import json
-from core.models import ManagedEntity
-from service.models import Ju_min_ji_ben_xin_xi_diao_cha
-
-CUSTOMER_HEADER_FIELDS = [field['name'] for field in json.loads(ManagedEntity.objects.get(name='customer').header_fields_json)]
-class Ju_min_ji_ben_xin_xi_diao_cha_HeaderForm(ModelForm):
-    class Meta:
-        model = Ju_min_ji_ben_xin_xi_diao_cha
-        fields = CUSTOMER_HEADER_FIELDS
-
-
 # 获取客户基本信息
 def get_customer_profile(customer):
+    from core.models import ManagedEntity
+    from service.forms import Ju_min_ji_ben_xin_xi_diao_cha_HeaderForm
     # 获取客户的基本信息表单
     base_form = ManagedEntity.objects.get(name='customer').base_form
     base_form_service_name = base_form.service_set.all().first().name
