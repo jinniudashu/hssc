@@ -182,7 +182,9 @@ class ClinicSite(admin.AdminSite):
 
         # 1. 获取服务包信息: ServicePackage, ServicePackageDetail
 
-        # 2. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
+        # 2. 创建服务进程：安排服务计划
+
+        # 3. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
 
         return redirect('/clinic/service/customerschedulepackage/add/')
 
