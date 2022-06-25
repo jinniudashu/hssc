@@ -174,19 +174,51 @@ class ClinicSite(admin.AdminSite):
 
     # 创建新的服务包计划
     def new_service_package_schedule(self, request, **kwargs):
+        # 1. 创建"安排服务计划"服务进程
         customer_id = kwargs['customer_id']
-        service_package_id = kwargs['service_package_id']
         print('customer_id:', customer_id)
+        customer = Customer.objects.get(id=customer_id)
+        current_operator = User.objects.get(username=request.user).customer
+        service = Service.objects.get(name='CustomerSchedulePackage')
+        content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+
+        # 创建一个状态为“运行”的“安排服务计划”作业进程
+        new_proc=OperationProc.objects.create(
+            service=service,  # 服务
+            customer=customer,  # 客户
+            operator=current_operator,  # 作业人员
+            creater=current_operator,  # 创建者
+            state=2,  # 进程状态：运行
+            content_type=content_type,  # 内容类型
+        )
+
+        # 2. 获取服务包信息: ServicePackage, ServicePackageDetail
+        service_package_id = kwargs['service_package_id']
         print('service_package_id:', service_package_id)
-        context = {}
-
-        # 1. 获取服务包信息: ServicePackage, ServicePackageDetail
-
-        # 2. 创建服务进程：安排服务计划
+        servicepackage = ServicePackage.objects.get(id=service_package_id)
+        servicepackagedetails = ServicePackageDetail.objects.filter(servicepackage=servicepackage)
+        print('servicepackagedetails:', servicepackagedetails)
 
         # 3. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
+        # 创建客户服务包
+        from service.models import CustomerSchedulePackage, CustomerScheduleDraft
+        customerschedulepackage = CustomerSchedulePackage.objects.create(
+            customer=customer,  # 客户
+            operator=current_operator,  # 作业人员
+            creater=current_operator,  # 创建者
+            pid=new_proc,  # 服务作业进程
+            cpid=None,
+            servicepackage=servicepackage,  # 服务包
+        )
+        CustomerScheduleDraft.objects.bulk_create(servicepackagedetails)
+        # 待处理customer, operator, creater, pid, cpid
 
-        return redirect('/clinic/service/customerschedulepackage/add/')
+        # 4. 更新OperationProc服务进程的form实例信息
+        new_proc.object_id = customerschedulepackage.id
+        new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
+        new_proc.save()
+
+        return redirect(new_proc.entry)
 
 clinic_site = ClinicSite(name = 'ClinicSite')
 
