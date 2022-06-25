@@ -23,5 +23,5 @@ from service.models import Ju_min_ji_ben_xin_xi_diao_cha
 class Ju_min_ji_ben_xin_xi_diao_cha_HeaderForm(ModelForm):
     class Meta:
         model = Ju_min_ji_ben_xin_xi_diao_cha
-        fields = ['boolfield_bei_bao_ren_xing_ming', 'boolfield_bei_bao_ren_xing_bie', 'boolfield_chu_sheng_ri_qi', 'boolfield_chang_zhu_di_zhi']
+        fields = ['boolfield_bei_bao_ren_xing_ming', 'boolfield_bei_bao_ren_xing_bie', 'boolfield_chu_sheng_ri_qi', 'boolfield_chang_zhu_di_zhi',]
         

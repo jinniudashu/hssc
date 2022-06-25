@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import redirect
+import nested_admin
 
 from core.admin import clinic_site
 from core.signals import operand_finished
@@ -14,8 +15,8 @@ class HsscFormAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
-        base_form = 'base_form'
-        extra_context['base_form'] = base_form
+        # base_form = 'base_form'
+        # extra_context['base_form'] = base_form
         return super().change_view(
             request, object_id, form_url, extra_context=extra_context,
         )
@@ -25,7 +26,8 @@ class HsscFormAdmin(admin.ModelAdmin):
 
         # 把服务进程状态修改为已完成
         proc = obj.pid
-        proc.update_state('RTC')
+        if proc:
+            proc.update_state('RTC')
 
         import copy
         form_data1 = copy.copy(form.cleaned_data)
@@ -55,6 +57,41 @@ class HsscFormAdmin(admin.ModelAdmin):
         else:
             return redirect('index')
 
+
+class CustomerScheduleAdmin(HsscFormAdmin):
+    autocomplete_fields = ["scheduled_operator", ]
+clinic_site.register(CustomerSchedule, CustomerScheduleAdmin)
+admin.site.register(CustomerSchedule, CustomerScheduleAdmin)
+
+class CustomerScheduleInline(nested_admin.NestedTabularInline):
+    model = CustomerSchedule
+    extra = 3
+    can_delete = False
+    # verbose_name_plural = '服务日程安排'
+    exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    autocomplete_fields = ["scheduled_operator", ]
+
+class CustomerScheduleDraftAdmin(HsscFormAdmin):
+    autocomplete_fields = ["scheduled_operator", ]
+    inlines = [CustomerScheduleInline]
+clinic_site.register(CustomerScheduleDraft, CustomerScheduleDraftAdmin)
+admin.site.register(CustomerScheduleDraft, CustomerScheduleDraftAdmin)
+
+class CustomerScheduleDraftInline(nested_admin.NestedTabularInline):
+    model = CustomerScheduleDraft
+    inlines = [CustomerScheduleInline]
+    extra = 3
+    can_delete = False
+    # verbose_name_plural = '服务项目安排'
+    exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    autocomplete_fields = ["scheduled_operator", ]
+
+class CustomerSchedulePackageAdmin(HsscFormAdmin):
+    exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    fieldsets = ((None, {'fields': (('customer', 'servicepackage'), )}),)
+    inlines = [CustomerScheduleDraftInline, ]
+clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
+admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 
 # **********************************************************************************************************************
 # Service表单Admin

@@ -2,17 +2,25 @@
     <thead>
     <tr>
     <th>服务项目</th>
-    <th>排队人数</th>
     <th>操作</th>
+    <th>排队人数</th>
     </tr>
     </thead>
     <tbody>
         {% for service in services %} 
         <tr >
             <td> {{ service.label }} </td>
+            <td><a href="/clinic/new_service_schedule/{{ customer_id }}/{{ service.id }}">安排</a> | <a href="/clinic/new_service/{{ customer_id }}/{{ service.id }}/0/">立即执行</a></td>
             <td> {{ service.queue_count }} </td>
-            <td> <a href="/core/new_service/{{ customer_id }}/{{ service.id }}/0/">新增</a> </td>
         </tr >
         {% endfor %}
+        {% for service_package in service_packages %} 
+        <tr >
+            <td> {{ service_package.label }} </td>
+            <td> <a href="/clinic/new_service_package_schedule/{{ customer_id }}/{{ service_package.id }}">安排</a> </td>
+            <td>-</td>
+        </tr >
+        {% endfor %}
+
     </tbody>
 </table>

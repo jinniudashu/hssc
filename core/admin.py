@@ -21,6 +21,10 @@ class ClinicSite(admin.AdminSite):
             path('receive_task/<int:proc_id>', self.receive_task),
             path('customer_service/<int:customer_id>', self.customer_service),
             path('search_customers/', self.search_customers),
+        	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
+            path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', self.new_service, name='new_service'),
+            path('new_service_schedule/<int:customer_id>/<int:service_id>', self.new_service_schedule, name='new_service_schedule'),
+            path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>', self.new_service_package_schedule, name='new_service_package_schedule'),
         ]
         return my_urls + urls
 
@@ -28,9 +32,6 @@ class ClinicSite(admin.AdminSite):
     def index(self, request, extra_context=None):
         # extra_context = extra_context or {}
         # user = User.objects.get(username=request.user).customer
-        
-        # # 可申领的服务作业
-        # extra_context['unassigned_procs'] = OperationProc.objects.get_unassigned_proc(user)
 
         return super().index(request, extra_context=extra_context)
 
@@ -65,6 +66,7 @@ class ClinicSite(admin.AdminSite):
 
         return response
 
+    # 搜索客户，返回客户列表
     def search_customers(self, request):
         from django.db.models import Q
         # 从request.POST获取search
@@ -77,6 +79,112 @@ class ClinicSite(admin.AdminSite):
             context['customers'] = Customer.objects.filter(name__icontains=search_text)
         return render(request, 'customers_list.html', context)
 
+    # 搜索服务，返回服务/服务包列表
+    def search_services(self, request, **kwargs):
+        # 从request.POST获取search
+        print('request.POST:', request.POST)
+        search_text = request.POST.get('search')
+        context = {}
+        # if search_text is None or search_text == '':
+        #     context['services'] = None
+        # else:
+        context['services'] = [
+            {
+                'id': service.id, 
+                'label': service.label,
+                'enable_queue_counter': service.enable_queue_counter,
+                'queue_count': OperationProc.objects.get_service_queue_count(service)
+            } for service in Service.objects.filter(Q(is_system_service=False) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
+        ]
+        
+        context['service_packages'] = [
+            {
+                'id': service_package.id, 
+                'label': service_package.label,
+            } for service_package in ServicePackage.objects.filter(Q(label__icontains=search_text) | Q(pym__icontains=search_text))
+        ]
+
+        context['customer_id'] = kwargs['customer_id']
+
+        return render(request, 'services_list.html', context)
+
+    # 创建服务
+    def new_service(self, request, **kwargs):
+        '''
+        人工创建新服务：作业进程+表单进程
+        从kwargs获取参数：customer_id, service_id
+        '''
+        from core.business_functions import create_service_proc, dispatch_operator
+        # 从request获取参数：customer, service, operator
+        customer = Customer.objects.get(id=kwargs['customer_id'])
+        current_operator = User.objects.get(username=request.user).customer
+        service = Service.objects.get(id=kwargs['service_id'])
+        service_operator = dispatch_operator(customer, service, current_operator)
+        content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
+
+        # 准备新的服务作业进程参数
+        proc_params = {}
+        proc_params['service'] = service
+        proc_params['customer'] = customer
+        proc_params['creater'] = current_operator
+        proc_params['operator'] = service_operator
+        proc_params['state'] = 0  # or 0 根据服务作业权限判断
+        proc_params['scheduled_time'] = timezone.now() # or None 根据服务作业权限判断
+        proc_params['contract_service_proc'] = None
+        proc_params['content_type'] = content_type
+        proc_params['form_data'] = None
+        
+
+        # 如果是推荐服务，解析parent_proc和passing_data
+        if kwargs['recommended_service_id']:
+            recommended_service = RecommendedService.objects.get(id=kwargs['recommended_service_id'])
+            proc_params['parent_proc'] = recommended_service.pid
+            proc_params['passing_data'] = recommended_service.passing_data
+        else:
+            # 人工创建服务，没有父进程
+            proc_params['parent_proc'] = None
+            # 人工创建服务，没有传递数据
+            proc_params['passing_data'] = 0
+
+
+        # 创建新的OperationProc服务作业进程实例
+        new_proc = create_service_proc(**proc_params)
+
+        # 如果请求来自可选服务，从可选服务队列中删除服务
+        if kwargs['recommended_service_id']:
+            RecommendedService.objects.get(id=kwargs['recommended_service_id']).delete()
+
+        # 如果开单给作业员本人，进入修改界面
+        if service_operator == current_operator:
+            # 重定向到/clinic/service/model/id/change
+            return redirect(new_proc.entry)
+        else:  # 否则显示提示消息：开单成功
+            from django.contrib import messages
+            messages.add_message(request, messages.INFO, f'{service.label}已开单')
+            return redirect(customer)
+
+    # 创建新的服务日程
+    def new_service_schedule(self, request, **kwargs):
+        customer_id = kwargs['customer_id']
+        service_id = kwargs['service_id']
+        print('customer_id:', customer_id)
+        print('service_id:', service_id)
+        context = {}
+        return redirect('/clinic/service/customerschedule/add/')
+
+    # 创建新的服务包计划
+    def new_service_package_schedule(self, request, **kwargs):
+        customer_id = kwargs['customer_id']
+        service_package_id = kwargs['service_package_id']
+        print('customer_id:', customer_id)
+        print('service_package_id:', service_package_id)
+        context = {}
+
+        # 1. 获取服务包信息: ServicePackage, ServicePackageDetail
+
+        # 2. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
+
+        return redirect('/clinic/service/customerschedulepackage/add/')
 
 clinic_site = ClinicSite(name = 'ClinicSite')
 

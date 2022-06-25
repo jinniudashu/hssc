@@ -2,7 +2,50 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution
+from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage
+
+
+class CustomerSchedulePackage(HsscFormModel):
+    servicepackage = models.ForeignKey(ServicePackage, on_delete=models.CASCADE, verbose_name='服务包')
+    
+    class Meta:
+        verbose_name = '安排服务包'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.servicepackage.label
+
+class CustomerScheduleDraft(HsscFormModel):
+    schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, on_delete=models.CASCADE, verbose_name='服务包')
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
+    Cycle_options = [(0, '总共'), (1, '每天'), (2, '每周'), (3, '每月'), (4, '每季'), (5, '每年')]
+    cycle_option = models.PositiveSmallIntegerField(choices=Cycle_options, default=0, blank=True, null=True, verbose_name='周期')
+    cycle_times = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="次数")
+    duration = models.DurationField(blank=True, null=True, verbose_name="持续周期", help_text='例如：3 days, 22:00:00')
+    Default_beginning_time = [(0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')]
+    default_beginning_time = models.PositiveSmallIntegerField(choices=Default_beginning_time, default=0, verbose_name='执行时间基准')
+    base_interval = models.DurationField(blank=True, null=True, verbose_name='基准间隔', help_text='例如：3 days, 22:00:00')
+    scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, verbose_name='服务人员')
+    
+    class Meta:
+        verbose_name = '服务项目安排'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.service.label
+
+class CustomerSchedule(HsscFormModel):
+    scheduled_draft = models.ForeignKey(CustomerScheduleDraft, on_delete=models.CASCADE, verbose_name='日程草案')
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
+    scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name='计划执行时间')
+    scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, verbose_name='服务人员')
+
+    class Meta:
+        verbose_name = '客户服务日程'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.service.label
 
 
 # **********************************************************************************************************************

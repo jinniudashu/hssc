@@ -131,7 +131,7 @@ class ServicePackageDetail(HsscPymBase):
     base_interval = models.DurationField(blank=True, null=True, verbose_name='基准间隔', help_text='例如：3 days, 22:00:00')
 
     class Meta:
-        verbose_name = "服务内容模板"
+        verbose_name = "服务项目模板"
         verbose_name_plural = verbose_name
         ordering = ['id']
 

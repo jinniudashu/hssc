@@ -41,7 +41,7 @@
         
         <h3>可选服务</h3>
         <div v-for="service in recommendedServices" :key="service.id">
-            <a :href="'/core/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
+            <a :href="'/clinic/new_service/' + service.customer_id + '/' + service.service_id + '/' + service.id + '/'">
                 {{ service.service_label }}
                 <span v-if="service.enable_queue_counter"> ({{ service.queue_count }})</span>
             </a>
@@ -64,16 +64,16 @@
 
     {% endverbatim %}
     
-    <label value="新增服务">新增服务：</label> <input class="form-control" type="search" 
+    <label value="新增服务">服务：</label> <input class="form-control" type="search" 
     name="search" placeholder="查找服务..." 
-    hx-post="/core/search_services/{{ profile.id }}/"
+    hx-post="/clinic/search_services/{{ profile.id }}/"
     hx-trigger="keyup changed delay:500ms, search" 
-    hx-target="#search-results" 
+    hx-target="#search-service-results" 
     hx-indicator=".htmx-indicator">
+
+    <input type="submit" value="返回工作台" onclick="location.href='/clinic/';"/>
     
-    <input type="submit" value="新增服务计划安排" onclick="location.href='/clinic/';"/> <input type="submit" value="退出" onclick="location.href='/clinic/';"/>
-    
-    <div id="search-results"></div>
+    <div id="search-service-results"></div>
 
     <script src="https://unpkg.com/vue@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>    
