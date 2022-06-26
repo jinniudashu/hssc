@@ -3,7 +3,7 @@ from django.db import models
 from icpc.models import *
 from dictionaries.models import *
 from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage
-
+from core.hsscbase_class import HsscBase
 
 class CustomerSchedulePackage(HsscFormModel):
     servicepackage = models.ForeignKey(ServicePackage, on_delete=models.CASCADE, verbose_name='服务包')
@@ -15,7 +15,7 @@ class CustomerSchedulePackage(HsscFormModel):
     def __str__(self):
         return self.servicepackage.label
 
-class CustomerScheduleDraft(HsscFormModel):
+class CustomerScheduleDraft(HsscBase):
     schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, on_delete=models.CASCADE, verbose_name='服务包')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
     Cycle_options = [(0, '总共'), (1, '每天'), (2, '每周'), (3, '每月'), (4, '每季'), (5, '每年')]
@@ -34,7 +34,7 @@ class CustomerScheduleDraft(HsscFormModel):
     def __str__(self):
         return self.service.label
 
-class CustomerSchedule(HsscFormModel):
+class CustomerSchedule(HsscBase):
     scheduled_draft = models.ForeignKey(CustomerScheduleDraft, on_delete=models.CASCADE, verbose_name='日程草案')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name='计划执行时间')

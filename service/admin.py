@@ -65,10 +65,10 @@ admin.site.register(CustomerSchedule, CustomerScheduleAdmin)
 
 class CustomerScheduleInline(nested_admin.NestedTabularInline):
     model = CustomerSchedule
-    extra = 3
+    extra = 0
     can_delete = False
     # verbose_name_plural = '服务日程安排'
-    exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    exclude = ["hssc_id", "label", "name", ]
     autocomplete_fields = ["scheduled_operator", ]
 
 class CustomerScheduleDraftAdmin(HsscFormAdmin):
@@ -80,10 +80,10 @@ admin.site.register(CustomerScheduleDraft, CustomerScheduleDraftAdmin)
 class CustomerScheduleDraftInline(nested_admin.NestedTabularInline):
     model = CustomerScheduleDraft
     inlines = [CustomerScheduleInline]
-    extra = 3
+    extra = 0
     can_delete = False
     # verbose_name_plural = '服务项目安排'
-    exclude = ["hssc_id", "label", "name", "customer", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
+    exclude = ["hssc_id", "label", "name", ]
     autocomplete_fields = ["scheduled_operator", ]
 
 class CustomerSchedulePackageAdmin(HsscFormAdmin):

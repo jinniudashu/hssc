@@ -176,7 +176,6 @@ class ClinicSite(admin.AdminSite):
     def new_service_package_schedule(self, request, **kwargs):
         # 1. 创建"安排服务计划"服务进程
         customer_id = kwargs['customer_id']
-        print('customer_id:', customer_id)
         customer = Customer.objects.get(id=customer_id)
         current_operator = User.objects.get(username=request.user).customer
         service = Service.objects.get(name='CustomerSchedulePackage')
@@ -194,10 +193,8 @@ class ClinicSite(admin.AdminSite):
 
         # 2. 获取服务包信息: ServicePackage, ServicePackageDetail
         service_package_id = kwargs['service_package_id']
-        print('service_package_id:', service_package_id)
         servicepackage = ServicePackage.objects.get(id=service_package_id)
         servicepackagedetails = ServicePackageDetail.objects.filter(servicepackage=servicepackage)
-        print('servicepackagedetails:', servicepackagedetails)
 
         # 3. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
         # 创建客户服务包
@@ -210,8 +207,17 @@ class ClinicSite(admin.AdminSite):
             cpid=None,
             servicepackage=servicepackage,  # 服务包
         )
-        CustomerScheduleDraft.objects.bulk_create(servicepackagedetails)
-        # 待处理customer, operator, creater, pid, cpid
+
+        for servicepackagedetail in servicepackagedetails:
+            CustomerScheduleDraft.objects.create(
+                schedule_package=customerschedulepackage,  # 客户服务包
+                service=servicepackagedetail.service,  # 服务项目
+                cycle_option=servicepackagedetail.cycle_option,  # 周期
+                cycle_times=servicepackagedetail.cycle_times,  # 次数
+                duration=servicepackagedetail.duration,  # 持续周期
+                default_beginning_time=servicepackagedetail.default_beginning_time,  # 执行时间基准
+                base_interval=servicepackagedetail.base_interval,  # 基准间隔
+            )
 
         # 4. 更新OperationProc服务进程的form实例信息
         new_proc.object_id = customerschedulepackage.id
