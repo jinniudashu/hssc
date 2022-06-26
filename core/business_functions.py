@@ -339,6 +339,23 @@ def update_customer_recommended_services_list(customer):
     send_channel_message(f'customer_recommended_services_{customer.id}', {'type': 'send_customer_recommended_services_list', 'data': recommendedServices})
 
 
+# 把客户服务项目安排转为客户服务日程
+def get_services_schedule(instances):
+    services_schedule = []
+    schedule_package = instances[0].schedule_package
+    customer = schedule_package.customer
+    for instance in instances:
+        print('instance:', instance)
+        service=instance.service,  # 服务项目
+        cycle_option=instance.cycle_option,  # 周期: [(0, '总共'), (1, '每天'), (2, '每周'), (3, '每月'), (4, '每季'), (5, '每年')]
+        cycle_times=instance.cycle_times,  # 次数
+        duration=instance.duration,  # 持续周期
+        default_beginning_time=instance.default_beginning_time,  # 执行时间基准: [(0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')]
+        base_interval=instance.base_interval,  # 基准间隔
+
+    return services_schedule
+
+
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 

@@ -2,7 +2,7 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage
+from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage, Customer
 from core.hsscbase_class import HsscBase
 
 class CustomerSchedulePackage(HsscFormModel):
@@ -25,7 +25,7 @@ class CustomerScheduleDraft(HsscBase):
     Default_beginning_time = [(0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')]
     default_beginning_time = models.PositiveSmallIntegerField(choices=Default_beginning_time, default=0, verbose_name='执行时间基准')
     base_interval = models.DurationField(blank=True, null=True, verbose_name='基准间隔', help_text='例如：3 days, 22:00:00')
-    scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, verbose_name='服务人员')
+    scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务人员')
     
     class Meta:
         verbose_name = '服务项目安排'
@@ -35,10 +35,12 @@ class CustomerScheduleDraft(HsscBase):
         return self.service.label
 
 class CustomerSchedule(HsscBase):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='客户')
+    schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, on_delete=models.CASCADE, verbose_name='服务包')
     scheduled_draft = models.ForeignKey(CustomerScheduleDraft, on_delete=models.CASCADE, verbose_name='日程草案')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name='计划执行时间')
-    scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, verbose_name='服务人员')
+    scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务人员')
 
     class Meta:
         verbose_name = '客户服务日程'

@@ -133,7 +133,6 @@ class ClinicSite(admin.AdminSite):
         proc_params['contract_service_proc'] = None
         proc_params['content_type'] = content_type
         proc_params['form_data'] = None
-        
 
         # 如果是推荐服务，解析parent_proc和passing_data
         if kwargs['recommended_service_id']:
@@ -145,7 +144,6 @@ class ClinicSite(admin.AdminSite):
             proc_params['parent_proc'] = None
             # 人工创建服务，没有传递数据
             proc_params['passing_data'] = 0
-
 
         # 创建新的OperationProc服务作业进程实例
         new_proc = create_service_proc(**proc_params)
@@ -180,7 +178,6 @@ class ClinicSite(admin.AdminSite):
         current_operator = User.objects.get(username=request.user).customer
         service = Service.objects.get(name='CustomerSchedulePackage')
         content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
-
         # 创建一个状态为“运行”的“安排服务计划”作业进程
         new_proc=OperationProc.objects.create(
             service=service,  # 服务
@@ -191,12 +188,11 @@ class ClinicSite(admin.AdminSite):
             content_type=content_type,  # 内容类型
         )
 
-        # 2. 获取服务包信息: ServicePackage, ServicePackageDetail
+        # 2. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
+        # 获取服务包信息: ServicePackage, ServicePackageDetail
         service_package_id = kwargs['service_package_id']
         servicepackage = ServicePackage.objects.get(id=service_package_id)
         servicepackagedetails = ServicePackageDetail.objects.filter(servicepackage=servicepackage)
-
-        # 3. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
         # 创建客户服务包
         from service.models import CustomerSchedulePackage, CustomerScheduleDraft
         customerschedulepackage = CustomerSchedulePackage.objects.create(
@@ -207,7 +203,7 @@ class ClinicSite(admin.AdminSite):
             cpid=None,
             servicepackage=servicepackage,  # 服务包
         )
-
+        # 创建服务项目安排
         for servicepackagedetail in servicepackagedetails:
             CustomerScheduleDraft.objects.create(
                 schedule_package=customerschedulepackage,  # 客户服务包
@@ -219,7 +215,7 @@ class ClinicSite(admin.AdminSite):
                 base_interval=servicepackagedetail.base_interval,  # 基准间隔
             )
 
-        # 4. 更新OperationProc服务进程的form实例信息
+        # 3. 更新OperationProc服务进程的form实例信息
         new_proc.object_id = customerschedulepackage.id
         new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
         new_proc.save()
