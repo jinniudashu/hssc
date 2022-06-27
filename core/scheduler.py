@@ -4,7 +4,7 @@ from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.models import User
 from django.utils import timezone
-import datetime
+from datetime import timedelta
 from django.forms import model_to_dict
 from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
@@ -191,7 +191,7 @@ def operand_finished_handler(sender, **kwargs):
                 '''
                 period = None  # 意味着self.detection_scope == 'ALL'表示获取全部健康记录
                 if event_rule.detection_scope == 'LAST_WEEK_SERVICES':  # 获取表示指定时间段内的健康记录
-                    start_time = timezone.now() + datetime.timedelta(days=-7)
+                    start_time = timezone.now() + timedelta(days=-7)
                     end_time = timezone.now()
                     period = (start_time, end_time)
 

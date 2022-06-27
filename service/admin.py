@@ -62,6 +62,7 @@ class CustomerScheduleAdmin(admin.ModelAdmin):
     autocomplete_fields = ["scheduled_operator", ]
     list_display = ['service', 'scheduled_time', 'scheduled_operator']
     list_editable = ['scheduled_time', 'scheduled_operator']
+    ordering = ('scheduled_time',)
 clinic_site.register(CustomerSchedule, CustomerScheduleAdmin)
 admin.site.register(CustomerSchedule, CustomerScheduleAdmin)
 
@@ -97,18 +98,23 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
     def save_formset(self, request, form, formset, change):
         instances = formset.save()
         if instances:
+            schedule_package = instances[0].schedule_package
+            customer = schedule_package.customer
             from core.business_functions import get_services_schedule
             services_schedule = get_services_schedule(instances)
+            print('services_schedule:', services_schedule)
             # 创建客户服务日程
             for service_schedule in services_schedule:
                 CustomerSchedule.objects.create(
+                    customer=customer,
+                    schedule_package=schedule_package,
                     scheduled_draft=service_schedule['scheduled_draft'],
                     service=service_schedule['service'],
                     scheduled_time=service_schedule['scheduled_time'],
                     scheduled_operator=service_schedule['scheduled_operator'],
                 )
             # 重定向到修改客户服务日程页面
-            return redirect('service/customerschedule/')
+            return redirect('/clinic/service/customerschedule/', pk=instances[0].pk)
             # return redirect('service:customer_schedule_edit', pk=instances[0].pk)
 
 clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)

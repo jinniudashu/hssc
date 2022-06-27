@@ -243,6 +243,7 @@ def send_channel_message(group_name, message):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(group_name, message)
 
+
 from core.models import OperationProc
 def update_unassigned_procs():
     # 可申领的服务作业
@@ -341,17 +342,67 @@ def update_customer_recommended_services_list(customer):
 
 # 把客户服务项目安排转为客户服务日程
 def get_services_schedule(instances):
-    services_schedule = []
-    schedule_package = instances[0].schedule_package
-    customer = schedule_package.customer
+    from django.utils import timezone
+    from datetime import timedelta
+    def _get_beginning_time(option, base_interval):
+        beginning_time =None
+        # (0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
+        if option == 1:
+            if base_interval:
+                beginning_time = timezone.now() + base_interval
+            else:
+                beginning_time = timezone.now()
+        elif option == 2:
+            if base_interval:
+                beginning_time = timezone.now() + base_interval
+            else:
+                beginning_time = timezone.now()
+        elif option == 3:
+            if base_interval:
+                beginning_time = timezone.now() + base_interval
+            else:
+                beginning_time = timezone.now()
+        elif option == 4:
+            if base_interval:
+                beginning_time = timezone.now() + base_interval
+            else:
+                beginning_time = timezone.now()
+        return beginning_time
+
+    def _get_times_interval(cycle_unit, cycle_frequency, cycle_times):
+        # 返回：执行次数，执行间隔
+        # 周期单位: [('TOTAL', '总共'), ('DAY', '每天'), ('WEEK', '每周'), ('MONTH', '每月'), ('QUARTER', '每季'), ('YEAR', '每年')]
+        if cycle_unit == 'TOTAL':
+            times = cycle_times
+            interval_seconds = int(cycle_times*24*60*60/cycle_frequency)
+        else:
+            times = cycle_times * cycle_frequency
+            from enum import Enum
+            class UnitSeconds(Enum):
+                DAY = 86400
+                WEEK = 604800
+                MONTH = 2592000
+                QUARTER = 7776000
+                YEAR = 31536000
+            interval_seconds = int(UnitSeconds[cycle_unit].value*cycle_times/times)
+        return times, interval_seconds
+
+    services_schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator}]
     for instance in instances:
-        print('instance:', instance)
-        service=instance.service,  # 服务项目
-        cycle_option=instance.cycle_option,  # 周期: [(0, '总共'), (1, '每天'), (2, '每周'), (3, '每月'), (4, '每季'), (5, '每年')]
-        cycle_times=instance.cycle_times,  # 次数
-        duration=instance.duration,  # 持续周期
-        default_beginning_time=instance.default_beginning_time,  # 执行时间基准: [(0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')]
-        base_interval=instance.base_interval,  # 基准间隔
+        times, interval = _get_times_interval(instance.cycle_unit, instance.cycle_frequency, instance.cycle_times)
+        beginning_time = _get_beginning_time(instance.default_beginning_time, instance.base_interval)
+        for i in range(times):
+            if beginning_time:
+                scheduled_time = beginning_time + timedelta(seconds=interval*i)
+            else:
+                scheduled_time = None
+            print('service:', instance.service, 'scheduled_time:', scheduled_time)
+            services_schedule.append({
+                'scheduled_draft': instance,
+                'service': instance.service,  # 服务项目
+                'scheduled_time': scheduled_time,
+                'scheduled_operator': instance.scheduled_operator,
+            })
 
     return services_schedule
 

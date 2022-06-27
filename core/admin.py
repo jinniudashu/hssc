@@ -205,12 +205,13 @@ class ClinicSite(admin.AdminSite):
         )
         # 创建服务项目安排
         for servicepackagedetail in servicepackagedetails:
+            print('servicepackagedetail:', servicepackagedetail.cycle_frequency, type(servicepackagedetail.cycle_frequency), servicepackagedetail.cycle_times, type(servicepackagedetail.cycle_times))
             CustomerScheduleDraft.objects.create(
                 schedule_package=customerschedulepackage,  # 客户服务包
                 service=servicepackagedetail.service,  # 服务项目
-                cycle_option=servicepackagedetail.cycle_option,  # 周期
-                cycle_times=servicepackagedetail.cycle_times,  # 次数
-                duration=servicepackagedetail.duration,  # 持续周期
+                cycle_unit=servicepackagedetail.cycle_unit,  # 周期单位
+                cycle_frequency=servicepackagedetail.cycle_frequency,  # 每周期频次
+                cycle_times=servicepackagedetail.cycle_times,  # 周期总数/天数
                 default_beginning_time=servicepackagedetail.default_beginning_time,  # 执行时间基准
                 base_interval=servicepackagedetail.base_interval,  # 基准间隔
             )
