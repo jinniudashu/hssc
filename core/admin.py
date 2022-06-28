@@ -25,6 +25,7 @@ class ClinicSite(admin.AdminSite):
             path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', self.new_service, name='new_service'),
             path('new_service_schedule/<int:customer_id>/<int:service_id>', self.new_service_schedule, name='new_service_schedule'),
             path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>', self.new_service_package_schedule, name='new_service_package_schedule'),
+            path('update_customer_schedules/<int:customer_id>/<int:service_package_id>', self.update_customer_schedules, name='update_customer_schedules'),
         ]
         return my_urls + urls
 
@@ -222,6 +223,26 @@ class ClinicSite(admin.AdminSite):
         new_proc.save()
 
         return redirect(new_proc.entry)
+
+    # 更新客户服务日程
+    def update_customer_schedules(self, request, **kwargs):
+        from service.forms import CustomerForScheduleForm, CustomerScheduleFormSet
+        customer = Customer.objects.get(id=kwargs['customer_id'])
+        if request.method == 'POST':
+            customer_form = CustomerForScheduleForm(request.POST, instance=customer)
+            customer_schedules_formset = CustomerScheduleFormSet(request.POST, instance=customer)
+            if customer_schedules_formset.is_valid():
+                customer_schedules_formset.save()
+            
+            return redirect(customer)
+        else:
+            customer_form = CustomerForScheduleForm(instance=customer)
+            customer_schedules_formset = CustomerScheduleFormSet(instance=customer)
+            context = {
+                'customer_form': customer_form,
+                'customer_schedules_formset': customer_schedules_formset,
+            }
+            return render(request, 'service/customerschedule_update.html', context)
 
 clinic_site = ClinicSite(name = 'ClinicSite')
 

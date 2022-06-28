@@ -329,6 +329,34 @@
             "components_groups": []
         },
         {
+            "label": "投诉建议表",
+            "name": "tou_su_jian_yi_biao",
+            "hssc_id": "fdc17a34-f5bc-11ec-81c9-3ae37e09fcca",
+            "pym": "tsjyb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "null",
+            "components": [
+                "eac129c0-f5bc-11ec-b5c2-3ae37e09fcca"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "服务安排查询表",
+            "name": "yi_an_pai_fu_wu_cha_xun_biao",
+            "hssc_id": "2b357d88-f5ba-11ec-9137-ead13379a4da",
+            "pym": "fwapcxb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "null",
+            "components": [
+                "ceecaf40-e576-11ec-8a69-ca4030bb64ad",
+                "c90e6930-f5b9-11ec-9137-ead13379a4da",
+                "f047d996-f5b9-11ec-9137-ead13379a4da"
+            ],
+            "components_groups": []
+        },
+        {
             "label": "机构基本信息表",
             "name": "ji_gou_ji_ben_xin_xi_biao",
             "hssc_id": "43464b44-c5c9-11ec-b819-725badf7393d",
@@ -1448,6 +1476,52 @@
                 "15de6896-dfbc-11ec-9eb2-26a028640b2f"
             ],
             "role": [
+                "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
+            ]
+        },
+        {
+            "label": "安排服务包",
+            "name": "CustomerSchedulePackage",
+            "hssc_id": "3fc90eaa-f5c3-11ec-b5c2-3ae37e09fcca",
+            "pym": "apfwb",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "is_system_service": true,
+            "history_services_display": 0,
+            "enable_queue_counter": false,
+            "route_to": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "buessiness_forms": [],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
+                "de194c50-9aa1-11ec-bde1-8a6e55faf877",
+                "de1992d2-9aa1-11ec-bde1-8a6e55faf877",
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877",
+                "de1a253a-9aa1-11ec-bde1-8a6e55faf877",
+                "de1a6f7c-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ab716-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b05cc-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b4cc6-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b9046-9aa1-11ec-bde1-8a6e55faf877",
+                "de1bcda4-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c1052-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ce450-9aa1-11ec-bde1-8a6e55faf877",
+                "de1d24ec-9aa1-11ec-bde1-8a6e55faf877",
+                "de1d6952-9aa1-11ec-bde1-8a6e55faf877",
+                "de1daa3e-9aa1-11ec-bde1-8a6e55faf877",
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
             ]
         }

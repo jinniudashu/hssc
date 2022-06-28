@@ -63,10 +63,11 @@ class CustomerScheduleAdmin(admin.ModelAdmin):
     list_display = ['service', 'scheduled_time', 'scheduled_operator']
     list_editable = ['scheduled_time', 'scheduled_operator']
     ordering = ('scheduled_time',)
+
 clinic_site.register(CustomerSchedule, CustomerScheduleAdmin)
 admin.site.register(CustomerSchedule, CustomerScheduleAdmin)
 
-class CustomerScheduleInline(nested_admin.NestedTabularInline):
+class CustomerScheduleInlineNested(nested_admin.NestedTabularInline):
     model = CustomerSchedule
     extra = 0
     can_delete = False
@@ -76,13 +77,13 @@ class CustomerScheduleInline(nested_admin.NestedTabularInline):
 
 class CustomerScheduleDraftAdmin(HsscFormAdmin):
     autocomplete_fields = ["scheduled_operator", ]
-    inlines = [CustomerScheduleInline]
+    inlines = [CustomerScheduleInlineNested]
 clinic_site.register(CustomerScheduleDraft, CustomerScheduleDraftAdmin)
 admin.site.register(CustomerScheduleDraft, CustomerScheduleDraftAdmin)
 
 class CustomerScheduleDraftInline(nested_admin.NestedTabularInline):
     model = CustomerScheduleDraft
-    inlines = [CustomerScheduleInline]
+    inlines = [CustomerScheduleInlineNested]
     extra = 0
     can_delete = False
     # verbose_name_plural = '服务项目安排'
@@ -93,7 +94,7 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
     exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
     fieldsets = ((None, {'fields': (('customer', 'servicepackage'), )}),)
     readonly_fields = ['customer', 'servicepackage']
-    inlines = [CustomerScheduleDraftInline, ]
+    inlines = [CustomerScheduleDraftInline]
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save()
@@ -114,7 +115,8 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
                     scheduled_operator=service_schedule['scheduled_operator'],
                 )
             # 重定向到修改客户服务日程页面
-            return redirect('/clinic/service/customerschedule/', pk=instances[0].pk)
+            return redirect('/clinic/')
+            return redirect('/clinic/service/customerschedule/')
             # return redirect('service:customer_schedule_edit', pk=instances[0].pk)
 
 clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)

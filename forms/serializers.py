@@ -40,6 +40,14 @@ class Men_zhen_fu_wu_ji_lu_2Serializer(serializers.ModelSerializer):
     class Meta:
         model = Men_zhen_fu_wu_ji_lu_2
         fields = '__all__'
+class Tou_su_jian_yi_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tou_su_jian_yi_biao
+        fields = '__all__'
+class Yi_an_pai_fu_wu_cha_xun_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yi_an_pai_fu_wu_cha_xun_biao
+        fields = '__all__'
 class Ji_gou_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ji_gou_ji_ben_xin_xi_biao

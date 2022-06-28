@@ -391,3 +391,6 @@ class FieldsType(Enum):
     boolfield_hui_zong_fei_yong_qing_dan_fu_jian = "None"  # 汇总费用清单附件
     boolfield_men_zhen_bing_li_fu_jian = "None"  # 门诊病历附件
     boolfield_dao_dian_shen_fen_yan_zheng = "None"  # 到店身份验证
+    boolfield_fu_wu_ming_cheng = "String"  # 服务名称
+    boolfield_fu_wu_shi_jian = "Datetime"  # 服务时间
+    boolfield_tou_su_jian_yi = "String"  # 投诉建议

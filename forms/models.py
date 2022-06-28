@@ -140,6 +140,22 @@ class Men_zhen_fu_wu_ji_lu_2(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
+class Tou_su_jian_yi_biao(HsscFormModel):
+    boolfield_tou_su_jian_yi = models.TextField(max_length=255, null=True, blank=True, verbose_name='投诉建议')
+    class Meta:
+        verbose_name = '投诉建议表'
+        verbose_name_plural = verbose_name
+        
+
+class Yi_an_pai_fu_wu_cha_xun_biao(HsscFormModel):
+    boolfield_fu_wu_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='服务名称')
+    boolfield_fu_wu_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='服务时间')
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_yi_an_pai_fu_wu_cha_xun_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
+    class Meta:
+        verbose_name = '服务安排查询表'
+        verbose_name_plural = verbose_name
+        
+
 class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_ji_gou_lian_xi_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构联系地址')
     boolfield_ji_gou_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构编码')

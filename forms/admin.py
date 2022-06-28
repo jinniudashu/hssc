@@ -49,6 +49,15 @@ class Men_zhen_fu_wu_ji_lu_2Admin(admin.ModelAdmin):
 
 admin.site.register(Men_zhen_fu_wu_ji_lu_2, Men_zhen_fu_wu_ji_lu_2Admin)
 
+class Tou_su_jian_yi_biaoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Tou_su_jian_yi_biao, Tou_su_jian_yi_biaoAdmin)
+
+class Yi_an_pai_fu_wu_cha_xun_biaoAdmin(admin.ModelAdmin):
+        autocomplete_fields = ["boolfield_jiu_zhen_ji_gou_ze_ren_ren", ]
+
+admin.site.register(Yi_an_pai_fu_wu_cha_xun_biao, Yi_an_pai_fu_wu_cha_xun_biaoAdmin)
+
 class Ji_gou_ji_ben_xin_xi_biaoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)

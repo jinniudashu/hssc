@@ -130,7 +130,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+            "hosts": [os.environ.get('REDIS_URL', 'redis://default:redispw@localhost:49153')],
         },
     },
 }
@@ -194,7 +194,7 @@ SIMPLE_BACKEND_REDIRECT_URL = '/'
 # APPEND_SLASH=False
 
 # CELERY SETTINGS
-CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://default:redispw@localhost:49153')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
