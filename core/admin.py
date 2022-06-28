@@ -237,7 +237,7 @@ class ClinicSite(admin.AdminSite):
 
         customerschedulepackage = CustomerSchedulePackage.objects.get(id=kwargs['customer_schedule_package_id'])
         customer_form = CustomerSchedulePackageForm(instance=customerschedulepackage)
-        queryset = CustomerSchedule.objects.filter(schedule_package=customerschedulepackage)
+        queryset = CustomerSchedule.objects.filter(schedule_package=customerschedulepackage).order_by('scheduled_time')
         if request.method == 'POST':
             # customer_schedules_formset = CustomerScheduleFormset(request.POST, queryset=queryset)
             customer_schedules_formset = CustomerScheduleFormset(request.POST)
