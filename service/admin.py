@@ -114,10 +114,11 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
                     scheduled_time=service_schedule['scheduled_time'],
                     scheduled_operator=service_schedule['scheduled_operator'],
                 )
-            # 重定向到修改客户服务日程页面
-            return redirect('/clinic/')
-            return redirect('/clinic/service/customerschedule/')
-            # return redirect('service:customer_schedule_edit', pk=instances[0].pk)
+
+    def response_change(self, request, obj):
+        # 重定向到修改客户服务日程页面
+        return redirect(f'/clinic/update_customer_schedules/{obj.id}')
+
 
 clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)

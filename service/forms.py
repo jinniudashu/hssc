@@ -1,12 +1,5 @@
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import ModelForm
 
-from core.models import Customer
-from service.models import CustomerSchedule
-class CustomerForScheduleForm(ModelForm):
-    class Meta:
-        model = Customer
-        fields = ('name',)
-CustomerScheduleFormSet = inlineformset_factory(Customer, CustomerSchedule, fields=('service', 'scheduled_time', 'scheduled_operator',), extra=0, can_delete=False)
 
 from service.models import Ji_gou_ji_ben_xin_xi_biao
 class Ji_gou_ji_ben_xin_xi_biao_HeaderForm(ModelForm):
