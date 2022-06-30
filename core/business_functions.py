@@ -344,30 +344,8 @@ def update_customer_recommended_services_list(customer):
 def get_services_schedule(instances):
     from django.utils import timezone
     from datetime import timedelta
-    def _get_beginning_time(option, base_interval):
-        beginning_time =None
-        # (0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
-        if option == 1:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        elif option == 2:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        elif option == 3:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        elif option == 4:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        return beginning_time
+
+    services_schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator}]
 
     def _get_times_interval(cycle_unit, cycle_frequency, cycle_times):
         # 返回：执行次数，执行间隔
@@ -387,25 +365,55 @@ def get_services_schedule(instances):
             interval_seconds = int(UnitSeconds[cycle_unit].value*cycle_times/times)
         return times, interval_seconds
 
-    services_schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator}]
-    for instance in instances:
-        times, interval = _get_times_interval(instance.cycle_unit, instance.cycle_frequency, instance.cycle_times)
-        beginning_time = _get_beginning_time(instance.default_beginning_time, instance.base_interval)
-        for i in range(times):
-            if beginning_time:
-                scheduled_time = beginning_time + timedelta(seconds=interval*i)
+    def _get_beginning_time(option, base_interval):
+        beginning_time =None
+        # (0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
+        if option == 1:
+            if base_interval:
+                beginning_time = timezone.now() + base_interval
             else:
-                scheduled_time = None
-            print('service:', instance.service, 'scheduled_time:', scheduled_time)
-            services_schedule.append({
-                'scheduled_draft': instance,
-                'service': instance.service,  # 服务项目
-                'scheduled_time': scheduled_time,
-                'scheduled_operator': instance.scheduled_operator,
-            })
+                beginning_time = timezone.now()
+        elif option == 2:
+            if base_interval:
+                beginning_time = frist_schedul + base_interval
+            else:
+                beginning_time = frist_schedul
+        elif option == 3:
+            if base_interval:
+                beginning_time = previous + base_interval
+            else:
+                beginning_time = previous
+        elif option == 4:
+            if base_interval:
+                pass
+            else:
+                pass
+
+        return beginning_time
+
+    frist_schedul = None
+    previous = None
+
+    for index, instance in enumerate(instances):
+            times, interval = _get_times_interval(instance.cycle_unit, instance.cycle_frequency, instance.cycle_times)
+            beginning_time = _get_beginning_time(instance.default_beginning_time, instance.base_interval)
+            if index == 0:
+                frist_schedul = beginning_time
+            for i in range(times):
+                if beginning_time:
+                    scheduled_time = beginning_time + timedelta(seconds=interval*i)
+                else:
+                    scheduled_time = None
+                print('service:', instance.service, 'scheduled_time:', scheduled_time)
+                services_schedule.append({
+                    'scheduled_draft': instance,
+                    'service': instance.service,  # 服务项目
+                    'scheduled_time': scheduled_time,
+                    'scheduled_operator': instance.scheduled_operator,
+                })
+                previous = scheduled_time
 
     return services_schedule
-
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
