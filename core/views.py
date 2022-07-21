@@ -37,6 +37,7 @@ def jinshuju_test(request, **kwargs):
     import json
     from django.core.exceptions import ObjectDoesNotExist
     from core.models import ExternalServiceMapping    
+    from core.utils import send_wechat_message
     # xmlhttp.setRequestHeader("Content-type","application/json")
     print("收到请求")
 
@@ -45,6 +46,7 @@ def jinshuju_test(request, **kwargs):
             print('Headers:', request.headers)
             postBody = request.body
             json_result = json.loads(postBody)
+            print('bodys:', json_result)
 
             # 接收到外部表单处理步骤：查找用户，判断服务状态，查找表单，复制表单内容，或创建错误日志
             external_form_id = json_result.get('form')
@@ -52,9 +54,12 @@ def jinshuju_test(request, **kwargs):
             entry = json_result.get('entry')
             # 1. 用微信OpenID查找是否有对应的用户：open_id = json_result.get('x_field_weixin_openid')
             weixin_openid = entry.get('x_field_weixin_openid')
-            print('收到微信OpenID：', weixin_openid)
+            print('微信ID：', weixin_openid)
 
             # 2. 如果查到对应用户，判断是否在服务期内，如果不在服务期，则不处理，如果在服务期，则开始处理表单
+            
+                # 获取用户负责人企业微信账号，用于发送通知消息
+
             # 3. 用外部表单名称在表单映射表中查找内部对应表单，如果查到，则复制表单内容，如果没查到，则创建新的映射记录，并通知管理员补充映射表
             try:
                 mapping = ExternalServiceMapping.objects.get(external_form_id = external_form_id)
@@ -70,6 +75,9 @@ def jinshuju_test(request, **kwargs):
 
             except ObjectDoesNotExist:
                 pass
+
+            # send_wechat_message(weixin_openid, '收到一个新的表单，请及时处理！')
+            send_wechat_message('XiaoMai', '收到一个新的表单，请及时处理！')
 
     response = HttpResponse()
     response.content = 'Hi, this is Jinshuju Test 127.0.0.1:8000'

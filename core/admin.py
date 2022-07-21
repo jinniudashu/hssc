@@ -226,7 +226,7 @@ class ClinicSite(admin.AdminSite):
 
     # 更新客户服务日程
     def update_customer_schedules(self, request, **kwargs):
-        from django.forms import ModelForm, modelformset_factory, TextInput
+        from django.forms import ModelForm, modelformset_factory
         from service.models import CustomerSchedulePackage, CustomerSchedule
         class CustomerSchedulePackageForm(ModelForm):
             class Meta:
@@ -234,12 +234,10 @@ class ClinicSite(admin.AdminSite):
                 fields = ('customer', 'servicepackage', )
 
         CustomerScheduleFormset = modelformset_factory(CustomerSchedule, fields=('service', 'scheduled_time', 'scheduled_operator',), extra=0, can_delete=False)
-
         customerschedulepackage = CustomerSchedulePackage.objects.get(id=kwargs['customer_schedule_package_id'])
         customer_form = CustomerSchedulePackageForm(instance=customerschedulepackage)
         queryset = CustomerSchedule.objects.filter(schedule_package=customerschedulepackage).order_by('scheduled_time')
         if request.method == 'POST':
-            # customer_schedules_formset = CustomerScheduleFormset(request.POST, queryset=queryset)
             customer_schedules_formset = CustomerScheduleFormset(request.POST)
             if customer_schedules_formset.is_valid():
                 customer_schedules_formset.save()        
