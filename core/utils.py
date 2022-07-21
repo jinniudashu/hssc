@@ -10,10 +10,6 @@ def send_wechat_message(uid, message):
 
     from hssc.settings import env
 
-    # CORP_ID = 'ww936884380b76f62f'
-    # SECRET = '29_paZii9ut8wphm8cMaj_ygkBh63cxJ_Ots_nQmd1Y'
-    # AGENT_ID = '1000003'
-
     redis_client = Redis.from_url('redis://default:redispw@localhost:49153/15')
     session_interface = RedisStorage(
         redis_client,
