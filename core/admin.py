@@ -403,3 +403,17 @@ clinic_site.register(Message)
 
 admin.site.register(ExternalServiceMapping)
 clinic_site.register(ExternalServiceMapping)
+
+
+# 承保人员清单可导入
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+
+class ChengBaoRenYuanQingDanResource(resources.ModelResource):
+    class Meta:
+        model = ChengBaoRenYuanQingDan
+        # exclude = ['LastCycleDate']
+
+class ChengBaoRenYuanQingDanAdmin(ImportExportModelAdmin):
+    resource_class = ChengBaoRenYuanQingDanResource
+admin.site.register(ChengBaoRenYuanQingDan, ChengBaoRenYuanQingDanAdmin)

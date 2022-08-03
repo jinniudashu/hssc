@@ -23,13 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-print('BASE_DIR:', BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0-n3&w(mzu*l7+ox@nfh3gwaw((-^=mzk%b7+ui!-zpbs%6ver'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,6 +61,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'nested_admin',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -101,23 +101,11 @@ WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
-    
-    # # 需求管理系统数据库
-    # 'rcms': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'HOST': env('DATABASE_HOST'),
-    #     'NAME': env('DATABASE_NAME'),
-    #     'USER': env('DATABASE_USER'),
-    #     'PASSWORD': env('DATABASE_PASSWORD'),
-    #     'PORT': env('DATABASE_PORT'),
-    # }
 }
 
 import dj_database_url
@@ -130,7 +118,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://default:redispw@localhost:49153')],
+            "hosts": [os.environ.get('REDIS_URL', env('REDIS_URL'))],
         },
     },
 }
@@ -194,7 +182,7 @@ SIMPLE_BACKEND_REDIRECT_URL = '/'
 # APPEND_SLASH=False
 
 # CELERY SETTINGS
-CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://default:redispw@localhost:49153')
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', env('REDIS_URL'))
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

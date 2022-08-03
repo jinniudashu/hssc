@@ -2,7 +2,7 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage, Customer
+from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage, Customer, ChengBaoRenYuanQingDan
 from core.hsscbase_class import HsscBase
 
 class CustomerSchedulePackage(HsscFormModel):
@@ -603,9 +603,9 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
 class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
     boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
-    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
-    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
     boolfield_bei_bao_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
+    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
+    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='身份证号')
     boolfield_bei_bao_ren_xing_bie = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人性别')
     boolfield_chu_sheng_ri_qi = models.DateField(null=True, blank=False, verbose_name='出生日期')
     boolfield_bao_xian_ze_ren = models.CharField(max_length=255, null=True, blank=False, verbose_name='保险责任')
@@ -617,7 +617,5 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
         verbose_name = '基本信息调查'
         verbose_name_plural = verbose_name
 
-    def __str__(self):
-        return self.customer.name
-
-        
+    # def __str__(self):
+    #     return self.customer.name

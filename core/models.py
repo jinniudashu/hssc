@@ -406,6 +406,7 @@ class Customer(HsscBase):
     health_record = models.JSONField(blank=True, null=True, verbose_name="健康记录")
     weixin_openid = models.CharField(max_length=255, blank=True, null=True, verbose_name="微信openid")
 
+
     class Meta:
         verbose_name = "客户注册信息"
         verbose_name_plural = "客户注册信息"
@@ -652,3 +653,25 @@ class HsscBaseFormModel(HsscFormModel):
     
     def natural_key(self):
         return self.name
+
+
+# 保险服务专用
+# 承保人员清单
+class ChengBaoRenYuanQingDan(models.Model):
+    序号=models.CharField(max_length=255, blank=True, null=True, verbose_name="序号")
+    保单号=models.CharField(max_length=255, blank=True, null=True, verbose_name="保单号")
+    被保人姓名=models.CharField(max_length=255, blank=True, null=True, verbose_name="被保人姓名")
+    证件类型=models.CharField(max_length=255, blank=True, null=True, verbose_name="证件类型")
+    身份证号=models.CharField(max_length=255, blank=True, null=True, verbose_name="身份证号")
+    出生日期=models.CharField(max_length=255, blank=True, null=True, verbose_name="出生日期")
+    保险责任=models.CharField(max_length=255, blank=True, null=True, verbose_name="保险责任")
+    保险有效期=models.CharField(max_length=255, blank=True, null=True, verbose_name="保险有效期")
+    联系方式=models.CharField(max_length=255, blank=True, null=True, verbose_name="联系方式")
+
+    class Meta:
+        verbose_name = "导入表-承保人员清单"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return str(self.被保人姓名)

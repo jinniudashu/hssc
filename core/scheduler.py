@@ -4,14 +4,58 @@ from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.models import User
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.forms import model_to_dict
 from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
 
-from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message
+from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message, ChengBaoRenYuanQingDan
 from core.business_functions import field_name_replace
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
+
+
+# 数据导入ChengBaoRenYuanQingDan时，自动插入service.models.Ju_min_ji_ben_xin_xi_diao_cha
+@receiver(post_save, sender=ChengBaoRenYuanQingDan)
+def chengbao_renyuan_qingdan_post_save_handler(sender, instance, created, **kwargs):
+    from service.models import Ju_min_ji_ben_xin_xi_diao_cha
+    if created:
+        # 字段对应关系
+        cheng_bao_ren_yuan_qing_dan_map = {
+            '序号': 'boolfield_xu_hao',
+            '保单号': 'boolfield_bao_dan_hao',
+            '被保人姓名': 'boolfield_bei_bao_ren_xing_ming',
+            '证件类型': 'boolfield_zheng_jian_lei_xing',
+            '身份证号': 'boolfield_zheng_jian_hao_ma',
+            '出生日期': 'boolfield_chu_sheng_ri_qi',
+            '保险责任': 'boolfield_bao_xian_ze_ren',
+            '保险有效期': 'boolfield_bao_xian_you_xiao_qi',
+            '联系方式': 'boolfield_lian_xi_dian_hua',
+        }
+
+        # 创建User实例
+        user = User.objects.create_user(instance.被保人姓名, None, instance.联系方式)
+
+        # # 创建客户档案
+        # customer = Customer.objects.create(
+        #     user=user,
+        #     name=instance.被保人姓名,
+        #     phone=instance.联系方式,
+        # )
+        customer = user.customer
+
+        # 创建参保人员
+        ju_min_ji_ben_xin_xi_diao_cha = Ju_min_ji_ben_xin_xi_diao_cha.objects.create(
+            customer=customer,
+            boolfield_xu_hao=instance.序号,
+            boolfield_bao_dan_hao=instance.保单号,
+            boolfield_bei_bao_ren_xing_ming=instance.被保人姓名,
+            # boolfield_zheng_jian_lei_xing=instance.证件类型,
+            boolfield_zheng_jian_hao_ma=instance.身份证号,
+            boolfield_chu_sheng_ri_qi=datetime.strptime(instance.出生日期, "%Y-%m-%d"),
+            boolfield_bao_xian_ze_ren=instance.保险责任,
+            boolfield_bao_xian_you_xiao_qi=datetime.strptime(instance.保险有效期, "%Y-%m-%d"),
+            boolfield_lian_xi_dian_hua=instance.联系方式,
+        )
 
 
 @receiver(user_logged_in)
