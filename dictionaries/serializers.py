@@ -355,3 +355,8 @@ class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wuSerializer(
     class Meta:
         model = Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu
         fields = 'value'
+
+class Shi_fou_an_pai_zhi_liao_ji_huaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shi_fou_an_pai_zhi_liao_ji_hua
+        fields = 'value'

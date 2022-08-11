@@ -48,6 +48,18 @@ class Yi_an_pai_fu_wu_cha_xun_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Yi_an_pai_fu_wu_cha_xun_biao
         fields = '__all__'
+class Kou_qiang_jian_cha_ji_zhen_duanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kou_qiang_jian_cha_ji_zhen_duan
+        fields = '__all__'
+class Tui_bao_shen_qing_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tui_bao_shen_qing_biao
+        fields = '__all__'
+class Tui_bao_que_ren_danSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tui_bao_que_ren_dan
+        fields = '__all__'
 class Ji_gou_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ji_gou_ji_ben_xin_xi_biao
@@ -79,6 +91,10 @@ class Men_zhen_ji_lu_dan_shen_he_danSerializer(serializers.ModelSerializer):
 class Li_pei_dui_zhang_dan_shen_he_danSerializer(serializers.ModelSerializer):
     class Meta:
         model = Li_pei_dui_zhang_dan_shen_he_dan
+        fields = '__all__'
+class Zhi_liao_ji_hua_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zhi_liao_ji_hua_biao
         fields = '__all__'
 class Li_pei_fei_yong_hui_zong_dan_shen_heSerializer(serializers.ModelSerializer):
     class Meta:

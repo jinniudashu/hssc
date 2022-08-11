@@ -1,0 +1,84 @@
+version: '3'
+
+volumes:
+  pgdata: # postgres数据文件目录
+
+networks: # 自定义网络(默认桥接), 不使用links通信
+  dental_network:
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: .
+    image: dental_app:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    command:
+      - sh
+      - -c
+      - |
+        python manage.py wait_for_db
+        python manage.py migrate
+        python manage.py loaddata initial_data.json
+        python manage.py init_core_data
+        daphne --port 8000 --bind 0.0.0.0 hssc.asgi:application
+    env_file:
+      - ./.env
+    networks:
+      - dental_network
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14-alpine
+    env_file:
+      - ./.env
+    volumes: 
+      - pgdata:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+    networks:
+      - dental_network
+
+  redis:
+    image: redis:alpine
+    networks:
+      - dental_network
+    
+  celery:
+    restart: always
+    build:
+      context: .
+    image: dental_celery:latest
+    command: celery -A hssc worker -l info
+    volumes:
+      - ./:/app
+    env_file:
+      - ./.env
+    networks:
+      - dental_network
+    depends_on:
+      - db
+      - redis
+      - app
+
+  celerybeat:
+    restart: always
+    build:
+      context: .
+    image: dental_celerybeat:latest
+    command: celery -A hssc beat -l INFO
+    volumes:
+      - ./:/app
+    env_file:
+      - ./.env
+    networks:
+      - dental_network
+    depends_on:
+      - db
+      - redis
+      - app
+      - celery

@@ -9,9 +9,8 @@ class Command(BaseCommand):
         获取Hssc源码，创建脚本文件
         '''
         print('开始导入脚本')
-        # SOURCECODE_URL = 'https://hssc-formdesign.herokuapp.com/define_backup/source_codes_list/'
-        # SOURCECODE_URL = 'https://hssc-dental.herokuapp.com/define_backup/source_codes_list/'
-        SOURCECODE_URL = 'http://design.tpahn.com/define_backup/source_codes_list/'
+        SOURCECODE_URL = 'http://design-dental.tpahn.com/define_backup/source_codes_list/'
+        # SOURCECODE_URL = 'http://design-clinic.tpahn.com/define_backup/source_codes_list/'
         # SOURCECODE_URL = 'http://127.0.0.1:8000/define_backup/source_codes_list/'
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]

@@ -2,7 +2,7 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage, Customer, ChengBaoRenYuanQingDan
+from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage, Customer
 from core.hsscbase_class import HsscBase
 
 class CustomerSchedulePackage(HsscFormModel):
@@ -22,8 +22,8 @@ class CustomerScheduleDraft(HsscBase):
     cycle_unit = models.CharField(max_length=10, choices=Cycle_unit, default='TOTAL', blank=True, null=True, verbose_name='周期单位')
     cycle_frequency = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="每周期频次")
     cycle_times = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="周期数/天数")
-    Default_beginning_time = [(1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')]
-    default_beginning_time = models.PositiveSmallIntegerField(choices=Default_beginning_time, default=1, verbose_name='执行时间基准')
+    Default_beginning_time = [(0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')]
+    default_beginning_time = models.PositiveSmallIntegerField(choices=Default_beginning_time, default=0, verbose_name='执行时间基准')
     base_interval = models.DurationField(blank=True, null=True, verbose_name='基准间隔', help_text='例如：3 days, 22:00:00')
     scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务人员')
     
@@ -53,6 +53,75 @@ class CustomerSchedule(HsscBase):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+class Kou_qiang_jian_cha_ji_zhen_duan(HsscFormModel):
+    boolfield_kou_qiang_jian_cha_ji_zhen_duan = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='口腔检查及诊断')
+    boolfield_shi_fou_an_pai_zhi_liao_ji_hua = models.ForeignKey(Shi_fou_an_pai_zhi_liao_ji_hua, related_name='shi_fou_an_pai_zhi_liao_ji_hua_for_boolfield_shi_fou_an_pai_zhi_liao_ji_hua_kou_qiang_jian_cha_ji_zhen_duan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否安排治疗计划')
+
+    class Meta:
+        verbose_name = '口腔检查及诊断'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class An_pai_zhi_liao_ji_hua(HsscFormModel):
+    boolfield_zhi_liao_ji_hua = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='治疗计划')
+
+    class Meta:
+        verbose_name = '安排治疗计划'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Shou_ci_dao_dian_que_ren(HsscFormModel):
+    boolfield_dao_dian_shen_fen_yan_zheng = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='到店身份验证')
+    boolfield_dao_da_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_dao_da_que_ren_shou_ci_dao_dian_que_ren', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
+    boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
+    boolfield_jiu_zhen_wen_ti = models.CharField(max_length=255, null=True, blank=False, verbose_name='就诊问题')
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_shou_ci_dao_dian_que_ren', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
+    boolfield_shi_yong_fu_wu_chan_pin = models.ManyToManyField(Bao_xian_chan_pin, related_name='bao_xian_chan_pin_for_boolfield_shi_yong_fu_wu_chan_pin_shou_ci_dao_dian_que_ren', blank=True, verbose_name='使用服务产品')
+    boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
+
+    class Meta:
+        verbose_name = '首次到店确认'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Tui_bao_que_ren_fu_wu(HsscFormModel):
+    boolfield_ke_hu_tui_bao_shen_qing_shi_fou_tong_guo = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ke_hu_tui_bao_shen_qing_shi_fou_tong_guo_tui_bao_que_ren_fu_wu', on_delete=models.CASCADE, null=True, blank=False, verbose_name='客户退保申请是否通过')
+
+    class Meta:
+        verbose_name = '退保确认服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Tui_bao_shen_qing_fu_wu(HsscFormModel):
+    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
+    boolfield_bei_bao_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
+    boolfield_bei_bao_xian_ren_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保险人证件号码')
+    boolfield_shi_yong_fu_wu_chan_pin = models.ManyToManyField(Bao_xian_chan_pin, related_name='bao_xian_chan_pin_for_boolfield_shi_yong_fu_wu_chan_pin_tui_bao_shen_qing_fu_wu', blank=False, verbose_name='使用服务产品')
+    boolfield_shen_qing_tui_bao_yuan_yin = models.TextField(max_length=255, null=True, blank=False, verbose_name='申请退保原因')
+    boolfield_shen_fen_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='身份证件附件')
+    boolfield_kou_qiang_jian_cha_ji_zhen_duan = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='口腔检查及诊断')
+
+    class Meta:
+        verbose_name = '退保申请服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Men_zhen_ji_lu_hui_zong(HsscFormModel):
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_men_zhen_ji_lu_hui_zong', blank=True, verbose_name='症状')
     boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_men_zhen_ji_lu_hui_zong', blank=True, verbose_name='检查项目')
@@ -95,7 +164,7 @@ class Zhen_suo_yu_yue(HsscFormModel):
     boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
 
     class Meta:
-        verbose_name = '诊所安排'
+        verbose_name = '诊所安排复诊'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -103,29 +172,6 @@ class Zhen_suo_yu_yue(HsscFormModel):
 
         
 class Li_pei_shen_qing_chong_shen(HsscFormModel):
-    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
-    boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='性别')
-    boolfield_yu_chu_xian_ren_guan_xi = models.ForeignKey(Yu_chu_xian_ren_guan_xi, related_name='yu_chu_xian_ren_guan_xi_for_boolfield_yu_chu_xian_ren_guan_xi_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='与出险人关系')
-    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
-    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
-    boolfield_zheng_jian_you_xiao_qi = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件有效期')
-    boolfield_guo_ji_di_qu = models.CharField(max_length=255, null=True, blank=False, verbose_name='国籍地区')
-    boolfield_hang_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='行业')
-    boolfield_zhi_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='职业')
-    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
-    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
-    boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
-    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
-    boolfield_ren_shen_xian_li_pei_shen_qing_shu_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
-    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_li_pei_shen_qing_chong_shen', blank=True, verbose_name='症状')
-    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_li_pei_shen_qing_chong_shen', blank=True, verbose_name='检查项目')
-    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
-    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_li_pei_shen_qing_chong_shen', blank=False, verbose_name='治疗项目')
-    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_li_pei_shen_qing_chong_shen', blank=True, verbose_name='其他健康干预服务')
-    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
-    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
-    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
-    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
     boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
     boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
     boolfield_bao_an_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='报案时间')
@@ -149,16 +195,39 @@ class Li_pei_shen_qing_chong_shen(HsscFormModel):
     boolfield_li_pei_fang_shi = models.CharField(max_length=255, null=True, blank=False, verbose_name='理赔方式')
     boolfield_bei_zhu = models.CharField(max_length=255, null=True, blank=False, verbose_name='备注')
     boolfield_bei_bao_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='被保人证件附件')
-    boolfield_li_pei_dui_zhang_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_dui_zhang_dan_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔对账单签署')
-    boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔对账单退单原因')
     boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu_li_pei_shen_qing_chong_shen', blank=False, verbose_name='保单内服务收费项目')
     boolfield_bao_dan_nei_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单内服务费用')
     boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu_li_pei_shen_qing_chong_shen', blank=False, verbose_name='保单外服务收费项目')
     boolfield_bao_dan_wai_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单外服务费用')
     boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
     boolfield_hui_zong_fei_yong_qing_dan_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='汇总费用清单附件')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
+    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
+    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
+    boolfield_li_pei_dui_zhang_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_dui_zhang_dan_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔对账单签署')
+    boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔对账单退单原因')
     boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔费用汇总单签署')
     boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔费用汇总单退单原因')
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_li_pei_shen_qing_chong_shen', blank=True, verbose_name='症状')
+    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_li_pei_shen_qing_chong_shen', blank=True, verbose_name='检查项目')
+    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
+    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_li_pei_shen_qing_chong_shen', blank=False, verbose_name='治疗项目')
+    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_li_pei_shen_qing_chong_shen', blank=True, verbose_name='其他健康干预服务')
+    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
+    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
+    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
+    boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='性别')
+    boolfield_yu_chu_xian_ren_guan_xi = models.ForeignKey(Yu_chu_xian_ren_guan_xi, related_name='yu_chu_xian_ren_guan_xi_for_boolfield_yu_chu_xian_ren_guan_xi_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='与出险人关系')
+    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_li_pei_shen_qing_chong_shen', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
+    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
+    boolfield_zheng_jian_you_xiao_qi = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件有效期')
+    boolfield_guo_ji_di_qu = models.CharField(max_length=255, null=True, blank=False, verbose_name='国籍地区')
+    boolfield_hang_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='行业')
+    boolfield_zhi_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='职业')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
+    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
+    boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
 
     class Meta:
         verbose_name = '重新申请理赔'
@@ -184,29 +253,6 @@ class Yu_yue_zi_xun(HsscFormModel):
 
         
 class Ti_jiao_he_bao_zi_liao(HsscFormModel):
-    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
-    boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='性别')
-    boolfield_yu_chu_xian_ren_guan_xi = models.ForeignKey(Yu_chu_xian_ren_guan_xi, related_name='yu_chu_xian_ren_guan_xi_for_boolfield_yu_chu_xian_ren_guan_xi_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='与出险人关系')
-    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
-    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
-    boolfield_zheng_jian_you_xiao_qi = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件有效期')
-    boolfield_guo_ji_di_qu = models.CharField(max_length=255, null=True, blank=False, verbose_name='国籍地区')
-    boolfield_hang_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='行业')
-    boolfield_zhi_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='职业')
-    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
-    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
-    boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
-    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
-    boolfield_ren_shen_xian_li_pei_shen_qing_shu_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
-    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_ti_jiao_he_bao_zi_liao', blank=True, verbose_name='症状')
-    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_ti_jiao_he_bao_zi_liao', blank=True, verbose_name='检查项目')
-    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
-    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_ti_jiao_he_bao_zi_liao', blank=False, verbose_name='治疗项目')
-    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_ti_jiao_he_bao_zi_liao', blank=True, verbose_name='其他健康干预服务')
-    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
-    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
-    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
-    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
     boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
     boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
     boolfield_bao_an_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='报案时间')
@@ -230,18 +276,41 @@ class Ti_jiao_he_bao_zi_liao(HsscFormModel):
     boolfield_li_pei_fang_shi = models.CharField(max_length=255, null=True, blank=False, verbose_name='理赔方式')
     boolfield_bei_zhu = models.CharField(max_length=255, null=True, blank=False, verbose_name='备注')
     boolfield_bei_bao_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='被保人证件附件')
-    boolfield_li_pei_dui_zhang_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_dui_zhang_dan_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔对账单签署')
-    boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔对账单退单原因')
+    boolfield_shi_fou_shen_he_tong_guo = models.ForeignKey(Shi_fou_shen_he_tong_guo, related_name='shi_fou_shen_he_tong_guo_for_boolfield_shi_fou_shen_he_tong_guo_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否审核通过')
+    boolfield_li_pei_shen_qing_tui_hui_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔申请退回原因')
     boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu_ti_jiao_he_bao_zi_liao', blank=False, verbose_name='保单内服务收费项目')
     boolfield_bao_dan_nei_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单内服务费用')
     boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu_ti_jiao_he_bao_zi_liao', blank=False, verbose_name='保单外服务收费项目')
     boolfield_bao_dan_wai_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单外服务费用')
     boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
     boolfield_hui_zong_fei_yong_qing_dan_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='汇总费用清单附件')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
+    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
+    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
+    boolfield_li_pei_dui_zhang_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_dui_zhang_dan_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔对账单签署')
+    boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔对账单退单原因')
     boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔费用汇总单签署')
     boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔费用汇总单退单原因')
-    boolfield_shi_fou_shen_he_tong_guo = models.ForeignKey(Shi_fou_shen_he_tong_guo, related_name='shi_fou_shen_he_tong_guo_for_boolfield_shi_fou_shen_he_tong_guo_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='是否审核通过')
-    boolfield_li_pei_shen_qing_tui_hui_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔申请退回原因')
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_ti_jiao_he_bao_zi_liao', blank=True, verbose_name='症状')
+    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_ti_jiao_he_bao_zi_liao', blank=True, verbose_name='检查项目')
+    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
+    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_ti_jiao_he_bao_zi_liao', blank=False, verbose_name='治疗项目')
+    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_ti_jiao_he_bao_zi_liao', blank=True, verbose_name='其他健康干预服务')
+    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
+    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
+    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
+    boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='性别')
+    boolfield_yu_chu_xian_ren_guan_xi = models.ForeignKey(Yu_chu_xian_ren_guan_xi, related_name='yu_chu_xian_ren_guan_xi_for_boolfield_yu_chu_xian_ren_guan_xi_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='与出险人关系')
+    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_ti_jiao_he_bao_zi_liao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
+    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
+    boolfield_zheng_jian_you_xiao_qi = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件有效期')
+    boolfield_guo_ji_di_qu = models.CharField(max_length=255, null=True, blank=False, verbose_name='国籍地区')
+    boolfield_hang_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='行业')
+    boolfield_zhi_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='职业')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
+    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
+    boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
 
     class Meta:
         verbose_name = '保险理赔审核服务'
@@ -310,20 +379,6 @@ class Li_pei_shen_qing_fu_wu(HsscFormModel):
 
         
 class Li_pei_shen_qing_shu_shen_he(HsscFormModel):
-    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
-    boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='性别')
-    boolfield_yu_chu_xian_ren_guan_xi = models.ForeignKey(Yu_chu_xian_ren_guan_xi, related_name='yu_chu_xian_ren_guan_xi_for_boolfield_yu_chu_xian_ren_guan_xi_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='与出险人关系')
-    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
-    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
-    boolfield_zheng_jian_you_xiao_qi = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件有效期')
-    boolfield_guo_ji_di_qu = models.CharField(max_length=255, null=True, blank=False, verbose_name='国籍地区')
-    boolfield_hang_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='行业')
-    boolfield_zhi_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='职业')
-    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
-    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
-    boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
-    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
-    boolfield_ren_shen_xian_li_pei_shen_qing_shu_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
     boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
     boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
     boolfield_bao_an_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='报案时间')
@@ -347,8 +402,20 @@ class Li_pei_shen_qing_shu_shen_he(HsscFormModel):
     boolfield_li_pei_fang_shi = models.CharField(max_length=255, null=True, blank=False, verbose_name='理赔方式')
     boolfield_bei_zhu = models.CharField(max_length=255, null=True, blank=False, verbose_name='备注')
     boolfield_bei_bao_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='被保人证件附件')
+    boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu_li_pei_shen_qing_shu_shen_he', blank=False, verbose_name='保单内服务收费项目')
+    boolfield_bao_dan_nei_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单内服务费用')
+    boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu_li_pei_shen_qing_shu_shen_he', blank=False, verbose_name='保单外服务收费项目')
+    boolfield_bao_dan_wai_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单外服务费用')
+    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
+    boolfield_hui_zong_fei_yong_qing_dan_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='汇总费用清单附件')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='人身险理赔申请书签署')
+    boolfield_ren_shen_xian_li_pei_shen_qing_shu_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='人身险理赔申请书退单原因')
+    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
+    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
     boolfield_li_pei_dui_zhang_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_dui_zhang_dan_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔对账单签署')
     boolfield_li_pei_dui_zhang_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔对账单退单原因')
+    boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔费用汇总单签署')
+    boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔费用汇总单退单原因')
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_li_pei_shen_qing_shu_shen_he', blank=True, verbose_name='症状')
     boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_li_pei_shen_qing_shu_shen_he', blank=True, verbose_name='检查项目')
     boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
@@ -356,16 +423,18 @@ class Li_pei_shen_qing_shu_shen_he(HsscFormModel):
     boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_li_pei_shen_qing_shu_shen_he', blank=True, verbose_name='其他健康干预服务')
     boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
     boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
-    boolfield_men_zhen_ji_lu_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='门诊记录单退单原因')
-    boolfield_li_pei_men_zhen_ji_lu_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_men_zhen_ji_lu_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔门诊记录签署')
-    boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_nei_fu_wu_shou_fei_xiang_mu_li_pei_shen_qing_shu_shen_he', blank=False, verbose_name='保单内服务收费项目')
-    boolfield_bao_dan_nei_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单内服务费用')
-    boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu = models.ManyToManyField(Fu_wu_xiang_mu, related_name='fu_wu_xiang_mu_for_boolfield_bao_dan_wai_fu_wu_shou_fei_xiang_mu_li_pei_shen_qing_shu_shen_he', blank=False, verbose_name='保单外服务收费项目')
-    boolfield_bao_dan_wai_fu_wu_fei_yong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='保单外服务费用')
-    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
-    boolfield_hui_zong_fei_yong_qing_dan_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='汇总费用清单附件')
-    boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu = models.ForeignKey(Qian_shu_que_ren, related_name='qian_shu_que_ren_for_boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='理赔费用汇总单签署')
-    boolfield_li_pei_fei_yong_hui_zong_dan_tui_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='理赔费用汇总单退单原因')
+    boolfield_shen_qing_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='申请人姓名')
+    boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='性别')
+    boolfield_yu_chu_xian_ren_guan_xi = models.ForeignKey(Yu_chu_xian_ren_guan_xi, related_name='yu_chu_xian_ren_guan_xi_for_boolfield_yu_chu_xian_ren_guan_xi_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='与出险人关系')
+    boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_li_pei_shen_qing_shu_shen_he', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
+    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
+    boolfield_zheng_jian_you_xiao_qi = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件有效期')
+    boolfield_guo_ji_di_qu = models.CharField(max_length=255, null=True, blank=False, verbose_name='国籍地区')
+    boolfield_hang_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='行业')
+    boolfield_zhi_ye = models.CharField(max_length=255, null=True, blank=False, verbose_name='职业')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='联系电话')
+    boolfield_chang_zhu_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='常住地址')
+    boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
 
     class Meta:
         verbose_name = '理赔申请审核'
@@ -437,7 +506,7 @@ class Men_zhen_ji_lu(HsscFormModel):
     boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
 
     class Meta:
-        verbose_name = '门诊记录'
+        verbose_name = '门诊病例记录服务'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -450,14 +519,9 @@ class Yu_yue_tong_zhi(HsscFormModel):
     boolfield_ji_gou_lian_xi_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='机构联系地址')
     boolfield_ji_gou_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=False, verbose_name='机构联系电话')
     boolfield_jiu_zhen_yi_sheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='就诊医生')
-    boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
-    boolfield_jiu_zhen_wen_ti = models.CharField(max_length=255, null=True, blank=False, verbose_name='就诊问题')
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_yu_yue_tong_zhi', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
-    boolfield_shi_yong_fu_wu_chan_pin = models.ManyToManyField(Bao_xian_chan_pin, related_name='bao_xian_chan_pin_for_boolfield_shi_yong_fu_wu_chan_pin_yu_yue_tong_zhi', blank=True, verbose_name='使用服务产品')
-    boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
 
     class Meta:
-        verbose_name = '预约通知'
+        verbose_name = '发送预约通知'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -474,7 +538,7 @@ class Fen_zhen_que_ren(HsscFormModel):
     boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
 
     class Meta:
-        verbose_name = '到店确认'
+        verbose_name = '诊所到店确认'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -491,7 +555,7 @@ class Yu_yue_que_ren(HsscFormModel):
     boolfield_ju_jue_jie_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='拒绝接单原因')
 
     class Meta:
-        verbose_name = '预约确认'
+        verbose_name = '诊所预约确认'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -603,9 +667,9 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
 class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     boolfield_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='序号')
     boolfield_bao_dan_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='保单号')
-    boolfield_bei_bao_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
     boolfield_zheng_jian_lei_xing = models.ForeignKey(Zheng_jian_lei_xing, related_name='zheng_jian_lei_xing_for_boolfield_zheng_jian_lei_xing_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='证件类型')
-    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='身份证号')
+    boolfield_zheng_jian_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='证件号码')
+    boolfield_bei_bao_ren_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人姓名')
     boolfield_bei_bao_ren_xing_bie = models.CharField(max_length=255, null=True, blank=False, verbose_name='被保人性别')
     boolfield_chu_sheng_ri_qi = models.DateField(null=True, blank=False, verbose_name='出生日期')
     boolfield_bao_xian_ze_ren = models.CharField(max_length=255, null=True, blank=False, verbose_name='保险责任')
@@ -617,5 +681,7 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
         verbose_name = '基本信息调查'
         verbose_name_plural = verbose_name
 
-    # def __str__(self):
-    #     return self.customer.name
+    def __str__(self):
+        return self.customer.name
+
+        

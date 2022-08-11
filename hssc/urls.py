@@ -17,6 +17,10 @@ urlpatterns = [
     # path('grappelli/', include('grappelli.urls')),
 ]
 
+# from django.conf.urls.static import static
+# from hssc import settings
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 admin.site.site_header = '智益医养服务供应链管理系统'
 admin.site.site_title = 'HSSC'
 admin.site.index_title = '系统管理控制台'

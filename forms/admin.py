@@ -58,6 +58,20 @@ class Yi_an_pai_fu_wu_cha_xun_biaoAdmin(admin.ModelAdmin):
 
 admin.site.register(Yi_an_pai_fu_wu_cha_xun_biao, Yi_an_pai_fu_wu_cha_xun_biaoAdmin)
 
+class Kou_qiang_jian_cha_ji_zhen_duanAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_shi_fou_an_pai_zhi_liao_ji_hua": admin.VERTICAL, }
+
+admin.site.register(Kou_qiang_jian_cha_ji_zhen_duan, Kou_qiang_jian_cha_ji_zhen_duanAdmin)
+
+class Tui_bao_shen_qing_biaoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Tui_bao_shen_qing_biao, Tui_bao_shen_qing_biaoAdmin)
+
+class Tui_bao_que_ren_danAdmin(admin.ModelAdmin):
+        radio_fields = {"boolfield_ke_hu_tui_bao_shen_qing_shi_fou_tong_guo": admin.VERTICAL, }
+
+admin.site.register(Tui_bao_que_ren_dan, Tui_bao_que_ren_danAdmin)
+
 class Ji_gou_ji_ben_xin_xi_biaoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Ji_gou_ji_ben_xin_xi_biao, Ji_gou_ji_ben_xin_xi_biaoAdmin)
@@ -95,6 +109,10 @@ class Li_pei_dui_zhang_dan_shen_he_danAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_li_pei_dui_zhang_dan_qian_shu": admin.VERTICAL, }
 
 admin.site.register(Li_pei_dui_zhang_dan_shen_he_dan, Li_pei_dui_zhang_dan_shen_he_danAdmin)
+
+class Zhi_liao_ji_hua_biaoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Zhi_liao_ji_hua_biao, Zhi_liao_ji_hua_biaoAdmin)
 
 class Li_pei_fei_yong_hui_zong_dan_shen_heAdmin(admin.ModelAdmin):
         radio_fields = {"boolfield_li_pei_fei_yong_hui_zong_dan_qian_shu": admin.VERTICAL, }

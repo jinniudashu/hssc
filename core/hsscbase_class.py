@@ -243,6 +243,9 @@ class FieldsType(Enum):
     boolfield_chu_xian_di_dian_sheng_ji_bie = "String"  # 出险地点省级别
     boolfield_li_pei_jin_e = "String"  # 理赔金额
     boolfield_guo_ji_di_qu = "String"  # 国籍地区
+    boolfield_fu_wu_ming_cheng = "String"  # 服务名称
+    boolfield_tou_su_jian_yi = "String"  # 投诉建议
+    boolfield_shen_qing_tui_bao_yuan_yin = "String"  # 申请退保原因
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -272,6 +275,7 @@ class FieldsType(Enum):
     boolfield_bao_xian_you_xiao_qi = "Date"  # 保险有效期
     boolfield_bao_an_shi_jian = "Datetime"  # 报案时间
     boolfield_chu_xian_shi_jian = "Datetime"  # 出险时间
+    boolfield_fu_wu_shi_jian = "Datetime"  # 服务时间
     boolfield_yao_pin_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 药品单位
     boolfield_xin_yu_ping_ji = "dictionaries.Xin_yu_ping_ji"  # 信誉评级
     boolfield_chu_fang_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 处方计量单位
@@ -385,12 +389,13 @@ class FieldsType(Enum):
     boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu = "dictionaries.Nin_cong_he_chu_zhi_dao_wo_men"  # 您从何处知道我们的服务
     boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men = "dictionaries.Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu"  # 您是否愿意向他人推荐我们
     boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia = "dictionaries.Fu_wu_xiao_guo_ping_jia"  # 治疗感受和效果评价
+    boolfield_shi_fou_an_pai_zhi_liao_ji_hua = "dictionaries.Shi_fou_an_pai_zhi_liao_ji_hua"  # 是否安排治疗计划
+    boolfield_ke_hu_tui_bao_shen_qing_shi_fou_tong_guo = "dictionaries.Qian_shu_que_ren"  # 客户退保申请是否通过
     boolfield_shen_fen_zheng_jian_fu_jian = "None"  # 身份证件附件
     boolfield_shen_qing_ren_zheng_jian_fu_jian = "None"  # 申请人证件附件
     boolfield_bei_bao_ren_zheng_jian_fu_jian = "None"  # 被保人证件附件
     boolfield_hui_zong_fei_yong_qing_dan_fu_jian = "None"  # 汇总费用清单附件
     boolfield_men_zhen_bing_li_fu_jian = "None"  # 门诊病历附件
     boolfield_dao_dian_shen_fen_yan_zheng = "None"  # 到店身份验证
-    boolfield_fu_wu_ming_cheng = "String"  # 服务名称
-    boolfield_fu_wu_shi_jian = "Datetime"  # 服务时间
-    boolfield_tou_su_jian_yi = "String"  # 投诉建议
+    boolfield_kou_qiang_jian_cha_ji_zhen_duan = "None"  # 口腔检查及诊断
+    boolfield_zhi_liao_ji_hua = "None"  # 治疗计划

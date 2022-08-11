@@ -2990,5 +2990,27 @@
             "value": "不愿意",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Shi_fou_an_pai_zhi_liao_ji_hua",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "874771c6-123e-11ed-92ab-da42fac10474",
+            "pym": null,
+            "value": "是",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_an_pai_zhi_liao_ji_hua",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "8748fbf4-123e-11ed-92ab-da42fac10474",
+            "pym": null,
+            "value": "否",
+            "icpc": null
+        }
     }
 ]
