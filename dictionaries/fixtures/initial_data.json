@@ -3012,5 +3012,38 @@
             "value": "否",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Jiu_zhen_ji_gou_fu_ze_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6786c196-292b-11ed-9dcc-4889e7cf38c9",
+            "pym": null,
+            "value": "笛特口腔小李",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Jiu_zhen_ji_gou_fu_ze_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "67870fc0-292b-11ed-96e6-4889e7cf38c9",
+            "pym": null,
+            "value": "金盘口腔小王",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Jiu_zhen_ji_gou_fu_ze_ren",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "678736cf-292b-11ed-bf7e-4889e7cf38c9",
+            "pym": null,
+            "value": "小白口腔小白",
+            "icpc": null
+        }
     }
 ]

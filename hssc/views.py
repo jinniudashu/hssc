@@ -41,7 +41,7 @@ def check_signature(request):
     else:
         return HttpResponse('chenggong')  #可根据实际需要返回
 
-
+# 创建微信公众号菜单
 def create_menu(request):
     from hssc.settings import env
     from wechatpy import WeChatClient

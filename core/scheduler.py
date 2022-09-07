@@ -349,52 +349,51 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'推荐服务作业: {obj}'
 
-        def _alert_content_violations(self, **kwargs):
+        def _send_wechat_template_message(**kwargs):
             '''
-            内容违规提示
+            发送公众号模板消息
+            模板参数格式: {"template_id":"xxxxx", "title":"xxxxxx", "remark":"xxxxxx", "keyword1":"字段名1",  "keyword2":"字段名2", ...}
             '''
-            print('alert_content_violations:', '内容违规提示')
-            return '内容违规提示'
+            from core.utils import get_wechat_template_message_data, send_wechat_template_message
+            # 获取用户微信open_id
+            open_id = kwargs['operation_proc'].customer.weixin_openid
 
-        def _send_notification(**kwargs):
+            message = eval(kwargs['message'])  # 把kwargs['message']从字符串转换为字典
+            form_data = kwargs['form_data']  # 表单数据
+
+            # 用open_id 和 message 构造消息data
+            data = get_wechat_template_message_data(open_id, message, form_data)
+
+            # 发送消息
+            result = send_wechat_template_message(data)
+
+            print('发送公众号模板消息:', kwargs['message'], '结果:', result)
+            return result
+
+        def _send_wecom_message(**kwargs):
             '''
-            发送提醒
+            发送企业微信提醒
             '''
-            def _get_reminders(_option):
-                '''
-                用选项值为list.index获取提醒对象列表
-                '''
-                reminder_option = [
-                    operation_proc.customer,  # 0: 发送给当前客户
-                    kwargs['operator'],  # 1: 发送给当前作业人员
-                    # return workgroup_list,  # 2: 发送给当前作业组成员
-                ]
-                return [reminder_option[_option]]
+            from core.utils import send_wecom_message
+            
+            # 获取作业员企业微信id
+            wecom_uid = kwargs['operator'].staff.wecom_id
 
-            # 准备服务作业进程参数
-            operation_proc = kwargs['operation_proc']
+            # 获取消息内容
+            message = kwargs['message']
 
-            # 获取提醒人员list
-            _reminders_option = kwargs['reminders']
-            reminders = _get_reminders(_reminders_option)
+            # 发送消息
+            result = send_wecom_message(wecom_uid, message)
+            print('发送企业微信提醒:', kwargs['message'])
 
-            # 创建提醒消息
-            for customer in reminders:
-                _ = Message.objects.create(
-                    message=kwargs['message'],  # 消息内容
-                    customer=customer,  # 客户
-                    creater=kwargs['operator'],  # 创建者
-                    pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                    cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-                )
+            return result
 
-            return f'生成提醒消息OK'
 
         class SystemOperandFunc(Enum):
             CREATE_NEXT_SERVICE = _create_next_service  # 生成后续服务
             RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
-            VIOLATION_ALERT = _alert_content_violations  # 内容违规提示
-            SEND_NOTIFICATION = _send_notification  # 发送提醒
+            SEND_WECHART_TEMPLATE_MESSAGE = _send_wechat_template_message  # 发送公众号消息
+            SEND_WECOM_MESSAGE = _send_wecom_message  # 发送企业微信消息
 
 		# 调用OperandFuncMixin中的系统自动作业函数
         return eval(f'SystemOperandFunc.{system_operand}')(**kwargs)
@@ -427,6 +426,6 @@ def operand_finished_handler(sender, **kwargs):
                 'form_data': kwargs['form_data'],
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
-            _result = _execute_system_operand(service_rule.system_operand, **operation_params)
+            _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
             print('From check_rules 执行结果:', _result)
     

@@ -153,7 +153,7 @@ class SystemOperand(HsscBase):
         ordering = ['id']
 
     def __str__(self):
-        return self.func
+        return self.label
 
 
 # 事件规则表
@@ -473,6 +473,7 @@ class Staff(HsscBase):
     registration_fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='挂号费')
     standardized_workload = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='标化工作量')
     institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="隶属机构")
+    wecom_id = models.CharField(max_length=255, blank=True, null=True, verbose_name="企业微信id")
 
     class Meta:
         verbose_name = "员工基本信息"

@@ -459,3 +459,9 @@ class Shi_fou_an_pai_zhi_liao_ji_hua(DictBase):
     class Meta:
         verbose_name = '是否安排治疗计划'
         verbose_name_plural = verbose_name
+
+
+class Jiu_zhen_ji_gou_fu_ze_ren(DictBase):
+    class Meta:
+        verbose_name = '就诊机构负责人'
+        verbose_name_plural = verbose_name

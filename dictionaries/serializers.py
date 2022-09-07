@@ -360,3 +360,8 @@ class Shi_fou_an_pai_zhi_liao_ji_huaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shi_fou_an_pai_zhi_liao_ji_hua
         fields = 'value'
+
+class Jiu_zhen_ji_gou_fu_ze_renSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Jiu_zhen_ji_gou_fu_ze_ren
+        fields = 'value'

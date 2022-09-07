@@ -77,18 +77,10 @@ class Zhen_jian_sui_fang_biao(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Fen_zhen_que_ren_biao(HsscFormModel):
-    boolfield_dao_dian_shen_fen_yan_zheng = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='到店身份验证')
-    boolfield_dao_da_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_dao_da_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
-    class Meta:
-        verbose_name = '到店确认表'
-        verbose_name_plural = verbose_name
-        
-
 class A6401(HsscFormModel):
     boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
     boolfield_jiu_zhen_wen_ti = models.CharField(max_length=255, null=True, blank=False, verbose_name='就诊问题')
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_A6401', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Jiu_zhen_ji_gou_fu_ze_ren, related_name='jiu_zhen_ji_gou_fu_ze_ren_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_A6401', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
     boolfield_shi_yong_fu_wu_chan_pin = models.ManyToManyField(Bao_xian_chan_pin, related_name='bao_xian_chan_pin_for_boolfield_shi_yong_fu_wu_chan_pin_A6401', blank=True, verbose_name='使用服务产品')
     boolfield_fu_jia_fu_wu_yao_qiu = models.CharField(max_length=255, null=True, blank=True, verbose_name='附加服务要求')
     class Meta:
@@ -127,19 +119,6 @@ class Zhen_hou_hui_fang_dan(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Men_zhen_fu_wu_ji_lu_2(HsscFormModel):
-    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_men_zhen_fu_wu_ji_lu_2', blank=True, verbose_name='症状')
-    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_men_zhen_fu_wu_ji_lu_2', blank=True, verbose_name='检查项目')
-    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_men_zhen_fu_wu_ji_lu_2', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
-    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_men_zhen_fu_wu_ji_lu_2', blank=False, verbose_name='治疗项目')
-    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_men_zhen_fu_wu_ji_lu_2', blank=True, verbose_name='其他健康干预服务')
-    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
-    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
-    class Meta:
-        verbose_name = '门诊接续服务记录'
-        verbose_name_plural = verbose_name
-        
-
 class Tou_su_jian_yi_biao(HsscFormModel):
     boolfield_tou_su_jian_yi = models.TextField(max_length=255, null=True, blank=True, verbose_name='投诉建议')
     class Meta:
@@ -150,7 +129,7 @@ class Tou_su_jian_yi_biao(HsscFormModel):
 class Yi_an_pai_fu_wu_cha_xun_biao(HsscFormModel):
     boolfield_fu_wu_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='服务名称')
     boolfield_fu_wu_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='服务时间')
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_yi_an_pai_fu_wu_cha_xun_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = models.ForeignKey(Jiu_zhen_ji_gou_fu_ze_ren, related_name='jiu_zhen_ji_gou_fu_ze_ren_for_boolfield_jiu_zhen_ji_gou_ze_ren_ren_yi_an_pai_fu_wu_cha_xun_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='就诊机构责任人')
     class Meta:
         verbose_name = '服务安排查询表'
         verbose_name_plural = verbose_name
@@ -293,19 +272,6 @@ class Li_pei_fei_yong_hui_zong_dan_shen_he(HsscFormModel):
         verbose_name_plural = verbose_name
         
 
-class Men_zhen_fu_wu_ji_lu_dan(HsscFormModel):
-    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='症状')
-    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='检查项目')
-    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_men_zhen_fu_wu_ji_lu_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
-    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_men_zhen_fu_wu_ji_lu_dan', blank=False, verbose_name='治疗项目')
-    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='其他健康干预服务')
-    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
-    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
-    class Meta:
-        verbose_name = '门诊服务记录单'
-        verbose_name_plural = verbose_name
-        
-
 class A6502(HsscFormModel):
     boolfield_jie_dan_que_ren = models.ForeignKey(Jie_dan_que_ren, related_name='jie_dan_que_ren_for_boolfield_jie_dan_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=False, verbose_name='接单确认')
     boolfield_ju_jue_jie_dan_yuan_yin = models.CharField(max_length=255, null=True, blank=True, verbose_name='拒绝接单原因')
@@ -329,6 +295,47 @@ class Ren_shen_xian_li_pei_shen_qing_shu(HsscFormModel):
     boolfield_shen_qing_ren_zheng_jian_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='申请人证件附件')
     class Meta:
         verbose_name = '人身险理赔申请书'
+        verbose_name_plural = verbose_name
+        
+
+class Fen_zhen_que_ren_biao(HsscFormModel):
+    boolfield_dao_da_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_dao_da_que_ren_fen_zhen_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
+    class Meta:
+        verbose_name = '到店确认表'
+        verbose_name_plural = verbose_name
+        
+
+class Shou_ci_dao_dian_que_ren_biao(HsscFormModel):
+    boolfield_dao_da_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_dao_da_que_ren_shou_ci_dao_dian_que_ren_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='到达确认')
+    boolfield_shen_fen_xin_xi_yan_zheng = models.CharField(max_length=255, null=True, blank=False, verbose_name='身份信息验证')
+    class Meta:
+        verbose_name = '首次到店确认表'
+        verbose_name_plural = verbose_name
+        
+
+class Men_zhen_fu_wu_ji_lu_2(HsscFormModel):
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_men_zhen_fu_wu_ji_lu_2', blank=True, verbose_name='症状')
+    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_men_zhen_fu_wu_ji_lu_2', blank=True, verbose_name='检查项目')
+    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_men_zhen_fu_wu_ji_lu_2', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
+    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_men_zhen_fu_wu_ji_lu_2', blank=False, verbose_name='治疗项目')
+    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_men_zhen_fu_wu_ji_lu_2', blank=True, verbose_name='其他健康干预服务')
+    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
+    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
+    class Meta:
+        verbose_name = '门诊复诊病例'
+        verbose_name_plural = verbose_name
+        
+
+class Men_zhen_fu_wu_ji_lu_dan(HsscFormModel):
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='症状')
+    boolfield_jian_cha_xiang_mu = models.ManyToManyField(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_jian_cha_xiang_mu_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='检查项目')
+    boolfield_zhen_duan = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhen_duan_men_zhen_fu_wu_ji_lu_dan', on_delete=models.CASCADE, null=True, blank=False, verbose_name='诊断')
+    boolfield_zhi_liao_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_zhi_liao_xiang_mu_men_zhen_fu_wu_ji_lu_dan', blank=False, verbose_name='治疗项目')
+    boolfield_qi_ta_jian_kang_gan_yu_fu_wu = models.ManyToManyField(Icpc8_other_health_interventions, related_name='icpc8_other_health_interventions_for_boolfield_qi_ta_jian_kang_gan_yu_fu_wu_men_zhen_fu_wu_ji_lu_dan', blank=True, verbose_name='其他健康干预服务')
+    boolfield_fei_yong_he_ji = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='费用合计')
+    boolfield_men_zhen_bing_li_fu_jian = models.ImageField(upload_to='uploads/', null=True, blank=False, verbose_name='门诊病历附件')
+    class Meta:
+        verbose_name = '门诊病例'
         verbose_name_plural = verbose_name
         
 

@@ -1,4 +1,38 @@
 {
+    "systemoperand": [
+        {
+            "label": "推荐后续服务",
+            "name": "recommend_next_service",
+            "hssc_id": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "func": "RECOMMEND_NEXT_SERVICE",
+            "parameters": "service_id",
+            "description": ""
+        },
+        {
+            "label": "生成后续服务",
+            "name": "create_next_service",
+            "hssc_id": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "func": "CREATE_NEXT_SERVICE",
+            "parameters": "service_id",
+            "description": ""
+        },
+        {
+            "label": "发送公众号消息",
+            "name": "send_wechat_template_message",
+            "hssc_id": "e0dfa946-a42f-11ec-848a-4889e7cf38c9",
+            "func": "SEND_WECHART_TEMPLATE_MESSAGE",
+            "parameters": "message",
+            "description": null
+        },
+        {
+            "label": "发送企业微信消息",
+            "name": "send_wecom_message",
+            "hssc_id": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
+            "func": "SEND_WECOM_MESSAGE",
+            "parameters": "user_id, message",
+            "description": null
+        }
+    ],
     "role": [
         {
             "label": "健康管理师",
@@ -236,20 +270,6 @@
             "components_groups": []
         },
         {
-            "label": "到店确认表",
-            "name": "fen_zhen_que_ren_biao",
-            "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
-            "pym": "ddqrb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[]",
-            "components": [
-                "a0fc960a-a506-11ec-a7bb-cecec7a0e139",
-                "ac7bb410-e715-11ec-8fdc-9a0420f173f1"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "预约单",
             "name": "A6401",
             "hssc_id": "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
@@ -306,25 +326,6 @@
                 "33f72e3e-e78d-11ec-8127-065284c7e455",
                 "5338730c-e78d-11ec-af5f-065284c7e455",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
-            ],
-            "components_groups": []
-        },
-        {
-            "label": "门诊接续服务记录",
-            "name": "men_zhen_fu_wu_ji_lu_2",
-            "hssc_id": "76eb37a2-e6d0-11ec-b27f-0e45e7e36a4e",
-            "pym": "mzjxfwjl",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[]",
-            "components": [
-                "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
-                "785896e0-dfbc-11ec-9eb2-26a028640b2f",
-                "946d2bc0-dfbc-11ec-9597-26a028640b2f",
-                "ab41e426-dfbc-11ec-9597-26a028640b2f",
-                "028de0d6-dfbd-11ec-9597-26a028640b2f",
-                "fff58ea4-e3ff-11ec-9eb0-42585b16dcd4"
             ],
             "components_groups": []
         },
@@ -572,25 +573,6 @@
             "components_groups": []
         },
         {
-            "label": "门诊服务记录单",
-            "name": "men_zhen_fu_wu_ji_lu_dan",
-            "hssc_id": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-            "pym": "mzfwjld",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": "[]",
-            "components": [
-                "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
-                "785896e0-dfbc-11ec-9eb2-26a028640b2f",
-                "946d2bc0-dfbc-11ec-9597-26a028640b2f",
-                "ab41e426-dfbc-11ec-9597-26a028640b2f",
-                "028de0d6-dfbd-11ec-9597-26a028640b2f",
-                "fff58ea4-e3ff-11ec-9eb0-42585b16dcd4"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "接单确认表",
             "name": "A6502",
             "hssc_id": "0d1b5014-9e23-11ec-aa2c-fe35a7065cdd",
@@ -625,6 +607,71 @@
                 "8fa7f370-de29-11ec-b7a6-323f52c35ca4",
                 "bf57c78e-e2df-11ec-9a2f-dae07feb8058",
                 "bf9bacda-e6ca-11ec-b27f-0e45e7e36a4e"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "到店确认表",
+            "name": "fen_zhen_que_ren_biao",
+            "hssc_id": "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
+            "pym": "ddqrb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[]",
+            "components": [
+                "a0fc960a-a506-11ec-a7bb-cecec7a0e139"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "首次到店确认表",
+            "name": "shou_ci_dao_dian_que_ren_biao",
+            "hssc_id": "d381d0d8-13c7-11ed-87b4-0242ac120003",
+            "pym": "scddqrb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "null",
+            "components": [
+                "97358b46-df1b-11ec-b4b2-02377abc76d6",
+                "a0fc960a-a506-11ec-a7bb-cecec7a0e139"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "门诊复诊病例",
+            "name": "men_zhen_fu_wu_ji_lu_2",
+            "hssc_id": "76eb37a2-e6d0-11ec-b27f-0e45e7e36a4e",
+            "pym": "mzfzbl",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[]",
+            "components": [
+                "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
+                "785896e0-dfbc-11ec-9eb2-26a028640b2f",
+                "946d2bc0-dfbc-11ec-9597-26a028640b2f",
+                "ab41e426-dfbc-11ec-9597-26a028640b2f",
+                "028de0d6-dfbd-11ec-9597-26a028640b2f",
+                "fff58ea4-e3ff-11ec-9eb0-42585b16dcd4"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "门诊病例",
+            "name": "men_zhen_fu_wu_ji_lu_dan",
+            "hssc_id": "15de6896-dfbc-11ec-9eb2-26a028640b2f",
+            "pym": "mzbl",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": "[]",
+            "components": [
+                "2ca816a2-dfbd-11ec-9eb2-26a028640b2f",
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
+                "785896e0-dfbc-11ec-9eb2-26a028640b2f",
+                "946d2bc0-dfbc-11ec-9597-26a028640b2f",
+                "ab41e426-dfbc-11ec-9597-26a028640b2f",
+                "028de0d6-dfbd-11ec-9597-26a028640b2f",
+                "fff58ea4-e3ff-11ec-9eb0-42585b16dcd4"
             ],
             "components_groups": []
         }
@@ -1081,8 +1128,8 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
-                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd"
+                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
+                "09be9cb8-df1a-11ec-b4b2-02377abc76d6"
             ],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
@@ -1269,8 +1316,8 @@
                 "1210eee8-e54b-11ec-91a5-4e30b92064b6",
                 "2e70d896-e54b-11ec-91a5-4e30b92064b6",
                 "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
-                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058"
+                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
+                "15de6896-dfbc-11ec-9eb2-26a028640b2f"
             ],
             "role": [
                 "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
@@ -1302,8 +1349,8 @@
             "buessiness_forms": [
                 "dc327a94-e400-11ec-9eb0-42585b16dcd4",
                 "e22449e8-e3fe-11ec-9d3a-42585b16dcd4",
-                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058"
+                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
+                "15de6896-dfbc-11ec-9eb2-26a028640b2f"
             ],
             "role": [
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
@@ -1342,8 +1389,8 @@
                 "1210eee8-e54b-11ec-91a5-4e30b92064b6",
                 "2e70d896-e54b-11ec-91a5-4e30b92064b6",
                 "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
-                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058"
+                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
+                "15de6896-dfbc-11ec-9eb2-26a028640b2f"
             ],
             "role": [
                 "de1daa3e-9aa1-11ec-bde1-8a6e55faf877"
@@ -1411,8 +1458,8 @@
                 "1210eee8-e54b-11ec-91a5-4e30b92064b6",
                 "2e70d896-e54b-11ec-91a5-4e30b92064b6",
                 "4736ad9c-e54b-11ec-91a5-4e30b92064b6",
-                "15de6896-dfbc-11ec-9eb2-26a028640b2f",
-                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058"
+                "6acf9a64-e2e1-11ec-9a2f-dae07feb8058",
+                "15de6896-dfbc-11ec-9eb2-26a028640b2f"
             ],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
@@ -1531,6 +1578,7 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
+                "76eb37a2-e6d0-11ec-b27f-0e45e7e36a4e",
                 "15de6896-dfbc-11ec-9eb2-26a028640b2f"
             ],
             "role": [
@@ -1669,8 +1717,8 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "09be9cb8-df1a-11ec-b4b2-02377abc76d6",
-                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd"
+                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
+                "09be9cb8-df1a-11ec-b4b2-02377abc76d6"
             ],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
@@ -1731,6 +1779,36 @@
             "generate_script_order": 100,
             "buessiness_forms": [
                 "b5fb8b92-123e-11ed-92ab-da42fac10474"
+            ],
+            "role": [
+                "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
+            ]
+        },
+        {
+            "label": "复诊病例记录服务",
+            "name": "fu_zhen_bing_li_ji_lu_fu_wu",
+            "hssc_id": "f26ea5a4-13ca-11ed-bb52-0242ac120003",
+            "pym": "fzbljlfw",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "is_system_service": false,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "buessiness_forms": [
+                "76eb37a2-e6d0-11ec-b27f-0e45e7e36a4e"
             ],
             "role": [
                 "e862fdba-de2f-11ec-8b9f-323f52c35ca4"
@@ -2169,35 +2247,25 @@
             "service": "8c5ae916-124a-11ed-aabd-da42fac10474",
             "buessiness_form": "b5fb8b92-123e-11ed-92ab-da42fac10474",
             "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "f26fa2a6-13ca-11ed-bb52-0242ac120003",
+            "service": "f26ea5a4-13ca-11ed-bb52-0242ac120003",
+            "buessiness_form": "76eb37a2-e6d0-11ec-b27f-0e45e7e36a4e",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "4f094fa8-13cb-11ed-8f0f-0242ac120003",
+            "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
+            "buessiness_form": "76eb37a2-e6d0-11ec-b27f-0e45e7e36a4e",
+            "is_list": false
         }
     ],
     "servicepackage": [
-        {
-            "label": "test1",
-            "name": "test1",
-            "hssc_id": "cc14ae12-f5d4-11ec-97a1-7e2e654fecea",
-            "pym": "test1",
-            "name_icpc": null,
-            "overtime": null,
-            "services": [
-                "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
-                "bf73968c-dfbd-11ec-9597-26a028640b2f",
-                "ca482cce-e406-11ec-9eb0-42585b16dcd4"
-            ]
-        },
-        {
-            "label": "test2",
-            "name": "test2",
-            "hssc_id": "2de40eda-f5d5-11ec-98db-7e2e654fecea",
-            "pym": "test2",
-            "name_icpc": null,
-            "overtime": "8 days, 0:00:00",
-            "services": [
-                "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-                "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
-                "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e"
-            ]
-        },
         {
             "label": "种植牙服务计划",
             "name": "zhong_zhi_ya_fu_wu_ji_hua",
@@ -2206,95 +2274,18 @@
             "name_icpc": null,
             "overtime": "3 days, 0:00:00",
             "services": [
-                "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+                "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
                 "bf73968c-dfbd-11ec-9597-26a028640b2f",
                 "5e13cff4-e406-11ec-9eb0-42585b16dcd4",
                 "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
                 "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
                 "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
-                "ce6b656a-1245-11ed-aabd-da42fac10474"
+                "ce6b656a-1245-11ed-aabd-da42fac10474",
+                "f26ea5a4-13ca-11ed-bb52-0242ac120003"
             ]
         }
     ],
     "servicepackagedetail": [
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "cc151e6a-f5d4-11ec-97a1-7e2e654fecea",
-            "pym": null,
-            "servicepackage": "cc14ae12-f5d4-11ec-97a1-7e2e654fecea",
-            "service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
-            "cycle_unit": "TOTAL",
-            "cycle_frequency": 1,
-            "cycle_times": 1,
-            "default_beginning_time": 2,
-            "base_interval": null
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "cc15a3ee-f5d4-11ec-97a1-7e2e654fecea",
-            "pym": null,
-            "servicepackage": "cc14ae12-f5d4-11ec-97a1-7e2e654fecea",
-            "service": "bf73968c-dfbd-11ec-9597-26a028640b2f",
-            "cycle_unit": "TOTAL",
-            "cycle_frequency": 1,
-            "cycle_times": 1,
-            "default_beginning_time": 0,
-            "base_interval": null
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "2de45246-f5d5-11ec-98db-7e2e654fecea",
-            "pym": null,
-            "servicepackage": "2de40eda-f5d5-11ec-98db-7e2e654fecea",
-            "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
-            "cycle_unit": "TOTAL",
-            "cycle_frequency": 1,
-            "cycle_times": 1,
-            "default_beginning_time": 2,
-            "base_interval": null
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "2de4a034-f5d5-11ec-98db-7e2e654fecea",
-            "pym": null,
-            "servicepackage": "2de40eda-f5d5-11ec-98db-7e2e654fecea",
-            "service": "945606fa-e4c8-11ec-b4b1-1a2f7481020f",
-            "cycle_unit": "TOTAL",
-            "cycle_frequency": 1,
-            "cycle_times": 1,
-            "default_beginning_time": 0,
-            "base_interval": null
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "2de4ce42-f5d5-11ec-98db-7e2e654fecea",
-            "pym": null,
-            "servicepackage": "2de40eda-f5d5-11ec-98db-7e2e654fecea",
-            "service": "7dbd3cd6-e407-11ec-9d3a-42585b16dcd4",
-            "cycle_unit": "TOTAL",
-            "cycle_frequency": 1,
-            "cycle_times": 1,
-            "default_beginning_time": 0,
-            "base_interval": null
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "4dde10aa-f5d5-11ec-98db-7e2e654fecea",
-            "pym": null,
-            "servicepackage": "cc14ae12-f5d4-11ec-97a1-7e2e654fecea",
-            "service": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
-            "cycle_unit": "TOTAL",
-            "cycle_frequency": 1,
-            "cycle_times": 1,
-            "default_beginning_time": 3,
-            "base_interval": null
-        },
         {
             "label": null,
             "name": null,
@@ -2324,19 +2315,6 @@
         {
             "label": null,
             "name": null,
-            "hssc_id": "cd0cb604-1242-11ed-92ab-da42fac10474",
-            "pym": null,
-            "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
-            "service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
-            "cycle_unit": "MONTH",
-            "cycle_frequency": 1,
-            "cycle_times": 120,
-            "default_beginning_time": 3,
-            "base_interval": "1 day, 0:00:00"
-        },
-        {
-            "label": null,
-            "name": null,
             "hssc_id": "cd0cecd2-1242-11ed-92ab-da42fac10474",
             "pym": null,
             "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
@@ -2353,12 +2331,12 @@
             "hssc_id": "6a95d4e2-1247-11ed-92ab-da42fac10474",
             "pym": null,
             "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
-            "service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "service": "4f44e4ea-e5a0-11ec-8838-da3a431a38b1",
             "cycle_unit": "MONTH",
             "cycle_frequency": 1,
             "cycle_times": 120,
             "default_beginning_time": 3,
-            "base_interval": "0:10:00"
+            "base_interval": null
         },
         {
             "label": null,
@@ -2366,12 +2344,12 @@
             "hssc_id": "6a9618f8-1247-11ed-92ab-da42fac10474",
             "pym": null,
             "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
-            "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
+            "service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
             "cycle_unit": "TOTAL",
             "cycle_frequency": 1,
             "cycle_times": 120,
             "default_beginning_time": 3,
-            "base_interval": "3 days, 0:00:00"
+            "base_interval": null
         },
         {
             "label": null,
@@ -2379,68 +2357,38 @@
             "hssc_id": "6a965354-1247-11ed-92ab-da42fac10474",
             "pym": null,
             "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
-            "service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
+            "service": "f26ea5a4-13ca-11ed-bb52-0242ac120003",
             "cycle_unit": "TOTAL",
             "cycle_frequency": 1,
             "cycle_times": 120,
             "default_beginning_time": 3,
+            "base_interval": null
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "3b48bffe-13ca-11ed-8a95-0242ac120003",
+            "pym": null,
+            "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
+            "service": "aa2f634e-e6d1-11ec-8cc0-0e45e7e36a4e",
+            "cycle_unit": "TOTAL",
+            "cycle_frequency": 1,
+            "cycle_times": 120,
+            "default_beginning_time": 1,
             "base_interval": "3 days, 0:00:00"
-        }
-    ],
-    "systemoperand": [
-        {
-            "label": "推荐后续作业",
-            "name": "recommend_next_operation",
-            "hssc_id": "e0dc2719-a42f-11ec-905b-4889e7cf38c9",
-            "func": "RECOMMEND_NEXT_OPERATION",
-            "parameters": "operand_id",
-            "description": "",
-            "applicable": 0
         },
         {
-            "label": "生成后续作业",
-            "name": "create_next_operation",
-            "hssc_id": "e0dd3887-a42f-11ec-85a9-4889e7cf38c9",
-            "func": "CREATE_NEXT_OPERATION",
-            "parameters": "operand_id",
-            "description": "",
-            "applicable": 0
-        },
-        {
-            "label": "推荐后续服务",
-            "name": "recommend_next_service",
-            "hssc_id": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
-            "func": "RECOMMEND_NEXT_SERVICE",
-            "parameters": "service_id",
-            "description": "",
-            "applicable": 1
-        },
-        {
-            "label": "生成后续服务",
-            "name": "create_next_service",
-            "hssc_id": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "func": "CREATE_NEXT_SERVICE",
-            "parameters": "service_id",
-            "description": "",
-            "applicable": 1
-        },
-        {
-            "label": "违规提示",
-            "name": "prompt_violate_business_rule",
-            "hssc_id": "e0dfa946-a42f-11ec-848a-4889e7cf38c9",
-            "func": "VIOLATION_ALERT",
-            "parameters": "violation_info",
-            "description": "",
-            "applicable": 3
-        },
-        {
-            "label": "发送提醒消息",
-            "name": "send_notification",
-            "hssc_id": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
-            "func": "SEND_NOTIFICATION",
-            "parameters": "user_id, message_type, message_content",
-            "description": "",
-            "applicable": 3
+            "label": null,
+            "name": null,
+            "hssc_id": "3b48fa78-13ca-11ed-8a95-0242ac120003",
+            "pym": null,
+            "servicepackage": "cd0ae9be-1242-11ed-92ab-da42fac10474",
+            "service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
+            "cycle_unit": "TOTAL",
+            "cycle_frequency": 1,
+            "cycle_times": 120,
+            "default_beginning_time": 1,
+            "base_interval": "3 days, 0:00:00"
         }
     ],
     "eventrule": [
@@ -2573,7 +2521,7 @@
             "description": "是否安排治疗计划 == '\"是\"'",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "boolfield_shi_fou_an_pai_zhi_liao_ji_hua == '\"是\"'",
+            "expression": "len({'是'}.intersection(boolfield_shi_fou_an_pai_zhi_liao_ji_hua)) == 1",
             "expression_fields": "boolfield_shi_fou_an_pai_zhi_liao_ji_hua"
         },
         {
@@ -2584,7 +2532,7 @@
             "description": "是否安排治疗计划 == '\"否\"'",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "boolfield_shi_fou_an_pai_zhi_liao_ji_hua == '\"否\"'",
+            "expression": "len({'否'}.intersection(boolfield_shi_fou_an_pai_zhi_liao_ji_hua)) == 1",
             "expression_fields": "boolfield_shi_fou_an_pai_zhi_liao_ji_hua"
         }
     ],
@@ -2852,23 +2800,6 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "发送预约通知",
-            "name": null,
-            "hssc_id": "a46be55c-e606-11ec-9ff2-cec25659f4ce",
-            "service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
-            "next_service": null,
-            "passing_data": 1,
-            "complete_feedback": 1,
-            "reminders": 0,
-            "message": "预约成功信息",
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true,
-            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
-        },
-        {
             "label": "重新预约完成",
             "name": null,
             "hssc_id": "15a832fe-e632-11ec-9186-c2da47347ca3",
@@ -2942,11 +2873,11 @@
             "hssc_id": "04f4661a-e70b-11ec-b504-9a0420f173f1",
             "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
             "event_rule": "8a2b1c90-de67-11ec-990e-9a796a47c5af",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "system_operand": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
+            "next_service": null,
             "passing_data": 1,
             "complete_feedback": 1,
-            "reminders": 1,
+            "reminders": 0,
             "message": null,
             "interval_rule": null,
             "interval_time": null,
@@ -2954,10 +2885,10 @@
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         },
         {
-            "label": "预约通知完成",
+            "label": "诊所接单完成",
             "name": null,
             "hssc_id": "47f2b8cc-e715-11ec-b504-9a0420f173f1",
-            "service": "d82343b8-df1c-11ec-b4b2-02377abc76d6",
+            "service": "8b00b6d6-de60-11ec-be26-9a796a47c5af",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "e6f2536a-1244-11ed-92ab-da42fac10474",
@@ -3037,6 +2968,40 @@
             "interval_time": null,
             "is_active": true,
             "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "复诊到店",
+            "name": null,
+            "hssc_id": "4d4dfc8e-13c8-11ed-8d9f-0242ac120003",
+            "service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
+            "event_rule": "79cd9036-df1a-11ec-b4b2-02377abc76d6",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "f26ea5a4-13ca-11ed-bb52-0242ac120003",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
+        },
+        {
+            "label": "复诊未到店",
+            "name": null,
+            "hssc_id": "9c89961e-13c8-11ed-9c38-0242ac120003",
+            "service": "49dc88f0-df1a-11ec-b4b2-02377abc76d6",
+            "event_rule": "0fcd52cc-e4c7-11ec-b4b1-1a2f7481020f",
+            "system_operand": "e0e045ac-a42f-11ec-93c3-4889e7cf38c9",
+            "next_service": null,
+            "passing_data": 1,
+            "complete_feedback": 0,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true,
+            "service_spec": "7250f7e8-b6df-11ec-8121-0ebea05fc526"
         }
     ],
     "externalservicemapping": [
@@ -3048,7 +3013,7 @@
             "external_form_name": "预约服务",
             "form_source": "jinshuju",
             "service": "d14d858c-e537-11ec-bc0a-ee06e95295ac",
-            "fields_mapping": "[{\"field_1\": \"datetimefield_ri_qi_shi_jian\"}, {\"field_2\": \"boolfield_jiu_zhen_wen_ti\"}, {\"field_3\": \"boolfield_jiu_zhen_ji_gou_ze_ren_ren\"}, {\"field_4\": \"boolfield_shi_yong_bao_xian_chan_pin\"}, {\"field_5\": \"boolfield_fu_jia_fu_wu_yao_qiu\"}]"
+            "fields_mapping": "[{\"field_1\": \"boolfield_yu_yue_shi_jian\"}, {\"field_2\": \"boolfield_jiu_zhen_wen_ti\"}, {\"field_3\": \"boolfield_jiu_zhen_ji_gou_ze_ren_ren\"}, {\"field_4\": \"boolfield_shi_yong_fu_wu_chan_pin\"}, {\"field_5\": \"boolfield_fu_jia_fu_wu_yao_qiu\"}]"
         }
     ],
     "yao_pin_ji_ben_xin_xi_biao": []

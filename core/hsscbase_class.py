@@ -282,7 +282,7 @@ class FieldsType(Enum):
     boolfield_ru_ku_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 入库计量单位
     boolfield_xiao_shou_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 销售计量单位
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = "icpc.Icpc4_physical_examination_and_tests"  # 设备适用服务功能
-    boolfield_suo_shu_ji_gou = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
+    boolfield_suo_shu_ji_gou = "entities.Institution"  # 所属机构
     boolfield_zheng_zhuang = "icpc.Icpc3_symptoms_and_problems"  # 症状
     boolfield_xing_bie = "dictionaries.Gender"  # 性别
     boolfield_min_zu = "dictionaries.Nationality"  # 民族
@@ -292,7 +292,7 @@ class FieldsType(Enum):
     boolfield_yi_liao_fei_yong_fu_dan = "dictionaries.Medical_expenses_burden"  # 医疗费用负担
     boolfield_ju_zhu_lei_xing = "dictionaries.Type_of_residence"  # 居住类型
     boolfield_xue_xing = "dictionaries.Blood_type"  # 血型
-    boolfield_qian_yue_jia_ting_yi_sheng = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
+    boolfield_qian_yue_jia_ting_yi_sheng = "entities.Staff"  # 签约家庭医生
     boolfield_yun_dong_neng_li = "dictionaries.Exercise_time"  # 运动能力
     boolfield_xing_ge_qing_xiang = "dictionaries.Character"  # 性格倾向
     boolfield_dui_mu_qian_sheng_huo_he_gong_zuo_man_yi_ma = "dictionaries.Satisfaction"  # 对目前生活和工作满意吗
@@ -359,9 +359,9 @@ class FieldsType(Enum):
     boolfield_yi_chuan_bing_shi_cheng_yuan = "dictionaries.Qin_shu_guan_xi"  # 遗传病史成员
     boolfield_fu_wu_xiang_mu_ming_cheng = "icpc.Icpc4_physical_examination_and_tests"  # 服务项目名称
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
-    boolfield_yao_pin_ming = "entities.None"  # 药品名
+    boolfield_yao_pin_ming = "entities.Medicine"  # 药品名
     boolfield_zheng_jian_lei_xing = "dictionaries.Zheng_jian_lei_xing"  # 证件类型
-    boolfield_jiu_zhen_ji_gou = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 就诊机构
+    boolfield_jiu_zhen_ji_gou = "entities.Institution"  # 就诊机构
     boolfield_shi_yong_fu_wu_chan_pin = "dictionaries.Bao_xian_chan_pin"  # 使用服务产品
     boolfield_jie_dan_que_ren = "dictionaries.Jie_dan_que_ren"  # 接单确认
     boolfield_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 诊断
@@ -383,7 +383,7 @@ class FieldsType(Enum):
     boolfield_li_pei_dui_zhang_dan_qian_shu = "dictionaries.Qian_shu_que_ren"  # 理赔对账单签署
     boolfield_li_pei_men_zhen_ji_lu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 理赔门诊记录签署
     boolfield_ren_shen_xian_li_pei_shen_qing_shu_qian_shu = "dictionaries.Qian_shu_que_ren"  # 人身险理赔申请书签署
-    boolfield_jiu_zhen_ji_gou_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 就诊机构责任人
+    boolfield_jiu_zhen_ji_gou_ze_ren_ren = "dictionaries.Jiu_zhen_ji_gou_fu_ze_ren"  # 就诊机构责任人
     boolfield_shi_fou_bang_ding_bei_bao_ren_xin_xi = "dictionaries.Xin_xi_que_ren"  # 是否绑定被保人信息
     boolfield_shi_fou_shen_he_tong_guo = "dictionaries.Shi_fou_shen_he_tong_guo"  # 是否审核通过
     boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu = "dictionaries.Nin_cong_he_chu_zhi_dao_wo_men"  # 您从何处知道我们的服务

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from core.admin import clinic_site
-from .views import index, check_signature, create_menu
+from .views import index, check_signature
 
 urlpatterns = [
     path('', index, name='index'),
@@ -13,7 +13,6 @@ urlpatterns = [
     path('clinic/', clinic_site.urls, name='clinic:index'),
     path('core/', include('core.urls')),
     path("template/", include('core.urls')),
-	path('create_menu/', create_menu, name='create_menu'),    
     # path('grappelli/', include('grappelli.urls')),
 ]
 

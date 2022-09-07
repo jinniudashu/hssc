@@ -20,10 +20,6 @@ class Zhen_jian_sui_fang_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zhen_jian_sui_fang_biao
         fields = '__all__'
-class Fen_zhen_que_ren_biaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Fen_zhen_que_ren_biao
-        fields = '__all__'
 class A6401Serializer(serializers.ModelSerializer):
     class Meta:
         model = A6401
@@ -35,10 +31,6 @@ class A6203Serializer(serializers.ModelSerializer):
 class Zhen_hou_hui_fang_danSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zhen_hou_hui_fang_dan
-        fields = '__all__'
-class Men_zhen_fu_wu_ji_lu_2Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Men_zhen_fu_wu_ji_lu_2
         fields = '__all__'
 class Tou_su_jian_yi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,10 +92,6 @@ class Li_pei_fei_yong_hui_zong_dan_shen_heSerializer(serializers.ModelSerializer
     class Meta:
         model = Li_pei_fei_yong_hui_zong_dan_shen_he
         fields = '__all__'
-class Men_zhen_fu_wu_ji_lu_danSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Men_zhen_fu_wu_ji_lu_dan
-        fields = '__all__'
 class A6502Serializer(serializers.ModelSerializer):
     class Meta:
         model = A6502
@@ -111,4 +99,20 @@ class A6502Serializer(serializers.ModelSerializer):
 class Ren_shen_xian_li_pei_shen_qing_shuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ren_shen_xian_li_pei_shen_qing_shu
+        fields = '__all__'
+class Fen_zhen_que_ren_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fen_zhen_que_ren_biao
+        fields = '__all__'
+class Shou_ci_dao_dian_que_ren_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shou_ci_dao_dian_que_ren_biao
+        fields = '__all__'
+class Men_zhen_fu_wu_ji_lu_2Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Men_zhen_fu_wu_ji_lu_2
+        fields = '__all__'
+class Men_zhen_fu_wu_ji_lu_danSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Men_zhen_fu_wu_ji_lu_dan
         fields = '__all__'

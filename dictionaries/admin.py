@@ -578,3 +578,11 @@ class Shi_fou_an_pai_zhi_liao_ji_huaAdmin(admin.ModelAdmin):
     list_display = ["value"]
 
 clinic_site.register(Shi_fou_an_pai_zhi_liao_ji_hua, Shi_fou_an_pai_zhi_liao_ji_huaAdmin)
+
+
+@admin.register(Jiu_zhen_ji_gou_fu_ze_ren)
+class Jiu_zhen_ji_gou_fu_ze_renAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+clinic_site.register(Jiu_zhen_ji_gou_fu_ze_ren, Jiu_zhen_ji_gou_fu_ze_renAdmin)

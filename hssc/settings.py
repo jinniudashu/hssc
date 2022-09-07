@@ -33,7 +33,8 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['hssc-test.herokuapp.com', '127.0.0.1', 'dental.tpacn.com', 'dental.tpahn.com']
+# ALLOWED_HOSTS = ['127.0.0.1', 'dental.tpacn.com', 'dental.tpahn.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'clinic-test.tpacn.com', 'clinic-test.tpahn.com', 'clinic.tpacn.com', 'clinic.tpahn.com', ]
 
 # Application definition
 
@@ -101,26 +102,26 @@ WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
 # Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     },
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+}
 
 # import dj_database_url
 # db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 # DATABASES['default'].update(db_from_env)
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': os.environ.get('DB_HOST'),
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASS'),
+#     }
+# }
 
 DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
 
@@ -128,8 +129,8 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            # "hosts": [os.environ.get('REDIS_URL', env('REDIS_URL'))],
-            "hosts": [env('REDIS_URL')],
+            # "hosts": [env('REDIS_URL')],
+            'hosts': ['redis://default:redispw@localhost:49153']
         },
     },
 }
@@ -196,8 +197,9 @@ SIMPLE_BACKEND_REDIRECT_URL = '/'
 # APPEND_SLASH=False
 
 # CELERY SETTINGS
-# CELERY_BROKER_URL = os.environ.get('REDIS_URL', env('REDIS_URL'))
-CELERY_BROKER_URL = env('REDIS_URL')
+
+# CELERY_BROKER_URL = env('REDIS_URL')
+CELERY_BROKER_URL = 'redis://default:redispw@localhost:49153'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

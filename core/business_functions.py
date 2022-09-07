@@ -1,6 +1,9 @@
 def copy_previous_form_data(form, previous_form_data):
     # 获取父进程表单
-    previous_form = form.pid.parent_proc.content_object
+    previous_form = None
+    if form.pid.parent_proc:
+        previous_form = form.pid.parent_proc.content_object
+
     if not previous_form:
         return
     else:
@@ -16,6 +19,8 @@ def copy_previous_form_data(form, previous_form_data):
         previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
         form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
         copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+
+        # _form_fields_name = {key for key in previous_form_data.keys()}
 
         # 向当前进程表单写入交集字段内容
         for field_name in copy_fields_name:
@@ -60,7 +65,7 @@ def create_form_instance(operation_proc, passing_data, form_data):
     #     form_instance.save()
 
     # 3. 如果passing_data>0, copy父进程表单数据
-    if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+    if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
         copy_previous_form_data(form_instance, form_data)
 
     return form_instance
@@ -72,7 +77,7 @@ def create_service_proc(**kwargs):
     # 检查父进程表单是否携带进程控制信息(检查api_fields字段)，如果有，整合所有表单的进程控制信息(charge_staff, operator, scheduled_time)
     # 提取进程控制信息，更新相应控制项内容。Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
     form_data = kwargs['form_data']
-    if kwargs['passing_data'] > 0:
+    if kwargs['passing_data'] in [1, 2]:
         # 获取父进程中api_fields不为空的表单, 并获取其中的进程控制信息api_fields
         _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields]
         api_fields = []
@@ -97,17 +102,30 @@ def create_service_proc(**kwargs):
 
     # 创建新的服务作业进程
     from core.models import OperationProc
-    new_proc=OperationProc.objects.create(
-        service=kwargs['service'],
-        customer=kwargs['customer'],
-        creater=kwargs['creater'],
-        operator=kwargs['operator'],
-        state=kwargs['state'],
-        scheduled_time=kwargs['scheduled_time'],
-        parent_proc=kwargs['parent_proc'],
-        contract_service_proc=kwargs['contract_service_proc'],
-        content_type=kwargs['content_type'],
-    )
+    parent_proc=kwargs.get('parent_proc')
+    if parent_proc:
+        new_proc=OperationProc.objects.create(
+            service=kwargs['service'],
+            customer=kwargs['customer'],
+            creater=kwargs['creater'],
+            operator=kwargs['operator'],
+            state=kwargs['state'],
+            scheduled_time=kwargs['scheduled_time'],
+            parent_proc=parent_proc,
+            contract_service_proc=kwargs.get('contract_service_proc'),
+            content_type=kwargs['content_type'],
+        )
+    else:
+        new_proc=OperationProc.objects.create(
+            service=kwargs['service'],
+            customer=kwargs['customer'],
+            creater=kwargs['creater'],
+            operator=kwargs['operator'],
+            state=kwargs['state'],
+            scheduled_time=kwargs['scheduled_time'],
+            contract_service_proc=kwargs.get('contract_service_proc'),
+            content_type=kwargs['content_type'],
+        )
     # Here postsave signal in service.models
     # 更新允许作业岗位
     role = kwargs['service'].role.all()
