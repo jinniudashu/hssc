@@ -1,12 +1,13 @@
 def copy_previous_form_data(form, previous_form_data):
     # 获取父进程表单
-    previous_form = None
+    
     if form.pid.parent_proc:
         previous_form = form.pid.parent_proc.content_object
-
-    if not previous_form:
-        return
     else:
+        previous_form = None
+
+    if previous_form:
+        # 如果有父进程表单，获取父进程表单字段
         from core.models import HsscFormModel
         # 获取父进程表单和当前进程表单字段的交集
         base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
@@ -19,23 +20,25 @@ def copy_previous_form_data(form, previous_form_data):
         previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
         form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
         copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+    else:
+        # 否则是外部进程表单，获取表单字段
+        copy_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+        copy_fields_name = {key for key in previous_form_data.keys()} - copy_fields_name_m2m
 
-        # _form_fields_name = {key for key in previous_form_data.keys()}
+    # 向当前进程表单写入交集字段内容
+    for field_name in copy_fields_name:
+        field_value = previous_form_data.get(field_name)
+        if field_value:
+            exec(f'form.{field_name} = field_value')
+    form.save()
 
-        # 向当前进程表单写入交集字段内容
-        for field_name in copy_fields_name:
-            field_value = previous_form_data.get(field_name)
-            if field_value:
-                exec(f'form.{field_name} = field_value')
-        form.save()
+    # 向当前进程表单写入交集多对多字段内容
+    for field_name in copy_fields_name_m2m:
+        m2m_objs = [previous_form_data.get(field_name)]
+        if m2m_objs:
+            exec(f'form.{field_name}.add(*m2m_objs)')
 
-        # 向当前进程表单写入交集多对多字段内容
-        for field_name in copy_fields_name_m2m:
-            m2m_objs = previous_form_data.get(field_name)
-            if m2m_objs:
-                exec(f'form.{field_name}.add(*m2m_objs)')
-
-        return form
+    return form
 
 
 from service.models import *

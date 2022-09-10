@@ -58,8 +58,11 @@ def jinshuju_post(request, **kwargs):
             return float(_value)
         elif _type == 'String':  # 字符串类型
             return _value
-        else:  # 如果字段类型是类型类型，返回对应字典实例对象
+        else:  # 如果字段类型是关联类型，返回对应字典实例对象
+            # 如果是外键关联类型，返回对应的字典实例对象
             model = eval(_type.split('.')[1]).objects.get(value=_value)
+            # 如果是多对多关联类型，返回对应的字典实例对象列表
+            # model = eval(_type.split('.')[1]).objects.filter(value=_value)
             return model
 
     if(request.method == 'POST'):
