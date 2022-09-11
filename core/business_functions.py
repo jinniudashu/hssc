@@ -34,7 +34,11 @@ def copy_previous_form_data(form, previous_form_data):
 
     # 向当前进程表单写入交集多对多字段内容
     for field_name in copy_fields_name_m2m:
-        m2m_objs = [previous_form_data.get(field_name)]
+        m2m_objs = previous_form_data.get(field_name)
+        # 如果m2m_objs不是列表类型，转换为列表类型，以适配外部表单copy_form_data
+        if not isinstance(m2m_objs, list):
+            m2m_objs = [m2m_objs]
+
         if m2m_objs:
             exec(f'form.{field_name}.add(*m2m_objs)')
 
