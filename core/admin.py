@@ -256,6 +256,12 @@ clinic_site = ClinicSite(name = 'ClinicSite')
 # **********************************************************************************************************************
 # Service 配置 Admin
 # **********************************************************************************************************************
+@admin.register(Medicine)
+class MedicineAdmin(admin.ModelAdmin):
+    search_fields = ('name', 'pym')
+clinic_site.register(Medicine, MedicineAdmin)
+
+
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     search_fields = ('name', 'pym')
@@ -309,6 +315,12 @@ class ServiceAdmin(admin.ModelAdmin):
     autocomplete_fields = ["name_icpc"]
 
 
+@admin.register(CycleUnit)
+class CycleUnitAdmin(admin.ModelAdmin):
+    list_display = ['cycle_unit', 'days',]
+    list_display_links = ['cycle_unit', 'days',]
+    readonly_fields = ['hssc_id', 'name', 'pym']
+
 class ServicePackageDetailInline(admin.TabularInline):
     model = ServicePackageDetail
     exclude = ['name', 'label', 'hssc_id', 'pym']
@@ -320,7 +332,7 @@ class ServicePackageAdmin(admin.ModelAdmin):
     list_display_links = ['label', ]
     fieldsets = (
         (None, {
-            'fields': (('label', 'name_icpc'), 'overtime', ('name', 'hssc_id'))
+            'fields': (('label', 'name_icpc'), ('name', 'hssc_id'))
         }),
     )
     search_fields=['label', 'pym']

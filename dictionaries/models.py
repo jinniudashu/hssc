@@ -295,7 +295,7 @@ class Qian_yue_que_ren(DictBase):
 
 class Sui_fang_ping_gu(DictBase):
     class Meta:
-        verbose_name = '监测评估'
+        verbose_name = '血压监测评估'
         verbose_name_plural = verbose_name
 
 
@@ -359,109 +359,7 @@ class Qin_shu_guan_xi(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Bao_xian_chan_pin(DictBase):
+class Tang_niao_bing_kong_zhi_xiao_guo_ping_gu(DictBase):
     class Meta:
-        verbose_name = '保险产品'
-        verbose_name_plural = verbose_name
-
-
-class Jie_dan_que_ren(DictBase):
-    class Meta:
-        verbose_name = '接单确认'
-        verbose_name_plural = verbose_name
-
-
-class Gou_tong_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '沟通情况'
-        verbose_name_plural = verbose_name
-
-
-class Deng_hou_shi_jian(DictBase):
-    class Meta:
-        verbose_name = '等候时间'
-        verbose_name_plural = verbose_name
-
-
-class Jie_dai_fu_wu(DictBase):
-    class Meta:
-        verbose_name = '接待服务'
-        verbose_name_plural = verbose_name
-
-
-class Fu_wu_xiao_guo_ping_jia(DictBase):
-    class Meta:
-        verbose_name = '治疗效果评价'
-        verbose_name_plural = verbose_name
-
-
-class Fu_wu_xiang_mu(DictBase):
-    class Meta:
-        verbose_name = '服务项目'
-        verbose_name_plural = verbose_name
-
-
-class Yu_chu_xian_ren_guan_xi(DictBase):
-    class Meta:
-        verbose_name = '与出险人关系'
-        verbose_name_plural = verbose_name
-
-
-class Ping_fen(DictBase):
-    class Meta:
-        verbose_name = '评分'
-        verbose_name_plural = verbose_name
-
-
-class Zheng_jian_lei_xing(DictBase):
-    class Meta:
-        verbose_name = '证件类型'
-        verbose_name_plural = verbose_name
-
-
-class Shi_fou_tong_guo(DictBase):
-    class Meta:
-        verbose_name = '是否通过'
-        verbose_name_plural = verbose_name
-
-
-class Xin_xi_que_ren(DictBase):
-    class Meta:
-        verbose_name = '绑定确认'
-        verbose_name_plural = verbose_name
-
-
-class Qian_shu_que_ren(DictBase):
-    class Meta:
-        verbose_name = '签署确认'
-        verbose_name_plural = verbose_name
-
-
-class Shi_fou_shen_he_tong_guo(DictBase):
-    class Meta:
-        verbose_name = '是否审核通过'
-        verbose_name_plural = verbose_name
-
-
-class Nin_cong_he_chu_zhi_dao_wo_men(DictBase):
-    class Meta:
-        verbose_name = '您从何处知道我们的服务'
-        verbose_name_plural = verbose_name
-
-
-class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu(DictBase):
-    class Meta:
-        verbose_name = '是否愿意向他人推荐我们'
-        verbose_name_plural = verbose_name
-
-
-class Shi_fou_an_pai_zhi_liao_ji_hua(DictBase):
-    class Meta:
-        verbose_name = '是否安排治疗计划'
-        verbose_name_plural = verbose_name
-
-
-class Jiu_zhen_ji_gou_fu_ze_ren(DictBase):
-    class Meta:
-        verbose_name = '就诊机构负责人'
+        verbose_name = '糖尿病控制效果评估'
         verbose_name_plural = verbose_name

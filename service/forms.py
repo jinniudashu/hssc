@@ -19,9 +19,21 @@ class She_bei_ji_ben_xin_xi_ji_lu_HeaderForm(ModelForm):
         model = She_bei_ji_ben_xin_xi_ji_lu
         fields = []
         
+from service.models import Gong_ying_shang_ji_ben_xin_xi_diao_cha
+class Gong_ying_shang_ji_ben_xin_xi_diao_cha_HeaderForm(ModelForm):
+    class Meta:
+        model = Gong_ying_shang_ji_ben_xin_xi_diao_cha
+        fields = []
+        
+from service.models import Yao_pin_ji_ben_xin_xi_biao
+class Yao_pin_ji_ben_xin_xi_biao_HeaderForm(ModelForm):
+    class Meta:
+        model = Yao_pin_ji_ben_xin_xi_biao
+        fields = []
+        
 from service.models import Ju_min_ji_ben_xin_xi_diao_cha
 class Ju_min_ji_ben_xin_xi_diao_cha_HeaderForm(ModelForm):
     class Meta:
         model = Ju_min_ji_ben_xin_xi_diao_cha
-        fields = ['boolfield_bei_bao_ren_xing_ming', 'boolfield_bei_bao_ren_xing_bie', 'boolfield_chu_sheng_ri_qi', 'boolfield_chang_zhu_di_zhi']
+        fields = ['boolfield_jia_ting_di_zhi', 'boolfield_lian_xi_dian_hua', 'boolfield_xing_ming', 'boolfield_chu_sheng_ri_qi', 'boolfield_xing_bie']
         

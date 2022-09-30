@@ -1,92 +1,12 @@
 from rest_framework import serializers
 from .models import *
-class Fu_zhen_bing_li_ji_lu_fu_wuSerializer(serializers.ModelSerializer):
+class Xue_ya_jian_ce_ping_guSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Fu_zhen_bing_li_ji_lu_fu_wu
+        model = Xue_ya_jian_ce_ping_gu
         fields = '__all__'
-class Kou_qiang_jian_cha_ji_zhen_duanSerializer(serializers.ModelSerializer):
+class Can_hou_2_xiao_shi_xue_tangSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Kou_qiang_jian_cha_ji_zhen_duan
-        fields = '__all__'
-class An_pai_zhi_liao_ji_huaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = An_pai_zhi_liao_ji_hua
-        fields = '__all__'
-class Shou_ci_dao_dian_que_renSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Shou_ci_dao_dian_que_ren
-        fields = '__all__'
-class Tui_bao_que_ren_fu_wuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tui_bao_que_ren_fu_wu
-        fields = '__all__'
-class Tui_bao_shen_qing_fu_wuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tui_bao_shen_qing_fu_wu
-        fields = '__all__'
-class Men_zhen_ji_lu_hui_zongSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Men_zhen_ji_lu_hui_zong
-        fields = '__all__'
-class Chong_xin_yu_yue_an_paiSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chong_xin_yu_yue_an_pai
-        fields = '__all__'
-class Zhen_suo_yu_yueSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Zhen_suo_yu_yue
-        fields = '__all__'
-class Li_pei_shen_qing_chong_shenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Li_pei_shen_qing_chong_shen
-        fields = '__all__'
-class Yu_yue_zi_xunSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yu_yue_zi_xun
-        fields = '__all__'
-class Ti_jiao_he_bao_zi_liaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ti_jiao_he_bao_zi_liao
-        fields = '__all__'
-class Li_pei_shen_qing_fu_wuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Li_pei_shen_qing_fu_wu
-        fields = '__all__'
-class Li_pei_shen_qing_shu_shen_heSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Li_pei_shen_qing_shu_shen_he
-        fields = '__all__'
-class Man_yi_du_diao_chaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Man_yi_du_diao_cha
-        fields = '__all__'
-class Zhen_hou_sui_fangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Zhen_hou_sui_fang
-        fields = '__all__'
-class Zhen_jian_sui_fangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Zhen_jian_sui_fang
-        fields = '__all__'
-class Men_zhen_ji_luSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Men_zhen_ji_lu
-        fields = '__all__'
-class Yu_yue_tong_zhiSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yu_yue_tong_zhi
-        fields = '__all__'
-class Fen_zhen_que_renSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Fen_zhen_que_ren
-        fields = '__all__'
-class Yu_yue_que_renSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yu_yue_que_ren
-        fields = '__all__'
-class Yu_yue_an_paiSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yu_yue_an_pai
+        model = Can_hou_2_xiao_shi_xue_tang
         fields = '__all__'
 class Ji_gou_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -112,7 +32,103 @@ class Yao_pin_ji_ben_xin_xi_biaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Yao_pin_ji_ben_xin_xi_biao
         fields = '__all__'
+class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu
+        fields = '__all__'
 class Ju_min_ji_ben_xin_xi_diao_chaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ju_min_ji_ben_xin_xi_diao_cha
+        fields = '__all__'
+class Shu_ye_zhu_sheSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shu_ye_zhu_she
+        fields = '__all__'
+class Qian_yue_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Qian_yue_fu_wu
+        fields = '__all__'
+class T9001Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = T9001
+        fields = '__all__'
+class Tang_hua_xue_hong_dan_bai_jian_cha_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tang_hua_xue_hong_dan_bai_jian_cha_biao
+        fields = '__all__'
+class Kong_fu_xue_tang_jian_chaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kong_fu_xue_tang_jian_cha
+        fields = '__all__'
+class Xue_ya_jian_ceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Xue_ya_jian_ce
+        fields = '__all__'
+class Tang_niao_bing_cha_tiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tang_niao_bing_cha_ti
+        fields = '__all__'
+class A3502Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A3502
+        fields = '__all__'
+class A6299Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6299
+        fields = '__all__'
+class A6220Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6220
+        fields = '__all__'
+class A6202Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6202
+        fields = '__all__'
+class T6301Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = T6301
+        fields = '__all__'
+class T8901Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = T8901
+        fields = '__all__'
+class A6218Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6218
+        fields = '__all__'
+class A6201Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6201
+        fields = '__all__'
+class A6217Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6217
+        fields = '__all__'
+class Tang_niao_bing_zi_wo_jian_ceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tang_niao_bing_zi_wo_jian_ce
+        fields = '__all__'
+class Yao_shi_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yao_shi_fu_wu
+        fields = '__all__'
+class Tang_niao_bing_zhuan_yong_wen_zhenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tang_niao_bing_zhuan_yong_wen_zhen
+        fields = '__all__'
+class A3101Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A3101
+        fields = '__all__'
+class A6502Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6502
+        fields = '__all__'
+class A6501Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = A6501
+        fields = '__all__'
+class Men_zhen_chu_fang_biaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Men_zhen_chu_fang_biao
         fields = '__all__'
