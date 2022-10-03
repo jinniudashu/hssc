@@ -72,7 +72,7 @@ def create_form_instance(operation_proc, passing_data, form_data):
     #     form_instance.save()
 
     # 3. 如果passing_data>0, copy父进程表单数据
-    if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
+    if passing_data > 0 and form_data:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
         copy_previous_form_data(form_instance, form_data)
 
     return form_instance
