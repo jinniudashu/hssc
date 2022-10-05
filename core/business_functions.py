@@ -394,27 +394,22 @@ def get_services_schedule(instances):
                 beginning_time = timezone.now()
         return beginning_time
 
-    def _get_times_interval(cycle_unit, cycle_frequency, cycle_times):
+    def _get_times_interval(unit_days, cycle_frequency, total_days):
         # 返回：执行次数，执行间隔
-        # 周期单位: [('TOTAL', '总共'), ('DAY', '每天'), ('WEEK', '每周'), ('MONTH', '每月'), ('QUARTER', '每季'), ('YEAR', '每年')]
-        if cycle_unit == 'TOTAL':
-            times = cycle_times
-            interval_seconds = int(cycle_times*24*60*60/cycle_frequency)
-        else:
-            times = cycle_times * cycle_frequency
-            from enum import Enum
-            class UnitSeconds(Enum):
-                DAY = 86400
-                WEEK = 604800
-                MONTH = 2592000
-                QUARTER = 7776000
-                YEAR = 31536000
-            interval_seconds = int(UnitSeconds[cycle_unit].value*cycle_times/times)
+        times = total_days // unit_days * cycle_frequency
+        from enum import Enum
+        class UnitSeconds(Enum):
+            DAY = 86400
+            WEEK = 604800
+            MONTH = 2592000
+            QUARTER = 7776000
+            YEAR = 31536000
+        interval_seconds = int(UnitSeconds[unit_days].value*total_days/times)
         return times, interval_seconds
 
-    services_schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator}]
+    schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator, 'overtime': overtime}, ]
     for instance in instances:
-        times, interval = _get_times_interval(instance.cycle_unit, instance.cycle_frequency, instance.cycle_times)
+        times, interval = _get_times_interval(instance.cycle_unit.days, instance.cycle_frequency, instance.cycle_times)
         beginning_time = _get_beginning_time(instance.default_beginning_time, instance.base_interval)
         for i in range(times):
             if beginning_time:
@@ -422,14 +417,15 @@ def get_services_schedule(instances):
             else:
                 scheduled_time = None
             print('service:', instance.service, 'scheduled_time:', scheduled_time)
-            services_schedule.append({
+            schedule.append({
                 'scheduled_draft': instance,
                 'service': instance.service,  # 服务项目
                 'scheduled_time': scheduled_time,
                 'scheduled_operator': instance.scheduled_operator,
+                'overtime': instance.overtime,
             })
 
-    return services_schedule
+    return schedule
 
 
 from django.dispatch import receiver

@@ -89,6 +89,14 @@ class CustomerScheduleDraftInline(nested_admin.NestedTabularInline):
     exclude = ["hssc_id", "label", "name", ]
     autocomplete_fields = ["scheduled_operator", ]
 
+    def get_queryset(self, request):
+        # 重写get_queryset方法，设置缺省overtime为服务的overtime
+        qs = super().get_queryset(request)
+        for item in qs:
+            item.overtime = item.service.overtime
+            item.save()
+        return qs
+
 class CustomerSchedulePackageAdmin(HsscFormAdmin):
     exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
     fieldsets = ((None, {'fields': (('customer', 'servicepackage'), )}),)
@@ -101,21 +109,20 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
             schedule_package = instances[0].schedule_package
             customer = schedule_package.customer
             from core.business_functions import get_services_schedule
-            services_schedule = get_services_schedule(instances)
-            print('services_schedule:', services_schedule)
+            schedule = get_services_schedule(instances)
             # 创建客户服务日程
-            for service_schedule in services_schedule:
+            for item in schedule:
                 CustomerSchedule.objects.create(
                     customer=customer,
                     schedule_package=schedule_package,
-                    scheduled_draft=service_schedule['scheduled_draft'],
-                    service=service_schedule['service'],
-                    scheduled_time=service_schedule['scheduled_time'],
-                    scheduled_operator=service_schedule['scheduled_operator'],
+                    scheduled_draft=item['scheduled_draft'],
+                    service=item['service'],
+                    scheduled_time=item['scheduled_time'],
+                    scheduled_operator=item['scheduled_operator'],
+                    overtime=item['overtime'],
                 )
             # 重定向到修改客户服务日程页面
             return redirect('/clinic/service/customerschedule/', pk=instances[0].pk)
-            # return redirect('service:customer_schedule_edit', pk=instances[0].pk)
 
 clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
