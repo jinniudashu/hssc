@@ -367,60 +367,68 @@ def update_customer_recommended_services_list(customer):
 
 # 把客户服务项目安排转为客户服务日程
 def get_services_schedule(instances):
-    from django.utils import timezone
-    from datetime import timedelta
-    def _get_beginning_time(option, base_interval):
-        beginning_time =None
-        # (0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
-        if option == 1:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        elif option == 2:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        elif option == 3:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        elif option == 4:
-            if base_interval:
-                beginning_time = timezone.now() + base_interval
-            else:
-                beginning_time = timezone.now()
-        return beginning_time
+    def _get_schedule_times(instance, first_start_time, previous_end_time):
+        # 返回: 计划时间列表
+        def _add_base_interval(time, interval):
+            if interval:
+                time = time + interval
+            return time
+            
+        unit_days = instance.cycle_unit.days  # 周期单位天数
+        cycle_frequency = instance.cycle_frequency  # 每周期频次
+        total_days = instance.cycle_times  # 总天数
+        begin_option = instance.default_beginning_time  # 执行时间基准
+        base_interval = instance.base_interval  # 基准间隔
 
-    def _get_times_interval(unit_days, cycle_frequency, total_days):
-        # 返回：执行次数，执行间隔
-        times = total_days // unit_days * cycle_frequency
-        from enum import Enum
-        class UnitSeconds(Enum):
-            DAY = 86400
-            WEEK = 604800
-            MONTH = 2592000
-            QUARTER = 7776000
-            YEAR = 31536000
-        interval_seconds = int(UnitSeconds[unit_days].value*total_days/times)
-        return times, interval_seconds
+        # 计算开始时间
+        start_time = None
+        # (0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
+        from django.utils import timezone
+        if begin_option == 1:
+            start_time = _add_base_interval(timezone.now(), base_interval)
+        elif begin_option == 2:
+            start_time = _add_base_interval(first_start_time, base_interval)
+        elif begin_option == 3:
+            start_time = _add_base_interval(previous_end_time, base_interval)
+        elif begin_option == 4:
+            start_time = _add_base_interval(timezone.now(), base_interval)  # TODO: 客户出生日期
+
+        if start_time:
+            # 计算总次数
+            times = total_days // unit_days * cycle_frequency
+            # 计算每次间隔小时数
+            interval_hours = unit_days * 24 // cycle_frequency
+            # 从开始时间开始，每次间隔interval_hours小时，给出时间列表
+            schedule_times = []
+            from datetime import timedelta
+            for i in range(times):
+                schedule_times.append(start_time + timedelta(hours=interval_hours * i))
+
+            return schedule_times
+        else:
+            return []
 
     schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator, 'overtime': overtime}, ]
-    for instance in instances:
-        times, interval = _get_times_interval(instance.cycle_unit.days, instance.cycle_frequency, instance.cycle_times)
-        beginning_time = _get_beginning_time(instance.default_beginning_time, instance.base_interval)
-        for i in range(times):
-            if beginning_time:
-                scheduled_time = beginning_time + timedelta(seconds=interval*i)
-            else:
-                scheduled_time = None
-            print('service:', instance.service, 'scheduled_time:', scheduled_time)
+    first_start_time = None
+    previous_end_time = None
+
+    for idx, instance in enumerate(instances):
+        schedule_times = _get_schedule_times(
+            instance,
+            first_start_time,  # 首个服务开始时间
+            previous_end_time)  # 上个服务结束时间
+
+        if schedule_times:
+            if idx == 0:
+                first_start_time = schedule_times[0]  # 获取首个服务开始时间
+            previous_end_time = schedule_times[-1]  # 获取上个服务结束时间
+
+        for time in schedule_times:
+            print('service:', instance.service, 'scheduled_time:', time)
             schedule.append({
                 'scheduled_draft': instance,
                 'service': instance.service,  # 服务项目
-                'scheduled_time': scheduled_time,
+                'scheduled_time': time,
                 'scheduled_operator': instance.scheduled_operator,
                 'overtime': instance.overtime,
             })
