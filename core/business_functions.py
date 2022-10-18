@@ -367,7 +367,7 @@ def update_customer_recommended_services_list(customer):
 
 # 把客户服务项目安排转为客户服务日程
 def get_services_schedule(instances):
-    def _get_schedule_times(instance, first_start_time, previous_end_time):
+    def _get_schedule_times(instance, idx, first_start_time, previous_end_time):
         # 返回: 计划时间列表
         def _add_base_interval(time, interval):
             if interval:
@@ -379,6 +379,10 @@ def get_services_schedule(instances):
         total_days = instance.cycle_times  # 总天数
         begin_option = instance.default_beginning_time  # 执行时间基准
         base_interval = instance.base_interval  # 基准间隔
+
+        if idx == 0:  # 调整首个服务的开始时间
+            if begin_option in [2,3]:
+                begin_option = 1
 
         # 计算开始时间
         start_time = None
@@ -415,8 +419,10 @@ def get_services_schedule(instances):
     for idx, instance in enumerate(instances):
         schedule_times = _get_schedule_times(
             instance,
+            idx,  
             first_start_time,  # 首个服务开始时间
-            previous_end_time)  # 上个服务结束时间
+            previous_end_time,  # 上个服务结束时间
+            )
 
         if schedule_times:
             if idx == 0:

@@ -35,10 +35,23 @@ class CustomerScheduleDraft(HsscBase):
     def __str__(self):
         return self.service.label
 
-class CustomerSchedule(HsscBase):
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.CASCADE, verbose_name='客户')
+
+class CustomerScheduleList(HsscFormModel):
+    plan_serial_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='服务计划')
     schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, on_delete=models.CASCADE, verbose_name='服务包')
-    scheduled_draft = models.ForeignKey(CustomerScheduleDraft, on_delete=models.CASCADE, verbose_name='日程草案')
+
+    class Meta:
+        verbose_name = '客户服务计划'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.plan_serial_number
+
+
+class CustomerSchedule(HsscBase):
+    customer_schedule_list = models.ForeignKey(CustomerScheduleList, null=True, blank=True, on_delete=models.CASCADE, verbose_name='服务计划')
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.CASCADE, verbose_name='客户')
+    schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, blank=True, on_delete=models.CASCADE, verbose_name='服务包')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name='计划执行时间')
     scheduled_operator = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务人员')
