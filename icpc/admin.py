@@ -15,6 +15,8 @@ class IcpcAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+clinic_site.register(Icpc, IcpcAdmin)
+
 class SubIcpcAdmin(admin.ModelAdmin):
     list_display = ["icpc_code", "icode", "iname", "pym"]
     search_fields=["iname", "pym", "icpc_code", "icode"]

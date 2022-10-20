@@ -147,8 +147,16 @@ class HsscPymBase(HsscBase):
         super().save(*args, **kwargs)
 
 
+
 from enum import Enum
 class FieldsType(Enum):
+    # 手工添加CustomerSchedule字段数据类型
+    scheduled_time = "Datetime"  # 计划执行时间
+    overtime = "Datetime"  # 超期时限
+    scheduled_operator = "entities.Stuff"  # 计划执行人员
+    service = "core.Service"  # 服务
+
+    # 自动生成字段数据类型
     boolfield_yao_pin_tong_yong_ming = "String"  # 药品通用名
     boolfield_shen_fen_zheng_hao_ma = "String"  # 身份证号码
     boolfield_yao_pin_ming_cheng = "String"  # 药品名称

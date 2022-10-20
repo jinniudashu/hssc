@@ -35,11 +35,10 @@ class CustomerScheduleDraft(HsscBase):
     def __str__(self):
         return self.service.label
 
-
 class CustomerScheduleList(HsscFormModel):
     plan_serial_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='服务计划')
     schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, on_delete=models.CASCADE, verbose_name='服务包')
-
+    
     class Meta:
         verbose_name = '客户服务计划'
         verbose_name_plural = verbose_name
@@ -47,10 +46,8 @@ class CustomerScheduleList(HsscFormModel):
     def __str__(self):
         return self.plan_serial_number
 
-
-class CustomerSchedule(HsscBase):
+class CustomerSchedule(HsscFormModel):
     customer_schedule_list = models.ForeignKey(CustomerScheduleList, null=True, blank=True, on_delete=models.CASCADE, verbose_name='服务计划')
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.CASCADE, verbose_name='客户')
     schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, blank=True, on_delete=models.CASCADE, verbose_name='服务包')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name='计划执行时间')

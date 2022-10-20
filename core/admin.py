@@ -164,12 +164,39 @@ class ClinicSite(admin.AdminSite):
 
     # 创建新的服务日程
     def new_service_schedule(self, request, **kwargs):
+        # 1. 创建"安排服务计划"服务进程
         customer_id = kwargs['customer_id']
-        service_id = kwargs['service_id']
-        print('customer_id:', customer_id)
-        print('service_id:', service_id)
-        context = {}
-        return redirect('/clinic/service/customerschedule/add/')
+        customer = Customer.objects.get(id=customer_id)
+        current_operator = User.objects.get(username=request.user).customer
+        service = Service.objects.get(name='CustomerSchedule')
+        content_type = ContentType.objects.get(app_label='service', model='customerschedule')
+        # 创建一个状态为“运行”的“安排服务计划”作业进程
+        new_proc=OperationProc.objects.create(
+            service=service,  # 服务
+            customer=customer,  # 客户
+            operator=current_operator,  # 作业人员
+            creater=current_operator,  # 创建者
+            state=2,  # 进程状态：运行
+            content_type=content_type,  # 内容类型
+        )
+
+        # 2. 创建服务计划安排: CustomerSchedule
+        from service.models import CustomerSchedule
+        customerschedule = CustomerSchedule.objects.create(
+            customer=customer,  # 客户
+            operator=current_operator,  # 作业人员
+            creater=current_operator,  # 创建者
+            pid=new_proc,  # 服务作业进程
+            cpid=None,
+            service=Service.objects.get(id=kwargs['service_id']),  # 服务
+        )
+
+        # 3. 更新OperationProc服务进程的form实例信息
+        new_proc.object_id = customerschedule.id
+        new_proc.entry = f'/clinic/service/customerschedule/{customerschedule.id}/change'
+        new_proc.save()
+
+        return redirect(new_proc.entry)
 
     # 创建新的服务包计划
     def new_service_package_schedule(self, request, **kwargs):
@@ -280,7 +307,7 @@ class BuessinessFormAdmin(admin.ModelAdmin):
     search_fields = ['name', 'label', 'pym']
     readonly_fields = ['api_fields', 'name', 'hssc_id']
     autocomplete_fields = ['name_icpc',]
-
+clinic_site.register(BuessinessForm, BuessinessFormAdmin)
 
 @admin.register(ManagedEntity)
 class ManagedEntityAdmin(admin.ModelAdmin):
@@ -313,6 +340,7 @@ class ServiceAdmin(admin.ModelAdmin):
     inlines = [BuessinessFormsSettingInline]
     filter_horizontal = ("role",)
     autocomplete_fields = ["name_icpc"]
+clinic_site.register(Service, ServiceAdmin)
 
 
 @admin.register(CycleUnit)

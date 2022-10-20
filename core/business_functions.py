@@ -170,8 +170,10 @@ def create_customer_service_log(form_data, form_instance):
                 val_iterator = [id_list.iname]
             elif app_label == 'dictionaries':
                 val_iterator = [id_list.value]
+            elif app_label == 'core':
+                val_iterator = [id_list.label]  # 适配core.Service
             else:
-                val_iterator = [id_list.name]
+                val_iterator = [id_list.name]  # 适配entities.Stuff
         return f'{set(val_iterator)}'
 
     # 数据格式预处理
@@ -185,6 +187,8 @@ def create_customer_service_log(form_data, form_instance):
         elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
             form_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
         else:  # 如果字段类型是关联字段，转换为集合字符串
+            # if field_type == 'entities.Service':
+            #     field_val = field_val.label
             form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
 
     print('完成预处理form_data:', form_data)
@@ -331,6 +335,7 @@ def update_customer_services_list(customer):
     ]
 
     # 历史服务
+    # 如果service是安排服务包和安排服务，则获取所安排服务包或服务的label，并添加到service.label后面；否则获取service的label
     history_services =  [
         {
             'service_entry': proc.entry,
@@ -430,7 +435,6 @@ def get_services_schedule(instances):
             previous_end_time = schedule_times[-1]  # 获取上个服务结束时间
 
         for time in schedule_times:
-            print('service:', instance.service, 'scheduled_time:', time)
             schedule.append({
                 'scheduled_draft': instance,
                 'service': instance.service,  # 服务项目

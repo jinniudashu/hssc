@@ -432,7 +432,8 @@ class Customer(HsscBase):
         '''
         获取客户历史服务列表
         '''
-        return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(is_system_service=True))
+        # return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(is_system_service=True))
+        return self.operation_proc_customer.filter(state=4)
 
     def get_recommended_services(self) -> 'QuerySet[RecommendedService]':
         '''

@@ -33,6 +33,7 @@ class HsscFormAdmin(admin.ModelAdmin):
         form_data2 = copy.copy(form.cleaned_data)
 
         # 把表单内容存入CustomerServiceLog
+        print('form_data1:', form_data1)
         create_customer_service_log(form_data1, obj)
 
         # 发送服务作业完成信号
@@ -63,11 +64,11 @@ class HsscFormAdmin(admin.ModelAdmin):
 
 
 class CustomerScheduleAdmin(HsscFormAdmin):
-    exclude = ['hssc_id', 'label', 'name', 'customer_schedule_list', 'schedule_package', ]
+    exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym", 'customer_schedule_list', 'schedule_package', ]
     autocomplete_fields = ["scheduled_operator", ]
     list_display = ['service', 'scheduled_time', 'scheduled_operator', 'overtime']
     list_editable = ['scheduled_time', 'scheduled_operator', 'overtime']
-    readonly_fields = ['customer', ]
+    readonly_fields = ['customer']
     ordering = ('scheduled_time',)
 
 clinic_site.register(CustomerSchedule, CustomerScheduleAdmin)
@@ -77,8 +78,7 @@ class CustomerScheduleInline(admin.TabularInline):
     model = CustomerSchedule
     extra = 0
     can_delete = False
-    # verbose_name_plural = '服务日程安排'
-    exclude = ["hssc_id", "label", "name", 'customer', 'schedule_package', ]
+    exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", 'customer', 'schedule_package', ]
     autocomplete_fields = ["scheduled_operator", ]
 
 
@@ -164,7 +164,6 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
 
 clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
-
 
 # **********************************************************************************************************************
 # Service表单Admin
