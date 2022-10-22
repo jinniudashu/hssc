@@ -112,7 +112,6 @@
                 const servicesListSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/customer_services_list/${customerId}/`);
                 servicesListSocket.onmessage = function (event) {
                     _this.servicesList = JSON.parse(event.data);
-                    console.log(_this.servicesList);
                 }
             },
         };

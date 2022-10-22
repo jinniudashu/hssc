@@ -33,7 +33,6 @@ class HsscFormAdmin(admin.ModelAdmin):
         form_data2 = copy.copy(form.cleaned_data)
 
         # 把表单内容存入CustomerServiceLog
-        print('form_data1:', form_data1)
         create_customer_service_log(form_data1, obj)
 
         # 发送服务作业完成信号
@@ -68,7 +67,7 @@ class CustomerScheduleAdmin(HsscFormAdmin):
     autocomplete_fields = ["scheduled_operator", ]
     list_display = ['service', 'scheduled_time', 'scheduled_operator', 'overtime']
     list_editable = ['scheduled_time', 'scheduled_operator', 'overtime']
-    readonly_fields = ['customer']
+    readonly_fields = ['customer', 'service']
     ordering = ('scheduled_time',)
 
 clinic_site.register(CustomerSchedule, CustomerScheduleAdmin)

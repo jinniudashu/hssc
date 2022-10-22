@@ -182,7 +182,7 @@ def operation_proc_post_save_handler(sender, instance, created, **kwargs):
     update_unassigned_procs()
 
     # 根据customer过滤出用户的已安排服务和历史服务，发送channel_message给“用户服务组”
-    if not instance.service.is_system_service:
+    if instance.service.service_type in [1,2]:
         update_customer_services_list(instance.customer)
 
     # 根据服务进程创建待办事项: sync_proc_todo_list

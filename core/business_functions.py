@@ -260,7 +260,7 @@ def get_operator_permitted_services(operator):
     from core.models import Service
     return [
         service.id
-        for service in Service.objects.filter(is_system_service=False) 
+        for service in Service.objects.filter(service_type__in=[1,2]) 
         if set(service.role.all()).intersection(set(operator.staff.role.all()))
     ]
 
@@ -335,14 +335,28 @@ def update_customer_services_list(customer):
     ]
 
     # 历史服务
+    # history_services =  [
+    #     {
+    #         'service_entry': proc.entry,
+    #         'service_label': proc.service.label,
+    #         'service_id': proc.service.id,
+    #     } for proc in customer.get_history_services()
+    # ]
+
+    history_services = []
     # 如果service是安排服务包和安排服务，则获取所安排服务包或服务的label，并添加到service.label后面；否则获取service的label
-    history_services =  [
-        {
+    for proc in customer.get_history_services():
+        service_label = proc.service.label
+        if proc.service.name == 'CustomerSchedulePackage':
+            service_label = service_label + ' [ ' + proc.content_object.servicepackage.label + ' ] '
+        elif proc.service.name == 'CustomerSchedule':
+            service_label = service_label + ' [ ' + proc.content_object.service.label + ' ] '
+
+        history_services.append({
             'service_entry': proc.entry,
-            'service_label': proc.service.label,
+            'service_label': service_label,
             'service_id': proc.service.id,
-        } for proc in customer.get_history_services()
-    ]
+        })
 
     servicesList = {
         'scheduled_services': scheduled_services,

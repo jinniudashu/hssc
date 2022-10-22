@@ -95,7 +95,7 @@ class ClinicSite(admin.AdminSite):
                 'label': service.label,
                 'enable_queue_counter': service.enable_queue_counter,
                 'queue_count': OperationProc.objects.get_service_queue_count(service)
-            } for service in Service.objects.filter(Q(is_system_service=False) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
+            } for service in Service.objects.filter(Q(service_type__in=[1,2]) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
         ]
         
         context['service_packages'] = [
@@ -325,7 +325,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     fieldsets = (
         ('基本信息', {
-            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority', 'is_system_service'), 'role', 'history_services_display', 'enable_queue_counter', 'route_to', ('working_hours' ,'overtime'), ('name', 'hssc_id'))
+            'fields': (('label', 'name_icpc'), ('managed_entity', 'priority', 'service_type'), 'role', 'history_services_display', 'enable_queue_counter', 'route_to', ('working_hours' ,'overtime'), ('name', 'hssc_id'))
         }),
         ('作业管理', {
             'fields': ('suppliers', 'not_suitable', 'cost', 'load_feedback')

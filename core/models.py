@@ -62,7 +62,8 @@ class Service(HsscPymBase):
     managed_entity = models.ForeignKey(ManagedEntity, on_delete=models.CASCADE, null=True, verbose_name="管理实体")
     Operation_priority = [(0, '0级'), (1, '紧急'), (2, '优先'), (3, '一般')]
     priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name='优先级')
-    is_system_service = models.BooleanField(default=False, verbose_name='系统内置服务')
+    Service_type = [(0, '系统基础服务'), (1, '系统业务服务'), (2, '用户业务服务')]
+    service_type = models.PositiveSmallIntegerField(choices=Service_type, default=2, verbose_name='服务类型')
     role = models.ManyToManyField(Role, blank=True, verbose_name="服务岗位")
     History_services_display=[(0, '所有历史服务'), (1, '当日服务')]
     history_services_display = models.PositiveBigIntegerField(choices=History_services_display, default=0, blank=True, null=True, verbose_name='历史服务默认显示')
@@ -432,8 +433,7 @@ class Customer(HsscBase):
         '''
         获取客户历史服务列表
         '''
-        # return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(is_system_service=True))
-        return self.operation_proc_customer.filter(state=4)
+        return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(service_type=0))
 
     def get_recommended_services(self) -> 'QuerySet[RecommendedService]':
         '''
