@@ -203,6 +203,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_RESULT_BACKEND = 'django-db'
-
 # CELERY BEAT SETTINGS
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# CELERY 的启动工作数量设置
+# CELERY_WORKER_CONCURRENCY = 2
+# 每个worker执行了多少任务就会死掉，默认是无限
+# CELERY_WORKER_MAX_TASKS_PER_CHILD = 200

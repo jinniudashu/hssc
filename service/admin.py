@@ -65,8 +65,8 @@ class HsscFormAdmin(admin.ModelAdmin):
 class CustomerScheduleAdmin(HsscFormAdmin):
     exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym", 'customer_schedule_list', 'schedule_package', ]
     autocomplete_fields = ["scheduled_operator", ]
-    list_display = ['service', 'scheduled_time', 'scheduled_operator', 'overtime']
-    list_editable = ['scheduled_time', 'scheduled_operator', 'overtime']
+    list_display = ['service', 'scheduled_time', 'scheduled_operator', 'overtime', 'is_assigned']
+    list_editable = ['scheduled_time', 'scheduled_operator', 'overtime', 'is_assigned']
     readonly_fields = ['customer', 'service']
     ordering = ('scheduled_time',)
 
@@ -77,7 +77,7 @@ class CustomerScheduleInline(admin.TabularInline):
     model = CustomerSchedule
     extra = 0
     can_delete = False
-    exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", 'customer', 'schedule_package', ]
+    exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", 'customer', 'schedule_package', 'is_assigned']
     autocomplete_fields = ["scheduled_operator", ]
 
 
@@ -159,7 +159,12 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
                     scheduled_time=item['scheduled_time'],
                     scheduled_operator=item['scheduled_operator'],
                     overtime=item['overtime'],
+                    pid=schedule_package.pid
                 )
+
+            # 更新服务进程entry为'customerschedulelist/id/change/'
+            schedule_list.schedule_package.pid.entry = f'/clinic/service/customerschedulelist/{schedule_list.id}/change'
+            schedule_list.schedule_package.pid.save()
 
 clinic_site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
@@ -245,7 +250,7 @@ clinic_site.register(Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu, Shen_qing_kong_f
 
 class Ju_min_ji_ben_xin_xi_diao_chaAdmin(HsscFormAdmin):
     fieldssets = [
-        ("个人基本信息", {"fields": ("boolfield_shen_fen_zheng_hao_ma", "boolfield_ju_min_dang_an_hao", "boolfield_jia_ting_di_zhi", "boolfield_yi_liao_ic_ka_hao", "boolfield_lian_xi_dian_hua", "boolfield_xing_ming", "boolfield_chu_sheng_ri_qi", "boolfield_xing_bie", "boolfield_min_zu", "boolfield_hun_yin_zhuang_kuang", "boolfield_wen_hua_cheng_du", "boolfield_zhi_ye_zhuang_kuang", "boolfield_yi_liao_fei_yong_fu_dan", "boolfield_ju_zhu_lei_xing", "boolfield_xue_xing", "boolfield_qian_yue_jia_ting_yi_sheng", "boolfield_jia_ting_cheng_yuan_guan_xi", )}), ]
+        ("个人基本信息", {"fields": ("boolfield_xing_ming", "boolfield_chu_sheng_ri_qi", "boolfield_xing_bie", "boolfield_jia_ting_di_zhi", "boolfield_lian_xi_dian_hua", "boolfield_shen_fen_zheng_hao_ma", "boolfield_ju_min_dang_an_hao", "boolfield_yi_liao_ic_ka_hao", "boolfield_min_zu", "boolfield_hun_yin_zhuang_kuang", "boolfield_wen_hua_cheng_du", "boolfield_zhi_ye_zhuang_kuang", "boolfield_yi_liao_fei_yong_fu_dan", "boolfield_ju_zhu_lei_xing", "boolfield_xue_xing", "boolfield_qian_yue_jia_ting_yi_sheng", "boolfield_jia_ting_cheng_yuan_guan_xi", )}), ]
     autocomplete_fields = ["boolfield_qian_yue_jia_ting_yi_sheng", ]
     search_fields = ["name", "pym", ]
 
@@ -345,7 +350,7 @@ clinic_site.register(A6299, A6299Admin)
 class A6220Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("糖尿病监测评估", {"fields": ("boolfield_kong_fu_xue_tang_ping_jun_zhi", "boolfield_can_hou_2_xiao_shi_xue_tang_ping_jun_zhi", "boolfield_xue_ya_jian_ce_ping_gu", "boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu", )}), ]
+        ("糖尿病监测评估", {"fields": ("boolfield_kong_fu_xue_tang_ping_jun_zhi", "boolfield_can_hou_2_xiao_shi_xue_tang_ping_jun_zhi", "boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu", "boolfield_xue_ya_jian_ce_ping_gu", )}), ]
     radio_fields = {"boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu": admin.VERTICAL, }
 
 admin.site.register(A6220, A6220Admin)

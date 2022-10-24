@@ -306,8 +306,8 @@ class OperationProc(HsscBase):
         ordering = ['id']
 
     def __str__(self):
-		# return 作业名称-客户姓名
-        return "%s - %s - %s" %(self.id, self.service.label, self.creater.name)
+		# return 作业名称
+        return self.service.label
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -394,7 +394,7 @@ class StaffTodo(HsscBase):
         ordering = ['id']
 
     def __str__(self):
-        return "%s - %s - %s" %(self.id, self.service_label, self.customer_name)
+        return self.service_label
 
     def save(self, *args, **kwargs):
         if not self.label:
@@ -626,7 +626,7 @@ class HsscFormModel(HsscBase):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_customer', verbose_name="客户")
     operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_operator', verbose_name="操作员")
     creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_creater', verbose_name="创建者")
-    pid = models.OneToOneField(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程id")
+    pid = models.ForeignKey(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_pid', verbose_name="作业进程id")
     cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, related_name='%(class)s_sid', verbose_name="服务进程id")
     slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")

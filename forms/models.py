@@ -368,14 +368,14 @@ class A6219(HsscFormModel):
         
 
 class A6203(HsscFormModel):
-    boolfield_shen_fen_zheng_hao_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
-    boolfield_ju_min_dang_an_hao = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
-    boolfield_jia_ting_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
-    boolfield_yi_liao_ic_ka_hao = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
-    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     boolfield_xing_ming = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     boolfield_chu_sheng_ri_qi = models.DateField(null=True, blank=True, verbose_name='出生日期')
     boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
+    boolfield_jia_ting_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    boolfield_shen_fen_zheng_hao_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
+    boolfield_ju_min_dang_an_hao = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
+    boolfield_yi_liao_ic_ka_hao = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
     boolfield_min_zu = models.ForeignKey(Nationality, related_name='nationality_for_boolfield_min_zu_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='民族')
     boolfield_hun_yin_zhuang_kuang = models.ForeignKey(Marital_status, related_name='marital_status_for_boolfield_hun_yin_zhuang_kuang_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='婚姻状况')
     boolfield_wen_hua_cheng_du = models.ForeignKey(Education, related_name='education_for_boolfield_wen_hua_cheng_du_A6203', on_delete=models.CASCADE, null=True, blank=True, verbose_name='文化程度')
@@ -493,8 +493,8 @@ class Z6230(HsscFormModel):
 class A6220(HsscFormModel):
     boolfield_kong_fu_xue_tang_ping_jun_zhi = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖平均值')
     boolfield_can_hou_2_xiao_shi_xue_tang_ping_jun_zhi = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='餐后2小时血糖平均值')
-    boolfield_xue_ya_jian_ce_ping_gu = models.ForeignKey(Sui_fang_ping_gu, related_name='sui_fang_ping_gu_for_boolfield_xue_ya_jian_ce_ping_gu_A6220', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血压监测评估')
     boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu = models.ForeignKey(Tang_niao_bing_kong_zhi_xiao_guo_ping_gu, related_name='tang_niao_bing_kong_zhi_xiao_guo_ping_gu_for_boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu_A6220', on_delete=models.CASCADE, null=True, blank=False, verbose_name='糖尿病控制效果评估')
+    boolfield_xue_ya_jian_ce_ping_gu = models.ForeignKey(Sui_fang_ping_gu, related_name='sui_fang_ping_gu_for_boolfield_xue_ya_jian_ce_ping_gu_A6220', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血压监测评估')
     class Meta:
         verbose_name = '糖尿病监测评估'
         verbose_name_plural = verbose_name

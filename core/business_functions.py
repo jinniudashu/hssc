@@ -1,3 +1,5 @@
+from service.models import *
+
 def copy_previous_form_data(form, previous_form_data):
     # 获取父进程表单
     
@@ -45,7 +47,6 @@ def copy_previous_form_data(form, previous_form_data):
     return form
 
 
-from service.models import *
 # 创建服务表单实例
 def create_form_instance(operation_proc, passing_data, form_data):
     # 1. 创建空表单
@@ -180,7 +181,7 @@ def create_customer_service_log(form_data, form_instance):
     for field_name, field_val in form_data.items():
         # 根据字段类型做字段值的格式转换
         field_type = eval(f'FieldsType.{field_name}').value
-        if field_type == 'Datetime' or field_type == 'Date':  # 日期类型暂时不处理
+        if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
             form_data[field_name] = f'{field_val}'
         elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
             form_data[field_name] = str({field_val}) if field_val != None else '{}'
@@ -322,6 +323,41 @@ def update_staff_todo_list(operator):
     # 发送channel_message给操作员
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
 
+# 搜索给定关键字的客户基本信息列表
+def search_customer_profile_list(search_text):
+    from core.models import Customer, ManagedEntity
+    import json
+    # 获取客户实体对象
+    customer_entity = ManagedEntity.objects.get(name='customer')
+
+    # 获取客户基本信息表model，用于后续查询
+    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
+
+    # 获取客户基本信息的展示表头
+    customer_profile_fields = json.loads(customer_entity.header_fields_json)
+    # 构造客户基本信息表头
+    customer_profile_fields_header = ['用户名']
+    for field in customer_profile_fields:
+        customer_profile_fields_header.append(field['label'])
+
+    customer_profiles = []
+    for customer in Customer.objects.filter(name__icontains=search_text):
+        # 获取客户最新基本信息
+        profile = eval(customer_profile_model).objects.filter(customer=customer).last()
+
+        selected_profile = []
+        for field in customer_profile_fields:
+            selected_profile.append(getattr(profile, field['name']))
+
+        # 构造客户基本信息列表
+        customer_profile = {'id': customer.id, 'name': customer.name, 'selected_profile': selected_profile}
+        customer_profiles.append(customer_profile)
+
+    # 返回客户基本信息列表和表头
+    return customer_profiles, customer_profile_fields_header
+
+
+
 # 更新客户服务列表
 def update_customer_services_list(customer):
     # 已安排服务
@@ -348,9 +384,9 @@ def update_customer_services_list(customer):
     for proc in customer.get_history_services():
         service_label = proc.service.label
         if proc.service.name == 'CustomerSchedulePackage':
-            service_label = service_label + ' [ ' + proc.content_object.servicepackage.label + ' ] '
+            service_label = service_label + ' -- ' + proc.content_object.servicepackage.label
         elif proc.service.name == 'CustomerSchedule':
-            service_label = service_label + ' [ ' + proc.content_object.service.label + ' ] '
+            service_label = service_label + ' -- ' + proc.content_object.service.label
 
         history_services.append({
             'service_entry': proc.entry,

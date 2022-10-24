@@ -1,14 +1,19 @@
 <table class="table">
     <thead>
     <tr>
-    <th>姓名</th>
-    <th>查看</th>
+    {% for header in customer_profile_fields_header %}
+    <th>{{ header }}</th>
+    {% endfor %}
+    <!-- <th>操作</th> -->
     </tr>
     </thead>
     <tbody>
-        {% for customer in customers %} 
+        {% for customer in customer_profiles %} 
         <tr >
             <td> {{ customer.name }} </td>
+            {% for value in customer.selected_profile %} 
+                <td> {{ value }} </td>
+            {% endfor %}
             <td> <a href="customer_service/{{ customer.id }}">查看</a> </td>
         </tr >
         {% endfor %}

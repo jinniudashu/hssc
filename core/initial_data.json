@@ -1208,7 +1208,7 @@
             "app_name": "service",
             "model_name": "Customer",
             "base_form": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
-            "header_fields_json": "[{\"name\": \"boolfield_jia_ting_di_zhi\", \"label\": \"\\u5bb6\\u5ead\\u5730\\u5740\"}, {\"name\": \"boolfield_lian_xi_dian_hua\", \"label\": \"\\u8054\\u7cfb\\u7535\\u8bdd\"}, {\"name\": \"boolfield_xing_ming\", \"label\": \"\\u59d3\\u540d\"}, {\"name\": \"boolfield_chu_sheng_ri_qi\", \"label\": \"\\u51fa\\u751f\\u65e5\\u671f\"}, {\"name\": \"boolfield_xing_bie\", \"label\": \"\\u6027\\u522b\"}]",
+            "header_fields_json": "[{\"name\": \"boolfield_xing_ming\", \"label\": \"\\u59d3\\u540d\"}, {\"name\": \"boolfield_chu_sheng_ri_qi\", \"label\": \"\\u51fa\\u751f\\u65e5\\u671f\"}, {\"name\": \"boolfield_xing_bie\", \"label\": \"\\u6027\\u522b\"}, {\"name\": \"boolfield_jia_ting_di_zhi\", \"label\": \"\\u5bb6\\u5ead\\u5730\\u5740\"}, {\"name\": \"boolfield_lian_xi_dian_hua\", \"label\": \"\\u8054\\u7cfb\\u7535\\u8bdd\"}]",
             "header_fields": [
                 "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",

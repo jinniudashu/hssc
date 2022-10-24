@@ -139,12 +139,6 @@ def jinshuju_post(request, **kwargs):
     return response
 
 
-def test_celery(request):
-    from core.tasks import test_task
-    test_task.delay()
-    return HttpResponse('ok')
-
-
 # # 微信消息接口
 # from rest_framework.views import APIView
 # import redis

@@ -70,14 +70,18 @@ class ClinicSite(admin.AdminSite):
     # 搜索客户，返回客户列表
     def search_customers(self, request):
         from django.db.models import Q
+        from core.business_functions import search_customer_profile_list
         # 从request.POST获取search
         print('request.POST:', request.POST)
         search_text = request.POST.get('search')
         context = {}
         if search_text is None or search_text == '':
-            context['customers'] = None
+            context['customer_profiles'] = None
         else:
-            context['customers'] = Customer.objects.filter(name__icontains=search_text)
+            # 获取客户基本信息
+            customer_profiles, customer_profile_fields_header = search_customer_profile_list(search_text)
+            context['customer_profiles'] = customer_profiles
+            context['customer_profile_fields_header'] = customer_profile_fields_header
         return render(request, 'customers_list.html', context)
 
     # 搜索服务，返回服务/服务包列表
