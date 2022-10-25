@@ -25,7 +25,7 @@ def check_proc_awaiting_timeout(self):
         # 获取进程的计划执行时间
         scheduled_time = proc.scheduled_time
         # 获取受理时限
-        working_hours = proc.service.working_hours
+        working_hours = proc.working_hours
         if working_hours:
             # 计算超时时间
             timeout_time = scheduled_time + working_hours
@@ -43,7 +43,7 @@ def check_proc_awaiting_timeout(self):
         # 获取进程的计划执行时间
         scheduled_time = proc.scheduled_time
         # 获取超时时限
-        overtime = proc.service.overtime
+        overtime = proc.overtime
         if overtime:
             # 计算超时时间
             timeout_time = scheduled_time + overtime
@@ -61,9 +61,7 @@ def check_proc_awaiting_timeout(self):
         scheduled_time__lte=timezone.now() + timedelta(days=7),
         is_assigned=False,
     )
-    print('7天内的客户日程安排增加到任务队列:', schedules)
     for schedule in schedules:
-
         '''
         生成后续服务
         '''

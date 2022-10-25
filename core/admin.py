@@ -182,6 +182,8 @@ class ClinicSite(admin.AdminSite):
             creater=current_operator,  # 创建者
             state=2,  # 进程状态：运行
             content_type=content_type,  # 内容类型
+            overtime=service.overtime,  # 超时时间
+            working_hours=service.working_hours,  # 工作时间
         )
 
         # 2. 创建服务计划安排: CustomerSchedule
@@ -218,6 +220,8 @@ class ClinicSite(admin.AdminSite):
             creater=current_operator,  # 创建者
             state=2,  # 进程状态：运行
             content_type=content_type,  # 内容类型
+            overtime=service.overtime,  # 超时时间
+            working_hours=service.working_hours,  # 工作时间
         )
 
         # 2. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft

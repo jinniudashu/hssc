@@ -291,6 +291,8 @@ class OperationProc(HsscBase):
     contract_service_proc = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程")  # 服务进程id: spid
     form_slugs = models.JSONField(blank=True, null=True, verbose_name="表单索引")
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划执行时间")
+    overtime = models.DurationField(blank=True, null=True, verbose_name='超期时限')
+    working_hours = models.DurationField(blank=True, null=True, verbose_name='工时')
     acceptance_timeout = models.BooleanField(default=False, blank=True, null=True, verbose_name="受理超时")
     completion_timeout = models.BooleanField(default=False, blank=True, null=True, verbose_name="完成超时")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")

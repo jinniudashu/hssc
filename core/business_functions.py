@@ -122,6 +122,8 @@ def create_service_proc(**kwargs):
             parent_proc=parent_proc,
             contract_service_proc=kwargs.get('contract_service_proc'),
             content_type=kwargs['content_type'],
+            overtime=kwargs['service'].overtime,  # 超时时间
+            working_hours=kwargs['service'].working_hours,  # 工作时间
         )
     else:
         new_proc=OperationProc.objects.create(
@@ -133,6 +135,8 @@ def create_service_proc(**kwargs):
             scheduled_time=kwargs['scheduled_time'],
             contract_service_proc=kwargs.get('contract_service_proc'),
             content_type=kwargs['content_type'],
+            overtime=kwargs['service'].overtime,  # 超时时间
+            working_hours=kwargs['service'].working_hours,  # 工作时间
         )
     # Here postsave signal in service.models
     # 更新允许作业岗位
