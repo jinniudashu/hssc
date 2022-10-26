@@ -650,7 +650,6 @@ class Medicine(HsscPymBase):
         return self.label
 
 
-
 class HsscFormModel(HsscBase):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_customer', verbose_name="客户")
     operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='%(class)s_operator', verbose_name="操作员")

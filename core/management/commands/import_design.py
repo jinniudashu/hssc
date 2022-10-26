@@ -10,8 +10,8 @@ class Command(BaseCommand):
         '''
         print('开始导入脚本')
         # SOURCECODE_URL = 'http://design-dental.tpacn.com/define_backup/source_codes_list/'
-        # SOURCECODE_URL = 'http://design-clinic.tpacn.com/define_backup/source_codes_list/'
-        SOURCECODE_URL = 'http://127.0.0.1:8001/define_backup/source_codes_list/'
+        SOURCECODE_URL = 'http://design-clinic.tpacn.com/define_backup/source_codes_list/'
+        # SOURCECODE_URL = 'http://127.0.0.1:8001/define_backup/source_codes_list/'
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         source_code =json.loads(res_json['code'])
