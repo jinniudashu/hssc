@@ -89,26 +89,22 @@ class ClinicSite(admin.AdminSite):
         # 从request.POST获取search
         print('request.POST:', request.POST)
         search_text = request.POST.get('search')
+
         context = {}
-        # if search_text is None or search_text == '':
-        #     context['services'] = None
-        # else:
         context['services'] = [
             {
                 'id': service.id, 
                 'label': service.label,
                 'enable_queue_counter': service.enable_queue_counter,
                 'queue_count': OperationProc.objects.get_service_queue_count(service)
-            } for service in Service.objects.filter(Q(service_type__in=[1,2]) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
-        ]
-        
+            } for service in Service.objects.filter(Q(service_type=2) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
+        ]        
         context['service_packages'] = [
             {
                 'id': service_package.id, 
                 'label': service_package.label,
             } for service_package in ServicePackage.objects.filter(Q(label__icontains=search_text) | Q(pym__icontains=search_text))
         ]
-
         context['customer_id'] = kwargs['customer_id']
 
         return render(request, 'services_list.html', context)

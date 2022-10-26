@@ -3,7 +3,7 @@ import json
 
 from core.models import *
 from icpc.models import Icpc
-from service.models import Yao_pin_ji_ben_xin_xi_biao
+# from service.models import Yao_pin_ji_ben_xin_xi_biao
 
 test_user_data = {
     'user': [
@@ -142,7 +142,8 @@ class Command(BaseCommand):
             ServiceSpec,
             ServiceRule,
             ExternalServiceMapping,
-            Yao_pin_ji_ben_xin_xi_biao,
+            # Yao_pin_ji_ben_xin_xi_biao,
+            Medicine,
         ]
         for model in initial_models:
             print(model._meta.model_name)
