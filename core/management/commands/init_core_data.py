@@ -129,6 +129,7 @@ class Command(BaseCommand):
             initial_data = json.loads(f.read())
 
         initial_models=[
+            SystemOperand,
             CycleUnit,
             Role,
             BuessinessForm,
@@ -137,12 +138,9 @@ class Command(BaseCommand):
             BuessinessFormsSetting,
             ServicePackage,
             ServicePackageDetail,
-            SystemOperand,
             EventRule,
-            ServiceSpec,
             ServiceRule,
             ExternalServiceMapping,
-            # Yao_pin_ji_ben_xin_xi_biao,
             Medicine,
         ]
         for model in initial_models:

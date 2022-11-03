@@ -7,9 +7,13 @@ from pypinyin import Style, lazy_pinyin
 
 # 自定义管理器：设计数据备份、恢复
 class HsscBackupManager(models.Manager):
-    def backup_data(self):
+    def backup_data(self, queryset=None):
         backup_data = []
-        for item in self.all():
+        
+        if queryset is None:
+            queryset = self.all()
+            
+        for item in queryset:
             item_dict = model_to_dict(item)
 
             # 遍历模型非多对多字段，如果是外键，则用外键的hssc_id替换外键id
@@ -179,7 +183,6 @@ class FieldsType(Enum):
     boolfield_ju_min_dang_an_hao = "String"  # 居民档案号
     boolfield_jia_ting_di_zhi = "String"  # 家庭地址
     boolfield_yi_liao_ic_ka_hao = "String"  # 医疗ic卡号
-    boolfield_jian_kang_dang_an_bian_hao = "String"  # 健康档案编号
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = "String"  # 家庭签约服务协议
     boolfield_yao_pin_bian_ma = "String"  # 药品编码
     boolfield_yao_pin_gui_ge = "String"  # 药品规格
@@ -223,7 +226,6 @@ class FieldsType(Enum):
     boolfield_tang_hua_xue_hong_dan_bai = "Numbers"  # 糖化血红蛋白
     boolfield_kong_fu_xue_tang = "Numbers"  # 空腹血糖
     boolfield_shu_zhang_ya = "Numbers"  # 舒张压
-    boolfield_niao_wei_liang_bai_dan_bai = "Numbers"  # 尿微量白蛋白
     boolfield_yao_wei = "Numbers"  # 腰围
     boolfield_dang_qian_pai_dui_ren_shu = "Numbers"  # 当前排队人数
     boolfield_yu_ji_deng_hou_shi_jian = "Numbers"  # 预计等候时间
@@ -234,7 +236,6 @@ class FieldsType(Enum):
     boolfield_shu_xue_ri_qi = "Date"  # 输血日期
     boolfield_wai_shang_ri_qi = "Date"  # 外伤日期
     boolfield_que_zhen_shi_jian = "Datetime"  # 确诊时间
-    boolfield_bao_zhi_qi = "Date"  # 保质期
     boolfield_chu_sheng_ri_qi = "Date"  # 出生日期
     boolfield_yu_yue_shi_jian = "Datetime"  # 预约时间
     boolfield_zhu_she_ri_qi = "Datetime"  # 注射日期
@@ -259,7 +260,6 @@ class FieldsType(Enum):
     boolfield_xing_ge_qing_xiang = "dictionaries.Character"  # 性格倾向
     boolfield_dui_mu_qian_sheng_huo_he_gong_zuo_man_yi_ma = "dictionaries.Satisfaction"  # 对目前生活和工作满意吗
     boolfield_dui_zi_ji_de_shi_ying_neng_li_man_yi_ma = "dictionaries.Satisfaction"  # 对自己的适应能力满意吗
-    boolfield_shi_fou_neng_de_dao_qin_you_de_gu_li_he_zhi_chi = "dictionaries.Frequency"  # 是否能得到亲友的鼓励和支持
     boolfield_yin_jiu_pin_ci = "dictionaries.Frequency"  # 饮酒频次
     boolfield_xi_yan_pin_ci = "dictionaries.Frequency"  # 吸烟频次
     boolfield_jue_de_zi_shen_jian_kang_zhuang_kuang_ru_he = "dictionaries.State_degree"  # 觉得自身健康状况如何
@@ -280,32 +280,15 @@ class FieldsType(Enum):
     boolfield_kou_chun = "dictionaries.Lips"  # 口唇
     boolfield_chi_lie = "dictionaries.Dentition"  # 齿列
     boolfield_yan_bu = "dictionaries.Pharynx"  # 咽部
-    boolfield_sheng_huo_shi_jian = "dictionaries.Life_event"  # 生活事件
     boolfield_xia_zhi_shui_zhong = "dictionaries.Edema"  # 下肢水肿
     boolfield_ke_neng_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 可能诊断
     boolfield_pai_chu_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 排除诊断
-    boolfield_di_yi_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 第一诊断
-    T4504 = "icpc.Icpc8_other_health_interventions"  # 健康教育
-    boolfield_fen_zhen_que_ren = "dictionaries.Qian_dao_que_ren"  # 分诊确认
     boolfield_chang_yong_zheng_zhuang = "dictionaries.Chang_yong_zheng_zhuang"  # 常用症状
     boolfield_tang_niao_bing_zheng_zhuang = "dictionaries.Tang_niao_bing_zheng_zhuang"  # 糖尿病症状
-    boolfield_yin_jiu_qing_kuang = "dictionaries.Yin_jiu_qing_kuang"  # 饮酒情况
-    boolfield_xi_yan_qing_kuang = "dictionaries.Xi_yan_qing_kuang"  # 吸烟情况
     boolfield_qian_dao_que_ren = "dictionaries.Qian_dao_que_ren"  # 签到确认
     boolfield_shi_mian_qing_kuang = "dictionaries.Shi_mian_qing_kuang"  # 失眠情况
-    boolfield_da_bian_qing_kuang = "dictionaries.Da_bian_qing_kuang"  # 大便情况
     boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = "dictionaries.Ya_li_qing_kuang"  # 生活工作压力情况
-    boolfield_kong_qi_wu_ran_qing_kuang = "dictionaries.Kong_qi_wu_ran_qing_kuang"  # 空气污染情况
-    T4501 = "icpc.Icpc8_other_health_interventions"  # 营养干预
-    boolfield_zao_sheng_wu_ran_qing_kuang = "dictionaries.Zao_sheng_wu_ran_qing_kuang"  # 噪声污染情况
-    boolfield_shi_pin_he_yin_shui_an_quan_qing_kuang = "dictionaries.Shi_pin_he_yin_shui_an_quan_qing_kuang"  # 食品和饮水安全情况
-    boolfield_yin_shi_gui_lv_qing_kuang = "dictionaries.Yin_shi_gui_lv_qing_kuang"  # 饮食规律情况
-    boolfield_qi_ta_huan_jing_wu_ran_qing_kuang = "dictionaries.Qi_ta_huan_jing_wu_ran_qing_kuang"  # 其他环境污染情况
-    boolfield_qian_yue_yong_hu = "dictionaries.Qian_yue_qing_kuang"  # 签约用户
     boolfield_shi_fou_ji_xu_shi_yong = "dictionaries.Ji_xu_shi_yong_qing_kuang"  # 是否继续使用
-    boolfield_you_fou_you_man_xing_ji_bing = "dictionaries.Man_bing_diao_cha"  # 有否有慢性疾病
-    boolfield_jian_kang_zhuang_kuang_zi_wo_ping_jia = "dictionaries.Jian_kang_zi_wo_ping_jia"  # 健康状况自我评价
-    T4502 = "icpc.Icpc8_other_health_interventions"  # 运动干预
     boolfield_qian_yue_que_ren = "dictionaries.Qian_yue_que_ren"  # 签约确认
     boolfield_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 责任人
     boolfield_xue_ya_jian_ce_ping_gu = "dictionaries.Sui_fang_ping_gu"  # 血压监测评估
@@ -323,5 +306,5 @@ class FieldsType(Enum):
     boolfield_yi_chuan_bing_shi_cheng_yuan = "dictionaries.Qin_shu_guan_xi"  # 遗传病史成员
     boolfield_fu_wu_xiang_mu_ming_cheng = "icpc.Icpc4_physical_examination_and_tests"  # 服务项目名称
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
-    boolfield_yao_pin_ming = "core.Medicine"  # 药品名
+    boolfield_yao_pin_ming = "entities.Yao_pin_ji_ben_xin_xi_biao"  # 药品名
     boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu = "dictionaries.Tang_niao_bing_kong_zhi_xiao_guo_ping_gu"  # 糖尿病控制效果评估

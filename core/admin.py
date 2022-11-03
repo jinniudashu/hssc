@@ -1,7 +1,6 @@
-from urllib import response
 from django.contrib import admin
 from django.shortcuts import render, redirect
-from django.urls import path, reverse
+from django.urls import path
 from django.contrib.auth.models import User
 
 from core.models import *
@@ -18,14 +17,14 @@ class ClinicSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('receive_task/<int:proc_id>', self.receive_task),
-            path('customer_service/<int:customer_id>', self.customer_service),
+            path('receive_task/<int:proc_id>/', self.receive_task),
+            path('customer_service/<int:customer_id>/', self.customer_service),
             path('search_customers/', self.search_customers),
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
             path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', self.new_service, name='new_service'),
-            path('new_service_schedule/<int:customer_id>/<int:service_id>', self.new_service_schedule, name='new_service_schedule'),
-            path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>', self.new_service_package_schedule, name='new_service_package_schedule'),
-            path('update_customer_schedules/<int:customer_schedule_package_id>', self.update_customer_schedules, name='update_customer_schedules'),
+            path('new_service_schedule/<int:customer_id>/<int:service_id>/', self.new_service_schedule, name='new_service_schedule'),
+            path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>/', self.new_service_package_schedule, name='new_service_package_schedule'),
+            path('update_customer_schedules/<int:customer_schedule_package_id>/', self.update_customer_schedules, name='update_customer_schedules'),
         ]
         return my_urls + urls
 
@@ -383,7 +382,6 @@ class EventRuleAdmin(admin.ModelAdmin):
     readonly_fields = ['hssc_id']
     ordering = ('id',)
 
-admin.site.register(ServiceSpec)
 
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):

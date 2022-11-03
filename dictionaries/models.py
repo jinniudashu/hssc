@@ -125,12 +125,6 @@ class Pharynx(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Life_event(DictBase):
-    class Meta:
-        verbose_name = '生活事件'
-        verbose_name_plural = verbose_name
-
-
 class Edema(DictBase):
     class Meta:
         verbose_name = '水肿情况'
@@ -197,18 +191,6 @@ class Tang_niao_bing_zheng_zhuang(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Xi_yan_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '吸烟情况'
-        verbose_name_plural = verbose_name
-
-
-class Yin_jiu_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '饮酒情况'
-        verbose_name_plural = verbose_name
-
-
 class Qian_dao_que_ren(DictBase):
     class Meta:
         verbose_name = '签到确认'
@@ -221,69 +203,15 @@ class Shi_mian_qing_kuang(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Da_bian_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '大便情况'
-        verbose_name_plural = verbose_name
-
-
 class Ya_li_qing_kuang(DictBase):
     class Meta:
         verbose_name = '压力情况'
         verbose_name_plural = verbose_name
 
 
-class Kong_qi_wu_ran_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '空气污染情况'
-        verbose_name_plural = verbose_name
-
-
-class Zao_sheng_wu_ran_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '噪声污染情况'
-        verbose_name_plural = verbose_name
-
-
-class Shi_pin_he_yin_shui_an_quan_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '食品和饮水安全情况'
-        verbose_name_plural = verbose_name
-
-
-class Yin_shi_gui_lv_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '饮食规律情况'
-        verbose_name_plural = verbose_name
-
-
-class Qi_ta_huan_jing_wu_ran_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '其他环境污染情况'
-        verbose_name_plural = verbose_name
-
-
 class Ji_xu_shi_yong_qing_kuang(DictBase):
     class Meta:
         verbose_name = '继续使用情况'
-        verbose_name_plural = verbose_name
-
-
-class Qian_yue_qing_kuang(DictBase):
-    class Meta:
-        verbose_name = '签约情况'
-        verbose_name_plural = verbose_name
-
-
-class Man_bing_diao_cha(DictBase):
-    class Meta:
-        verbose_name = '慢病调查'
-        verbose_name_plural = verbose_name
-
-
-class Jian_kang_zi_wo_ping_jia(DictBase):
-    class Meta:
-        verbose_name = '健康自我评价'
         verbose_name_plural = verbose_name
 
 
@@ -344,12 +272,6 @@ class Yao_pin_fen_lei(DictBase):
 class Fu_wu_jue_se(DictBase):
     class Meta:
         verbose_name = '服务角色'
-        verbose_name_plural = verbose_name
-
-
-class She_bei_shi_yong_fu_wu_gong_neng(DictBase):
-    class Meta:
-        verbose_name = '设备适用服务功能'
         verbose_name_plural = verbose_name
 
 

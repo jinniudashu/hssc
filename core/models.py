@@ -177,14 +177,6 @@ class EventRule(HsscBase):
         ordering = ['id']
 
 
-# 服务规格设置
-class ServiceSpec(HsscBase):
-    class Meta:
-        verbose_name = "服务规格"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-
 # 服务规则库
 class ServiceRule(HsscBase):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
@@ -202,7 +194,6 @@ class ServiceRule(HsscBase):
     interval_rule = models.PositiveSmallIntegerField(choices=Interval_rule_options, blank=True, null=True, verbose_name='间隔条件')
     interval_time = models.DurationField(blank=True, null=True, verbose_name="间隔时间", help_text='例如：3 days, 22:00:00')
     is_active = models.BooleanField(choices=[(False, '否'), (True, '是')], default=True, verbose_name='启用')
-    service_spec = models.ForeignKey(ServiceSpec, on_delete=models.CASCADE, null=True, verbose_name='服务规格')
 
     class Meta:
         verbose_name = '服务规则'

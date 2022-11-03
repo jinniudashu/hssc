@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'core',
     'dictionaries',
     'icpc',
-    # 'forms',
     'service',
 
     'hssc.apps.UniversalManagerApp',
