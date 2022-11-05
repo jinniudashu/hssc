@@ -446,8 +446,8 @@ clinic_site.register(Tang_niao_bing_zhuan_yong_wen_zhen, Tang_niao_bing_zhuan_yo
 class A3101Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("体格检查表", {"fields": ("boolfield_you_yan_shi_li", "boolfield_zuo_yan_shi_li", "boolfield_ti_wen", "boolfield_mai_bo", "boolfield_hu_xi_pin_lv", "boolfield_shen_gao", "boolfield_ti_zhong", "boolfield_ti_zhi_zhi_shu", "boolfield_shou_suo_ya", "boolfield_shu_zhang_ya", "boolfield_yao_wei", "boolfield_yun_dong_neng_li", "boolfield_zuo_er_ting_li", "boolfield_you_er_ting_li", "boolfield_kou_chun", "boolfield_chi_lie", "boolfield_yan_bu", "boolfield_xia_zhi_shui_zhong", )}), ]
-    radio_fields = {"boolfield_kou_chun": admin.VERTICAL, "boolfield_chi_lie": admin.VERTICAL, "boolfield_xia_zhi_shui_zhong": admin.VERTICAL, }
+        ("诊前检查表", {"fields": ("boolfield_ti_wen", "boolfield_mai_bo", "boolfield_hu_xi_pin_lv", "boolfield_shen_gao", "boolfield_ti_zhong", "boolfield_ti_zhi_zhi_shu", "boolfield_shou_suo_ya", "boolfield_shu_zhang_ya", "boolfield_yao_wei", "boolfield_yan_bu", "boolfield_xia_zhi_shui_zhong", )}), ]
+    radio_fields = {"boolfield_xia_zhi_shui_zhong": admin.VERTICAL, }
 
 admin.site.register(A3101, A3101Admin)
 clinic_site.register(A3101, A3101Admin)

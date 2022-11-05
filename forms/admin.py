@@ -173,7 +173,7 @@ class A6203Admin(admin.ModelAdmin):
 admin.site.register(A6203, A6203Admin)
 
 class A3001Admin(admin.ModelAdmin):
-        radio_fields = {"boolfield_kou_chun": admin.VERTICAL, "boolfield_chi_lie": admin.VERTICAL, "boolfield_xia_zhi_shui_zhong": admin.VERTICAL, }
+        radio_fields = {"boolfield_xia_zhi_shui_zhong": admin.VERTICAL, }
 
 admin.site.register(A3001, A3001Admin)
 

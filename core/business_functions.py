@@ -37,12 +37,14 @@ def copy_previous_form_data(form, previous_form_data):
     # 向当前进程表单写入交集多对多字段内容
     for field_name in copy_fields_name_m2m:
         m2m_objs = previous_form_data.get(field_name)
-        # 如果m2m_objs不是列表类型，转换为列表类型，以适配外部表单copy_form_data
-        if not isinstance(m2m_objs, list):
-            m2m_objs = [m2m_objs]
-
+        print('copy_fields_name_m2m', copy_fields_name_m2m, 'field_name', field_name, 'm2m_objs', m2m_objs)
         if m2m_objs:
-            exec(f'form.{field_name}.add(*m2m_objs)')
+            if m2m_objs.__class__.__name__ == 'QuerySet':
+                exec(f'form.{field_name}.add(*m2m_objs)')
+            else:
+                # 如果m2m_objs不是QuerySet和List类型，转换为列表类型，以适配外部表单copy_form_data
+                if not isinstance(m2m_objs, list):
+                    m2m_objs = [m2m_objs]
 
     return form
 
@@ -74,6 +76,7 @@ def create_form_instance(operation_proc, passing_data, form_data):
 
     # 3. 如果passing_data>0, copy父进程表单数据
     if passing_data > 0 and form_data:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
+        print('copy_previous_form_data:', 'form_instance:', form_instance, 'form_data:', form_data)
         copy_previous_form_data(form_instance, form_data)
 
     return form_instance
@@ -143,6 +146,7 @@ def create_service_proc(**kwargs):
     role = kwargs['service'].role.all()
     new_proc.role.set(role)
 
+    print('create_form_instance:', 'new_proc:', new_proc, 'kwargs["passing_data"]:', kwargs['passing_data'], 'form_data:', form_data)
     form = create_form_instance(new_proc, kwargs['passing_data'], form_data)
     # 更新OperationProc服务进程的form实例信息
     new_proc.object_id = form.id
@@ -321,6 +325,7 @@ def update_staff_todo_list(operator):
                 'customer_phone': todo.customer_phone,
                 'customer_address': todo.customer_address,
                 'completion_timeout': todo.operation_proc.completion_timeout,
+                # 'scheduled_time': todo.scheduled_time,
             })
         items.append({'title': _item['title'], 'todos': todos})
 

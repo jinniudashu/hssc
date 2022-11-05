@@ -526,27 +526,20 @@ class Tang_niao_bing_zhuan_yong_wen_zhen(HsscFormModel):
 
         
 class A3101(HsscFormModel):
-    boolfield_you_yan_shi_li = models.CharField(max_length=255, null=True, blank=True, verbose_name='右眼视力')
-    boolfield_zuo_yan_shi_li = models.CharField(max_length=255, null=True, blank=True, verbose_name='左眼视力')
-    boolfield_ti_wen = models.IntegerField(null=True, blank=True, verbose_name='体温')
+    boolfield_ti_wen = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='体温')
     boolfield_mai_bo = models.IntegerField(null=True, blank=True, verbose_name='脉搏')
     boolfield_hu_xi_pin_lv = models.IntegerField(null=True, blank=True, verbose_name='呼吸频率')
-    boolfield_shen_gao = models.IntegerField(null=True, blank=True, verbose_name='身高')
-    boolfield_ti_zhong = models.IntegerField(null=True, blank=True, verbose_name='体重')
-    boolfield_ti_zhi_zhi_shu = models.IntegerField(null=True, blank=True, verbose_name='体质指数')
+    boolfield_shen_gao = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='身高')
+    boolfield_ti_zhong = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='体重')
+    boolfield_ti_zhi_zhi_shu = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='体质指数')
     boolfield_shou_suo_ya = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
     boolfield_shu_zhang_ya = models.IntegerField(null=True, blank=True, verbose_name='舒张压')
     boolfield_yao_wei = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='腰围')
-    boolfield_yun_dong_neng_li = models.ForeignKey(Exercise_time, related_name='exercise_time_for_boolfield_yun_dong_neng_li_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='运动能力')
-    boolfield_zuo_er_ting_li = models.ForeignKey(Hearing, related_name='hearing_for_boolfield_zuo_er_ting_li_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='左耳听力')
-    boolfield_you_er_ting_li = models.ForeignKey(Hearing, related_name='hearing_for_boolfield_you_er_ting_li_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='右耳听力')
-    boolfield_kou_chun = models.ForeignKey(Lips, related_name='lips_for_boolfield_kou_chun_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='口唇')
-    boolfield_chi_lie = models.ForeignKey(Dentition, related_name='dentition_for_boolfield_chi_lie_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='齿列')
     boolfield_yan_bu = models.ForeignKey(Pharynx, related_name='pharynx_for_boolfield_yan_bu_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='咽部')
     boolfield_xia_zhi_shui_zhong = models.ForeignKey(Edema, related_name='edema_for_boolfield_xia_zhi_shui_zhong_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='下肢水肿')
 
     class Meta:
-        verbose_name = '体格检查/部分健康评估'
+        verbose_name = '诊前检查'
         verbose_name_plural = verbose_name
 
     def __str__(self):

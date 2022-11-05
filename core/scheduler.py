@@ -307,7 +307,7 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             proc_params['form_data'] = kwargs['form_data']  # 表单数据
 
-            print('Debug: _create_next_service: proc_params:', proc_params['passing_data'])
+            print('Debug: _create_next_service(proc_params):', proc_params)
 
             # 创建新的服务作业进程
             new_proc = create_service_proc(**proc_params)
