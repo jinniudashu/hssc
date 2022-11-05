@@ -45,6 +45,7 @@
                         <th scope="col">居民档案号</th>
                         <th scope="col">姓名</th>
                         <th scope="col">服务项目</th>
+                        <th v-if="item.title == '本周服务安排'" scope="col">计划时间</th>
                         <th scope="col">联系电话</th>
                         <th scope="col">家庭地址</th>
                     </tr>
@@ -54,6 +55,7 @@
                         <td>{{ todo.customer_number }}</td>
                         <td><a :href="'customer_service/' + todo.customer_id">{{ todo.customer_name }}</a></td>
                         <td :class="{'red': todo.completion_timeout}">{{ todo.service_label }}</td>
+                        <td v-if="item.title == '本周服务安排'">{{ todo.scheduled_time }}</td>
                         <td>{{ todo.customer_phone }}</td>
                         <td>{{ todo.customer_address }}</td>
                     </tr>

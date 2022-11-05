@@ -325,7 +325,7 @@ def update_staff_todo_list(operator):
                 'customer_phone': todo.customer_phone,
                 'customer_address': todo.customer_address,
                 'completion_timeout': todo.operation_proc.completion_timeout,
-                # 'scheduled_time': todo.scheduled_time,
+                'scheduled_time': todo.scheduled_time.strftime("%m.%d %H:%M"),
             })
         items.append({'title': _item['title'], 'todos': todos})
 
