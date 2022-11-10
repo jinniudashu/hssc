@@ -100,44 +100,12 @@ class Dorsal_artery_pulsationAdmin(admin.ModelAdmin):
 clinic_site.register(Dorsal_artery_pulsation, Dorsal_artery_pulsationAdmin)
 
 
-@admin.register(Hearing)
-class HearingAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Hearing, HearingAdmin)
-
-
-@admin.register(Lips)
-class LipsAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Lips, LipsAdmin)
-
-
-@admin.register(Dentition)
-class DentitionAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Dentition, DentitionAdmin)
-
-
 @admin.register(Pharynx)
 class PharynxAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
     list_display = ["value"]
 
 clinic_site.register(Pharynx, PharynxAdmin)
-
-
-@admin.register(Life_event)
-class Life_eventAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Life_event, Life_eventAdmin)
 
 
 @admin.register(Edema)
@@ -228,22 +196,6 @@ class Tang_niao_bing_zheng_zhuangAdmin(admin.ModelAdmin):
 clinic_site.register(Tang_niao_bing_zheng_zhuang, Tang_niao_bing_zheng_zhuangAdmin)
 
 
-@admin.register(Xi_yan_qing_kuang)
-class Xi_yan_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Xi_yan_qing_kuang, Xi_yan_qing_kuangAdmin)
-
-
-@admin.register(Yin_jiu_qing_kuang)
-class Yin_jiu_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Yin_jiu_qing_kuang, Yin_jiu_qing_kuangAdmin)
-
-
 @admin.register(Qian_dao_que_ren)
 class Qian_dao_que_renAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
@@ -260,14 +212,6 @@ class Shi_mian_qing_kuangAdmin(admin.ModelAdmin):
 clinic_site.register(Shi_mian_qing_kuang, Shi_mian_qing_kuangAdmin)
 
 
-@admin.register(Da_bian_qing_kuang)
-class Da_bian_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Da_bian_qing_kuang, Da_bian_qing_kuangAdmin)
-
-
 @admin.register(Ya_li_qing_kuang)
 class Ya_li_qing_kuangAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
@@ -276,76 +220,12 @@ class Ya_li_qing_kuangAdmin(admin.ModelAdmin):
 clinic_site.register(Ya_li_qing_kuang, Ya_li_qing_kuangAdmin)
 
 
-@admin.register(Kong_qi_wu_ran_qing_kuang)
-class Kong_qi_wu_ran_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Kong_qi_wu_ran_qing_kuang, Kong_qi_wu_ran_qing_kuangAdmin)
-
-
-@admin.register(Zao_sheng_wu_ran_qing_kuang)
-class Zao_sheng_wu_ran_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Zao_sheng_wu_ran_qing_kuang, Zao_sheng_wu_ran_qing_kuangAdmin)
-
-
-@admin.register(Shi_pin_he_yin_shui_an_quan_qing_kuang)
-class Shi_pin_he_yin_shui_an_quan_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Shi_pin_he_yin_shui_an_quan_qing_kuang, Shi_pin_he_yin_shui_an_quan_qing_kuangAdmin)
-
-
-@admin.register(Yin_shi_gui_lv_qing_kuang)
-class Yin_shi_gui_lv_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Yin_shi_gui_lv_qing_kuang, Yin_shi_gui_lv_qing_kuangAdmin)
-
-
-@admin.register(Qi_ta_huan_jing_wu_ran_qing_kuang)
-class Qi_ta_huan_jing_wu_ran_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Qi_ta_huan_jing_wu_ran_qing_kuang, Qi_ta_huan_jing_wu_ran_qing_kuangAdmin)
-
-
 @admin.register(Ji_xu_shi_yong_qing_kuang)
 class Ji_xu_shi_yong_qing_kuangAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
     list_display = ["value"]
 
 clinic_site.register(Ji_xu_shi_yong_qing_kuang, Ji_xu_shi_yong_qing_kuangAdmin)
-
-
-@admin.register(Qian_yue_qing_kuang)
-class Qian_yue_qing_kuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Qian_yue_qing_kuang, Qian_yue_qing_kuangAdmin)
-
-
-@admin.register(Man_bing_diao_cha)
-class Man_bing_diao_chaAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Man_bing_diao_cha, Man_bing_diao_chaAdmin)
-
-
-@admin.register(Jian_kang_zi_wo_ping_jia)
-class Jian_kang_zi_wo_ping_jiaAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Jian_kang_zi_wo_ping_jia, Jian_kang_zi_wo_ping_jiaAdmin)
 
 
 @admin.register(Qian_yue_que_ren)
@@ -426,14 +306,6 @@ class Fu_wu_jue_seAdmin(admin.ModelAdmin):
     list_display = ["value"]
 
 clinic_site.register(Fu_wu_jue_se, Fu_wu_jue_seAdmin)
-
-
-@admin.register(She_bei_shi_yong_fu_wu_gong_neng)
-class She_bei_shi_yong_fu_wu_gong_nengAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(She_bei_shi_yong_fu_wu_gong_neng, She_bei_shi_yong_fu_wu_gong_nengAdmin)
 
 
 @admin.register(Qin_shu_guan_xi)

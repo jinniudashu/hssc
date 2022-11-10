@@ -455,7 +455,7 @@ clinic_site.register(A3101, A3101Admin)
 class A6502Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("门诊分诊", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_qian_dao_que_ren", "boolfield_ze_ren_ren", )}), ]
+        ("门诊分诊", {"fields": ("boolfield_qian_dao_que_ren", "boolfield_yu_yue_shi_jian", "boolfield_ze_ren_ren", )}), ]
     autocomplete_fields = ["boolfield_ze_ren_ren", ]
     radio_fields = {"boolfield_qian_dao_que_ren": admin.VERTICAL, }
 

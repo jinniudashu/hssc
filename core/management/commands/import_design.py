@@ -9,12 +9,11 @@ class Command(BaseCommand):
         获取Hssc源码，创建脚本文件
         '''
         # 导入项目的项目id
-        project_id = 1
+        project_name = 'Clinic'
         
         print('开始导入脚本')
-        # SOURCECODE_URL = 'http://design-dental.tpacn.com/define_backup/source_codes_list/'
-        SOURCECODE_URL = 'http://design-clinic.tpacn.com/define_backup/source_codes_list/'
-        # SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{project_id}/'
+        # SOURCECODE_URL = f'http://design.tpacn.com/define_backup/source_codes_list/{project_name}/'
+        SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{project_name}/'
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         source_code =json.loads(res_json['code'])

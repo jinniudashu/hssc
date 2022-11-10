@@ -7,9 +7,13 @@ from pypinyin import Style, lazy_pinyin
 
 # 自定义管理器：设计数据备份、恢复
 class HsscBackupManager(models.Manager):
-    def backup_data(self):
+    def backup_data(self, queryset=None):
         backup_data = []
-        for item in self.all():
+        # 如果没有指定查询集，则备份所有记录
+        if queryset is None:
+            queryset = self.all()
+            
+        for item in queryset:
             item_dict = model_to_dict(item)
 
             # 遍历模型非多对多字段，如果是外键，则用外键的hssc_id替换外键id
@@ -48,11 +52,12 @@ class HsscBackupManager(models.Manager):
         return backup_data
 
     def restore_data(self, data):
+        print('开始恢复：', self.model.__name__)
+        self.all().delete()
+
         if data is None or len(data) == 0:
             return 'No data to restore'
 
-        print('开始恢复：', self.model.__name__)
-        self.all().delete()
         for item_dict in data:
             item = {}
             # 遍历模型非多对多字段，如果是外键，则用外键的hssc_id找回关联对象
@@ -92,6 +97,68 @@ class HsscBackupManager(models.Manager):
                     eval(f'_instance.{field.name}').set(objects)
             
         return f'{self.model} 已恢复'
+
+    def merge_data(self, data):
+        if data is None or len(data) == 0:
+            return 'No data to restore'
+
+        print('开始合并：', self.model.__name__)
+        new_data_hssc_id = []
+        for item_dict in data:
+            # 用hssc_id判断当前记录是否已存在
+            try:
+                if self.model.__name__ == 'FormComponentsSetting':                    
+                    print('formcomponentssetting:', item_dict)
+                    new_data_hssc_id.append(item_dict['hssc_id'])
+                else:
+                    _instance = self.get(hssc_id=item_dict['hssc_id'])
+            except self.model.DoesNotExist:
+                _instance = None
+                print('正在合并：',item_dict)
+                
+                # 保存添加记录的hssc_id，用于生成queryset
+                new_data_hssc_id.append(item_dict['hssc_id'])
+                
+                item = {}
+                # 遍历模型非多对多字段，如果是外键，则用外键的hssc_id找回关联对象
+                for field in self.model._meta.fields:
+                    if item_dict.get(field.name) is not None:  # 如果字段不为空，进行检查替换                    
+                        if field.name in ['name_icpc', 'icpc']:  # 如果是ICPC外键，用icpc_code获取对象
+                            _object = field.related_model.objects.get(icpc_code=item_dict[field.name])
+                            item[field.name] = _object
+                        else:
+                            if (field.one_to_one or field.many_to_one):  # 一对一、多对一字段, 用hssc_id获取对象
+                                try:
+                                    _object = field.related_model.objects.get(hssc_id=item_dict[field.name])
+                                except field.related_model.DoesNotExist:  # ManagedEntity.base_form中的hssc_id可能为空
+                                    _object = None
+                                item[field.name] = _object
+                            elif field.__class__.__name__ == 'DurationField':  # duration字段
+                                item[field.name] = self._parse_timedelta(item_dict[field.name])
+                            else:
+                                item[field.name] = item_dict[field.name]
+
+                # 插入构造好的记录，不包括多对多字段
+                _instance=self.model.objects.create(**item)
+
+                # 遍历模型多对多字段，用hssc_id或icpc_code获取对象
+                for field in self.model._meta.many_to_many:
+                    if item_dict.get(field.name):  # 如果字段不为空，进行检查替换
+                        objects = []
+                        # 如果是ICPC外键，用icpc_code获取对象，否则用hssc_id获取对象
+                        if field.name in ['name_icpc', 'icpc']:
+                            for _object in field.related_model.objects.filter(icpc_code__in=item_dict[field.name]):
+                                objects.append(_object)
+                        else:
+                            for _object in field.related_model.objects.filter(hssc_id__in=item_dict[field.name]):
+                                objects.append(_object)
+
+                        # 将对象添加到多对多字段中
+                        eval(f'_instance.{field.name}').set(objects)
+
+        # 返回新增记录的hssc_id
+        return new_data_hssc_id
+
 
     @staticmethod
     def _parse_timedelta(stamp):
@@ -162,7 +229,6 @@ class FieldsType(Enum):
     boolfield_shen_fen_zheng_hao_ma = "String"  # 身份证号码
     boolfield_yao_pin_ming_cheng = "String"  # 药品名称
     boolfield_yong_yao_pin_ci = "String"  # 用药频次
-    boolfield_you_yan_shi_li = "String"  # 右眼视力
     boolfield_bing_qing_bu_chong_miao_shu = "String"  # 病情补充描述
     boolfield_mei_tian_gong_zuo_ji_gong_zuo_wang_fan_zong_shi_chang = "String"  # 每天工作及工作往返总时长
     boolfield_ping_jun_shui_mian_shi_chang = "String"  # 平均睡眠时长
@@ -175,11 +241,9 @@ class FieldsType(Enum):
     boolfield_zhi_ye_shi_jian = "String"  # 执业时间
     boolfield_yong_hu_ming = "String"  # 用户名
     boolfield_mi_ma = "String"  # 密码
-    boolfield_zuo_yan_shi_li = "String"  # 左眼视力
     boolfield_ju_min_dang_an_hao = "String"  # 居民档案号
     boolfield_jia_ting_di_zhi = "String"  # 家庭地址
     boolfield_yi_liao_ic_ka_hao = "String"  # 医疗ic卡号
-    boolfield_jian_kang_dang_an_bian_hao = "String"  # 健康档案编号
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = "String"  # 家庭签约服务协议
     boolfield_yao_pin_bian_ma = "String"  # 药品编码
     boolfield_yao_pin_gui_ge = "String"  # 药品规格
@@ -223,7 +287,6 @@ class FieldsType(Enum):
     boolfield_tang_hua_xue_hong_dan_bai = "Numbers"  # 糖化血红蛋白
     boolfield_kong_fu_xue_tang = "Numbers"  # 空腹血糖
     boolfield_shu_zhang_ya = "Numbers"  # 舒张压
-    boolfield_niao_wei_liang_bai_dan_bai = "Numbers"  # 尿微量白蛋白
     boolfield_yao_wei = "Numbers"  # 腰围
     boolfield_dang_qian_pai_dui_ren_shu = "Numbers"  # 当前排队人数
     boolfield_yu_ji_deng_hou_shi_jian = "Numbers"  # 预计等候时间
@@ -234,7 +297,6 @@ class FieldsType(Enum):
     boolfield_shu_xue_ri_qi = "Date"  # 输血日期
     boolfield_wai_shang_ri_qi = "Date"  # 外伤日期
     boolfield_que_zhen_shi_jian = "Datetime"  # 确诊时间
-    boolfield_bao_zhi_qi = "Date"  # 保质期
     boolfield_chu_sheng_ri_qi = "Date"  # 出生日期
     boolfield_yu_yue_shi_jian = "Datetime"  # 预约时间
     boolfield_zhu_she_ri_qi = "Datetime"  # 注射日期
@@ -255,11 +317,9 @@ class FieldsType(Enum):
     boolfield_ju_zhu_lei_xing = "dictionaries.Type_of_residence"  # 居住类型
     boolfield_xue_xing = "dictionaries.Blood_type"  # 血型
     boolfield_qian_yue_jia_ting_yi_sheng = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 签约家庭医生
-    boolfield_yun_dong_neng_li = "dictionaries.Exercise_time"  # 运动能力
     boolfield_xing_ge_qing_xiang = "dictionaries.Character"  # 性格倾向
     boolfield_dui_mu_qian_sheng_huo_he_gong_zuo_man_yi_ma = "dictionaries.Satisfaction"  # 对目前生活和工作满意吗
     boolfield_dui_zi_ji_de_shi_ying_neng_li_man_yi_ma = "dictionaries.Satisfaction"  # 对自己的适应能力满意吗
-    boolfield_shi_fou_neng_de_dao_qin_you_de_gu_li_he_zhi_chi = "dictionaries.Frequency"  # 是否能得到亲友的鼓励和支持
     boolfield_yin_jiu_pin_ci = "dictionaries.Frequency"  # 饮酒频次
     boolfield_xi_yan_pin_ci = "dictionaries.Frequency"  # 吸烟频次
     boolfield_jue_de_zi_shen_jian_kang_zhuang_kuang_ru_he = "dictionaries.State_degree"  # 觉得自身健康状况如何
@@ -274,38 +334,17 @@ class FieldsType(Enum):
     boolfield_yan_di = "dictionaries.Normality"  # 眼底
     boolfield_zuo_jiao = "dictionaries.Dorsal_artery_pulsation"  # 左脚
     boolfield_you_jiao = "dictionaries.Dorsal_artery_pulsation"  # 右脚
-    boolfield_zuo_er_ting_li = "dictionaries.Hearing"  # 左耳听力
-    boolfield_you_er_ting_li = "dictionaries.Hearing"  # 右耳听力
     boolfield_shou_shu_ming_cheng = "icpc.Icpc7_treatments"  # 手术名称
-    boolfield_kou_chun = "dictionaries.Lips"  # 口唇
-    boolfield_chi_lie = "dictionaries.Dentition"  # 齿列
     boolfield_yan_bu = "dictionaries.Pharynx"  # 咽部
-    boolfield_sheng_huo_shi_jian = "dictionaries.Life_event"  # 生活事件
     boolfield_xia_zhi_shui_zhong = "dictionaries.Edema"  # 下肢水肿
     boolfield_ke_neng_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 可能诊断
     boolfield_pai_chu_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 排除诊断
-    boolfield_di_yi_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 第一诊断
-    T4504 = "icpc.Icpc8_other_health_interventions"  # 健康教育
-    boolfield_fen_zhen_que_ren = "dictionaries.Qian_dao_que_ren"  # 分诊确认
     boolfield_chang_yong_zheng_zhuang = "dictionaries.Chang_yong_zheng_zhuang"  # 常用症状
     boolfield_tang_niao_bing_zheng_zhuang = "dictionaries.Tang_niao_bing_zheng_zhuang"  # 糖尿病症状
-    boolfield_yin_jiu_qing_kuang = "dictionaries.Yin_jiu_qing_kuang"  # 饮酒情况
-    boolfield_xi_yan_qing_kuang = "dictionaries.Xi_yan_qing_kuang"  # 吸烟情况
     boolfield_qian_dao_que_ren = "dictionaries.Qian_dao_que_ren"  # 签到确认
     boolfield_shi_mian_qing_kuang = "dictionaries.Shi_mian_qing_kuang"  # 失眠情况
-    boolfield_da_bian_qing_kuang = "dictionaries.Da_bian_qing_kuang"  # 大便情况
     boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = "dictionaries.Ya_li_qing_kuang"  # 生活工作压力情况
-    boolfield_kong_qi_wu_ran_qing_kuang = "dictionaries.Kong_qi_wu_ran_qing_kuang"  # 空气污染情况
-    T4501 = "icpc.Icpc8_other_health_interventions"  # 营养干预
-    boolfield_zao_sheng_wu_ran_qing_kuang = "dictionaries.Zao_sheng_wu_ran_qing_kuang"  # 噪声污染情况
-    boolfield_shi_pin_he_yin_shui_an_quan_qing_kuang = "dictionaries.Shi_pin_he_yin_shui_an_quan_qing_kuang"  # 食品和饮水安全情况
-    boolfield_yin_shi_gui_lv_qing_kuang = "dictionaries.Yin_shi_gui_lv_qing_kuang"  # 饮食规律情况
-    boolfield_qi_ta_huan_jing_wu_ran_qing_kuang = "dictionaries.Qi_ta_huan_jing_wu_ran_qing_kuang"  # 其他环境污染情况
-    boolfield_qian_yue_yong_hu = "dictionaries.Qian_yue_qing_kuang"  # 签约用户
     boolfield_shi_fou_ji_xu_shi_yong = "dictionaries.Ji_xu_shi_yong_qing_kuang"  # 是否继续使用
-    boolfield_you_fou_you_man_xing_ji_bing = "dictionaries.Man_bing_diao_cha"  # 有否有慢性疾病
-    boolfield_jian_kang_zhuang_kuang_zi_wo_ping_jia = "dictionaries.Jian_kang_zi_wo_ping_jia"  # 健康状况自我评价
-    T4502 = "icpc.Icpc8_other_health_interventions"  # 运动干预
     boolfield_qian_yue_que_ren = "dictionaries.Qian_yue_que_ren"  # 签约确认
     boolfield_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 责任人
     boolfield_xue_ya_jian_ce_ping_gu = "dictionaries.Sui_fang_ping_gu"  # 血压监测评估
@@ -323,5 +362,5 @@ class FieldsType(Enum):
     boolfield_yi_chuan_bing_shi_cheng_yuan = "dictionaries.Qin_shu_guan_xi"  # 遗传病史成员
     boolfield_fu_wu_xiang_mu_ming_cheng = "icpc.Icpc4_physical_examination_and_tests"  # 服务项目名称
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
-    boolfield_yao_pin_ming = "core.Medicine"  # 药品名
+    boolfield_yao_pin_ming = "entities.Yao_pin_ji_ben_xin_xi_biao"  # 药品名
     boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu = "dictionaries.Tang_niao_bing_kong_zhi_xiao_guo_ping_gu"  # 糖尿病控制效果评估

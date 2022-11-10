@@ -61,29 +61,9 @@ class Dorsal_artery_pulsationSerializer(serializers.ModelSerializer):
         model = Dorsal_artery_pulsation
         fields = 'value'
 
-class HearingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hearing
-        fields = 'value'
-
-class LipsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lips
-        fields = 'value'
-
-class DentitionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Dentition
-        fields = 'value'
-
 class PharynxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pharynx
-        fields = 'value'
-
-class Life_eventSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Life_event
         fields = 'value'
 
 class EdemaSerializer(serializers.ModelSerializer):
@@ -141,16 +121,6 @@ class Tang_niao_bing_zheng_zhuangSerializer(serializers.ModelSerializer):
         model = Tang_niao_bing_zheng_zhuang
         fields = 'value'
 
-class Xi_yan_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Xi_yan_qing_kuang
-        fields = 'value'
-
-class Yin_jiu_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yin_jiu_qing_kuang
-        fields = 'value'
-
 class Qian_dao_que_renSerializer(serializers.ModelSerializer):
     class Meta:
         model = Qian_dao_que_ren
@@ -161,59 +131,14 @@ class Shi_mian_qing_kuangSerializer(serializers.ModelSerializer):
         model = Shi_mian_qing_kuang
         fields = 'value'
 
-class Da_bian_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Da_bian_qing_kuang
-        fields = 'value'
-
 class Ya_li_qing_kuangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ya_li_qing_kuang
         fields = 'value'
 
-class Kong_qi_wu_ran_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Kong_qi_wu_ran_qing_kuang
-        fields = 'value'
-
-class Zao_sheng_wu_ran_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Zao_sheng_wu_ran_qing_kuang
-        fields = 'value'
-
-class Shi_pin_he_yin_shui_an_quan_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Shi_pin_he_yin_shui_an_quan_qing_kuang
-        fields = 'value'
-
-class Yin_shi_gui_lv_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yin_shi_gui_lv_qing_kuang
-        fields = 'value'
-
-class Qi_ta_huan_jing_wu_ran_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Qi_ta_huan_jing_wu_ran_qing_kuang
-        fields = 'value'
-
 class Ji_xu_shi_yong_qing_kuangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ji_xu_shi_yong_qing_kuang
-        fields = 'value'
-
-class Qian_yue_qing_kuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Qian_yue_qing_kuang
-        fields = 'value'
-
-class Man_bing_diao_chaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Man_bing_diao_cha
-        fields = 'value'
-
-class Jian_kang_zi_wo_ping_jiaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Jian_kang_zi_wo_ping_jia
         fields = 'value'
 
 class Qian_yue_que_renSerializer(serializers.ModelSerializer):
@@ -264,11 +189,6 @@ class Yao_pin_fen_leiSerializer(serializers.ModelSerializer):
 class Fu_wu_jue_seSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fu_wu_jue_se
-        fields = 'value'
-
-class She_bei_shi_yong_fu_wu_gong_nengSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = She_bei_shi_yong_fu_wu_gong_neng
         fields = 'value'
 
 class Qin_shu_guan_xiSerializer(serializers.ModelSerializer):
