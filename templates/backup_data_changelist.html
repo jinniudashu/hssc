@@ -1,0 +1,12 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <form action="backup_data/" method="POST">
+            {% csrf_token %}
+                <button type="submit">备份业务数据</button>
+        </form>
+    </div>
+    <br />
+    {{ block.super }}
+{% endblock %}

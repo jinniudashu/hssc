@@ -459,3 +459,66 @@ class ChengBaoRenYuanQingDanResource(resources.ModelResource):
 class ChengBaoRenYuanQingDanAdmin(ImportExportModelAdmin):
     resource_class = ChengBaoRenYuanQingDanResource
 admin.site.register(ChengBaoRenYuanQingDan, ChengBaoRenYuanQingDanAdmin)
+
+
+
+# **********************************************************************************************************************
+# 业务数据备份
+# **********************************************************************************************************************
+
+from django.http import HttpResponseRedirect
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from time import time
+
+# 每个需要备份的model都需要在这里添加
+# 不备份在其他表新增内容时自动插入内容的表，Component, RelateFieldModel
+Backup_models = [
+    Customer,
+    ContractServiceProc,
+    OperationProc,
+    StaffTodo,
+    Institution,
+    Staff,
+    Workgroup,
+    CustomerServiceLog,
+    RecommendedService,
+    Message,
+]
+
+@admin.register(BackupData)
+class BackupDataAdmin(admin.ModelAdmin):
+    list_display = ('name', 'create_time')
+    # 增加一个自定义按钮“备份设计数据”
+    change_list_template = 'backup_data_changelist.html'
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('backup_data/', self.backup_data),
+        ]
+        return my_urls + urls
+
+    # 备份设计数据
+    def backup_data(self, request):
+        backup_data = {}
+        for model in Backup_models:
+            _model = model.__name__.lower()
+            backup_data[_model]=model.objects.backup_data()
+            json.dumps(backup_data[_model], indent=4, ensure_ascii=False, cls=DjangoJSONEncoder)
+        
+        backup_name = str(int(time()))
+        # 写入数据库
+        result = BackupData.objects.create(
+            name = backup_name,
+            code = json.dumps(backup_data, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder),
+        )
+        print(f'设计数据备份成功, id: {result}')
+
+        # 写入json文件
+        print('开始写入json文件...')
+        with open(f'./core/backup/data_{backup_name}.json', 'w', encoding='utf-8') as f:
+            json.dump(backup_data, f, indent=4, ensure_ascii=False, cls=DjangoJSONEncoder)
+            print(f'ICPC写入成功, id: {backup_name}')
+
+        return HttpResponseRedirect("../")
