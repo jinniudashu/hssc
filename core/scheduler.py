@@ -342,7 +342,6 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'推荐服务作业: {obj}'
 
-
         def _send_wechat_template_message(**kwargs):
             '''
             发送公众号模板消息

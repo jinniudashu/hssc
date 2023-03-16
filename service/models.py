@@ -2,8 +2,10 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, HsscBaseFormModel, Staff, Institution, Service, ServicePackage, Customer, CycleUnit, Medicine
+from core.models import HsscFormModel, Staff, Institution, Service, ServicePackage, Customer, CycleUnit, Medicine
 from core.hsscbase_class import HsscBase
+
+from pypinyin import lazy_pinyin
 
 class CustomerSchedulePackage(HsscFormModel):
     servicepackage = models.ForeignKey(ServicePackage, on_delete=models.CASCADE, verbose_name='服务包')
@@ -88,7 +90,7 @@ class Can_hou_2_xiao_shi_xue_tang(HsscFormModel):
         return self.customer.name
 
         
-class Ji_gou_ji_ben_xin_xi_biao(HsscBaseFormModel):
+class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_lian_xi_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
     boolfield_ji_gou_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构编码')
     boolfield_ji_gou_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构名称')
@@ -99,6 +101,7 @@ class Ji_gou_ji_ben_xin_xi_biao(HsscBaseFormModel):
     boolfield_xing_zheng_qu_hua_gui_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='行政区划归属')
     boolfield_fa_ding_fu_ze_ren = models.CharField(max_length=255, null=True, blank=True, verbose_name='法定负责人')
     boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
     class Meta:
         verbose_name = '机构基本信息维护'
@@ -107,8 +110,16 @@ class Ji_gou_ji_ben_xin_xi_biao(HsscBaseFormModel):
     def __str__(self):
         return self.customer.name
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name
+
         
-class Zhi_yuan_ji_ben_xin_xi_biao(HsscBaseFormModel):
+class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_shen_fen_zheng_hao_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
     boolfield_zhi_ye_zi_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='执业资质')
     boolfield_zhuan_chang = models.CharField(max_length=255, null=True, blank=True, verbose_name='专长')
@@ -118,6 +129,7 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscBaseFormModel):
     boolfield_xing_ming = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     boolfield_suo_shu_ji_gou = models.ForeignKey(Institution, related_name='institution_for_boolfield_suo_shu_ji_gou_zhi_yuan_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='所属机构')
     boolfield_fu_wu_jue_se = models.ManyToManyField(Fu_wu_jue_se, related_name='fu_wu_jue_se_for_boolfield_fu_wu_jue_se_zhi_yuan_ji_ben_xin_xi_biao', blank=True, verbose_name='服务角色')
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
     class Meta:
         verbose_name = '职员基本信息维护'
@@ -125,6 +137,14 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscBaseFormModel):
 
     def __str__(self):
         return self.customer.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name
 
         
 class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_cha(HsscFormModel):
@@ -145,7 +165,7 @@ class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_cha(HsscFormModel):
         return self.customer.name
 
         
-class She_bei_ji_ben_xin_xi_ji_lu(HsscBaseFormModel):
+class She_bei_ji_ben_xin_xi_ji_lu(HsscFormModel):
     boolfield_she_bei_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='设备编码')
     boolfield_sheng_chan_chang_jia = models.CharField(max_length=255, null=True, blank=True, verbose_name='生产厂家')
     boolfield_she_bei_fu_wu_dan_wei_hao_shi = models.CharField(max_length=255, null=True, blank=True, verbose_name='设备服务单位耗时')
@@ -154,6 +174,7 @@ class She_bei_ji_ben_xin_xi_ji_lu(HsscBaseFormModel):
     boolfield_she_bei_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='设备名称')
     boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_she_bei_shi_yong_fu_wu_gong_neng_she_bei_ji_ben_xin_xi_ji_lu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='设备适用服务功能')
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
     class Meta:
         verbose_name = '设备基本信息维护'
@@ -162,8 +183,16 @@ class She_bei_ji_ben_xin_xi_ji_lu(HsscBaseFormModel):
     def __str__(self):
         return self.customer.name
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name
+
         
-class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
+class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscFormModel):
     boolfield_lian_xi_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系地址')
     boolfield_gong_ying_shang_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='供应商编码')
     boolfield_zhu_yao_gong_ying_chan_pin = models.CharField(max_length=255, null=True, blank=True, verbose_name='主要供应产品')
@@ -171,6 +200,7 @@ class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     boolfield_gong_ying_shang_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='供应商名称')
     boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
     boolfield_xin_yu_ping_ji = models.ForeignKey(Xin_yu_ping_ji, related_name='xin_yu_ping_ji_for_boolfield_xin_yu_ping_ji_gong_ying_shang_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='信誉评级')
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
     class Meta:
         verbose_name = '物料供应商基本信息维护'
@@ -179,8 +209,16 @@ class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     def __str__(self):
         return self.customer.name
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name
+
         
-class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
+class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_yao_pin_tong_yong_ming = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品通用名')
     boolfield_yao_pin_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='药品名称')
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
@@ -196,6 +234,7 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
     boolfield_xiao_shou_ji_liang_dan_wei = models.ForeignKey(Yao_pin_dan_wei, related_name='yao_pin_dan_wei_for_boolfield_xiao_shou_ji_liang_dan_wei_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='销售计量单位')
     boolfield_yong_yao_tu_jing = models.ForeignKey(Yong_yao_tu_jing, related_name='yong_yao_tu_jing_for_boolfield_yong_yao_tu_jing_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='用药途径')
     boolfield_yao_pin_fen_lei = models.ForeignKey(Yao_pin_fen_lei, related_name='yao_pin_fen_lei_for_boolfield_yao_pin_fen_lei_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品分类')
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
     class Meta:
         verbose_name = '药品基本信息维护'
@@ -203,6 +242,14 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscBaseFormModel):
 
     def __str__(self):
         return self.customer.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name
 
         
 class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
@@ -220,7 +267,7 @@ class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
         return self.customer.name
 
         
-class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
+class Ju_min_ji_ben_xin_xi_diao_cha(HsscFormModel):
     boolfield_xing_ming = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
     boolfield_chu_sheng_ri_qi = models.DateField(null=True, blank=True, verbose_name='出生日期')
     boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
@@ -238,6 +285,7 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
     boolfield_xue_xing = models.ForeignKey(Blood_type, related_name='blood_type_for_boolfield_xue_xing_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='血型')
     boolfield_qian_yue_jia_ting_yi_sheng = models.ForeignKey(Staff, related_name='staff_for_boolfield_qian_yue_jia_ting_yi_sheng_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约家庭医生')
     boolfield_jia_ting_cheng_yuan_guan_xi = models.ForeignKey(Family_relationship, related_name='family_relationship_for_boolfield_jia_ting_cheng_yuan_guan_xi_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家庭成员关系')
+    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
 
     class Meta:
         verbose_name = '居民基本信息调查'
@@ -245,6 +293,14 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscBaseFormModel):
 
     def __str__(self):
         return self.customer.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
+        super().save(*args, **kwargs)
+    
+    def natural_key(self):
+        return self.name
 
         
 class Shu_ye_zhu_she(HsscFormModel):
