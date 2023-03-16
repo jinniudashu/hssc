@@ -674,19 +674,6 @@ class HsscFormModel(HsscBase):
         return reverse(f'{self.__class__.__name__}_detail_url', kwargs={'slug':self.slug})
 
 
-class HsscBaseFormModel(HsscFormModel):
-    pym = models.CharField(max_length=255, blank=True, null=True, verbose_name="拼音码")
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.pym = ''.join(lazy_pinyin(self.label, style=Style.FIRST_LETTER))
-        super().save(*args, **kwargs)
-    
-    def natural_key(self):
-        return self.name
-
-
-
 # 保险服务专用
 # 承保人员清单
 class ChengBaoRenYuanQingDan(models.Model):
