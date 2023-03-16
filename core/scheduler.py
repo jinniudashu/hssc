@@ -317,37 +317,31 @@ def operand_finished_handler(sender, **kwargs):
             messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单')
 
             return f'创建服务作业进程: {new_proc}'
-
-        def _recommend_next_service(**kwargs):
+        
+        def _recommend_next_service(**kwargs):  # 由GPT-4重构的推荐服务函数
             '''
             推荐后续服务
             '''
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
             
+            # 创建新的推荐服务条目前先删除此客户的历史推荐服务条目
+            # 获取当前客户的所有推荐服务条目并删除
+            RecommendedService.objects.filter(customer=operation_proc.customer).delete()
+
             # 创建新的推荐服务条目
-            try:
-                obj = RecommendedService.objects.get(
-                    service=kwargs['next_service'],  # 推荐的服务
-                    customer=operation_proc.customer,  # 客户
-                    cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-                )
-                obj.pid=operation_proc
-                obj.counter+=1
-                obj.passing_data=kwargs['passing_data']
-                obj.save()
-            except RecommendedService.DoesNotExist:
-                obj = RecommendedService(
-                    service=kwargs['next_service'],  # 推荐的服务
-                    customer=operation_proc.customer,  # 客户
-                    creater=kwargs['operator'],  # 创建者
-                    pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                    cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-                    passing_data=kwargs['passing_data']
-                )
-                obj.save()
+            obj = RecommendedService(
+                service=kwargs['next_service'],  # 推荐的服务
+                customer=operation_proc.customer,  # 客户
+                creater=kwargs['operator'],  # 创建者
+                pid=operation_proc,  # 当前进程是被推荐服务的父进程
+                cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+                passing_data=kwargs['passing_data']
+            )
+            obj.save()
 
             return f'推荐服务作业: {obj}'
+
 
         def _send_wechat_template_message(**kwargs):
             '''
