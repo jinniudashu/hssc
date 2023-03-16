@@ -661,6 +661,12 @@ class HsscFormModel(HsscBase):
             self.created_time = timezone.now()
         self.updated_time = timezone.now()
 
+        # 检查label字段，如果为空，则将label赋值为verbose_name和customer.name的组合，以'-'分隔
+        if not self.label:
+            self.label = f"{self._meta.verbose_name}-{self.customer.name}"
+        if not self.name:
+            self.name = f"{type(self).__name__}-{self.hssc_id}"
+
         return super().save(*args, **kwargs)
 
     def get_autocomplete_fields(self):

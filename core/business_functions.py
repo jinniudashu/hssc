@@ -366,9 +366,29 @@ def search_customer_profile_list(search_text):
     return customer_profiles, customer_profile_fields_header
 
 
-
 # 更新客户服务列表
 def update_customer_services_list(customer):
+    from core.models import HsscFormModel
+
+    # 判断服务表单是否已经完成，已完成返回空字符串''，否则返回'*'
+    def is_service_form_completed(proc):
+        content_object = proc.content_object
+        # 表单所有字段
+        content_object_fields = [field.name for field in content_object._meta.get_fields()]
+
+        # 表单基类字段
+        base_class_fields = [field.name for field in HsscFormModel._meta.get_fields()]
+
+        # 表单非基类字段
+        non_base_class_fields = [field for field in content_object_fields if field not in base_class_fields]
+
+        for field in non_base_class_fields:
+            field_value = getattr(content_object, field)
+            if field_value is None or field_value == '':
+                return '*'
+
+        return ''
+
     # 已安排服务
     scheduled_services = [
         {
@@ -380,14 +400,6 @@ def update_customer_services_list(customer):
     ]
 
     # 历史服务
-    # history_services =  [
-    #     {
-    #         'service_entry': proc.entry,
-    #         'service_label': proc.service.label,
-    #         'service_id': proc.service.id,
-    #     } for proc in customer.get_history_services()
-    # ]
-
     history_services = []
     # 如果service是安排服务包和安排服务，则获取所安排服务包或服务的label，并添加到service.label后面；否则获取service的label
     for proc in customer.get_history_services():
@@ -397,9 +409,13 @@ def update_customer_services_list(customer):
         elif proc.service.name == 'CustomerSchedule':
             service_label = service_label + ' -- ' + proc.content_object.service.label
 
+        # 判断服务表单是否已经完成
+        is_completed = is_service_form_completed(proc)
+
+        # 构造历史服务列表
         history_services.append({
             'service_entry': proc.entry,
-            'service_label': service_label,
+            'service_label': f'{service_label} {is_completed}',
             'service_id': proc.service.id,
         })
 

@@ -201,6 +201,13 @@
             "hssc_id": "de1daa3e-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "bxry",
             "description": null
+        },
+        {
+            "label": "牙科诊所管理员",
+            "name": "ya_ke_zhen_suo",
+            "hssc_id": "e862fdba-de2f-11ec-8b9f-323f52c35ca4",
+            "pym": "ykzsgly",
+            "description": null
         }
     ],
     "buessinessform": [
@@ -2888,7 +2895,7 @@
             "description": "症状 in {'烦渴','多尿','多食','乏力','体重减轻','体重增加','皮肤感染'}",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'多尿', '体重减轻', '体重增加', '多食', '烦渴', '乏力', '皮肤感染'}.intersection(boolfield_zheng_zhuang)) >= 1",
+            "expression": "len({'多食', '体重增加', '烦渴', '皮肤感染', '体重减轻', '乏力', '多尿'}.intersection(boolfield_zheng_zhuang)) == 1",
             "expression_fields": "boolfield_zheng_zhuang"
         },
         {
@@ -2899,7 +2906,7 @@
             "description": "症状 == {'烦渴','多尿'} or 症状 == {'烦渴','体重增加'} or 症状 == {'多尿','皮肤感染'} or 症状 == {'烦渴','皮肤感染'}",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'烦渴', '多尿', '体重增加', '皮肤感染'}.intersection(boolfield_zheng_zhuang)) >= 2",
+            "expression": "len({'皮肤感染', '体重增加', '多尿', '烦渴'}.intersection(boolfield_zheng_zhuang)) == 2",
             "expression_fields": "boolfield_zheng_zhuang"
         },
         {

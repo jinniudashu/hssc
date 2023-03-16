@@ -9,7 +9,7 @@ from pypinyin import Style, lazy_pinyin
 class HsscBackupManager(models.Manager):
     def backup_data(self, queryset=None):
         backup_data = []
-        # 如果没有指定查询集，则备份所有记录
+        
         if queryset is None:
             queryset = self.all()
             
