@@ -521,6 +521,52 @@ def get_services_schedule(instances):
     return schedule
 
 
+# 估算服务项目的计划执行时间
+def eval_scheduled_time(_service, _operator):
+    from django.utils import timezone
+    from core.models import OperationProc, StaffTodo
+
+    scheduled_time = timezone.now()
+
+    if _operator:  # 若存在operator，返回operator当天的todo队列的队尾时间，
+        # 查询当天最后一条服务进程
+        last_staff_todo = StaffTodo.objects.filter(
+            operator=_operator,
+            state__in=[0, 1, 2, 3],
+            scheduled_time__date=timezone.now().date()
+        ).order_by('-scheduled_time').first()
+
+        # 如果存在当天最后一条服务进程，则计算队列时间，否则返回当前时间
+        if last_staff_todo:
+            if last_staff_todo.operation_proc.service.working_hours:
+                scheduled_time = last_staff_todo.scheduled_time + last_staff_todo.operation_proc.service.working_hours
+            else:
+                scheduled_time = last_staff_todo.scheduled_time
+
+            if scheduled_time < timezone.now():
+                scheduled_time = timezone.now()
+
+    else:  # 否则返回当天此服务进程的队列累加时间
+        # 查询当天最后一条同服务类型的服务进程
+        last_service_proc = OperationProc.objects.filter(
+            service=_service,
+            state__in=[0, 1, 2, 3],
+            scheduled_time__date=timezone.now().date()
+        ).order_by('-scheduled_time').first()
+
+        # 如果存在当天最后一条同服务类型的服务进程，则计算队列时间，否则返回当前时间
+        if last_service_proc:
+            if _service.working_hours:
+                scheduled_time = last_service_proc.scheduled_time + _service.working_hours
+            else:
+                scheduled_time = last_service_proc.scheduled_time
+
+            if scheduled_time < timezone.now():
+                scheduled_time = timezone.now()
+
+    return scheduled_time
+
+
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 
@@ -632,3 +678,4 @@ def keyword_search(s, keywords_list):
         search()
     keywords = sorted(set(match), key=match.index)
     return keywords
+

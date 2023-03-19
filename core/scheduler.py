@@ -285,7 +285,7 @@ def operand_finished_handler(sender, **kwargs):
             '''
             生成后续服务
             '''
-            from core.business_functions import create_service_proc, dispatch_operator
+            from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
             service = kwargs['next_service']
@@ -300,7 +300,10 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['creater'] = current_operator   # 创建者  
             proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
             proc_params['state'] = 0  # or 根据服务作业权限判断
-            proc_params['scheduled_time'] = timezone.now()  # 创建时间 or 根据服务作业逻辑判断
+
+            # 估算计划执行时间
+            proc_params['scheduled_time'] = eval_scheduled_time(service, service_operator)
+            
             proc_params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
             proc_params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
             proc_params['content_type'] = content_type

@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from core.models import OperationProc
 from service.models import CustomerSchedule
-from core.business_functions import create_service_proc, dispatch_operator
+from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
 
 @shared_task(bind=True)
 def test_task(self):
@@ -82,7 +82,8 @@ def check_proc_awaiting_timeout(self):
         proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
         proc_params['state'] = state  # or 根据服务作业权限判断
 
-        proc_params['scheduled_time'] = schedule.scheduled_time  # 创建时间 or 根据服务作业逻辑判断
+        # 估算计划执行时间
+        proc_params['scheduled_time'] = eval_scheduled_time(schedule.service, service_operator)
 
         proc_params['parent_proc'] = schedule.pid  # 安排服务/服务包进程是被创建服务进程的父进程
         proc_params['contract_service_proc'] = None  # 所属合约服务进程

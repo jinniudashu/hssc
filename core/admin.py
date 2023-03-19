@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.shortcuts import render, redirect
 from django.urls import path
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from core.models import *
 
@@ -114,7 +115,7 @@ class ClinicSite(admin.AdminSite):
         人工创建新服务：作业进程+表单进程
         从kwargs获取参数：customer_id, service_id
         '''
-        from core.business_functions import create_service_proc, dispatch_operator
+        from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
         # 从request获取参数：customer, service, operator
         customer = Customer.objects.get(id=kwargs['customer_id'])
         current_operator = User.objects.get(username=request.user).customer
@@ -129,7 +130,13 @@ class ClinicSite(admin.AdminSite):
         proc_params['creater'] = current_operator
         proc_params['operator'] = service_operator
         proc_params['state'] = 0  # or 0 根据服务作业权限判断
-        proc_params['scheduled_time'] = timezone.now() # or None 根据服务作业权限判断
+
+        # 如果当前操作员即是服务作业员，计划执行时间为当前时间，否则估算计划执行时间
+        if current_operator == service_operator:
+            proc_params['scheduled_time'] = timezone.now()
+        else:
+            proc_params['scheduled_time'] = eval_scheduled_time(service, service_operator)
+
         proc_params['contract_service_proc'] = None
         proc_params['content_type'] = content_type
         proc_params['form_data'] = None
@@ -163,6 +170,7 @@ class ClinicSite(admin.AdminSite):
 
     # 创建新的服务日程
     def new_service_schedule(self, request, **kwargs):
+        from core.business_functions import eval_scheduled_time
         # 1. 创建"安排服务计划"服务进程
         customer_id = kwargs['customer_id']
         customer = Customer.objects.get(id=customer_id)
@@ -175,6 +183,7 @@ class ClinicSite(admin.AdminSite):
             customer=customer,  # 客户
             operator=current_operator,  # 作业人员
             creater=current_operator,  # 创建者
+            scheduled_time=timezone.now(),  # 计划执行时间
             state=2,  # 进程状态：运行
             content_type=content_type,  # 内容类型
             overtime=service.overtime,  # 超时时间
@@ -183,13 +192,18 @@ class ClinicSite(admin.AdminSite):
 
         # 2. 创建服务计划安排: CustomerSchedule
         from service.models import CustomerSchedule
+        service=Service.objects.get(id=kwargs['service_id'])  # 服务
+
+        # 估算服务排队时间
+        scheduled_time = eval_scheduled_time(service, None)
         customerschedule = CustomerSchedule.objects.create(
             customer=customer,  # 客户
             operator=current_operator,  # 作业人员
             creater=current_operator,  # 创建者
             pid=new_proc,  # 服务作业进程
             cpid=None,
-            service=Service.objects.get(id=kwargs['service_id']),  # 服务
+            service=service,  # 服务
+            scheduled_time=scheduled_time,  # 计划执行时间
         )
 
         # 3. 更新OperationProc服务进程的form实例信息
