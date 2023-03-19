@@ -90,7 +90,7 @@ def create_service_proc(**kwargs):
     form_data = kwargs['form_data']
     if kwargs['passing_data'] in [1, 2]:
         # 获取父进程中api_fields不为空的表单, 并获取其中的进程控制信息api_fields
-        _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields]
+        _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields is not None and form.api_fields != 'null']
         api_fields = []
         for _form in _forms:
             api_fields.extend(json.loads(_form.api_fields))
