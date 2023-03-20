@@ -10,7 +10,7 @@ from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
 
 from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message, ChengBaoRenYuanQingDan
-from core.business_functions import field_name_replace
+from core.business_functions import field_name_replace, create_customer_schedule
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
 
 
@@ -425,3 +425,19 @@ def operand_finished_handler(sender, **kwargs):
             _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
             print('From check_rules 执行结果:', _result)
     
+
+    # 执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
+    # 1. 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
+    # 2. 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
+    current_service = operation_proc.service
+    if current_service.follow_up_required and current_service.follow_up_interval and current_service.follow_up_service:
+        # 构造参数
+        params = {
+            'customer': operation_proc.customer,
+            'service': current_service.follow_up_service,
+            'scheduled_time': timezone.now() + current_service.follow_up_interval,
+            'pid': operation_proc,
+        }
+        # 调用create_customer_schedule函数，创建客户服务日程
+        customer_schedule = create_customer_schedule(**params)
+        print('质控管理--创建客户服务日程:', customer_schedule)

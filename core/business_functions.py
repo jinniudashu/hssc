@@ -245,6 +245,10 @@ def dispatch_operator(customer, service, current_operator):
     from django.core.exceptions import ObjectDoesNotExist
     operator = None
 
+    # 系统自动生成客户服务日程时不传入操作员，直接返回None
+    if current_operator is None:
+        return None
+
     # 当前客户如有责任人，且责任人具有新增服务岗位权限，则开单给责任人
     charge_staff = customer.charge_staff
     if charge_staff:
@@ -519,6 +523,30 @@ def get_services_schedule(instances):
             })
 
     return schedule
+
+
+# 创建一条客户服务日程
+def create_customer_schedule(customer, service, scheduled_time, pid):
+    from django.utils import timezone
+
+    # 创建客户服务日程对象
+    customer_schedule = CustomerSchedule(
+        customer=customer,
+        service=service,
+        scheduled_time=scheduled_time,
+        pid = pid
+    )
+
+    # 设置其他默认值
+    customer_schedule.created_time = timezone.now()
+    customer_schedule.updated_time = timezone.now()
+    customer_schedule.label = f"{service.label}-{customer.name}"
+    customer_schedule.name = f"{type(customer_schedule).__name__}-{customer_schedule.hssc_id}"
+
+    # 保存客户服务日程对象
+    customer_schedule.save()
+
+    return customer_schedule
 
 
 # 估算服务项目的计划执行时间
