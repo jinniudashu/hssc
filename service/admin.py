@@ -159,6 +159,7 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
                     service=item['service'],
                     scheduled_time=item['scheduled_time'],
                     scheduled_operator=item['scheduled_operator'],
+                    priority_operator=item['priority_operator'],
                     overtime=item['overtime'],
                     pid=schedule_package.pid
                 )

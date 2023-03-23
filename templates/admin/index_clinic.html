@@ -34,14 +34,14 @@
                 <tr>
                     <th scope="col">客户姓名</th>
                     <th scope="col">服务项目</th>
-                    <th scope="col">负责小组</th>
+                    <th scope="col">负责人</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="proc in permittedUnassignedProcs" :key="proc.id">
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
                     <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
-                    <td>{{ proc.workgroup_name }}</td>
+                    <td>{{ proc.charge_staff }}</td>
                 </tr>
             </tbody>
         </table>        

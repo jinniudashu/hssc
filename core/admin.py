@@ -168,7 +168,7 @@ class ClinicSite(admin.AdminSite):
             messages.add_message(request, messages.INFO, f'{service.label}已开单')
             return redirect(customer)
 
-    # 创建新的服务日程
+    # 创建新的服务日程安排
     def new_service_schedule(self, request, **kwargs):
         from core.business_functions import eval_scheduled_time
         # 1. 创建"安排服务计划"服务进程
@@ -213,7 +213,7 @@ class ClinicSite(admin.AdminSite):
 
         return redirect(new_proc.entry)
 
-    # 创建新的服务包计划
+    # 创建新的服务包计划安排
     def new_service_package_schedule(self, request, **kwargs):
         # 1. 创建"安排服务计划"服务进程
         customer_id = kwargs['customer_id']
@@ -326,6 +326,7 @@ class BuessinessFormAdmin(admin.ModelAdmin):
     autocomplete_fields = ['name_icpc',]
 clinic_site.register(BuessinessForm, BuessinessFormAdmin)
 
+
 @admin.register(ManagedEntity)
 class ManagedEntityAdmin(admin.ModelAdmin):
     readonly_fields = ['hssc_id', 'pym', 'name', 'model_name', 'header_fields_json']
@@ -369,10 +370,12 @@ class CycleUnitAdmin(admin.ModelAdmin):
     list_display_links = ['cycle_unit', 'days',]
     readonly_fields = ['hssc_id', 'name', 'pym']
 
+
 class ServicePackageDetailInline(admin.TabularInline):
     model = ServicePackageDetail
     exclude = ['name', 'label', 'hssc_id', 'pym']
     autocomplete_fields = ['service']
+
 
 @admin.register(ServicePackage)
 class ServicePackageAdmin(admin.ModelAdmin):
@@ -390,6 +393,7 @@ class ServicePackageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(SystemOperand)
+
 
 @admin.register(EventRule)
 class EventRuleAdmin(admin.ModelAdmin):
@@ -437,18 +441,23 @@ clinic_site.register(Customer, CustomerAdmin)
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
-    search_fields = ['name']
+    search_fields = ['name', 'hssc_id']
 clinic_site.register(Staff, StaffAdmin)
 
 @admin.register(Workgroup)
 class WorkgroupAdmin(admin.ModelAdmin):
     list_display = ('label', 'leader')
-    readonly_fields = ['name']
+    readonly_fields = ['name', 'hssc_id']
 clinic_site.register(Workgroup, WorkgroupAdmin)
+
+@admin.register(VirtualStaff)
+class VirtualStaffAdmin(admin.ModelAdmin):
+    list_display = ('label', 'workgroup', 'staff')
+    readonly_fields = ['name', 'hssc_id']
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
-    search_fields = ['name']
+    search_fields = ['name', 'hssc_id']
 clinic_site.register(Institution, InstitutionAdmin)
 
 admin.site.register(CustomerServiceLog)

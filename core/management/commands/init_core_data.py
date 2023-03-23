@@ -5,131 +5,6 @@ from core.models import *
 from icpc.models import Icpc
 # from service.models import Yao_pin_ji_ben_xin_xi_biao
 
-test_user_data = {
-    'user': [
-        {
-            'username': '林管家',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '管家',
-            'last_name': '林',
-            'role': ['健康管理师', '医生助理'],
-        },
-        {
-            'username': '黄医生',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '医生',
-            'last_name': '黄',
-            'role': ['健康管理师', '医生', '医生助理'],
-        },
-        {
-            'username': '陈医生',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '医生',
-            'last_name': '陈',
-            'role': ['健康管理师', '医生', '医生助理'],
-        },
-        {
-            'username': '杨医生',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '医生',
-            'last_name': '杨',
-            'role': ['健康管理师', '医生', '医生助理', '公卫'],
-        },
-        {
-            'username': '孙护士',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '护士',
-            'last_name': '孙',
-            'role': ['护士', '医生助理'],
-        },
-        {
-            'username': '周药师',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '药师',
-            'last_name': '周',
-            'role': ['药士', '药剂师'],
-        },
-        {
-            'username': '林丽',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '丽',
-            'last_name': '林',
-            'role': ['检验师'],
-        },
-        {
-            'username': '化验小李',
-            'password': 'info1234',
-            'email': 'test@test.com',
-            'is_superuser': False,
-            'is_staff': True,
-            'first_name': '小李',
-            'last_name': '化验',
-            'role': ['检验师'],
-        },
-        # {
-        #     'username': '金盘口腔诊所',
-        #     'password': 'info1234',
-        #     'email': 'test@test.com',
-        #     'is_superuser': False,
-        #     'is_staff': True,
-        #     'first_name': '口腔诊所',
-        #     'last_name': '金盘',
-        #     'role': ['牙科诊所管理员'],
-        # },
-        # {
-        #     'username': '金盘口腔小王',
-        #     'password': 'info1234',
-        #     'email': 'test@test.com',
-        #     'is_superuser': False,
-        #     'is_staff': True,
-        #     'first_name': '小王',
-        #     'last_name': '金盘口腔',
-        #     'role': ['牙科诊所管理员'],
-        # },
-        # {
-        #     'username': '金盘口腔小赵',
-        #     'password': 'info1234',
-        #     'email': 'test@test.com',
-        #     'is_superuser': False,
-        #     'is_staff': True,
-        #     'first_name': '小赵',
-        #     'last_name': '金盘口腔',
-        #     'role': ['牙科诊所管理员'],
-        # },
-        # {
-        #     'username': '张三',
-        #     'password': 'info1234',
-        #     'email': 'test@test.com',
-        #     'is_superuser': False,
-        #     'is_staff': True,
-        #     'first_name': '三',
-        #     'last_name': '张',
-        #     'role': ['保险人员'],
-        # },
-    ],
-}
-
 class Command(BaseCommand):
     help = 'Restore design data from backuped json file'
 
@@ -165,9 +40,14 @@ class Command(BaseCommand):
         admin_group, created = Group.objects.get_or_create(name='admin')
         admin_group.permissions.add(*Permission.objects.all())
 
+
+        # 读取测试数据文件
+        with open('core/management/commands/test_data_clinic.json', encoding="utf8") as f:
+            test_data = json.loads(f.read())
+
         # 导入测试用户数据
         User.objects.all().exclude(username='admin').delete()
-        for user_data in test_user_data['user']:
+        for user_data in test_data['user']:
             user = User.objects.create_user(
                 username=user_data['username'],
                 password=user_data['password'],
@@ -191,6 +71,27 @@ class Command(BaseCommand):
 
         print('导入测试用户数据完成！')
 
+        # 导入工作小组测试数据
+        Workgroup.objects.all().delete()
+        for workgroup_data in test_data['workgroup']:
+            # 通过姓名字符串匹配，获取组长实例
+            leader_name = workgroup_data['leader']
+            leader_instance = Staff.objects.get(customer__name=leader_name)
+
+            # 创建新的工作小组并设置组长
+            new_workgroup = Workgroup.objects.create(leader=leader_instance)
+
+            # 通过姓名字符串匹配，获取组员实例并添加到工作小组中
+            for member_name in workgroup_data['members']:
+                member_instance = Staff.objects.get(customer__name=member_name)
+                new_workgroup.members.add(member_instance)
+
+            # 保存工作小组实例
+            new_workgroup.save()        
+
+        print('导入工作小组测试数据完成！')
+        
+
         # 创建周期任务
         from django_celery_beat.models import PeriodicTask, IntervalSchedule
         # 创建检查服务进程等待超时的周期任务
@@ -202,4 +103,3 @@ class Command(BaseCommand):
         )
 
         print('创建周期任务完成！')
-

@@ -17,7 +17,7 @@ class UnassignedProcsConsumer(AsyncWebsocketConsumer):
         await self.send(json.dumps({'permittedServicesId': permitted_services_id}))
 
         # 初始化更新职员任务工作台待分配服务进程列表
-        await sync_to_async(update_unassigned_procs)()
+        await sync_to_async(update_unassigned_procs)(operator)
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard('unassigned_procs', self.channel_name)

@@ -69,7 +69,7 @@ def check_proc_awaiting_timeout(self):
         proc_params = {}
         proc_params['service'] = schedule.service  # 进程所属服务
         proc_params['customer'] = schedule.customer  # 客户
-        proc_params['creater'] = schedule.creater   # 创建者  
+        proc_params['creater'] = schedule.creater   # 创建者
 
         if schedule.scheduled_operator:
             # 如果有指定执行人，则执行人为指定执行人, 服务进程状态为“就绪”
@@ -80,6 +80,7 @@ def check_proc_awaiting_timeout(self):
             service_operator = dispatch_operator(schedule.customer, schedule.service, schedule.creater)
             state = 0
         proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
+        proc_params['priority_operator'] = schedule.priority_operator  # 优先操作员
         proc_params['state'] = state  # or 根据服务作业权限判断
 
         # 估算计划执行时间

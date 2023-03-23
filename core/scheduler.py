@@ -179,7 +179,7 @@ def user_post_delete_handler(sender, instance, **kwargs):
 def operation_proc_post_save_handler(sender, instance, created, **kwargs):
     from core.business_functions import update_unassigned_procs, update_customer_services_list
     # 更新职员任务工作台可申领的服务作业
-    update_unassigned_procs()
+    update_unassigned_procs(instance.operator)
 
     # 根据customer过滤出用户的已安排服务和历史服务，发送channel_message给“用户服务组”
     if instance.service.service_type in [1,2]:

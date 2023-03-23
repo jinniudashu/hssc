@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.text import slugify
-
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 import datetime
 from time import time
@@ -274,6 +274,7 @@ class OperationProc(HsscBase):
     operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_operator', verbose_name="操作员")  # 作业员id: uid
     customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_customer', verbose_name="客户")  # 客户id: cid
     creater = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_creater', verbose_name="创建者")  # 创建者id: cid
+    priority_operator = models.ForeignKey('VirtualStaff', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="优先操作员")    
     role = models.ManyToManyField(Role, blank=True, verbose_name="作业岗位")
 	# 作业状态: state
     Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束'), (10, '等待超时')]
@@ -402,8 +403,7 @@ class Customer(HsscBase):
     name = models.CharField(max_length=50, verbose_name="姓名")
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="电话")
     address = models.CharField(max_length=255, blank=True, null=True, verbose_name="地址")
-    charge_staff = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='负责人')
-    workgroup = models.ForeignKey('Workgroup', on_delete=models.SET_NULL, blank=True, null=True, related_name='customer_workgroup', verbose_name='服务小组')
+    charge_staff = models.ForeignKey('VirtualStaff', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='负责人')
     health_record = models.JSONField(blank=True, null=True, verbose_name="健康记录")
     weixin_openid = models.CharField(max_length=255, blank=True, null=True, verbose_name="微信openid")
 
@@ -489,12 +489,18 @@ class Staff(HsscBase):
         if not self.name:
             self.name = self.customer.name
         super().save(*args, **kwargs)
+        VirtualStaff.objects.get_or_create(staff=self)
+
+    def delete(self, *args, **kwargs):
+        virtual_staff = VirtualStaff.objects.filter(staff=self)
+        virtual_staff.delete()
+        super().delete(*args, **kwargs)
 
 
-# 工作组
+# 工作小组
 class Workgroup(HsscBase):
     leader = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='workgroup_customer', null=True, verbose_name='组长')
-    members = models.ManyToManyField(Staff, related_name='workgroup_members', blank=True, verbose_name='组员')
+    members = models.ManyToManyField(Staff, related_name='workgroup_members', null=True, verbose_name='组员')
 
     class Meta:
         verbose_name = "服务小组"
@@ -505,9 +511,46 @@ class Workgroup(HsscBase):
         return str(self.label)
 
     def save(self, *args, **kwargs):
+        if not self.label:
+            self.label = self.leader.customer.label + '小组'
         if not self.name:
             self.name = f'{"_".join(lazy_pinyin(self.label))}'
         super().save(*args, **kwargs)
+        VirtualStaff.objects.get_or_create(workgroup=self, is_workgroup=True)
+    
+    def delete(self, *args, **kwargs):
+        virtual_staff = VirtualStaff.objects.filter(workgroup=self)
+        virtual_staff.delete()
+        super().delete(*args, **kwargs)
+
+
+# 虚拟职员数据结构定义：
+class VirtualStaff(HsscBase):
+    staff = models.OneToOneField(Staff, on_delete=models.CASCADE, blank=True, null=True, verbose_name='职员')
+    workgroup = models.OneToOneField(Workgroup, on_delete=models.CASCADE, blank=True, null=True, verbose_name='工作小组')
+    is_workgroup = models.BooleanField(default=False, verbose_name='是否为工作小组')
+
+    class Meta:
+        verbose_name = "虚拟职员"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def clean(self):
+        if not (self.staff or self.workgroup):
+            raise ValidationError('一个虚拟职员实例必须关联一个职员或工作小组。')
+        if self.staff and self.workgroup:
+            raise ValidationError('一个虚拟职员实例不能同时关联职员和工作小组。')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        if not self.label:
+            if self.is_workgroup:
+                self.label = self.workgroup.label
+            else:
+                self.label = self.staff.label
+        if not self.name:
+            self.name = f'{"_".join(lazy_pinyin(self.label))}'
+        super(VirtualStaff, self).save(*args, **kwargs)
 
 
 class CustomerServiceLogManager(models.Manager):

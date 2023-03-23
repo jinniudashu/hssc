@@ -1,5 +1,6 @@
 from service.models import *
 
+# 从前道表单复制数据到后道表单
 def copy_previous_form_data(form, previous_form_data):
     # 获取父进程表单
     
@@ -105,42 +106,34 @@ def create_service_proc(**kwargs):
                         scheduled_time = form_data.get(form_field)
                         kwargs['scheduled_time'] = scheduled_time
                     elif system_field=='charge_staff':  # charge_staff: 责任人
-                        charge_staff = form_data.get(form_field).customer
-                        kwargs['customer'].charge_staff = charge_staff
+                        kwargs['customer'].charge_staff = form_data.get(form_field)
                         kwargs['customer'].save()                        
                     else:
                         pass
 
     # 创建新的服务作业进程
     from core.models import OperationProc
-    parent_proc=kwargs.get('parent_proc')
+
+    params = {
+        'service': kwargs['service'],
+        'customer': kwargs['customer'],
+        'creater': kwargs['creater'],
+        'operator': kwargs['operator'],
+        'priority_operator': kwargs['priority_operator'],
+        'state': kwargs['state'],
+        'scheduled_time': kwargs['scheduled_time'],
+        'contract_service_proc': kwargs.get('contract_service_proc'),
+        'content_type': kwargs['content_type'],
+        'overtime': kwargs['service'].overtime,  # 超时时间
+        'working_hours': kwargs['service'].working_hours,  # 工作时间
+    }
+
+    parent_proc = kwargs.get('parent_proc')
     if parent_proc:
-        new_proc=OperationProc.objects.create(
-            service=kwargs['service'],
-            customer=kwargs['customer'],
-            creater=kwargs['creater'],
-            operator=kwargs['operator'],
-            state=kwargs['state'],
-            scheduled_time=kwargs['scheduled_time'],
-            parent_proc=parent_proc,
-            contract_service_proc=kwargs.get('contract_service_proc'),
-            content_type=kwargs['content_type'],
-            overtime=kwargs['service'].overtime,  # 超时时间
-            working_hours=kwargs['service'].working_hours,  # 工作时间
-        )
-    else:
-        new_proc=OperationProc.objects.create(
-            service=kwargs['service'],
-            customer=kwargs['customer'],
-            creater=kwargs['creater'],
-            operator=kwargs['operator'],
-            state=kwargs['state'],
-            scheduled_time=kwargs['scheduled_time'],
-            contract_service_proc=kwargs.get('contract_service_proc'),
-            content_type=kwargs['content_type'],
-            overtime=kwargs['service'].overtime,  # 超时时间
-            working_hours=kwargs['service'].working_hours,  # 工作时间
-        )
+        params['parent_proc'] = parent_proc
+
+    new_proc = OperationProc.objects.create(**params)
+
     # Here postsave signal in service.models
     # 更新允许作业岗位
     role = kwargs['service'].role.all()
@@ -231,8 +224,7 @@ def get_customer_profile(customer):
     url = f'/clinic/service/{base_form_service_name}/{instance.id}/change'
     profile = {
         'id': customer.id,
-        'charge_staff': '',
-        'workgroup': instance.customer.workgroup.label if instance.customer.workgroup else '',
+        'charge_staff': instance.customer.charge_staff.label if instance.customer.charge_staff else '',
         'url': url,
         'form': header_form,
     }
@@ -240,27 +232,27 @@ def get_customer_profile(customer):
     return profile
 
 
-# 为新服务分配操作员
+# 为新服务分配操作员，返回操作员(Customer类型)
 def dispatch_operator(customer, service, current_operator):
     from django.core.exceptions import ObjectDoesNotExist
-    operator = None
 
     # 系统自动生成客户服务日程时不传入操作员，直接返回None
     if current_operator is None:
         return None
 
-    # 当前客户如有责任人，且责任人具有新增服务岗位权限，则开单给责任人
+    # 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
     charge_staff = customer.charge_staff
     if charge_staff:
-        if set(charge_staff.staff.role.all()).intersection(set(service.role.all())):
-            operator = charge_staff
-            return operator
+        if charge_staff.staff:  # 责任人是具体职员
+            # 检查责任人的角色与服务所需角色是否有交集，以确定责任人是否具备岗位权限
+            if set(charge_staff.staff.role.all()).intersection(set(service.role.all())):
+                return charge_staff.staff.customer
     
     # 否则，如当前作业员具有新增服务岗位权限务岗位权限，则开单给作业员
     try:
         if set(current_operator.staff.role.all()).intersection(set(service.role.all())):
-            operator = current_operator
-            return operator
+            return current_operator
+
     except ObjectDoesNotExist:
         return None
 
@@ -286,8 +278,25 @@ def send_channel_message(group_name, message):
     async_to_sync(channel_layer.group_send)(group_name, message)
 
 
-from core.models import OperationProc
-def update_unassigned_procs():
+# 更新操作员可见的未分配的服务作业进程
+def update_unassigned_procs(operator):
+    # 业务逻辑：
+    # 先筛选出可行的作业进程available_operation_proc：
+    # 1. 服务作业进程的状态为0（未分配）；
+    # 2. 服务作业进程的操作员为空；
+    # 3. priority_operator为空或者当前操作员隶属于priority_operator；
+    from django.db.models import Q
+    from core.models import OperationProc
+
+    available_operation_proc = OperationProc.objects.filter(
+        state=0,  # 状态为0（未分配）
+        operator__isnull=True,  # 操作员为空
+    ).filter(
+        Q(priority_operator__isnull=True) |  # 优先操作员为空
+        Q(priority_operator__is_workgroup=False, priority_operator__staff__customer=operator) |  # 当前操作员即是Staff.customer
+        Q(priority_operator__is_workgroup=True, priority_operator__workgroup__members__in=[operator.staff])  # 当前操作员隶属于Workgroup.members
+    )
+
     # 可申领的服务作业
     unassigned_procs = {
         'unassignedProcs': [
@@ -296,14 +305,15 @@ def update_unassigned_procs():
                 'service_id': proc.service.id,
                 'service_label': proc.service.label,
                 'customer_name': proc.customer.name,
-                'workgroup_name': proc.customer.workgroup.label if proc.customer.workgroup else '',
+                'charge_staff': proc.customer.charge_staff.label if proc.customer.charge_staff else '',
                 'acceptance_timeout': proc.acceptance_timeout,
-            } for proc in OperationProc.objects.filter(state=0, operator=None)
+            } for proc in available_operation_proc
         ]
     }
 
     # 发送channel_message给操作员
     send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': unassigned_procs})
+
 
 from core.models import StaffTodo
 # 更新工作台职员任务列表
@@ -335,6 +345,7 @@ def update_staff_todo_list(operator):
 
     # 发送channel_message给操作员
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
+
 
 # 搜索给定关键字的客户基本信息列表
 def search_customer_profile_list(search_text):
@@ -430,8 +441,10 @@ def update_customer_services_list(customer):
     # 发送channel_message给操作员
     send_channel_message(f'customer_services_{customer.id}', {'type': 'send_customer_services_list', 'data': servicesList})
 
+
 # 更新客户推荐服务项目列表
 def update_customer_recommended_services_list(customer):
+    from core.models import OperationProc
     # # 推荐服务
     recommendedServices = [
         {
@@ -449,7 +462,7 @@ def update_customer_recommended_services_list(customer):
     send_channel_message(f'customer_recommended_services_{customer.id}', {'type': 'send_customer_recommended_services_list', 'data': recommendedServices})
 
 
-# 把客户服务项目安排转为客户服务日程
+# 把客户服务计划安排转为客户服务日程安排
 def get_services_schedule(instances):
     def _get_schedule_times(instance, idx, first_start_time, previous_end_time):
         # 返回: 计划时间列表
@@ -519,6 +532,7 @@ def get_services_schedule(instances):
                 'service': instance.service,  # 服务项目
                 'scheduled_time': time,
                 'scheduled_operator': instance.scheduled_operator,
+                'priority_operator': instance.priority_operator,
                 'overtime': instance.overtime,
             })
 
@@ -706,4 +720,3 @@ def keyword_search(s, keywords_list):
         search()
     keywords = sorted(set(match), key=match.index)
     return keywords
-
