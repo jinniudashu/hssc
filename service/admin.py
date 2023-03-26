@@ -175,6 +175,22 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 # Service表单Admin
 # **********************************************************************************************************************
 
+class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tangAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("餐后2小时血糖", {"fields": ("boolfield_can_hou_2_xiao_shi_xue_tang", )}), ]
+
+admin.site.register(Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang, Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tangAdmin)
+clinic_site.register(Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang, Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tangAdmin)
+
+class Yuan_wai_jian_ce_kong_fu_xue_tangAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("空腹血糖检查", {"fields": ("boolfield_kong_fu_xue_tang", )}), ]
+
+admin.site.register(Yuan_wai_jian_ce_kong_fu_xue_tang, Yuan_wai_jian_ce_kong_fu_xue_tangAdmin)
+clinic_site.register(Yuan_wai_jian_ce_kong_fu_xue_tang, Yuan_wai_jian_ce_kong_fu_xue_tangAdmin)
+
 class Xue_ya_jian_ce_ping_guAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -244,8 +260,8 @@ clinic_site.register(Yao_pin_ji_ben_xin_xi_biao, Yao_pin_ji_ben_xin_xi_biaoAdmin
 class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("申请服务表", {"fields": ("boolfield_dang_qian_pai_dui_ren_shu", "boolfield_yu_ji_deng_hou_shi_jian", "boolfield_ze_ren_ren", "boolfield_fu_wu_xiang_mu_ming_cheng", "boolfield_an_pai_que_ren", )}), ]
-    autocomplete_fields = ["boolfield_ze_ren_ren", "boolfield_fu_wu_xiang_mu_ming_cheng", ]
+        ("申请服务表", {"fields": ("boolfield_dang_qian_pai_dui_ren_shu", "boolfield_yu_ji_deng_hou_shi_jian", "boolfield_fu_wu_xiang_mu_ming_cheng", "boolfield_an_pai_que_ren", )}), ]
+    autocomplete_fields = ["boolfield_fu_wu_xiang_mu_ming_cheng", ]
 
 admin.site.register(Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu, Shen_qing_kong_fu_xue_tang_jian_cha_fu_wuAdmin)
 clinic_site.register(Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu, Shen_qing_kong_fu_xue_tang_jian_cha_fu_wuAdmin)
@@ -262,8 +278,9 @@ clinic_site.register(Ju_min_ji_ben_xin_xi_diao_cha, Ju_min_ji_ben_xin_xi_diao_ch
 class Shu_ye_zhu_sheAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("输液注射单", {"fields": ("boolfield_yong_yao_pin_ci", "boolfield_yao_pin_gui_ge", "boolfield_chang_yong_chu_fang_liang", "boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", "boolfield_yao_pin_ming", )}), ]
-    autocomplete_fields = ["boolfield_yao_pin_ming", ]
+        ("输液注射单", {"fields": ("boolfield_yong_yao_pin_ci", "boolfield_yao_pin_gui_ge", "boolfield_chang_yong_chu_fang_liang", "boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", "boolfield_yao_pin_ming", )}), 
+        ("上门服务", {"fields": ("boolfield_shang_men_fu_wu_xiang_mu", "boolfield_jia_ting_di_zhi", "boolfield_shang_men_fu_wu_shi_jian", )}), ]
+    autocomplete_fields = ["boolfield_yao_pin_ming", "boolfield_shang_men_fu_wu_xiang_mu", ]
 
 admin.site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)
 clinic_site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)
@@ -271,8 +288,7 @@ clinic_site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)
 class Qian_yue_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("家庭医生签约", {"fields": ("boolfield_jia_ting_qian_yue_fu_wu_xie_yi", "boolfield_qian_yue_que_ren", "boolfield_ze_ren_ren", )}), ]
-    autocomplete_fields = ["boolfield_ze_ren_ren", ]
+        ("家庭医生签约", {"fields": ("boolfield_jia_ting_qian_yue_fu_wu_xie_yi", "boolfield_qian_yue_que_ren", )}), ]
 
 admin.site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
 clinic_site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
@@ -280,7 +296,7 @@ clinic_site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
 class T9001Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("非胰岛素依赖性糖尿病", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
+        ("诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
     autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
 
 admin.site.register(T9001, T9001Admin)
@@ -381,15 +397,6 @@ class T6301Admin(HsscFormAdmin):
 admin.site.register(T6301, T6301Admin)
 clinic_site.register(T6301, T6301Admin)
 
-class T8901Admin(HsscFormAdmin):
-    fieldssets = [
-        ("基本信息", {"fields": ((),)}), 
-        ("非胰岛素依赖性糖尿病", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
-    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
-
-admin.site.register(T8901, T8901Admin)
-clinic_site.register(T8901, T8901Admin)
-
 class A6218Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -417,14 +424,6 @@ class A6217Admin(HsscFormAdmin):
 admin.site.register(A6217, A6217Admin)
 clinic_site.register(A6217, A6217Admin)
 
-class Tang_niao_bing_zi_wo_jian_ceAdmin(HsscFormAdmin):
-    fieldssets = [
-        ("基本信息", {"fields": ((),)}), 
-        ("糖尿病自我监测", {"fields": ("boolfield_kong_fu_xue_tang", )}), ]
-
-admin.site.register(Tang_niao_bing_zi_wo_jian_ce, Tang_niao_bing_zi_wo_jian_ceAdmin)
-clinic_site.register(Tang_niao_bing_zi_wo_jian_ce, Tang_niao_bing_zi_wo_jian_ceAdmin)
-
 class Yao_shi_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -438,8 +437,7 @@ clinic_site.register(Yao_shi_fu_wu, Yao_shi_fu_wuAdmin)
 class Tang_niao_bing_zhuan_yong_wen_zhenAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("糖尿病专用问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", "boolfield_tang_niao_bing_zheng_zhuang", )}), ]
-    autocomplete_fields = ["boolfield_zheng_zhuang", ]
+        ("糖尿病专用问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_tang_niao_bing_zheng_zhuang", )}), ]
 
 admin.site.register(Tang_niao_bing_zhuan_yong_wen_zhen, Tang_niao_bing_zhuan_yong_wen_zhenAdmin)
 clinic_site.register(Tang_niao_bing_zhuan_yong_wen_zhen, Tang_niao_bing_zhuan_yong_wen_zhenAdmin)
@@ -456,8 +454,7 @@ clinic_site.register(A3101, A3101Admin)
 class A6502Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("门诊分诊", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_qian_dao_que_ren", "boolfield_ze_ren_ren", )}), ]
-    autocomplete_fields = ["boolfield_ze_ren_ren", ]
+        ("门诊分诊", {"fields": ("boolfield_qian_dao_que_ren", "boolfield_yu_yue_shi_jian", )}), ]
     radio_fields = {"boolfield_qian_dao_que_ren": admin.VERTICAL, }
 
 admin.site.register(A6502, A6502Admin)
@@ -466,8 +463,7 @@ clinic_site.register(A6502, A6502Admin)
 class A6501Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_ze_ren_ren", )}), ]
-    autocomplete_fields = ["boolfield_ze_ren_ren", ]
+        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", )}), ]
 
 admin.site.register(A6501, A6501Admin)
 clinic_site.register(A6501, A6501Admin)

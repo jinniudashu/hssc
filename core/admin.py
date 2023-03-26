@@ -129,6 +129,7 @@ class ClinicSite(admin.AdminSite):
         proc_params['customer'] = customer
         proc_params['creater'] = current_operator
         proc_params['operator'] = service_operator
+        proc_params['priority_operator'] = None
         proc_params['state'] = 0  # or 0 根据服务作业权限判断
 
         # 如果当前操作员即是服务作业员，计划执行时间为当前时间，否则估算计划执行时间
@@ -250,7 +251,6 @@ class ClinicSite(admin.AdminSite):
         )
         # 创建服务项目安排
         for servicepackagedetail in servicepackagedetails:
-            print('servicepackagedetail:', servicepackagedetail.cycle_frequency, type(servicepackagedetail.cycle_frequency), servicepackagedetail.cycle_times, type(servicepackagedetail.cycle_times))
             CustomerScheduleDraft.objects.create(
                 schedule_package=customerschedulepackage,  # 客户服务包
                 service=servicepackagedetail.service,  # 服务项目
@@ -406,8 +406,8 @@ class EventRuleAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):
-    list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'complete_feedback', 'is_active']
-    list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'complete_feedback', 'is_active']
+    list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'priority_operator', 'passing_data', 'complete_feedback', 'is_active']
+    list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'priority_operator', 'passing_data', 'complete_feedback', 'is_active']
     list_display_links = ['label', ]
     readonly_fields = ['name', 'hssc_id']
     autocomplete_fields = ['service', 'next_service', 'event_rule']
@@ -448,12 +448,17 @@ clinic_site.register(Staff, StaffAdmin)
 class WorkgroupAdmin(admin.ModelAdmin):
     list_display = ('label', 'leader')
     readonly_fields = ['name', 'hssc_id']
+    search_fields = ['label', 'leader']
+
 clinic_site.register(Workgroup, WorkgroupAdmin)
 
 @admin.register(VirtualStaff)
 class VirtualStaffAdmin(admin.ModelAdmin):
     list_display = ('label', 'workgroup', 'staff')
     readonly_fields = ['name', 'hssc_id']
+    search_fields = ['label', 'staff', 'workgroup']
+    autocomplete_fields = ['staff', 'workgroup']
+clinic_site.register(VirtualStaff, VirtualStaffAdmin)
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):

@@ -186,6 +186,7 @@ class ServiceRule(HsscBase):
     event_rule = models.ForeignKey(EventRule, on_delete=models.CASCADE,  blank=True, null=True, verbose_name='条件事件')
     system_operand = models.ForeignKey(SystemOperand, on_delete=models.CASCADE, blank=True, null=True, verbose_name='系统作业')
     next_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='next_service', verbose_name='后续服务')
+    priority_operator = models.ForeignKey('VirtualStaff', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="优先操作员")    
     Receive_form = [(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')]  # 接收表单数据
     passing_data = models.PositiveSmallIntegerField(choices=Receive_form, default=0,  blank=True, null=True, verbose_name='接收表单')
     Complete_feedback = [(0, '否'), (1, '返回完成状态'), (2, '返回表单')]
@@ -429,12 +430,6 @@ class Customer(HsscBase):
         '''
         return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(service_type=0))
 
-    def get_recommended_services(self) -> 'QuerySet[RecommendedService]':
-        '''
-        获取客户推荐服务列表
-        '''
-        return self.recommended_service_customer.all()
-
     def get_scheduled_services(self) -> 'QuerySet[OperationProc]':
         '''
         获取已安排服务列表
@@ -500,7 +495,7 @@ class Staff(HsscBase):
 # 工作小组
 class Workgroup(HsscBase):
     leader = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='workgroup_customer', null=True, verbose_name='组长')
-    members = models.ManyToManyField(Staff, related_name='workgroup_members', null=True, verbose_name='组员')
+    members = models.ManyToManyField(Staff, related_name='workgroup_members', verbose_name='组员')
 
     class Meta:
         verbose_name = "服务小组"
@@ -614,7 +609,10 @@ class RecommendedService(HsscBase):
         ordering = ['id']
 
     def __str__(self):
-        return str(self.service.label)
+        if self.service:
+            return str(self.service.label)
+        else:
+            return ''
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''

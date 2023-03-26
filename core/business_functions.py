@@ -294,7 +294,7 @@ def update_unassigned_procs(operator):
     ).filter(
         Q(priority_operator__isnull=True) |  # 优先操作员为空
         Q(priority_operator__is_workgroup=False, priority_operator__staff__customer=operator) |  # 当前操作员即是Staff.customer
-        Q(priority_operator__is_workgroup=True, priority_operator__workgroup__members__in=[operator.staff])  # 当前操作员隶属于Workgroup.members
+        Q(priority_operator__is_workgroup=True, priority_operator__workgroup__members__in=[operator.staff])  # 当前操作员是职员，且隶属于Workgroup.members
     )
 
     # 可申领的服务作业
@@ -396,7 +396,6 @@ def update_customer_services_list(customer):
 
         # 表单非基类字段
         non_base_class_fields = [field for field in content_object_fields if field not in base_class_fields]
-
         for field in non_base_class_fields:
             field_value = getattr(content_object, field)
             if field_value is None or field_value == '':
@@ -416,16 +415,18 @@ def update_customer_services_list(customer):
 
     # 历史服务
     history_services = []
-    # 如果service是安排服务包和安排服务，则获取所安排服务包或服务的label，并添加到service.label后面；否则获取service的label
+    # 如果service是安排服务包和安排服务，则获取所安排服务包或服务的label，并添加到service.label后面；否则获取service的label, 并获取服务表单完成标识
     for proc in customer.get_history_services():
         service_label = proc.service.label
+        is_completed = ''
+
         if proc.service.name == 'CustomerSchedulePackage':
             service_label = service_label + ' -- ' + proc.content_object.servicepackage.label
         elif proc.service.name == 'CustomerSchedule':
             service_label = service_label + ' -- ' + proc.content_object.service.label
 
-        # 判断服务表单是否已经完成
-        is_completed = is_service_form_completed(proc)
+            # 获取服务表单完成标识
+            is_completed = is_service_form_completed(proc)
 
         # 构造历史服务列表
         history_services.append({
@@ -444,8 +445,9 @@ def update_customer_services_list(customer):
 
 # 更新客户推荐服务项目列表
 def update_customer_recommended_services_list(customer):
-    from core.models import OperationProc
+    from core.models import OperationProc, RecommendedService
     # # 推荐服务
+    recommend_services = RecommendedService.objects.filter(customer=customer)
     recommendedServices = [
         {
             'id': recommend_service.id,
@@ -455,7 +457,7 @@ def update_customer_recommended_services_list(customer):
             'enable_queue_counter': recommend_service.service.enable_queue_counter,
             'queue_count': OperationProc.objects.get_service_queue_count(recommend_service.service),
             'counter': recommend_service.counter,
-        } for recommend_service in customer.get_recommended_services()
+        } for recommend_service in recommend_services if recommend_service.service is not None
     ]
 
     # 发送channel_message给操作员

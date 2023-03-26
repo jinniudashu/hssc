@@ -201,13 +201,6 @@
             "hssc_id": "de1daa3e-9aa1-11ec-bde1-8a6e55faf877",
             "pym": "bxry",
             "description": null
-        },
-        {
-            "label": "牙科诊所管理员",
-            "name": "ya_ke_zhen_suo",
-            "hssc_id": "e862fdba-de2f-11ec-8b9f-323f52c35ca4",
-            "pym": "ykzsgly",
-            "description": null
         }
     ],
     "buessinessform": [
@@ -270,8 +263,7 @@
             "description": null,
             "api_fields": null,
             "components": [
-                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
-                "401d33d8-aa49-11ec-9f15-ee7ade4bced6"
+                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "components_groups": []
         },
@@ -285,8 +277,7 @@
             "api_fields": null,
             "components": [
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
-                "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b",
-                "401d33d8-aa49-11ec-9f15-ee7ade4bced6"
+                "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b"
             ],
             "components_groups": []
         },
@@ -297,7 +288,7 @@
             "pym": "zqjcb",
             "name_icpc": null,
             "description": "",
-            "api_fields": "null",
+            "api_fields": null,
             "components": [
                 "deae47e2-9aa1-11ec-bde1-8a6e55faf877",
                 "deaf1ae6-9aa1-11ec-bde1-8a6e55faf877",
@@ -319,11 +310,10 @@
             "hssc_id": "0c620622-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "tnbzywz",
             "name_icpc": "A6219",
-            "description": null,
+            "description": "",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "1cad2116-a52a-11ec-a478-2ec403f6c47b"
             ],
             "components_groups": []
@@ -344,25 +334,12 @@
             "components_groups": []
         },
         {
-            "label": "糖尿病自我监测",
-            "name": "T4505",
-            "hssc_id": "0d3821bc-9e23-11ec-aa2c-fe35a7065cdd",
-            "pym": "tnbzwjc",
-            "name_icpc": null,
-            "description": null,
-            "api_fields": null,
-            "components": [
-                "deb59434-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
-        },
-        {
             "label": "院内辅助问诊",
             "name": "A6217",
             "hssc_id": "0c82d69a-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "ynfzwz",
             "name_icpc": "A6217",
-            "description": null,
+            "description": "",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -396,21 +373,6 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
-        },
-        {
-            "label": "非胰岛素依赖性糖尿病",
-            "name": "T9001",
-            "hssc_id": "0c7bdb06-9e23-11ec-aa2c-fe35a7065cdd",
-            "pym": "fydsylxtnb",
-            "name_icpc": "T9001",
-            "description": null,
-            "api_fields": null,
-            "components": [
-                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
-                "6a4b6984-9e93-11ec-a013-aa434405c3fc",
-                "5b880f4c-9e93-11ec-b91b-aa434405c3fc"
             ],
             "components_groups": []
         },
@@ -479,7 +441,7 @@
             "hssc_id": "0c3bd51a-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "kfxtjc",
             "name_icpc": "T3404",
-            "description": null,
+            "description": "",
             "api_fields": null,
             "components": [
                 "deb59434-9aa1-11ec-bde1-8a6e55faf877"
@@ -492,7 +454,7 @@
             "hssc_id": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "ywfzwz",
             "name_icpc": "A6202",
-            "description": null,
+            "description": "",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -507,7 +469,7 @@
             "pym": "tnbjcpg",
             "name_icpc": null,
             "description": "",
-            "api_fields": "null",
+            "api_fields": null,
             "components": [
                 "5dff3ef6-32fb-11ed-9164-0242ac120004",
                 "ba6e088e-32fb-11ed-8023-0242ac120004",
@@ -719,6 +681,21 @@
             "components_groups": []
         },
         {
+            "label": "诊断表",
+            "name": "T9001",
+            "hssc_id": "0c7bdb06-9e23-11ec-aa2c-fe35a7065cdd",
+            "pym": "zdb",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": null,
+            "components": [
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
+                "6a4b6984-9e93-11ec-a013-aa434405c3fc",
+                "5b880f4c-9e93-11ec-b91b-aa434405c3fc"
+            ],
+            "components_groups": []
+        },
+        {
             "label": "家庭医生签约",
             "name": "Z6261",
             "hssc_id": "d0ce09ec-aa45-11ec-9f15-ee7ade4bced6",
@@ -728,8 +705,7 @@
             "api_fields": null,
             "components": [
                 "5ff67f9c-aa45-11ec-8f0c-ee7ade4bced6",
-                "b19d4830-aa45-11ec-8f0c-ee7ade4bced6",
-                "401d33d8-aa49-11ec-9f15-ee7ade4bced6"
+                "b19d4830-aa45-11ec-8f0c-ee7ade4bced6"
             ],
             "components_groups": []
         },
@@ -749,6 +725,21 @@
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
                 "abe7baaa-c9ef-11ec-b369-168d53e8234e",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
+            ],
+            "components_groups": []
+        },
+        {
+            "label": "上门服务",
+            "name": "shang_men_fu_wu",
+            "hssc_id": "5f2dc566-c975-11ed-9502-0242ac120003",
+            "pym": "smfw",
+            "name_icpc": null,
+            "description": "",
+            "api_fields": null,
+            "components": [
+                "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
+                "6ef43624-c975-11ed-9502-0242ac120003",
+                "2ca0627a-c975-11ed-a1d5-0242ac120003"
             ],
             "components_groups": []
         },
@@ -792,7 +783,6 @@
             "components": [
                 "1cdf93ec-d100-11ec-b369-823d1f108281",
                 "3604f812-d100-11ec-ab0d-823d1f108281",
-                "401d33d8-aa49-11ec-9f15-ee7ade4bced6",
                 "cde598b8-d0ff-11ec-b369-823d1f108281",
                 "9e873f3a-d100-11ec-ab0d-823d1f108281"
             ],
@@ -934,7 +924,7 @@
             "pym": "ch2xsxt",
             "name_icpc": null,
             "description": "",
-            "api_fields": "null",
+            "api_fields": null,
             "components": [
                 "d6f0beac-32fb-11ed-8023-0242ac120004"
             ],
@@ -947,7 +937,7 @@
             "pym": "xyjcpg",
             "name_icpc": null,
             "description": "",
-            "api_fields": "null",
+            "api_fields": null,
             "components": [
                 "4bf17ad0-aa48-11ec-9f15-ee7ade4bced6"
             ],
@@ -1036,10 +1026,10 @@
     ],
     "service": [
         {
-            "label": "药物干预",
+            "label": "药品处方",
             "name": "men_zhen_chu_fang_biao",
             "hssc_id": "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
-            "pym": "ywgy",
+            "pym": "ypcf",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1047,6 +1037,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1077,6 +1070,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1107,6 +1103,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1137,6 +1136,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1165,6 +1167,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1196,6 +1201,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1226,6 +1234,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1256,6 +1267,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1286,6 +1300,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1305,38 +1322,6 @@
             ]
         },
         {
-            "label": "糖尿病自我监测",
-            "name": "tang_niao_bing_zi_wo_jian_ce",
-            "hssc_id": "e03bfa96-9aa1-11ec-bde1-8a6e55faf877",
-            "pym": "tnbzwjc",
-            "name_icpc": null,
-            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
-            "priority": 3,
-            "service_type": 2,
-            "history_services_display": 0,
-            "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
-            "suppliers": null,
-            "not_suitable": null,
-            "overtime": null,
-            "working_hours": null,
-            "frequency": null,
-            "cost": null,
-            "load_feedback": false,
-            "resource_materials": null,
-            "resource_devices": null,
-            "resource_knowledge": null,
-            "generate_script_order": 100,
-            "buessiness_forms": [
-                "0d3821bc-9e23-11ec-aa2c-fe35a7065cdd"
-            ],
-            "role": [
-                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
-                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
-                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
-            ]
-        },
-        {
             "label": "院内辅助问诊",
             "name": "A6217",
             "hssc_id": "e03d308c-9aa1-11ec-bde1-8a6e55faf877",
@@ -1348,6 +1333,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1378,6 +1366,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1409,10 +1400,13 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": null,
+            "working_hours": "0:00:05",
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -1422,36 +1416,6 @@
             "generate_script_order": 100,
             "buessiness_forms": [
                 "0c75d8a0-9e23-11ec-aa2c-fe35a7065cdd"
-            ],
-            "role": [
-                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
-            ]
-        },
-        {
-            "label": "胰岛素依赖性糖尿病",
-            "name": "T8901",
-            "hssc_id": "e040d160-9aa1-11ec-bde1-8a6e55faf877",
-            "pym": "ydsylxtnb",
-            "name_icpc": "T8901",
-            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
-            "priority": 3,
-            "service_type": 2,
-            "history_services_display": 0,
-            "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
-            "suppliers": null,
-            "not_suitable": null,
-            "overtime": null,
-            "working_hours": null,
-            "frequency": null,
-            "cost": null,
-            "load_feedback": false,
-            "resource_materials": null,
-            "resource_devices": null,
-            "resource_knowledge": null,
-            "generate_script_order": 100,
-            "buessiness_forms": [
-                "0c7bdb06-9e23-11ec-aa2c-fe35a7065cdd"
             ],
             "role": [
                 "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
@@ -1469,6 +1433,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1506,6 +1473,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1538,6 +1508,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1568,6 +1541,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1624,6 +1600,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1654,6 +1633,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1689,6 +1671,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1713,10 +1698,10 @@
             ]
         },
         {
-            "label": "空腹血糖检查",
+            "label": "门诊空腹血糖检查",
             "name": "kong_fu_xue_tang_jian_cha",
             "hssc_id": "cb6fe794-b6da-11ec-8425-0ebea05fc526",
-            "pym": "kfxtjc",
+            "pym": "mzkfxtjc",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1724,10 +1709,13 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": null,
+            "working_hours": "0:00:04",
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -1739,7 +1727,6 @@
                 "0c3bd51a-9e23-11ec-aa2c-fe35a7065cdd"
             ],
             "role": [
-                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
                 "de1ce450-9aa1-11ec-bde1-8a6e55faf877"
             ]
         },
@@ -1755,6 +1742,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1774,17 +1764,20 @@
             ]
         },
         {
-            "label": "非胰岛素依赖性糖尿病",
+            "label": "二型糖尿病诊断",
             "name": "T9001",
             "hssc_id": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
-            "pym": "fydsylxtnb",
-            "name_icpc": "T9001",
+            "pym": "extnbzd",
+            "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
             "service_type": 2,
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1815,6 +1808,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1837,10 +1833,10 @@
             ]
         },
         {
-            "label": "输液注射",
+            "label": "上门代注服务",
             "name": "shu_ye_zhu_she",
             "hssc_id": "9b199d36-c9f1-11ec-b452-168d53e8234e",
-            "pym": "syzs",
+            "pym": "smdzfw",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -1848,6 +1844,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1860,7 +1859,8 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "3e88f758-c9ef-11ec-b369-168d53e8234e"
+                "3e88f758-c9ef-11ec-b369-168d53e8234e",
+                "5f2dc566-c975-11ed-9502-0242ac120003"
             ],
             "role": [
                 "de194c50-9aa1-11ec-bde1-8a6e55faf877"
@@ -1878,6 +1878,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1917,6 +1920,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1954,6 +1960,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -1986,6 +1995,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2016,6 +2028,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2046,6 +2061,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2076,6 +2094,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2107,6 +2128,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2137,6 +2161,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2171,10 +2198,10 @@
             ]
         },
         {
-            "label": "餐后2小时血糖",
+            "label": "门诊餐后2小时血糖",
             "name": "can_hou_2_xiao_shi_xue_tang",
             "hssc_id": "cb7ecd6e-32fd-11ed-a506-0242ac120004",
-            "pym": "ch2xsxt",
+            "pym": "mzch2xsxt",
             "name_icpc": null,
             "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
             "priority": 3,
@@ -2182,6 +2209,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2197,7 +2227,6 @@
                 "e86f0bbe-32fd-11ed-ad2f-0242ac120004"
             ],
             "role": [
-                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
                 "de1ce450-9aa1-11ec-bde1-8a6e55faf877"
             ]
         },
@@ -2213,6 +2242,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2243,6 +2275,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -2274,6 +2309,79 @@
                 "de1d24ec-9aa1-11ec-bde1-8a6e55faf877",
                 "de1d6952-9aa1-11ec-bde1-8a6e55faf877",
                 "de1daa3e-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "院外监测空腹血糖",
+            "name": "yuan_wai_jian_ce_kong_fu_xue_tang",
+            "hssc_id": "a1b9c424-c971-11ed-a51e-0242ac120003",
+            "pym": "ywjckfxt",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "buessiness_forms": [
+                "0c3bd51a-9e23-11ec-aa2c-fe35a7065cdd"
+            ],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
+                "de194c50-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "院外监测餐后2小时血糖",
+            "name": "yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang",
+            "hssc_id": "c8855096-c971-11ed-a51e-0242ac120003",
+            "pym": "ywjcch2xsxt",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "buessiness_forms": [
+                "e86f0bbe-32fd-11ed-ad2f-0242ac120004"
+            ],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
+                "de194c50-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b05cc-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
             ]
         }
     ],
@@ -2329,14 +2437,6 @@
         {
             "label": null,
             "name": null,
-            "hssc_id": "8ac789de-ab1f-11ec-8223-32f453b6622c",
-            "service": "e03bfa96-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0d3821bc-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
             "hssc_id": "8ac824ac-ab1f-11ec-8223-32f453b6622c",
             "service": "e03d308c-9aa1-11ec-bde1-8a6e55faf877",
             "buessiness_form": "0c82d69a-9e23-11ec-aa2c-fe35a7065cdd",
@@ -2356,14 +2456,6 @@
             "hssc_id": "8ac95d86-ab1f-11ec-8223-32f453b6622c",
             "service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
             "buessiness_form": "0c75d8a0-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "8ac9f822-ab1f-11ec-8223-32f453b6622c",
-            "service": "e040d160-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0c7bdb06-9e23-11ec-aa2c-fe35a7065cdd",
             "is_list": false
         },
         {
@@ -2693,6 +2785,30 @@
             "service": "ab1007cc-32fe-11ed-aa6f-0242ac120004",
             "buessiness_form": "bd4d409e-32fe-11ed-aa6f-0242ac120004",
             "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "a1ba2b08-c971-11ed-a51e-0242ac120003",
+            "service": "a1b9c424-c971-11ed-a51e-0242ac120003",
+            "buessiness_form": "0c3bd51a-9e23-11ec-aa2c-fe35a7065cdd",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "c885b432-c971-11ed-a51e-0242ac120003",
+            "service": "c8855096-c971-11ed-a51e-0242ac120003",
+            "buessiness_form": "e86f0bbe-32fd-11ed-ad2f-0242ac120004",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "aa75f71e-c975-11ed-9502-0242ac120003",
+            "service": "9b199d36-c9f1-11ec-b452-168d53e8234e",
+            "buessiness_form": "5f2dc566-c975-11ed-9502-0242ac120003",
+            "is_list": false
         }
     ],
     "servicepackage": [
@@ -2719,7 +2835,7 @@
             "pym": null,
             "order": 1,
             "servicepackage": "6992ad18-33de-11ed-9004-4889e7cf38c9",
-            "service": "cb6fe794-b6da-11ec-8425-0ebea05fc526",
+            "service": "a1b9c424-c971-11ed-a51e-0242ac120003",
             "cycle_unit": "27ac618f-33da-11ed-bbdd-4889e7cf38c9",
             "cycle_frequency": 1,
             "cycle_times": 7,
@@ -2733,7 +2849,7 @@
             "pym": null,
             "order": 2,
             "servicepackage": "6992ad18-33de-11ed-9004-4889e7cf38c9",
-            "service": "cb7ecd6e-32fd-11ed-a506-0242ac120004",
+            "service": "c8855096-c971-11ed-a51e-0242ac120003",
             "cycle_unit": "27ac618f-33da-11ed-bbdd-4889e7cf38c9",
             "cycle_frequency": 1,
             "cycle_times": 7,
@@ -2789,7 +2905,7 @@
             "pym": null,
             "order": 10,
             "servicepackage": "41722f80-33df-11ed-985d-4889e7cf38c9",
-            "service": "cb6fe794-b6da-11ec-8425-0ebea05fc526",
+            "service": "a1b9c424-c971-11ed-a51e-0242ac120003",
             "cycle_unit": "306ea873-33da-11ed-aebb-4889e7cf38c9",
             "cycle_frequency": 2,
             "cycle_times": 90,
@@ -2803,7 +2919,7 @@
             "pym": null,
             "order": 20,
             "servicepackage": "41722f80-33df-11ed-985d-4889e7cf38c9",
-            "service": "cb7ecd6e-32fd-11ed-a506-0242ac120004",
+            "service": "c8855096-c971-11ed-a51e-0242ac120003",
             "cycle_unit": "306ea873-33da-11ed-aebb-4889e7cf38c9",
             "cycle_frequency": 2,
             "cycle_times": 90,
@@ -2895,7 +3011,7 @@
             "description": "症状 in {'烦渴','多尿','多食','乏力','体重减轻','体重增加','皮肤感染'}",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'多食', '体重增加', '烦渴', '皮肤感染', '体重减轻', '乏力', '多尿'}.intersection(boolfield_zheng_zhuang)) == 1",
+            "expression": "len({'多尿', '体重减轻', '体重增加', '多食', '烦渴', '乏力', '皮肤感染'}.intersection(boolfield_zheng_zhuang)) >= 1",
             "expression_fields": "boolfield_zheng_zhuang"
         },
         {
@@ -2906,7 +3022,7 @@
             "description": "症状 == {'烦渴','多尿'} or 症状 == {'烦渴','体重增加'} or 症状 == {'多尿','皮肤感染'} or 症状 == {'烦渴','皮肤感染'}",
             "detection_scope": "CURRENT_SERVICE",
             "weight": 1,
-            "expression": "len({'皮肤感染', '体重增加', '多尿', '烦渴'}.intersection(boolfield_zheng_zhuang)) == 2",
+            "expression": "len({'烦渴', '多尿', '体重增加', '皮肤感染'}.intersection(boolfield_zheng_zhuang)) >= 2",
             "expression_fields": "boolfield_zheng_zhuang"
         },
         {
@@ -3092,7 +3208,7 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": false
         },
         {
             "label": null,
@@ -3111,29 +3227,13 @@
             "is_active": true
         },
         {
-            "label": null,
+            "label": "二型糖尿病诊断",
             "name": null,
             "hssc_id": "0e78ae30-b6e6-11ec-8121-0ebea05fc526",
             "service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
             "event_rule": "9dd8d736-abdc-11ec-bf5e-1ac10aeebbc4",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
-            "passing_data": 2,
-            "complete_feedback": 0,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "0e79b41a-b6e6-11ec-8121-0ebea05fc526",
-            "service": "e0398a04-9aa1-11ec-bde1-8a6e55faf877",
-            "event_rule": "a922d698-abda-11ec-a639-1ac10aeebbc4",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "e040d160-9aa1-11ec-bde1-8a6e55faf877",
             "passing_data": 2,
             "complete_feedback": 0,
             "reminders": 0,
@@ -3181,39 +3281,7 @@
             "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
             "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
-            "next_service": "e0420c06-9aa1-11ec-bde1-8a6e55faf877",
-            "passing_data": 2,
-            "complete_feedback": 0,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "0e7b1198-b6e6-11ec-8121-0ebea05fc526",
-            "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
-            "next_service": "e03bfa96-9aa1-11ec-bde1-8a6e55faf877",
-            "passing_data": 1,
-            "complete_feedback": 0,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "0e7b5a2c-b6e6-11ec-8121-0ebea05fc526",
-            "service": "e03bfa96-9aa1-11ec-bde1-8a6e55faf877",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "66859d9c-aa55-11ec-9f15-ee7ade4bced6",
+            "next_service": "50762b88-c972-11ed-a51e-0242ac120003",
             "passing_data": 2,
             "complete_feedback": 0,
             "reminders": 0,
@@ -3227,7 +3295,7 @@
             "name": null,
             "hssc_id": "0e7ba6bc-b6e6-11ec-8121-0ebea05fc526",
             "service": "66859d9c-aa55-11ec-9f15-ee7ade4bced6",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "event_rule": "6680fa06-3300-11ed-98cd-0242ac120004",
             "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
             "next_service": "e03e65ba-9aa1-11ec-bde1-8a6e55faf877",
             "passing_data": 1,
@@ -3245,7 +3313,7 @@
             "service": "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
             "event_rule": "302378de-c9f2-11ec-b369-168d53e8234e",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "9b199d36-c9f1-11ec-b452-168d53e8234e",
+            "next_service": "1b8b3fba-c974-11ed-a1d5-0242ac120003",
             "passing_data": 1,
             "complete_feedback": 1,
             "reminders": 1,
@@ -3316,7 +3384,7 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": false
         },
         {
             "label": "糖尿病监测评估",
@@ -3344,6 +3412,70 @@
             "next_service": "e035d648-9aa1-11ec-bde1-8a6e55faf877",
             "passing_data": 1,
             "complete_feedback": 1,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "二型糖尿病推荐运动处方",
+            "name": null,
+            "hssc_id": "a6fb98ac-c978-11ed-8f38-0242ac120003",
+            "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "6494a7a2-c972-11ed-a51e-0242ac120003",
+            "passing_data": 1,
+            "complete_feedback": 0,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "一型糖尿病诊断",
+            "name": null,
+            "hssc_id": "da68b788-c978-11ed-8f38-0242ac120003",
+            "service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
+            "event_rule": "a922d698-abda-11ec-a639-1ac10aeebbc4",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "9086ce2c-c976-11ed-a229-0242ac120003",
+            "passing_data": 2,
+            "complete_feedback": 0,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "诊后7天回访",
+            "name": null,
+            "hssc_id": "40c1bd12-c97a-11ed-a572-0242ac120003",
+            "service": "1b8b3fba-c974-11ed-a1d5-0242ac120003",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
+            "passing_data": 1,
+            "complete_feedback": 1,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "评估糖尿病控制不稳定",
+            "name": null,
+            "hssc_id": "9398f974-c97a-11ed-a572-0242ac120003",
+            "service": "66859d9c-aa55-11ec-9f15-ee7ade4bced6",
+            "event_rule": "3351be40-3300-11ed-89e6-0242ac120004",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "e035d648-9aa1-11ec-bde1-8a6e55faf877",
+            "passing_data": 1,
+            "complete_feedback": 0,
             "reminders": 0,
             "message": null,
             "interval_rule": null,

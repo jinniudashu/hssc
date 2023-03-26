@@ -222,7 +222,8 @@ class FieldsType(Enum):
     overtime = "Datetime"  # 超期时限
     scheduled_operator = "entities.Stuff"  # 计划执行人员
     service = "core.Service"  # 服务
-    is_assigned = 'Boolean'  # 是否已生成任务
+    priority_operator = "core.VirtualStaff"  # 虚拟职员
+    is_assigned = "Boolean"  # 是否已生成任务
 
     # 自动生成字段数据类型
     boolfield_yao_pin_tong_yong_ming = "String"  # 药品通用名
@@ -300,6 +301,7 @@ class FieldsType(Enum):
     boolfield_chu_sheng_ri_qi = "Date"  # 出生日期
     boolfield_yu_yue_shi_jian = "Datetime"  # 预约时间
     boolfield_zhu_she_ri_qi = "Datetime"  # 注射日期
+    boolfield_shang_men_fu_wu_shi_jian = "Datetime"  # 上门服务时间
     boolfield_yao_pin_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 药品单位
     boolfield_xin_yu_ping_ji = "dictionaries.Xin_yu_ping_ji"  # 信誉评级
     boolfield_chu_fang_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 处方计量单位
@@ -346,7 +348,6 @@ class FieldsType(Enum):
     boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = "dictionaries.Ya_li_qing_kuang"  # 生活工作压力情况
     boolfield_shi_fou_ji_xu_shi_yong = "dictionaries.Ji_xu_shi_yong_qing_kuang"  # 是否继续使用
     boolfield_qian_yue_que_ren = "dictionaries.Qian_yue_que_ren"  # 签约确认
-    boolfield_ze_ren_ren = "entities.Zhi_yuan_ji_ben_xin_xi_biao"  # 责任人
     boolfield_xue_ya_jian_ce_ping_gu = "dictionaries.Sui_fang_ping_gu"  # 血压监测评估
     boolfield_niao_tang = "dictionaries.Niao_tang"  # 尿糖
     boolfield_dan_bai_zhi = "dictionaries.Dan_bai_zhi"  # 蛋白质
@@ -364,3 +365,4 @@ class FieldsType(Enum):
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
     boolfield_yao_pin_ming = "entities.Yao_pin_ji_ben_xin_xi_biao"  # 药品名
     boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu = "dictionaries.Tang_niao_bing_kong_zhi_xiao_guo_ping_gu"  # 糖尿病控制效果评估
+    boolfield_shang_men_fu_wu_xiang_mu = "icpc.Icpc7_treatments"  # 上门服务项目

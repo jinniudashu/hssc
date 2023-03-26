@@ -178,8 +178,9 @@ def user_post_delete_handler(sender, instance, **kwargs):
 @receiver(post_save, sender=OperationProc)
 def operation_proc_post_save_handler(sender, instance, created, **kwargs):
     from core.business_functions import update_unassigned_procs, update_customer_services_list
-    # 更新职员任务工作台可申领的服务作业
-    update_unassigned_procs(instance.operator)
+    # 如果操作员是员工更新职员任务工作台可申领的服务作业
+    if instance.operator and instance.operator.user.is_staff:
+        update_unassigned_procs(instance.operator)
 
     # 根据customer过滤出用户的已安排服务和历史服务，发送channel_message给“用户服务组”
     if instance.service.service_type in [1,2]:
@@ -298,7 +299,8 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['service'] = service  # 进程所属服务
             proc_params['customer'] = customer  # 客户
             proc_params['creater'] = current_operator   # 创建者  
-            proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
+            proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断
+            proc_params['priority_operator'] = kwargs['priority_operator'] # 优先操作者
             proc_params['state'] = 0  # or 根据服务作业权限判断
 
             # 估算计划执行时间
@@ -410,6 +412,7 @@ def operand_finished_handler(sender, **kwargs):
             operation_params = {
                 'operation_proc': operation_proc,
                 'operator': operation_proc.operator,
+                'priority_operator': service_rule.priority_operator,
                 'service': service_rule.service,
                 'next_service': service_rule.next_service,
                 'passing_data': service_rule.passing_data,

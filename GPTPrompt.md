@@ -106,7 +106,8 @@ class VirtualStaff(models.Model):
 
 ### 6、设计系统变更
 1. 在formdesign.define_backup的script_file_header.py文件中添加hssc.service的models.py和admin.py的变更内容
-2. 在formdesign管理界面“关联字段基础表”中添加虚拟职员，关联内容：VirtualStaff，关联内容类型：内核
+2. 在formdesign.define_operand.models中添加CoreModel，让其记录的增删改与“关联字段基础表”同步。
+3. 在其中添加一条记录，名称=虚拟职员，model_name=VirtualStaff。
 
 ### 7、测试用例准备
 1. 在formdesign管理界面“关联字段”添加“测试责任人”字段，关联内容：虚拟职员
@@ -117,3 +118,8 @@ class VirtualStaff(models.Model):
 1. 设计系统生产环境生成脚本，备份设计数据，下载设计数据到设计系统开发环境；
 2. hssc导入脚本和数据；
 3. 业务系统测试。
+
+## 部署
+1. 设计系统生产环境生成脚本，备份设计数据，下载设计数据到设计系统开发环境；
+2. 清理Buessiness.api_fields='null'和'[]'的数据；
+3. 重新备份设计数据和生成脚本；

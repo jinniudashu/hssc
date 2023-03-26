@@ -70,6 +70,28 @@ class CustomerSchedule(HsscFormModel):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang(HsscFormModel):
+    boolfield_can_hou_2_xiao_shi_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='餐后2小时血糖')
+
+    class Meta:
+        verbose_name = '院外监测餐后2小时血糖'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Yuan_wai_jian_ce_kong_fu_xue_tang(HsscFormModel):
+    boolfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='空腹血糖')
+
+    class Meta:
+        verbose_name = '院外监测空腹血糖'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Xue_ya_jian_ce_ping_gu(HsscFormModel):
     boolfield_xue_ya_jian_ce_ping_gu = models.ForeignKey(Sui_fang_ping_gu, related_name='sui_fang_ping_gu_for_boolfield_xue_ya_jian_ce_ping_gu_xue_ya_jian_ce_ping_gu', on_delete=models.CASCADE, null=True, blank=False, verbose_name='血压监测评估')
 
@@ -85,7 +107,7 @@ class Can_hou_2_xiao_shi_xue_tang(HsscFormModel):
     boolfield_can_hou_2_xiao_shi_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='餐后2小时血糖')
 
     class Meta:
-        verbose_name = '餐后2小时血糖'
+        verbose_name = '门诊餐后2小时血糖'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -267,7 +289,6 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
 class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
     boolfield_dang_qian_pai_dui_ren_shu = models.IntegerField(null=True, blank=True, verbose_name='当前排队人数')
     boolfield_yu_ji_deng_hou_shi_jian = models.IntegerField(null=True, blank=True, verbose_name='预计等候时间')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
     boolfield_fu_wu_xiang_mu_ming_cheng = models.ForeignKey(Icpc4_physical_examination_and_tests, related_name='icpc4_physical_examination_and_tests_for_boolfield_fu_wu_xiang_mu_ming_cheng_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='服务项目名称')
     boolfield_an_pai_que_ren = models.ForeignKey(An_pai_que_ren, related_name='an_pai_que_ren_for_boolfield_an_pai_que_ren_shen_qing_kong_fu_xue_tang_jian_cha_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='安排确认')
 
@@ -325,9 +346,12 @@ class Shu_ye_zhu_she(HsscFormModel):
     boolfield_yong_yao_liao_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药疗程')
     boolfield_zhu_she_ri_qi = models.DateTimeField(null=True, blank=True, verbose_name='注射日期')
     boolfield_yao_pin_ming = models.ManyToManyField(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_shu_ye_zhu_she', blank=True, verbose_name='药品名')
+    boolfield_shang_men_fu_wu_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_shang_men_fu_wu_xiang_mu_shu_ye_zhu_she', blank=True, verbose_name='上门服务项目')
+    boolfield_jia_ting_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
+    boolfield_shang_men_fu_wu_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='上门服务时间')
 
     class Meta:
-        verbose_name = '输液注射'
+        verbose_name = '上门代注服务'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -337,7 +361,6 @@ class Shu_ye_zhu_she(HsscFormModel):
 class Qian_yue_fu_wu(HsscFormModel):
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭签约服务协议')
     boolfield_qian_yue_que_ren = models.ForeignKey(Qian_yue_que_ren, related_name='qian_yue_que_ren_for_boolfield_qian_yue_que_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签约确认')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_qian_yue_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 
     class Meta:
         verbose_name = '签约服务'
@@ -353,7 +376,7 @@ class T9001(HsscFormModel):
     boolfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_pai_chu_zhen_duan_T9001', blank=True, verbose_name='排除诊断')
 
     class Meta:
-        verbose_name = '非胰岛素依赖性糖尿病'
+        verbose_name = '二型糖尿病诊断'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -372,10 +395,10 @@ class Tang_hua_xue_hong_dan_bai_jian_cha_biao(HsscFormModel):
 
         
 class Kong_fu_xue_tang_jian_cha(HsscFormModel):
-    boolfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
+    boolfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='空腹血糖')
 
     class Meta:
-        verbose_name = '空腹血糖检查'
+        verbose_name = '门诊空腹血糖检查'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -498,23 +521,10 @@ class T6301(HsscFormModel):
     boolfield_yan_di = models.ForeignKey(Normality, related_name='normality_for_boolfield_yan_di_T6301', on_delete=models.CASCADE, null=True, blank=True, verbose_name='眼底')
     boolfield_shou_suo_ya = models.IntegerField(null=True, blank=True, verbose_name='收缩压')
     boolfield_shu_zhang_ya = models.IntegerField(null=True, blank=True, verbose_name='舒张压')
-    boolfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
+    boolfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False, verbose_name='空腹血糖')
 
     class Meta:
         verbose_name = '糖尿病一般随访'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.customer.name
-
-        
-class T8901(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T8901', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
-    boolfield_ke_neng_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ke_neng_zhen_duan_T8901', blank=True, verbose_name='可能诊断')
-    boolfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_pai_chu_zhen_duan_T8901', blank=True, verbose_name='排除诊断')
-
-    class Meta:
-        verbose_name = '胰岛素依赖性糖尿病'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -558,17 +568,6 @@ class A6217(HsscFormModel):
         return self.customer.name
 
         
-class Tang_niao_bing_zi_wo_jian_ce(HsscFormModel):
-    boolfield_kong_fu_xue_tang = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='空腹血糖')
-
-    class Meta:
-        verbose_name = '糖尿病自我监测'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.customer.name
-
-        
 class Yao_shi_fu_wu(HsscFormModel):
     boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yao_shi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
     boolfield_shi_fou_ji_xu_shi_yong = models.ForeignKey(Ji_xu_shi_yong_qing_kuang, related_name='ji_xu_shi_yong_qing_kuang_for_boolfield_shi_fou_ji_xu_shi_yong_yao_shi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否继续使用')
@@ -584,7 +583,6 @@ class Yao_shi_fu_wu(HsscFormModel):
         
 class Tang_niao_bing_zhuan_yong_wen_zhen(HsscFormModel):
     boolfield_bing_qing_bu_chong_miao_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
-    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_tang_niao_bing_zhuan_yong_wen_zhen', blank=True, verbose_name='症状')
     boolfield_tang_niao_bing_zheng_zhuang = models.ManyToManyField(Tang_niao_bing_zheng_zhuang, related_name='tang_niao_bing_zheng_zhuang_for_boolfield_tang_niao_bing_zheng_zhuang_tang_niao_bing_zhuan_yong_wen_zhen', blank=True, verbose_name='糖尿病症状')
 
     class Meta:
@@ -617,9 +615,8 @@ class A3101(HsscFormModel):
 
         
 class A6502(HsscFormModel):
+    boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=False, verbose_name='签到确认')
     boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
-    boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='签到确认')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_A6502', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
 
     class Meta:
         verbose_name = '门诊分诊'
@@ -630,8 +627,7 @@ class A6502(HsscFormModel):
 
         
 class A6501(HsscFormModel):
-    boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
-    boolfield_ze_ren_ren = models.ForeignKey(Staff, related_name='staff_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
 
     class Meta:
         verbose_name = '代人预约挂号'
@@ -649,7 +645,7 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
     boolfield_yao_pin_ming = models.ManyToManyField(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_men_zhen_chu_fang_biao', blank=True, verbose_name='药品名')
 
     class Meta:
-        verbose_name = '药物干预'
+        verbose_name = '药品处方'
         verbose_name_plural = verbose_name
 
     def __str__(self):
