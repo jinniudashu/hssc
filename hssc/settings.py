@@ -127,7 +127,8 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             # "hosts": [env('REDIS_URL')],
-            'hosts': ['redis://default:redispw@localhost:32768']
+            # 'hosts': ['redis://default:redispw@localhost:32768']
+            'hosts': ['redis://default:redispw@localhost:49153']
         },
     },
 }
@@ -157,7 +158,6 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'zh-Hans'
 
 USE_TZ = True
-# USE_TZ = False
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -192,7 +192,8 @@ SIMPLE_BACKEND_REDIRECT_URL = '/'
 
 # CELERY SETTINGS
 # CELERY_BROKER_URL = env('REDIS_URL')
-CELERY_BROKER_URL = 'redis://default:redispw@localhost:32768'
+# CELERY_BROKER_URL = 'redis://default:redispw@localhost:32768'
+CELERY_BROKER_URL = 'redis://default:redispw@localhost:49153'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
