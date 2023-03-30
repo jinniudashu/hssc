@@ -122,6 +122,7 @@ def user_registered_handler(sender, user, request, **kwargs):
 @receiver(post_save, sender=User)
 def user_post_save_handler(sender, instance, created, **kwargs):
     if created:  # 创建用户
+        # 执行init_core_data.py脚本增加员工测试数据会触发以下逻辑
         if instance.is_staff:  # 新建职员
             print('创建员工信息', instance)
             customer = Customer.objects.create(
@@ -139,19 +140,26 @@ def user_post_save_handler(sender, instance, created, **kwargs):
                 user=instance,
                 name=name,
             )
-    # else:   # 更新用户
-    #     if instance.is_staff:
-    #         print('更新员工信息', instance)
-    #         customer = instance.customer
-    #         customer.name = instance.last_name+instance.first_name
-    #         customer.save()
-    #         customer.staff.email = instance.email
-    #         customer.staff.save()
-    #     else:   # 客户
-    #         print('更新客户信息', instance)
-    #         customer = instance.customer
-    #         customer.name = instance.last_name+instance.first_name
-    #         customer.save()
+    else:   # 更新用户
+        # 管理员在admin中新增员工时，要先增加用户，会触发以下逻辑，但此时还没有职员信息，所以要判断
+        if instance.is_staff:
+            print('更新员工信息', instance)
+            customer = instance.customer
+            customer.name = instance.last_name+instance.first_name
+            customer.save()
+            if hasattr(customer, 'staff'):
+                customer.staff.email = instance.email
+                customer.staff.save()
+            else:
+                Staff.objects.create(
+                    customer=customer,
+                    email=instance.email,
+                )
+        else:   # 客户
+            print('更新客户信息', instance)
+            customer = instance.customer
+            customer.name = instance.last_name+instance.first_name
+            customer.save()
 
 
 @receiver(post_delete, sender=User)

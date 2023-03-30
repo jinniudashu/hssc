@@ -169,7 +169,7 @@ class ClinicSite(admin.AdminSite):
             messages.add_message(request, messages.INFO, f'{service.label}已开单')
             return redirect(customer)
 
-    # 创建新的服务日程安排
+    # 安排服务/创建新的服务日程
     def new_service_schedule(self, request, **kwargs):
         from core.business_functions import eval_scheduled_time
         # 1. 创建"安排服务计划"服务进程

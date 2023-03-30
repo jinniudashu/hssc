@@ -8,7 +8,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-import datetime
+from datetime import timedelta
 from time import time
 from enum import Enum
 
@@ -360,8 +360,8 @@ class StaffTodoManager(models.Manager):
 
 	# 未来七天任务
     def week_todos(self, operator):
-        startTime = timezone.now() + datetime.timedelta(days=1)
-        endTime = timezone.now() + datetime.timedelta(days=7)
+        startTime = timezone.now() + timedelta(days=1)
+        endTime = timezone.now() + timedelta(days=7)
         return self.filter(
             operator=operator, 
             priority=3, 
