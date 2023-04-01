@@ -68,6 +68,7 @@ class CustomerScheduleAdmin(HsscFormAdmin):
     list_display = ['service', 'scheduled_time', 'scheduled_operator', 'overtime', 'is_assigned']
     list_editable = ['scheduled_time', 'scheduled_operator', 'overtime', 'is_assigned']
     readonly_fields = ['customer', 'service']
+    filter_horizontal = ('reference_operation',)
     ordering = ('scheduled_time',)
 
 clinic_site.register(CustomerSchedule, CustomerScheduleAdmin)
@@ -175,6 +176,42 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 # Service表单Admin
 # **********************************************************************************************************************
 
+class Yi_xing_tang_niao_bing_zhen_duanAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
+    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
+
+admin.site.register(Yi_xing_tang_niao_bing_zhen_duan, Yi_xing_tang_niao_bing_zhen_duanAdmin)
+clinic_site.register(Yi_xing_tang_niao_bing_zhen_duan, Yi_xing_tang_niao_bing_zhen_duanAdmin)
+
+class Zhu_she_fu_wuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("输液注射单", {"fields": ("boolfield_yong_yao_pin_ci", "boolfield_yao_pin_gui_ge", "boolfield_chang_yong_chu_fang_liang", "boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", "boolfield_yao_pin_ming", )}), ]
+    autocomplete_fields = ["boolfield_yao_pin_ming", ]
+
+admin.site.register(Zhu_she_fu_wu, Zhu_she_fu_wuAdmin)
+clinic_site.register(Zhu_she_fu_wu, Zhu_she_fu_wuAdmin)
+
+class Yun_dong_chu_fangAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("运动干预", {"fields": ("boolfield_yun_dong_gan_yu", )}), ]
+    autocomplete_fields = ["boolfield_yun_dong_gan_yu", ]
+
+admin.site.register(Yun_dong_chu_fang, Yun_dong_chu_fangAdmin)
+clinic_site.register(Yun_dong_chu_fang, Yun_dong_chu_fangAdmin)
+
+class Ying_yang_chu_fangAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("营养干预", {"fields": ("boolfield_ying_yang_gan_yu", )}), ]
+    autocomplete_fields = ["boolfield_ying_yang_gan_yu", ]
+
+admin.site.register(Ying_yang_chu_fang, Ying_yang_chu_fangAdmin)
+clinic_site.register(Ying_yang_chu_fang, Ying_yang_chu_fangAdmin)
+
 class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tangAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -190,6 +227,26 @@ class Yuan_wai_jian_ce_kong_fu_xue_tangAdmin(HsscFormAdmin):
 
 admin.site.register(Yuan_wai_jian_ce_kong_fu_xue_tang, Yuan_wai_jian_ce_kong_fu_xue_tangAdmin)
 clinic_site.register(Yuan_wai_jian_ce_kong_fu_xue_tang, Yuan_wai_jian_ce_kong_fu_xue_tangAdmin)
+
+class Man_yi_du_diao_chaAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("满意度调查表", {"fields": ("boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen", "boolfield_ping_tai_fu_wu_xiang_mu_ping_fen", "boolfield_fu_wu_liu_cheng_ping_fen", "boolfield_fu_wu_xiao_lv_ping_fen", "boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu", "boolfield_you_dai_gai_jin_de_fu_wu", )}), 
+        ("满意度调查表", {"fields": ("boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen", "boolfield_ping_tai_fu_wu_xiang_mu_ping_fen", "boolfield_fu_wu_liu_cheng_ping_fen", "boolfield_fu_wu_xiao_lv_ping_fen", "boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu", "boolfield_you_dai_gai_jin_de_fu_wu", )}), ]
+    radio_fields = {"boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_ping_tai_fu_wu_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_fu_wu_liu_cheng_ping_fen": admin.VERTICAL, "boolfield_fu_wu_xiao_lv_ping_fen": admin.VERTICAL, "boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_ping_tai_fu_wu_xiang_mu_ping_fen": admin.VERTICAL, "boolfield_fu_wu_liu_cheng_ping_fen": admin.VERTICAL, "boolfield_fu_wu_xiao_lv_ping_fen": admin.VERTICAL, }
+
+admin.site.register(Man_yi_du_diao_cha, Man_yi_du_diao_chaAdmin)
+clinic_site.register(Man_yi_du_diao_cha, Man_yi_du_diao_chaAdmin)
+
+class Zhen_hou_sui_fangAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("诊后回访单", {"fields": ("boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia", "boolfield_deng_hou_qing_kuang", "boolfield_cun_zai_de_wen_ti", "boolfield_you_dai_gai_jin_de_fu_wu", "boolfield_nin_de_dan_xin_he_gu_lv", "boolfield_nin_hai_xu_yao_de_fu_wu", "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu", "boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men", )}), 
+        ("诊后回访单", {"fields": ("boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia", "boolfield_deng_hou_qing_kuang", "boolfield_cun_zai_de_wen_ti", "boolfield_you_dai_gai_jin_de_fu_wu", "boolfield_nin_de_dan_xin_he_gu_lv", "boolfield_nin_hai_xu_yao_de_fu_wu", "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu", "boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men", )}), ]
+    radio_fields = {"boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu": admin.VERTICAL, "boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men": admin.VERTICAL, "boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia": admin.VERTICAL, "boolfield_deng_hou_qing_kuang": admin.VERTICAL, "boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu": admin.VERTICAL, "boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men": admin.VERTICAL, }
+
+admin.site.register(Zhen_hou_sui_fang, Zhen_hou_sui_fangAdmin)
+clinic_site.register(Zhen_hou_sui_fang, Zhen_hou_sui_fangAdmin)
 
 class Xue_ya_jian_ce_ping_guAdmin(HsscFormAdmin):
     fieldssets = [
@@ -251,7 +308,8 @@ clinic_site.register(Gong_ying_shang_ji_ben_xin_xi_diao_cha, Gong_ying_shang_ji_
 
 class Yao_pin_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
     fieldssets = [
-        ("药品基本信息表", {"fields": ("boolfield_yao_pin_tong_yong_ming", "boolfield_yao_pin_ming_cheng", "boolfield_yong_yao_pin_ci", "boolfield_yao_pin_bian_ma", "boolfield_yao_pin_gui_ge", "boolfield_chang_yong_chu_fang_liang", "boolfield_dui_zhao_yi_bao_ming_cheng", "boolfield_dui_zhao_ji_yao_ming_cheng", "boolfield_huan_suan_gui_ze", "boolfield_yong_yao_liao_cheng", "boolfield_chu_fang_ji_liang_dan_wei", "boolfield_ru_ku_ji_liang_dan_wei", "boolfield_xiao_shou_ji_liang_dan_wei", "boolfield_yong_yao_tu_jing", "boolfield_yao_pin_fen_lei", )}), ]
+        ("药品基本信息表", {"fields": ("boolfield_yao_pin_tong_yong_ming", "boolfield_yao_pin_ming_cheng", "boolfield_yong_yao_pin_ci", "boolfield_yao_pin_bian_ma", "boolfield_yao_pin_gui_ge", "boolfield_chang_yong_chu_fang_liang", "boolfield_dui_zhao_yi_bao_ming_cheng", "boolfield_dui_zhao_ji_yao_ming_cheng", "boolfield_huan_suan_gui_ze", "boolfield_yong_yao_liao_cheng", "boolfield_chu_fang_ji_liang_dan_wei", "boolfield_ru_ku_ji_liang_dan_wei", "boolfield_xiao_shou_ji_liang_dan_wei", "boolfield_yong_yao_tu_jing", "boolfield_yao_pin_fen_lei", "boolfield_yao_pin_shi_ying_zheng", "boolfield_yao_pin_bu_shi_ying_zheng", )}), ]
+    autocomplete_fields = ["boolfield_yao_pin_shi_ying_zheng", "boolfield_yao_pin_bu_shi_ying_zheng", ]
     search_fields = ["name", "pym", ]
 
 admin.site.register(Yao_pin_ji_ben_xin_xi_biao, Yao_pin_ji_ben_xin_xi_biaoAdmin)
@@ -445,7 +503,9 @@ clinic_site.register(Tang_niao_bing_zhuan_yong_wen_zhen, Tang_niao_bing_zhuan_yo
 class A3101Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("诊前检查表", {"fields": ("boolfield_ti_wen", "boolfield_mai_bo", "boolfield_hu_xi_pin_lv", "boolfield_shen_gao", "boolfield_ti_zhong", "boolfield_ti_zhi_zhi_shu", "boolfield_shou_suo_ya", "boolfield_shu_zhang_ya", "boolfield_yao_wei", "boolfield_yan_bu", "boolfield_xia_zhi_shui_zhong", )}), ]
+        ("诊前检查表", {"fields": ("boolfield_ti_wen", "boolfield_mai_bo", "boolfield_hu_xi_pin_lv", "boolfield_shen_gao", "boolfield_ti_zhong", "boolfield_ti_zhi_zhi_shu", "boolfield_shou_suo_ya", "boolfield_shu_zhang_ya", "boolfield_yao_wei", "boolfield_yan_bu", "boolfield_xia_zhi_shui_zhong", )}), 
+        ("院外辅助问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", ]
     radio_fields = {"boolfield_xia_zhi_shui_zhong": admin.VERTICAL, }
 
 admin.site.register(A3101, A3101Admin)
@@ -454,7 +514,10 @@ clinic_site.register(A3101, A3101Admin)
 class A6502Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("门诊分诊", {"fields": ("boolfield_qian_dao_que_ren", "boolfield_yu_yue_shi_jian", )}), ]
+        ("门诊分诊", {"fields": ("boolfield_qian_dao_que_ren", )}), 
+        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_ze_ren_ren", )}), 
+        ("院外辅助问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", )}), ]
+    autocomplete_fields = ["boolfield_ze_ren_ren", "boolfield_zheng_zhuang", ]
     radio_fields = {"boolfield_qian_dao_que_ren": admin.VERTICAL, }
 
 admin.site.register(A6502, A6502Admin)
@@ -463,7 +526,9 @@ clinic_site.register(A6502, A6502Admin)
 class A6501Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", )}), ]
+        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_ze_ren_ren", )}), 
+        ("院外辅助问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", )}), ]
+    autocomplete_fields = ["boolfield_ze_ren_ren", "boolfield_zheng_zhuang", ]
 
 admin.site.register(A6501, A6501Admin)
 clinic_site.register(A6501, A6501Admin)

@@ -277,6 +277,11 @@ class FieldsType(Enum):
     boolfield_lian_xi_dian_hua = "String"  # 联系电话
     boolfield_xing_ming = "String"  # 姓名
     boolfield_nian_ling = "String"  # 年龄
+    boolfield_cun_zai_de_wen_ti = "String"  # 存在的问题
+    boolfield_nin_de_dan_xin_he_gu_lv = "String"  # 您的担心和顾虑
+    boolfield_you_dai_gai_jin_de_fu_wu = "String"  # 有待改进的服务
+    boolfield_nin_hai_xu_yao_de_fu_wu = "String"  # 您还需要的服务
+    boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu = "String"  # 希望增加的服务项目
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -346,7 +351,9 @@ class FieldsType(Enum):
     boolfield_qian_dao_que_ren = "dictionaries.Qian_dao_que_ren"  # 签到确认
     boolfield_shi_mian_qing_kuang = "dictionaries.Shi_mian_qing_kuang"  # 失眠情况
     boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = "dictionaries.Ya_li_qing_kuang"  # 生活工作压力情况
+    T4501 = "icpc.Icpc8_other_health_interventions"  # 营养干预
     boolfield_shi_fou_ji_xu_shi_yong = "dictionaries.Ji_xu_shi_yong_qing_kuang"  # 是否继续使用
+    T4502 = "icpc.Icpc8_other_health_interventions"  # 运动干预
     boolfield_qian_yue_que_ren = "dictionaries.Qian_yue_que_ren"  # 签约确认
     boolfield_xue_ya_jian_ce_ping_gu = "dictionaries.Sui_fang_ping_gu"  # 血压监测评估
     boolfield_niao_tang = "dictionaries.Niao_tang"  # 尿糖
@@ -365,4 +372,15 @@ class FieldsType(Enum):
     boolfield_an_pai_que_ren = "dictionaries.An_pai_que_ren"  # 安排确认
     boolfield_yao_pin_ming = "entities.Yao_pin_ji_ben_xin_xi_biao"  # 药品名
     boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu = "dictionaries.Tang_niao_bing_kong_zhi_xiao_guo_ping_gu"  # 糖尿病控制效果评估
+    boolfield_fu_wu_xiao_lv_ping_fen = "dictionaries.Ping_fen"  # 服务效率评分
+    boolfield_deng_hou_qing_kuang = "dictionaries.Deng_hou_shi_jian"  # 等候情况
+    boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen = "dictionaries.Ping_fen"  # 医疗服务技能项目评分
+    boolfield_ping_tai_fu_wu_xiang_mu_ping_fen = "dictionaries.Ping_fen"  # 平台服务项目评分
+    boolfield_fu_wu_liu_cheng_ping_fen = "dictionaries.Ping_fen"  # 服务流程评分
+    boolfield_nin_cong_he_chu_zhi_dao_wo_men_de_fu_wu = "dictionaries.Nin_cong_he_chu_zhi_dao_wo_men"  # 您从何处知道我们的服务
+    boolfield_nin_shi_fou_yuan_yi_xiang_ta_ren_tui_jian_wo_men = "dictionaries.Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu"  # 您是否愿意向他人推荐我们
+    boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia = "dictionaries.Fu_wu_xiao_guo_ping_jia"  # 治疗感受和效果评价
     boolfield_shang_men_fu_wu_xiang_mu = "icpc.Icpc7_treatments"  # 上门服务项目
+    boolfield_ze_ren_ren = "core.VirtualStaff"  # 责任人
+    boolfield_yao_pin_shi_ying_zheng = "icpc.Icpc5_evaluation_and_diagnoses"  # 药品适应症
+    boolfield_yao_pin_bu_shi_ying_zheng = "icpc.Icpc5_evaluation_and_diagnoses"  # 药品不适应症

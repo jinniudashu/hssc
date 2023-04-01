@@ -1,5 +1,21 @@
 from rest_framework import serializers
 from .models import *
+class Yi_xing_tang_niao_bing_zhen_duanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yi_xing_tang_niao_bing_zhen_duan
+        fields = '__all__'
+class Zhu_she_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zhu_she_fu_wu
+        fields = '__all__'
+class Yun_dong_chu_fangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yun_dong_chu_fang
+        fields = '__all__'
+class Ying_yang_chu_fangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ying_yang_chu_fang
+        fields = '__all__'
 class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang
@@ -7,6 +23,14 @@ class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tangSerializer(serializers.ModelSe
 class Yuan_wai_jian_ce_kong_fu_xue_tangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Yuan_wai_jian_ce_kong_fu_xue_tang
+        fields = '__all__'
+class Man_yi_du_diao_chaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Man_yi_du_diao_cha
+        fields = '__all__'
+class Zhen_hou_sui_fangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zhen_hou_sui_fang
         fields = '__all__'
 class Xue_ya_jian_ce_ping_guSerializer(serializers.ModelSerializer):
     class Meta:

@@ -200,3 +200,28 @@ class Tang_niao_bing_kong_zhi_xiao_guo_ping_guSerializer(serializers.ModelSerial
     class Meta:
         model = Tang_niao_bing_kong_zhi_xiao_guo_ping_gu
         fields = 'value'
+
+class Deng_hou_shi_jianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Deng_hou_shi_jian
+        fields = 'value'
+
+class Fu_wu_xiao_guo_ping_jiaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fu_wu_xiao_guo_ping_jia
+        fields = 'value'
+
+class Ping_fenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ping_fen
+        fields = 'value'
+
+class Nin_cong_he_chu_zhi_dao_wo_menSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nin_cong_he_chu_zhi_dao_wo_men
+        fields = 'value'
+
+class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu
+        fields = 'value'
