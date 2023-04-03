@@ -98,6 +98,7 @@
                 let _this = this;
 
                 customerId = Cookies.get('customer_id');
+                console.log('客户ID：', customerId);
 
                 permitted_services_id = Cookies.get('permitted_services_id').slice(1,-1).replace(/\\054 /g, ',').split(',')
                 this.permittedServicesId = permitted_services_id.map(id => parseInt(id))

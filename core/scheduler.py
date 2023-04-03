@@ -135,10 +135,9 @@ def user_post_save_handler(sender, instance, created, **kwargs):
             )
         else:  # 新建客户
             print('创建客户信息', instance)
-            name = instance.last_name+instance.first_name if instance.last_name+instance.first_name else instance.username
             Customer.objects.create(
                 user=instance,
-                name=name,
+                name=instance.last_name+instance.first_name if instance.last_name+instance.first_name else instance.username,
             )
     else:   # 更新用户
         # 管理员在admin中新增员工时，要先增加用户，会触发以下逻辑，但此时还没有职员信息，所以要判断
@@ -158,7 +157,7 @@ def user_post_save_handler(sender, instance, created, **kwargs):
         else:   # 客户
             print('更新客户信息', instance)
             customer = instance.customer
-            customer.name = instance.last_name+instance.first_name
+            customer.name = instance.last_name+instance.first_name if instance.last_name+instance.first_name else instance.username
             customer.save()
 
 
@@ -215,7 +214,6 @@ def operation_proc_post_save_handler(sender, instance, created, **kwargs):
                 customer_address=instance.customer.address,
                 priority = instance.priority
             )
-
 
 
 @receiver(operand_started)
@@ -338,10 +336,6 @@ def operand_finished_handler(sender, **kwargs):
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
             
-            # 创建新的推荐服务条目前先删除此客户的历史推荐服务条目
-            # 获取当前客户的所有推荐服务条目并删除
-            RecommendedService.objects.filter(customer=operation_proc.customer).delete()
-
             # 创建新的推荐服务条目
             obj = RecommendedService(
                 service=kwargs['next_service'],  # 推荐的服务
@@ -407,7 +401,10 @@ def operand_finished_handler(sender, **kwargs):
     operation_proc = kwargs['pid']
     request = kwargs['request']
 
-    # 根据服务规则检查业务事件是否发生，执行系统作业
+    # 删除当前客户的所有推荐服务条目
+    RecommendedService.objects.filter(customer=operation_proc.customer).delete()
+
+    # 根据服务规则检查业务事件是否发生，执行系统作业    
     # 逐一检查service_rule.event_rule.expression是否满足
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True):
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件

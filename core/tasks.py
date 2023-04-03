@@ -92,8 +92,13 @@ def check_proc_awaiting_timeout(self):
         content_type = ContentType.objects.get(app_label='service', model=schedule.service.name.lower())  # 表单类型
         proc_params['content_type'] = content_type
 
-        proc_params['passing_data'] = 0  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
-        proc_params['form_data'] = None  # 表单数据
+        # 检查是否有引用表单
+        if schedule.reference_operation:
+            proc_params['passing_data'] = 1  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+        else:
+            proc_params['passing_data'] = 0
+        
+        proc_params['form_data'] = None  # 待复制表单数据不使用
 
         print('客户日程安排增加到服务进程队列:', proc_params)
 

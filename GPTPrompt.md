@@ -1,4 +1,4 @@
-# 新增Feature：虚拟职员处理逻辑
+# 新增Feature 1, 虚拟职员处理逻辑
 
 ## 业务需求
 1. 业务要求任务可以指派给某个具体职员或者某个工作小组。
@@ -123,3 +123,9 @@ class VirtualStaff(models.Model):
 1. 设计系统生产环境生成脚本，备份设计数据，下载设计数据到设计系统开发环境；
 2. 清理Buessiness.api_fields='null'和'[]'的数据；
 3. 重新备份设计数据和生成脚本；
+
+
+# 新增Feature 2, 创建诊疗服务进程时判断父进程服务类型，如果是管理调度服务，则尝试拷贝父进程的引用进程表单内容
+1. 判断父进程content_object类型是否为CustomerSchedule
+2. 如果是，则尝试从reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
+

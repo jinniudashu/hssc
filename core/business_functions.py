@@ -61,25 +61,21 @@ def create_form_instance(operation_proc, passing_data, form_data):
         cpid=operation_proc.contract_service_proc,
     )
 
-    # 2. 如果不是基本信息表作业(作业服务表单!=作业服务的实体基本信息表单)，则为属性表，填入表头字段
-    # service = operation_proc.service
-    # if service.buessiness_forms.all().first() != service.managed_entity.base_form:
-    #     # 判断当前实体，填入实体基本信息表头字段
-    #     # 通用代码里customer应改为entity
-    #     base_info = eval(service.managed_entity.base_form.service_set.all().first().name.capitalize()).objects.filter(customer=operation_proc.customer).first()
-    #     # *********以下应为生成代码！生成所属实体表头信息************
-    #     form_instance.boolfield_chang_zhu_di_zhi = base_info.boolfield_chang_zhu_di_zhi
-    #     # form_instance.characterfield_contact_number = base_info.boolfield_lian_xi_dian_hua
-    #     form_instance.characterfield_name = base_info.characterfield_name
-    #     form_instance.characterfield_gender = base_info.characterfield_gender
-    #     form_instance.datetimefield_date_of_birth = base_info.datetimefield_date_of_birth
-    #     form_instance.save()
-
-    # 3. 如果passing_data>0, copy父进程表单数据
-    if passing_data > 0 and form_data:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
-        print('copy_previous_form_data:', 'form_instance:', form_instance, 'form_data:', form_data)
-        copy_previous_form_data(form_instance, form_data)
-
+    # 2. 如果passing_data>0, copy父进程表单数据
+    if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
+        # 父进程服务类型为诊疗服务（service_type=2）时，直接copy父进程表单数据
+        if operation_proc.service.service_type==2 and form_data:
+            print('copy_previous_form_data:', 'form_instance:', form_instance, 'form_data:', form_data)
+            copy_previous_form_data(form_instance, form_data)
+        # 父进程服务类型为管理调度服务（service_type=1）时，且父进程content_object类型为CustomerSchedule时，
+        # 尝试从content_object.reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
+        elif operation_proc.service.service_type==1 and operation_proc.content_object.__class__.__name__=='CustomerSchedule':
+            print('reference_operation:', operation_proc.content_object.reference_operation)
+            for proc in operation_proc.content_object.reference_operation:
+                form_obj = proc.content_object
+                # form_obj转换为form_data类型
+                form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+                copy_previous_form_data(form_instance, form_data)
     return form_instance
 
 
