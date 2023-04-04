@@ -211,11 +211,6 @@ class Fu_wu_xiao_guo_ping_jiaSerializer(serializers.ModelSerializer):
         model = Fu_wu_xiao_guo_ping_jia
         fields = 'value'
 
-class Ping_fenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ping_fen
-        fields = 'value'
-
 class Nin_cong_he_chu_zhi_dao_wo_menSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nin_cong_he_chu_zhi_dao_wo_men
