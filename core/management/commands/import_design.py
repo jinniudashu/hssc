@@ -12,8 +12,8 @@ class Command(BaseCommand):
         project_name = 'Clinic'
         
         print('开始导入脚本')
-        # SOURCECODE_URL = f'http://design.tpacn.com/define_backup/source_codes_list/{project_name}/'
-        SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{project_name}/'
+        SOURCECODE_URL = f'http://design.tpacn.com/define_backup/source_codes_list/{project_name}/'
+        # SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{project_name}/'
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         source_code =json.loads(res_json['code'])

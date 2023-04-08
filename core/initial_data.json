@@ -446,6 +446,20 @@
             ]
         },
         {
+            "label": "院外辅助问诊",
+            "name": "A6202",
+            "hssc_id": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
+            "pym": "ywfzwz",
+            "name_icpc": "A6202",
+            "description": "",
+            "api_fields": null,
+            "components": [
+                "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
+            ],
+            "components_groups": []
+        },
+        {
             "label": "糖尿病监测评估",
             "name": "A6220",
             "hssc_id": "bbf2ba74-aa48-11ec-8f0c-ee7ade4bced6",
@@ -914,7 +928,8 @@
                 "33f72e3e-e78d-11ec-8127-065284c7e455",
                 "5338730c-e78d-11ec-af5f-065284c7e455",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
-            ]
+            ],
+            "components_groups": []
         },
         {
             "label": "营养干预",
