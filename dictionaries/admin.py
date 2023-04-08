@@ -340,14 +340,6 @@ class Fu_wu_xiao_guo_ping_jiaAdmin(admin.ModelAdmin):
 clinic_site.register(Fu_wu_xiao_guo_ping_jia, Fu_wu_xiao_guo_ping_jiaAdmin)
 
 
-@admin.register(Ping_fen)
-class Ping_fenAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Ping_fen, Ping_fenAdmin)
-
-
 @admin.register(Nin_cong_he_chu_zhi_dao_wo_men)
 class Nin_cong_he_chu_zhi_dao_wo_menAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']

@@ -210,7 +210,7 @@
             "hssc_id": "0ce117aa-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "ywcf",
             "name_icpc": null,
-            "description": "",
+            "description": null,
             "api_fields": null,
             "components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
@@ -218,8 +218,7 @@
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
                 "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "用户注册",
@@ -237,8 +236,7 @@
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
                 "de9f4ea4-9aa1-11ec-bde1-8a6e55faf877",
                 "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "用户登录",
@@ -251,8 +249,7 @@
             "components": [
                 "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
                 "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "代人预约挂号",
@@ -260,27 +257,11 @@
             "hssc_id": "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "dryygh",
             "name_icpc": "A6501",
-            "description": "",
-            "api_fields": "[{\"scheduled_time\": \"boolfield_yu_yue_shi_jian\"}]",
-            "components": [
-                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
-                "4a68312a-cdd5-11ed-b166-0242ac120003"
-            ],
-            "components_groups": []
-        },
-        {
-            "label": "院外辅助问诊",
-            "name": "A6202",
-            "hssc_id": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
-            "pym": "ywfzwz",
-            "name_icpc": "A6202",
-            "description": "",
+            "description": null,
             "api_fields": null,
             "components": [
-                "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877"
+            ]
         },
         {
             "label": "门诊分诊",
@@ -291,9 +272,9 @@
             "description": "",
             "api_fields": null,
             "components": [
+                "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "诊前检查表",
@@ -315,8 +296,7 @@
                 "2cc86fcc-b89b-11ec-aad8-322924405212",
                 "dedebd28-9aa1-11ec-bde1-8a6e55faf877",
                 "dee098fa-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "糖尿病专用问诊",
@@ -329,8 +309,7 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "1cad2116-a52a-11ec-a478-2ec403f6c47b"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "药事服务",
@@ -344,8 +323,7 @@
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "01ae1278-a659-11ec-9221-f6197eef9f67",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "院内辅助问诊",
@@ -358,8 +336,7 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "院外咨询",
@@ -373,8 +350,7 @@
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "1287193a-a52a-11ec-a478-2ec403f6c47b"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "门诊医生问诊",
@@ -387,8 +363,7 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "糖尿病一般随访",
@@ -405,8 +380,7 @@
                 "decba0ee-9aa1-11ec-bde1-8a6e55faf877",
                 "1cad2116-a52a-11ec-a478-2ec403f6c47b",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "足背动脉检查",
@@ -419,8 +393,7 @@
             "components": [
                 "ded859ba-9aa1-11ec-bde1-8a6e55faf877",
                 "ded93d62-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "眼底检查",
@@ -432,8 +405,7 @@
             "api_fields": null,
             "components": [
                 "ded5a800-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "血压监测",
@@ -446,8 +418,7 @@
             "components": [
                 "deb35b74-9aa1-11ec-bde1-8a6e55faf877",
                 "deb416fe-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "空腹血糖检查",
@@ -459,8 +430,20 @@
             "api_fields": null,
             "components": [
                 "deb59434-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
+        },
+        {
+            "label": "院外辅助问诊",
+            "name": "A6202",
+            "hssc_id": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
+            "pym": "ywfzwz",
+            "name_icpc": "A6202",
+            "description": "",
+            "api_fields": null,
+            "components": [
+                "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
+            ]
         },
         {
             "label": "糖尿病监测评估",
@@ -475,8 +458,7 @@
                 "ba6e088e-32fb-11ed-8023-0242ac120004",
                 "4bf17ad0-aa48-11ec-9f15-ee7ade4bced6",
                 "8c6b84ce-32fc-11ed-a506-0242ac120004"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "遗传病史",
@@ -489,8 +471,7 @@
             "components": [
                 "0178473c-cab3-11ec-a675-8e39d789b675",
                 "9c342812-cab9-11ec-a675-8e39d789b675"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "过敏史",
@@ -502,8 +483,7 @@
             "api_fields": null,
             "components": [
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "家族病史",
@@ -516,8 +496,7 @@
             "components": [
                 "5245480e-cab3-11ec-a675-8e39d789b675",
                 "888d068a-cab9-11ec-a675-8e39d789b675"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "手术史",
@@ -530,8 +509,7 @@
             "components": [
                 "deb645d2-9aa1-11ec-bde1-8a6e55faf877",
                 "dedbea3a-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "疾病史",
@@ -544,8 +522,7 @@
             "components": [
                 "deb70576-9aa1-11ec-bde1-8a6e55faf877",
                 "e2257bfc-cab2-11ec-a675-8e39d789b675"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "外伤史",
@@ -558,8 +535,7 @@
             "components": [
                 "35091e02-c9ee-11ec-b369-168d53e8234e",
                 "df91ce4e-cab3-11ec-b358-8e39d789b675"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "输血史",
@@ -572,8 +548,7 @@
             "components": [
                 "deb2a274-9aa1-11ec-bde1-8a6e55faf877",
                 "dd6c67a8-c9ed-11ec-b369-168d53e8234e"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "个人心理综合素质调查",
@@ -587,8 +562,7 @@
                 "dec70886-9aa1-11ec-bde1-8a6e55faf877",
                 "5024b3ea-a52c-11ec-9b14-2ec403f6c47b",
                 "5977c26a-a52d-11ec-a478-2ec403f6c47b"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "个人适应能力评估",
@@ -602,8 +576,7 @@
                 "de9bbcf8-9aa1-11ec-bde1-8a6e55faf877",
                 "dec7ec2e-9aa1-11ec-bde1-8a6e55faf877",
                 "dec8f9a2-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "个人身体健康评估",
@@ -619,8 +592,7 @@
                 "dece6cde-9aa1-11ec-bde1-8a6e55faf877",
                 "decf4d66-9aa1-11ec-bde1-8a6e55faf877",
                 "ded02d26-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "个人健康行为调查",
@@ -635,8 +607,7 @@
                 "de9d30a6-9aa1-11ec-bde1-8a6e55faf877",
                 "decabc92-9aa1-11ec-bde1-8a6e55faf877",
                 "decba0ee-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "社会环境评估",
@@ -649,8 +620,7 @@
             "components": [
                 "ded110f6-9aa1-11ec-bde1-8a6e55faf877",
                 "ded206d2-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "尿常规检查",
@@ -664,8 +634,7 @@
                 "f9eed08e-b091-11ec-b42a-5ed0e34457d3",
                 "04381988-b092-11ec-b42a-5ed0e34457d3",
                 "15957162-b092-11ec-b42a-5ed0e34457d3"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "糖化血红蛋白检查",
@@ -677,8 +646,7 @@
             "api_fields": null,
             "components": [
                 "deb4e084-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "诊断表",
@@ -692,8 +660,7 @@
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "6a4b6984-9e93-11ec-a013-aa434405c3fc",
                 "5b880f4c-9e93-11ec-b91b-aa434405c3fc"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "家庭医生签约",
@@ -706,8 +673,7 @@
             "components": [
                 "5ff67f9c-aa45-11ec-8f0c-ee7ade4bced6",
                 "b19d4830-aa45-11ec-8f0c-ee7ade4bced6"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "输液注射单",
@@ -725,8 +691,7 @@
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
                 "abe7baaa-c9ef-11ec-b369-168d53e8234e",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "上门服务",
@@ -740,8 +705,7 @@
                 "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
                 "6ef43624-c975-11ed-9502-0242ac120003",
                 "2ca0627a-c975-11ed-a1d5-0242ac120003"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "个人基本信息",
@@ -769,8 +733,7 @@
                 "dec38ce2-9aa1-11ec-bde1-8a6e55faf877",
                 "dec46bf8-9aa1-11ec-bde1-8a6e55faf877",
                 "ded3d502-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "申请服务表",
@@ -785,8 +748,7 @@
                 "3604f812-d100-11ec-ab0d-823d1f108281",
                 "cde598b8-d0ff-11ec-b369-823d1f108281",
                 "9e873f3a-d100-11ec-ab0d-823d1f108281"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "药品基本信息表",
@@ -811,11 +773,8 @@
                 "654dfc0a-c5ce-11ec-b819-725badf7393d",
                 "6da75824-c5ce-11ec-b819-725badf7393d",
                 "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
-                "5dc1e618-c5ce-11ec-b9d4-725badf7393d",
-                "a713475c-cf6a-11ed-8299-0242ac120003",
-                "b2f39554-cf6a-11ed-8299-0242ac120003"
-            ],
-            "components_groups": []
+                "5dc1e618-c5ce-11ec-b9d4-725badf7393d"
+            ]
         },
         {
             "label": "物料供应商基本信息表",
@@ -833,8 +792,7 @@
                 "7c53c810-c5cb-11ec-b819-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "5f80d88c-c5ca-11ec-b819-725badf7393d"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "设备基本信息表",
@@ -853,8 +811,7 @@
                 "66ae19e2-c5cc-11ec-b9d4-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "ca6c7ec4-c5cc-11ec-b819-725badf7393d"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "服务分供机构基本信息表",
@@ -873,8 +830,7 @@
                 "7c53c810-c5cb-11ec-b819-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "5f80d88c-c5ca-11ec-b819-725badf7393d"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "职员基本信息表",
@@ -894,8 +850,7 @@
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
                 "ded78062-9aa1-11ec-bde1-8a6e55faf877",
                 "ded69094-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "机构基本信息表",
@@ -916,8 +871,7 @@
                 "0b72d3cc-c5c9-11ec-b819-725badf7393d",
                 "13299560-c5c9-11ec-b9d4-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "餐后2小时血糖",
@@ -929,8 +883,7 @@
             "api_fields": null,
             "components": [
                 "d6f0beac-32fb-11ed-8023-0242ac120004"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "血压监测评估",
@@ -942,8 +895,7 @@
             "api_fields": null,
             "components": [
                 "4bf17ad0-aa48-11ec-9f15-ee7ade4bced6"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "诊后回访单",
@@ -962,26 +914,7 @@
                 "33f72e3e-e78d-11ec-8127-065284c7e455",
                 "5338730c-e78d-11ec-af5f-065284c7e455",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
-            ],
-            "components_groups": []
-        },
-        {
-            "label": "满意度调查表",
-            "name": "man_yi_du_diao_cha_biao",
-            "hssc_id": "3886329c-e404-11ec-9d3a-42585b16dcd4",
-            "pym": "myddcb",
-            "name_icpc": null,
-            "description": "",
-            "api_fields": null,
-            "components": [
-                "a80571f6-e403-11ec-9eb0-42585b16dcd4",
-                "b891a5ac-e404-11ec-9eb0-42585b16dcd4",
-                "39922168-e405-11ec-9eb0-42585b16dcd4",
-                "95f5faa2-e404-11ec-9eb0-42585b16dcd4",
-                "a47b3736-e404-11ec-9eb0-42585b16dcd4",
-                "4c7839d4-e405-11ec-9d3a-42585b16dcd4"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "营养干预",
@@ -993,8 +926,7 @@
             "api_fields": null,
             "components": [
                 "abc77c0a-a4c3-11ec-8f29-cecec7a0e139"
-            ],
-            "components_groups": []
+            ]
         },
         {
             "label": "运动干预",
@@ -1006,8 +938,7 @@
             "api_fields": null,
             "components": [
                 "bcb64276-a4c3-11ec-a7bb-cecec7a0e139"
-            ],
-            "components_groups": []
+            ]
         }
     ],
     "managedentity": [
@@ -1248,7 +1179,6 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
                 "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd"
             ],
             "role": [
@@ -1283,8 +1213,6 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
-                "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
                 "0d1b5014-9e23-11ec-aa2c-fe35a7065cdd"
             ],
             "role": [
@@ -1309,7 +1237,7 @@
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": "0:00:05",
+            "working_hours": null,
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -1318,7 +1246,6 @@
             "resource_knowledge": null,
             "generate_script_order": 100,
             "buessiness_forms": [
-                "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
                 "0cd1dcea-9e23-11ec-aa2c-fe35a7065cdd"
             ],
             "role": [
@@ -1476,7 +1403,7 @@
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": "0:00:10",
+            "working_hours": "0:00:05",
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -1676,7 +1603,7 @@
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": "0:00:10",
+            "working_hours": null,
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -1785,7 +1712,7 @@
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": "0:00:05",
+            "working_hours": "0:00:04",
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -1818,7 +1745,7 @@
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
-            "working_hours": "0:00:05",
+            "working_hours": null,
             "frequency": null,
             "cost": null,
             "load_feedback": false,
@@ -2416,39 +2343,6 @@
             ]
         },
         {
-            "label": "满意度调查",
-            "name": "man_yi_du_diao_cha",
-            "hssc_id": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
-            "pym": "myddc",
-            "name_icpc": null,
-            "managed_entity": "3cb66657-5fda-11ed-a938-4889e7cf38c9",
-            "priority": 3,
-            "service_type": 2,
-            "history_services_display": 0,
-            "enable_queue_counter": true,
-            "route_to": "CUSTOMER_HOMEPAGE",
-            "follow_up_required": false,
-            "follow_up_interval": null,
-            "follow_up_service": null,
-            "suppliers": null,
-            "not_suitable": null,
-            "overtime": null,
-            "working_hours": null,
-            "frequency": null,
-            "cost": null,
-            "load_feedback": false,
-            "resource_materials": null,
-            "resource_devices": null,
-            "resource_knowledge": null,
-            "generate_script_order": 100,
-            "buessiness_forms": [
-                "3886329c-e404-11ec-9d3a-42585b16dcd4"
-            ],
-            "role": [
-                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877"
-            ]
-        },
-        {
             "label": "院外监测空腹血糖",
             "name": "yuan_wai_jian_ce_kong_fu_xue_tang",
             "hssc_id": "a1b9c424-c971-11ed-a51e-0242ac120003",
@@ -2599,9 +2493,9 @@
             "history_services_display": 0,
             "enable_queue_counter": true,
             "route_to": "CUSTOMER_HOMEPAGE",
-            "follow_up_required": true,
-            "follow_up_interval": "3 days, 0:00:00",
-            "follow_up_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
             "suppliers": null,
             "not_suitable": null,
             "overtime": null,
@@ -3066,25 +2960,9 @@
         {
             "label": null,
             "name": null,
-            "hssc_id": "62ce05c0-60c4-11ed-8c1d-4889e7cf38c9",
-            "service": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
-            "buessiness_form": "3886329c-e404-11ec-9d3a-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
             "hssc_id": "5e7baeda-e406-11ec-9d3a-42585b16dcd4",
             "service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
             "buessiness_form": "937920f2-e403-11ec-9eb0-42585b16dcd4",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "ca48d37c-e406-11ec-9eb0-42585b16dcd4",
-            "service": "ca482cce-e406-11ec-9eb0-42585b16dcd4",
-            "buessiness_form": "3886329c-e404-11ec-9d3a-42585b16dcd4",
             "is_list": false
         },
         {
@@ -3141,38 +3019,6 @@
             "hssc_id": "90872c5a-c976-11ed-a229-0242ac120003",
             "service": "9086ce2c-c976-11ed-a229-0242ac120003",
             "buessiness_form": "0c7bdb06-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "9405018a-cf67-11ed-9eaf-0242ac120003",
-            "service": "e0371aa8-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0d137dbc-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "a4b8d74a-cf67-11ed-9eaf-0242ac120003",
-            "service": "e035d648-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "bcefaf82-cf67-11ed-9eaf-0242ac120003",
-            "service": "e0371aa8-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
-            "is_list": false
-        },
-        {
-            "label": null,
-            "name": null,
-            "hssc_id": "045bd2e2-cf68-11ed-a782-0242ac120003",
-            "service": "e0385d3c-9aa1-11ec-bde1-8a6e55faf877",
-            "buessiness_form": "0c704264-9e23-11ec-aa2c-fe35a7065cdd",
             "is_list": false
         }
     ],
@@ -3582,7 +3428,7 @@
             "service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
             "event_rule": "1013b7c6-afca-11ec-b226-925bd788f441",
             "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
-            "next_service": "cb6fe794-b6da-11ec-8425-0ebea05fc526",
+            "next_service": "17c608fa-d119-11ec-ab0d-823d1f108281",
             "passing_data": 2,
             "complete_feedback": 0,
             "reminders": 1,
@@ -3816,13 +3662,13 @@
             "is_active": true
         },
         {
-            "label": "糖尿病运动处方推荐",
+            "label": "诊后7天回访",
             "name": null,
             "hssc_id": "40c1bd12-c97a-11ed-a572-0242ac120003",
-            "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
+            "service": "1b8b3fba-c974-11ed-a1d5-0242ac120003",
             "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
-            "next_service": "6494a7a2-c972-11ed-a51e-0242ac120003",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "5e7ae356-e406-11ec-9d3a-42585b16dcd4",
             "passing_data": 1,
             "complete_feedback": 1,
             "reminders": 0,

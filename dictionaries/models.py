@@ -281,12 +281,6 @@ class Fu_wu_xiao_guo_ping_jia(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Ping_fen(DictBase):
-    class Meta:
-        verbose_name = '评分'
-        verbose_name_plural = verbose_name
-
-
 class Nin_cong_he_chu_zhi_dao_wo_men(DictBase):
     class Meta:
         verbose_name = '您从何处知道我们的服务'

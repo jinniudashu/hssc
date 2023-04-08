@@ -26,8 +26,13 @@ class Command(BaseCommand):
     def _create_code_file(self, code_script):
         print('写入脚本文件...')
         for app_name, scripts in code_script.items():
-            for file_name, script in scripts.items():
-                self._write_file(f'./{app_name}/{file_name}.py', script)
+            if app_name == 'templates':
+                for file_name, script in scripts.items():
+                    self._write_file(f'./{app_name}/{file_name}_change_form.html', script)
+            else:
+                for file_name, script in scripts.items():
+                    if script:
+                        self._write_file(f'./{app_name}/{file_name}.py', script)
 
     def _create_data_file(self, data_script):
         print('写入json数据文件...')
