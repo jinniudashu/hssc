@@ -1,0 +1,8 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+    {{ block.super }}
+    <div style="margin-top: 20px;">
+        <strong>服务日程数量: </strong>{{ customer_schedule_counts }}
+    </div>
+{% endblock %}
