@@ -86,7 +86,7 @@ Congratulations! You have successfully installed and run the HSSC application.
     python manage.py import_design
     python manage.py makemigrations
     python manage.py migrate
-    python manage.py createsuperuser
+
     python manage.py loaddata initial_data.json
     python manage.py init_core_data
 ```
