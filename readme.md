@@ -19,11 +19,17 @@
 ### 🧠 Core concepts
 #### The core business model consists of seven key elements, which is a general collaboration system abstraction.
 1. Service tasks: defined by service task metadata, management attribute, and business attribute.
+
 2. Service form: the work product of the service task, represented by a JSON form consisting of key-value pairs of multiple business fields.
+
 3. Business event: when the value of a business field in the service form meets certain conditions which is expressed as a logic expression, a certain business event is considered occurring.
+
 4. Service rules: after completing the service task, what action (system job) should be taken if a certain business event occurs.
+
 5. System job: system scheduling actions, currently including generating the next task, recommending the next task, sending WeChat public account messages, and sending Enterprise WeChat messages. Additional system jobs can be added based on user needs.
+
 6. Service process: used to manage and schedule service task status during service task runtime.
+
 7. Scheduler: determines which system scheduling action should be taken based on the business rules when the service process status changes.
 
 ![Core business model relationship diagram](./docs/7elements.png)
@@ -31,6 +37,7 @@
 ### 👨‍🚀 Getting Started
 #### 📋 Requirements
 * Redis server is required at "localhost:6379" to run the application. Please install Redis server first.
+
 * .env file is required at the root directory of the project, please refer to .env.example for the required environment variables.
 
 #### 🛠️ Manual Installation

@@ -1,4 +1,4 @@
-## HSSC(Healthcare Service Supply Chain) | [English](../README.md)
+## HSSC (Healthcare Service Supply Chain) | [English](../README.md)
 
 ### 🚀 特性
 #### 本项目是健康管理应用定制系统组成部分——运行时框架子系统
