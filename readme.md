@@ -4,6 +4,8 @@
 #### This project is the runtime framework subsystem of a system for customizing healthcare application.
 * The goal of the healthcare application is to coordinate and push the correct information to the right people at the right time.
 
+* The fundamental solution to this problem is to generate a suitable next task for each collaborator involved, where "suitable" means in accordance with the predetermined business rules.
+
 * In order to meet the unique needs of the healthcare industry, service tasks and business rules need to be customized by business designers. The system can immediately generate business applications for publication and operation based on the customized business design.
 
 * The application customized by the business designer can collaborate with multiple healthcare experts' service tasks according to the preset business rules to complete user service tasks.
