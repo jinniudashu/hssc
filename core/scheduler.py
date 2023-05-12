@@ -430,8 +430,10 @@ def operand_finished_handler(sender, **kwargs):
                 'form_data': kwargs['form_data'],
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
-            _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
-            print('From check_rules 执行结果:', _result)
+            # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
+            if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
+                _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
+                print('From check_rules 执行结果:', _result)
     
 
     # 执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程

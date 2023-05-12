@@ -1892,6 +1892,61 @@
         }
     },
     {
+        "model": "dictionaries.Ping_fen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7c2b34fc-e404-11ec-9eb0-42585b16dcd4",
+            "pym": null,
+            "value": "4",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Ping_fen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7c2c725e-e404-11ec-9eb0-42585b16dcd4",
+            "pym": null,
+            "value": "3",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Ping_fen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7c2ca3be-e404-11ec-9eb0-42585b16dcd4",
+            "pym": null,
+            "value": "2",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Ping_fen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7c2cd01e-e404-11ec-9eb0-42585b16dcd4",
+            "pym": null,
+            "value": "1",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Ping_fen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7c2cfc74-e404-11ec-9eb0-42585b16dcd4",
+            "pym": null,
+            "value": "0",
+            "icpc": null
+        }
+    },
+    {
         "model": "dictionaries.Nin_cong_he_chu_zhi_dao_wo_men",
         "fields": {
             "label": null,

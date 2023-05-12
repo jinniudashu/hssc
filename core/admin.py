@@ -392,7 +392,7 @@ class ServicePackageAdmin(admin.ModelAdmin):
     ordering = ['id']
 
 
-admin.site.register(SystemOperand)
+# admin.site.register(SystemOperand)
 
 
 @admin.register(EventRule)

@@ -24,6 +24,10 @@ class Yuan_wai_jian_ce_kong_fu_xue_tangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Yuan_wai_jian_ce_kong_fu_xue_tang
         fields = '__all__'
+class Man_yi_du_diao_chaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Man_yi_du_diao_cha
+        fields = '__all__'
 class Zhen_hou_sui_fangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zhen_hou_sui_fang
