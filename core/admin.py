@@ -397,7 +397,7 @@ admin.site.register(SystemOperand)
 
 @admin.register(EventRule)
 class EventRuleAdmin(admin.ModelAdmin):
-    list_display = ('label', 'description', 'expression', 'detection_scope', 'weight')
+    list_display = ('label', 'description', 'expression', 'detection_scope', 'event_type')
     list_display_links = ['label', 'description']
     search_fields=['label', 'name', 'pym']
     readonly_fields = ['hssc_id']

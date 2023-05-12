@@ -153,6 +153,8 @@ class SystemOperand(HsscBase):
     func = models.CharField(max_length=255, blank=True, null=True, verbose_name="内部实现函数")
     parameters = models.CharField(max_length=255, blank=True, null=True, verbose_name="参数")
     description = models.CharField(max_length=255, blank=True, null=True, verbose_name="描述")
+    Operand_type = [('SCHEDULE_OPERAND', '调度作业'), ('FORM_OPERAND', '表单作业')]
+    operand_type = models.CharField(max_length=100, choices=Operand_type, default='SCHEDULE_OPERAND', verbose_name="系统作业类型")
     Applicable = [(0, '作业'), (1, '单元服务'), (2, '服务包'), (3, '全部')]
     applicable = models.PositiveSmallIntegerField(choices=Applicable, default=1, verbose_name='适用范围')
 
@@ -170,6 +172,8 @@ class EventRule(HsscBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
     Detection_scope = [('ALL', '所有历史表单'), ('CURRENT_SERVICE', '本次服务表单'), ('LAST_WEEK_SERVICES', '过去7天表单')]
     detection_scope = models.CharField(max_length=100, choices=Detection_scope, default='CURRENT_SERVICE', blank=True, null=True, verbose_name='检测范围')
+    Event_type = [('FORM_EVENT', '表单事件'), ('SCHEDULE_EVENT', '调度事件')]
+    event_type = models.CharField(max_length=100, choices=Event_type, default='SCHEDULE_EVENT', verbose_name="事件类型")
     weight = models.PositiveSmallIntegerField(blank=True, null=True, default=1, verbose_name="权重")
     expression = models.TextField(max_length=1024, blank=True, null=True, verbose_name="内部表达式")
     expression_fields = models.CharField(max_length=1024, blank=True, null=True, verbose_name="内部表达式字段")
