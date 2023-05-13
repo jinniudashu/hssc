@@ -533,6 +533,7 @@ class Men_zhen_chu_fang_biaoAdmin(HsscFormAdmin):
         ("基本信息", {"fields": ((),)}), 
         ("药物处方", {"fields": ("boolfield_yong_yao_pin_ci", "boolfield_chang_yong_chu_fang_liang", "boolfield_yong_yao_liao_cheng", "boolfield_yong_yao_tu_jing", "boolfield_yao_pin_ming", )}), ]
     autocomplete_fields = ["boolfield_yao_pin_ming", ]
+    change_form_template = "men_zhen_chu_fang_biao_change_form.html"
 
 admin.site.register(Men_zhen_chu_fang_biao, Men_zhen_chu_fang_biaoAdmin)
 clinic_site.register(Men_zhen_chu_fang_biao, Men_zhen_chu_fang_biaoAdmin)
