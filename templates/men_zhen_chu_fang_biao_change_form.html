@@ -9,7 +9,7 @@
 
         // A function implementing the event expression logic. It accepts the field values as arguments, and returns a boolean
         const form_event = (zhen_duan, yao_pin_ming_cheng) => {
-            return new Set(['糖尿病']).has(boolfield_zhen_duan) && new Set(['葡萄糖']).has(boolfield_yao_pin_ming_cheng);
+            return new Set(['糖尿病']).has(zhen_duan) && new Set(['葡萄糖']).has(yao_pin_ming_cheng);
         };
 
         // Evaluate if the related fields value matches the form event condition, if so, alert the user
@@ -17,9 +17,9 @@
             const zhen_duan = boolfield_zhen_duan.value;
             const yao_pin_ming_cheng = boolfield_yao_pin_ming_cheng.value;
             form_event_value = form_event(zhen_duan, yao_pin_ming_cheng);
-            // If form_event() returns true, then alert the user
+            // If form_event() returns true, then alert the user that the values are conflicting
             if (form_event_value) {
-                alert("糖尿病患者不可使用葡萄糖");
+                alert("<糖尿病>与<葡萄糖>冲突");
             }
         };
 
