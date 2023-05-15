@@ -267,7 +267,7 @@ class FieldsType(Enum):
     boolfield_she_bei_fu_wu_dan_wei_hao_shi = "String"  # 设备服务单位耗时
     boolfield_she_bei_jian_xiu_zhou_qi = "String"  # 设备检修周期
     boolfield_she_bei_shi_yong_cheng_ben = "String"  # 设备使用成本
-    boolfield_chang_yong_chu_fang_liang = "String"  # 常用处方量
+    boolfield_dan_ci_yong_yao_liang = "String"  # 单次用药量
     boolfield_dui_zhao_yi_bao_ming_cheng = "String"  # 对照医保名称
     boolfield_dui_zhao_ji_yao_ming_cheng = "String"  # 对照基药名称
     boolfield_huan_suan_gui_ze = "String"  # 换算规则

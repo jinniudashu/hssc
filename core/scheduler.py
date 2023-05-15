@@ -406,7 +406,7 @@ def operand_finished_handler(sender, **kwargs):
 
     # 根据服务规则检查业务事件是否发生，执行系统作业    
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
-    for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, service_rule__event_rule__event_type = "SCHEDULE_EVENT"):
+    for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件
         print('*****************************')
         print('From check_rules 扫描规则：', service_rule.service, service_rule.event_rule)

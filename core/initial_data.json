@@ -232,12 +232,13 @@
             "hssc_id": "0ce117aa-9e23-11ec-aa2c-fe35a7065cdd",
             "pym": "ywcf",
             "name_icpc": null,
-            "description": null,
+            "description": "",
             "api_fields": null,
             "components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
                 "2b80da60-c5ce-11ec-b819-725badf7393d",
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -959,26 +960,28 @@
             ]
         },
         {
-            "label": "营养干预",
+            "label": "营养处方",
             "name": "T4501",
             "hssc_id": "69c663ea-a4c6-11ec-a7bb-cecec7a0e139",
-            "pym": "yygy",
-            "name_icpc": "T4501",
-            "description": null,
+            "pym": "yycf",
+            "name_icpc": null,
+            "description": "",
             "api_fields": null,
             "components": [
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "abc77c0a-a4c3-11ec-8f29-cecec7a0e139"
             ]
         },
         {
-            "label": "运动干预",
+            "label": "运动处方",
             "name": "T4502",
             "hssc_id": "7f149618-a4c6-11ec-a7bb-cecec7a0e139",
-            "pym": "ydgy",
-            "name_icpc": "T4502",
-            "description": null,
+            "pym": "ydcf",
+            "name_icpc": null,
+            "description": "",
             "api_fields": null,
             "components": [
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "bcb64276-a4c3-11ec-a7bb-cecec7a0e139"
             ]
         }
@@ -3337,15 +3340,15 @@
             "expression_fields": "boolfield_zheng_zhuang"
         },
         {
-            "label": "糖尿病不适用药品规则",
+            "label": "葡萄糖不适用规则",
             "name": "tang_niao_bing_bu_shi_yong_yao_pin_gui_ze",
             "hssc_id": "ebbdfb30-b6d5-11ec-8121-0ebea05fc526",
-            "pym": "tnbbsyypgz",
+            "pym": "pttbsygz",
             "description": "疾病名称 in {'非胰岛素依赖糖尿病','胰岛素依赖糖尿病'} and 药品名称 == {'5%葡萄糖注射液','止咳糖浆'}",
             "detection_scope": "CURRENT_SERVICE",
             "event_type": "SCHEDULE_EVENT",
             "weight": 1,
-            "expression": "len({'胰岛素依赖糖尿病', '非胰岛素依赖糖尿病'}.intersection(boolfield_ji_bing_ming_cheng)) == 1 and len({'5%葡萄糖注射液', '止咳糖浆'}.intersection(boolfield_yao_pin_ming)) >= 1",
+            "expression": "len({'胰岛素依赖糖尿病', '非胰岛素依赖糖尿病'}.intersection(boolfield_ji_bing_ming_cheng)) == 1 and len({'10%葡萄糖', '5%葡萄糖氯化钠注射液', '5%葡萄糖注射液(新)'}.intersection(boolfield_yao_pin_ming)) >= 1",
             "expression_fields": "boolfield_ji_bing_ming_cheng,boolfield_yao_pin_ming"
         },
         {
@@ -3580,7 +3583,7 @@
             "hssc_id": "0e7a79f4-b6e6-11ec-8121-0ebea05fc526",
             "service": "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
             "event_rule": "ebbdfb30-b6d5-11ec-8121-0ebea05fc526",
-            "system_operand": "e0dfa946-a42f-11ec-848a-4889e7cf38c9",
+            "system_operand": "0fc9f2bb-f0ac-11ed-aa8a-4889e7cf38c9",
             "next_service": null,
             "passing_data": 1,
             "complete_feedback": 0,

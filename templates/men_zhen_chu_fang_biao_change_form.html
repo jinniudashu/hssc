@@ -1,31 +1,52 @@
 {% extends "admin/change_form.html" %}
 
 {% block extrahead %}
+{{ block.super }}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Retrieve DOM elements of all fields involved in the expression logic.
-        const boolfield_zhen_duan = document.getElementById("id_boolfield_zhen_duan");
-        const boolfield_yao_pin_ming_cheng = document.getElementById("id_boolfield_yao_pin_ming_cheng");
+        var selectElement = document.getElementById('select2-id_boolfield_ji_bing_ming_cheng-container');
 
-        // A function implementing the event expression logic. It accepts the field values as arguments, and returns a boolean
-        const form_event = (zhen_duan, yao_pin_ming_cheng) => {
-            return new Set(['糖尿病']).has(zhen_duan) && new Set(['葡萄糖']).has(yao_pin_ming_cheng);
-        };
-
-        // Evaluate if the related fields value matches the form event condition, if so, alert the user
-        const update_input = () => {
-            const zhen_duan = boolfield_zhen_duan.value;
-            const yao_pin_ming_cheng = boolfield_yao_pin_ming_cheng.value;
-            form_event_value = form_event(zhen_duan, yao_pin_ming_cheng);
-            // If form_event() returns true, then alert the user that the values are conflicting
-            if (form_event_value) {
-                alert("<糖尿病>与<葡萄糖>冲突");
-            }
-        };
-
-        // Add input event listener to related fields
-        boolfield_zhen_duan.addEventListener("input", update_input);
-        boolfield_yao_pin_ming_cheng.addEventListener("input", update_input);
+        selectElement?.addEventListener('input', function() {
+            console.log("选择变化")
+            var selectedValue = selectElement.value;
+            console.log(selectedValue);
+        });
     });
+
+        // selectElement.addEventListener('change', function() {
+        //     console.log("选择变化")
+        //     var selectedValue = selectElement.options[selectElement.selectedIndex].text;
+        //     if (selectedValue === '非胰岛素依赖性糖尿病') {
+        //         alert('选择了非胰岛素依赖性糖尿病！');
+        //     }
+        // });
+
+        // // Retrieve DOM elements of all fields involved in the expression logic.
+        // const boolfield_ji_bing_ming_cheng = document.getElementById("id_boolfield_ji_bing_ming_cheng");
+        // const boolfield_yao_pin_ming = document.getElementById("id_boolfield_yao_pin_ming");
+        // console.log("获取对象", boolfield_ji_bing_ming_cheng, boolfield_yao_pin_ming)
+
+        // // A function implementing the event expression logic. It accepts the field values as arguments, and returns a boolean
+        // const form_event = (ji_bing_ming_cheng, yao_pin_ming) => {
+        //     return new Set(['非胰岛素依赖糖尿病，胰岛素依赖糖尿病']).has(ji_bing_ming_cheng) && new Set(['5%葡萄糖注射液（新），5%葡萄糖氯化钠注射液，10%葡萄糖(新）']).has(yao_pin_ming);
+        // };
+
+        // // Evaluate if the related fields value matches the form event condition, if so, alert the user
+        // const update_input = () => {
+        //     const ji_bing_ming_cheng = boolfield_ji_bing_ming_cheng.options[boolfield_ji_bing_ming_cheng.selectedIndex]?.text;
+        //     const yao_pin_ming = boolfield_yao_pin_ming.options[boolfield_yao_pin_ming.selectedIndex]?.text;
+        //     console.log("输入变化：", ji_bing_ming_cheng, yao_pin_ming)
+        //     form_event_value = form_event(ji_bing_ming_cheng, yao_pin_ming);
+        //     // If form_event() returns true, then alert the user that the values are conflicting
+        //     if (form_event_value) {
+        //         alert(`${ji_bing_ming_cheng}与${yao_pin_ming}冲突`);
+        //     }
+        // };
+
+        // // boolfield_ji_bing_ming_cheng.addEventListener('change', update_input());
+        // // boolfield_yao_pin_ming.addEventListener("change", update_input);
+        // boolfield_ji_bing_ming_cheng.addEventListener("change", ()=>console.log("change"));
+        // boolfield_yao_pin_ming.addEventListener("change", ()=>console.log("change"));
+    // });
 </script>
 {% endblock %}
