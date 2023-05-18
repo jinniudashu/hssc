@@ -6,7 +6,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // 表单事件规则配置列表
-        const rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN"}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT"}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN"}]
+        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN"}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT"}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN"}]
 
         // 定义全局变量，用于存储被跟踪的字段当前值
         const current_values = {
@@ -70,7 +70,7 @@
                             // 检查保存按钮是否被禁用，如果是，启用
                             document.querySelector('input[name="_save"]').disabled = false;
                             // 如果疾病名称在规则列表中，检查表单事件
-                            rules.find(item => {
+                            content_conflict_rules.find(item => {
                                 if (item.boolfield_ji_bing_ming_cheng.includes(current_values.boolfield_ji_bing_ming_cheng)) {
                                     detect_form_event(item);
                                 }
@@ -97,7 +97,7 @@
                         // 检查保存按钮是否被禁用，如果是，启用
                         document.querySelector('input[name="_save"]').disabled = false;
                         // 如果药品名称在规则列表中，检查表单事件
-                        rules.find(item => {
+                        content_conflict_rules.find(item => {
                             if (item.boolfield_yao_pin_ming.filter(item => current_values.boolfield_yao_pin_ming.includes(item)).length > 0) {
                                 detect_form_event(item);
                             }
