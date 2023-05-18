@@ -68,6 +68,9 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     from analytics.models import record_login
     record_login(request, user)
 
+    if request.path == '/admin/login/':  # 后台登录
+        return
+    
     # 获得登陆作业进程参数
     if user.is_staff:  # 职员登录
         event_name = 'doctor_login'
@@ -185,7 +188,7 @@ def user_post_delete_handler(sender, instance, **kwargs):
 @receiver(post_save, sender=OperationProc)
 def operation_proc_post_save_handler(sender, instance, created, **kwargs):
     from core.business_functions import update_unassigned_procs, update_customer_services_list
-    # 如果操作员是员工更新职员任务工作台可申领的服务作业
+    # 如果操作员是员工，更新职员任务工作台可申领的服务作业
     if instance.operator and instance.operator.user.is_staff:
         update_unassigned_procs(instance.operator)
 
