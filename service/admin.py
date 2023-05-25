@@ -467,7 +467,7 @@ clinic_site.register(A6218, A6218Admin)
 class A6201Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("院外咨询", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", "boolfield_chang_yong_zheng_zhuang", )}), ]
+        ("院外咨询", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", )}), ]
     autocomplete_fields = ["boolfield_zheng_zhuang", ]
 
 admin.site.register(A6201, A6201Admin)
@@ -503,7 +503,8 @@ clinic_site.register(Tang_niao_bing_zhuan_yong_wen_zhen, Tang_niao_bing_zhuan_yo
 class A3101Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("诊前检查表", {"fields": ("boolfield_ti_wen", "boolfield_mai_bo", "boolfield_hu_xi_pin_lv", "boolfield_shen_gao", "boolfield_ti_zhong", "boolfield_ti_zhi_zhi_shu", "boolfield_shou_suo_ya", "boolfield_shu_zhang_ya", "boolfield_yao_wei", "boolfield_yan_bu", "boolfield_xia_zhi_shui_zhong", )}), ]
+        ("诊前检查表", {"fields": ("boolfield_ti_wen", "boolfield_mai_bo", "boolfield_hu_xi_pin_lv", "boolfield_shen_gao", "boolfield_ti_zhong", "boolfield_ti_zhi_zhi_shu", "boolfield_shou_suo_ya", "boolfield_shu_zhang_ya", "boolfield_yao_wei", "boolfield_yan_bu", "boolfield_xia_zhi_shui_zhong", "boolfield_zheng_zhuang", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", ]
     radio_fields = {"boolfield_xia_zhi_shui_zhong": admin.VERTICAL, }
     change_form_template = "a3101_change_form.html"
 
@@ -513,7 +514,8 @@ clinic_site.register(A3101, A3101Admin)
 class A6502Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("门诊分诊", {"fields": ("boolfield_qian_dao_que_ren", "boolfield_yu_yue_shi_jian", )}), ]
+        ("门诊分诊", {"fields": ("boolfield_qian_dao_que_ren", "boolfield_yu_yue_shi_jian", "boolfield_zheng_zhuang", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", ]
     radio_fields = {"boolfield_qian_dao_que_ren": admin.VERTICAL, }
 
 admin.site.register(A6502, A6502Admin)
@@ -522,8 +524,8 @@ clinic_site.register(A6502, A6502Admin)
 class A6501Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_ze_ren_ren", )}), ]
-    autocomplete_fields = ["boolfield_ze_ren_ren", ]
+        ("代人预约挂号", {"fields": ("boolfield_yu_yue_shi_jian", "boolfield_ze_ren_ren", "boolfield_zheng_zhuang", )}), ]
+    autocomplete_fields = ["boolfield_ze_ren_ren", "boolfield_zheng_zhuang", ]
 
 admin.site.register(A6501, A6501Admin)
 clinic_site.register(A6501, A6501Admin)

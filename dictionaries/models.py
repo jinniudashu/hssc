@@ -161,12 +161,6 @@ class Blood_type(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Chang_yong_zheng_zhuang(DictBase):
-    class Meta:
-        verbose_name = '常用症状'
-        verbose_name_plural = verbose_name
-
-
 class Tang_niao_bing_zheng_zhuang(DictBase):
     class Meta:
         verbose_name = '糖尿病症状'

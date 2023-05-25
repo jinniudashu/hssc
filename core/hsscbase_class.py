@@ -347,7 +347,6 @@ class FieldsType(Enum):
     boolfield_xia_zhi_shui_zhong = "dictionaries.Edema"  # 下肢水肿
     boolfield_ke_neng_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 可能诊断
     boolfield_pai_chu_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 排除诊断
-    boolfield_chang_yong_zheng_zhuang = "dictionaries.Chang_yong_zheng_zhuang"  # 常用症状
     boolfield_tang_niao_bing_zheng_zhuang = "dictionaries.Tang_niao_bing_zheng_zhuang"  # 糖尿病症状
     boolfield_qian_dao_que_ren = "dictionaries.Qian_dao_que_ren"  # 签到确认
     boolfield_shi_mian_qing_kuang = "dictionaries.Shi_mian_qing_kuang"  # 失眠情况

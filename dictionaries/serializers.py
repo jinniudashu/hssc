@@ -111,11 +111,6 @@ class Blood_typeSerializer(serializers.ModelSerializer):
         model = Blood_type
         fields = 'value'
 
-class Chang_yong_zheng_zhuangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chang_yong_zheng_zhuang
-        fields = 'value'
-
 class Tang_niao_bing_zheng_zhuangSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tang_niao_bing_zheng_zhuang

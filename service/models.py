@@ -654,7 +654,6 @@ class A6218(HsscFormModel):
 class A6201(HsscFormModel):
     boolfield_bing_qing_bu_chong_miao_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A6201', blank=True, verbose_name='症状')
-    boolfield_chang_yong_zheng_zhuang = models.ManyToManyField(Chang_yong_zheng_zhuang, related_name='chang_yong_zheng_zhuang_for_boolfield_chang_yong_zheng_zhuang_A6201', blank=True, verbose_name='常用症状')
 
     class Meta:
         verbose_name = '院外咨询'
@@ -713,6 +712,7 @@ class A3101(HsscFormModel):
     boolfield_yao_wei = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='腰围')
     boolfield_yan_bu = models.ForeignKey(Pharynx, related_name='pharynx_for_boolfield_yan_bu_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='咽部')
     boolfield_xia_zhi_shui_zhong = models.ForeignKey(Edema, related_name='edema_for_boolfield_xia_zhi_shui_zhong_A3101', on_delete=models.CASCADE, null=True, blank=True, verbose_name='下肢水肿')
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A3101', blank=True, verbose_name='症状')
 
     class Meta:
         verbose_name = '诊前检查'
@@ -725,6 +725,7 @@ class A3101(HsscFormModel):
 class A6502(HsscFormModel):
     boolfield_qian_dao_que_ren = models.ForeignKey(Qian_dao_que_ren, related_name='qian_dao_que_ren_for_boolfield_qian_dao_que_ren_A6502', on_delete=models.CASCADE, null=True, blank=False, verbose_name='签到确认')
     boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A6502', blank=True, verbose_name='症状')
 
     class Meta:
         verbose_name = '门诊分诊'
@@ -737,6 +738,7 @@ class A6502(HsscFormModel):
 class A6501(HsscFormModel):
     boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='预约时间')
     boolfield_ze_ren_ren = models.ForeignKey(VirtualStaff, related_name='virtualstaff_for_boolfield_ze_ren_ren_A6501', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A6501', blank=True, verbose_name='症状')
 
     class Meta:
         verbose_name = '代人预约挂号'

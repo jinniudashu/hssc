@@ -180,14 +180,6 @@ class Blood_typeAdmin(admin.ModelAdmin):
 clinic_site.register(Blood_type, Blood_typeAdmin)
 
 
-@admin.register(Chang_yong_zheng_zhuang)
-class Chang_yong_zheng_zhuangAdmin(admin.ModelAdmin):
-    search_fields = ['value', 'pym']
-    list_display = ["value"]
-
-clinic_site.register(Chang_yong_zheng_zhuang, Chang_yong_zheng_zhuangAdmin)
-
-
 @admin.register(Tang_niao_bing_zheng_zhuang)
 class Tang_niao_bing_zheng_zhuangAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
