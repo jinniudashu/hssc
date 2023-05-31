@@ -174,7 +174,7 @@ class EventRule(HsscBase):
     description = models.TextField(max_length=255, blank=True, null=True, verbose_name="表达式")
     Detection_scope = [('ALL', '所有历史表单'), ('CURRENT_SERVICE', '本次服务表单'), ('LAST_WEEK_SERVICES', '过去7天表单')]
     detection_scope = models.CharField(max_length=100, choices=Detection_scope, default='CURRENT_SERVICE', blank=True, null=True, verbose_name='检测范围')
-    Form_class = [(0, '所有表单'), (1, '调查类'), (2, '诊断类'), (3, '治疗类')]
+    Form_class = [(0, '所有类型'), (1, '调查类'), (2, '诊断类'), (3, '治疗类')]
     form_class_scope = models.PositiveSmallIntegerField(choices=Form_class, default=0, verbose_name='表单类型范围')
     Event_type = [('FORM_EVENT', '表单事件'), ('SCHEDULE_EVENT', '调度事件')]
     event_type = models.CharField(max_length=100, choices=Event_type, default='SCHEDULE_EVENT', verbose_name="事件类型")
