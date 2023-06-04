@@ -557,11 +557,17 @@ class VirtualStaff(HsscBase):
 
 
 class CustomerServiceLogManager(models.Manager):
-    def get_customer_service_log(self, customer, period=None):
+    def get_customer_service_log(self, customer, period=None, form_class=0):
         # 返回客户的给定时间段的服务日志
         if period:
-            return self.filter(customer=customer, created_time__range=period).order_by('created_time')
-        return self.filter(customer=customer)
+            logs= self.filter(customer=customer, created_time__range=period).order_by('created_time')
+        else:
+            logs = self.filter(customer=customer)
+            
+        # 返回指定表单类别的服务日志
+        if form_class > 0:
+            logs = logs.filter(form_class=form_class)
+        return logs
 
 # 客户健康记录
 class CustomerServiceLog(HsscBase):

@@ -249,9 +249,10 @@ def operand_finished_handler(sender, **kwargs):
                     end_time = timezone.now()
                     period = (start_time, end_time)
 
+                form_class_scope = event_rule.form_class_scope
                 # 取客户健康档案记录构造检测数据dict
                 _scanned_data = {}
-                logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period)            
+                logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period, form_class_scope)            
                 for log in logs:
                     _scanned_data = {**_scanned_data, **log.data}
                     
