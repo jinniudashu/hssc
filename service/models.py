@@ -74,8 +74,12 @@ class CustomerSchedule(HsscFormModel):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+
+def get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance():
+    return Icpc5_evaluation_and_diagnoses.objects.get(iname="胰岛素依赖型糖尿病")
+
 class Yi_xing_tang_niao_bing_zhen_duan(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
+    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, default=get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance, null=True, blank=True, verbose_name='疾病名称')
     boolfield_ke_neng_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ke_neng_zhen_duan_yi_xing_tang_niao_bing_zhen_duan', blank=True, verbose_name='可能诊断')
     boolfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_pai_chu_zhen_duan_yi_xing_tang_niao_bing_zhen_duan', blank=True, verbose_name='排除诊断')
 
@@ -455,8 +459,8 @@ class Shu_ye_zhu_she(HsscFormModel):
     boolfield_zhu_she_ri_qi = models.DateTimeField(null=True, blank=True, verbose_name='注射日期')
     boolfield_yao_pin_ming = models.ManyToManyField(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_shu_ye_zhu_she', blank=True, verbose_name='药品名')
     boolfield_shang_men_fu_wu_xiang_mu = models.ManyToManyField(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_shang_men_fu_wu_xiang_mu_shu_ye_zhu_she', blank=True, verbose_name='上门服务项目')
-    boolfield_jia_ting_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
-    boolfield_shang_men_fu_wu_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='上门服务时间')
+    boolfield_jia_ting_di_zhi = models.CharField(max_length=255, null=True, blank=False, verbose_name='家庭地址')
+    boolfield_shang_men_fu_wu_shi_jian = models.DateTimeField(null=True, blank=False, verbose_name='上门服务时间')
 
     class Meta:
         verbose_name = '上门代注服务'
@@ -478,8 +482,16 @@ class Qian_yue_fu_wu(HsscFormModel):
         return self.customer.name
 
         
+
+def get_T9001_boolfield_ji_bing_ming_cheng_instance():
+    return Icpc5_evaluation_and_diagnoses.objects.get(iname="非胰岛素依赖型糖尿病")
+
+
+def get_T9001_boolfield_pai_chu_zhen_duan_instance():
+    return Icpc5_evaluation_and_diagnoses.objects.get(iname="妊娠糖尿病")
+
 class T9001(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='疾病名称')
+    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T9001', on_delete=models.CASCADE, default=get_T9001_boolfield_ji_bing_ming_cheng_instance, null=True, blank=True, verbose_name='疾病名称')
     boolfield_ke_neng_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ke_neng_zhen_duan_T9001', blank=True, verbose_name='可能诊断')
     boolfield_pai_chu_zhen_duan = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_pai_chu_zhen_duan_T9001', blank=True, verbose_name='排除诊断')
 

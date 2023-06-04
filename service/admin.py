@@ -179,7 +179,7 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 class Yi_xing_tang_niao_bing_zhen_duanAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
+        ("胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
     autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
 
 admin.site.register(Yi_xing_tang_niao_bing_zhen_duan, Yi_xing_tang_niao_bing_zhen_duanAdmin)
@@ -354,7 +354,7 @@ clinic_site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
 class T9001Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
+        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
     autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
 
 admin.site.register(T9001, T9001Admin)

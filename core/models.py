@@ -573,8 +573,10 @@ class CustomerServiceLog(HsscBase):
     slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
     updated_time = models.DateTimeField(editable=False, null=True, verbose_name="更新时间")
-    Log_category = [('Subjective', '主观资料'), ('ObjectiveO', '客观资料'), ('Assessment', '诊断与评价'), ('Plan', '治疗方案'), ('Management', '管理活动')]
-    category = models.CharField(max_length=50, choices=Log_category , blank=True, null=True, verbose_name="记录类别")
+    # Log_category = [('Subjective', '主观资料'), ('ObjectiveO', '客观资料'), ('Assessment', '诊断与评价'), ('Plan', '治疗方案'), ('Management', '管理活动')]
+    # category = models.CharField(max_length=50, choices=Log_category , blank=True, null=True, verbose_name="记录类别")
+    Form_class = [(1, '调查类'), (2, '诊断类'), (3, '治疗类')]
+    form_class = models.PositiveSmallIntegerField(choices=Form_class, null=True, verbose_name="表单类型")
     data = models.JSONField(blank=True, null=True, encoder=JSONEncoder, verbose_name="服务记录")
 
     logs = CustomerServiceLogManager()

@@ -190,6 +190,9 @@ def create_customer_service_log(form_data, form_instance):
             form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
 
     print('完成预处理form_data:', form_data)
+    # 从form_instance.pid.service.buessiness_form中获取form_class
+    form_class = form_instance.pid.service.buessiness_forms.all()[0].form_class
+
     # 保存form_data
     try:
         log = CustomerServiceLog.objects.get(pid = form_instance.pid)
@@ -204,6 +207,7 @@ def create_customer_service_log(form_data, form_instance):
             creater=form_instance.creater,
             pid=form_instance.pid,
             cpid=form_instance.cpid,
+            form_class=form_class,
             data=form_data,
         )
 
