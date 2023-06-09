@@ -243,12 +243,7 @@ def operand_finished_handler(sender, **kwargs):
                 '''
                 获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
                 '''
-                period = None  # 意味着self.detection_scope == 'ALL'表示获取全部健康记录
-                if event_rule.detection_scope == 'LAST_WEEK_SERVICES':  # 获取表示指定时间段内的健康记录
-                    start_time = timezone.now() + timedelta(days=-7)
-                    end_time = timezone.now()
-                    period = (start_time, end_time)
-
+                period = event_rule.detection_scope
                 form_class_scope = event_rule.form_class_scope
                 # 取客户健康档案记录构造检测数据dict
                 _scanned_data = {}

@@ -12,10 +12,25 @@ from requests import Response
 
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 
-from core.models import Service, ServicePackage, Customer, OperationProc, RecommendedService
+from core.models import Service, ServicePackage, Customer, OperationProc, RecommendedService, CustomerServiceLog
 
 from dictionaries.models import *
 from service.models import *
+
+from django.views import View
+from django.core import serializers
+
+class CustomerServiceLogView(View):
+    def get(self, request, *args, **kwargs):
+        customer = request.GET.get('customer', None)
+        period = request.GET.get('period', 'ALL')
+        form_class = request.GET.get('form_class', 0)
+        if customer is not None:
+            logs = CustomerServiceLog.logs.get_customer_service_log(customer, period, int(form_class))
+            logs_json = serializers.serialize('json', logs)
+            return JsonResponse(logs_json, safe=False)
+        else:
+            return JsonResponse({"error": "Customer parameter is required"}, status=400)
 
 
 def index_customer(request):
