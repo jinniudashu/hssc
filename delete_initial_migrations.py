@@ -24,3 +24,7 @@ for app_dir in app_dirs:
                 print(f"Deleted directory: {item_path}")
     else:
         print(f"No migrations directory found in {app_dir}.")
+
+os.remove("db.sqlite3")
+print(f"Deleted: db.sqlite3")
+
