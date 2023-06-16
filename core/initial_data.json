@@ -237,10 +237,12 @@
             "form_style": "List",
             "api_fields": null,
             "components": [
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
+            ],
+            "list_components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
                 "2b80da60-c5ce-11ec-b819-725badf7393d",
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
-                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -263,7 +265,8 @@
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
                 "de9f4ea4-9aa1-11ec-bde1-8a6e55faf877",
                 "deb7b0ac-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "用户登录",
@@ -278,7 +281,8 @@
             "components": [
                 "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
                 "dea7211a-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "代人预约挂号",
@@ -294,7 +298,8 @@
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "3d2ec7e0-df4f-11ed-ba67-0242ac120003"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "门诊分诊",
@@ -310,7 +315,8 @@
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "98dbd7f4-a52b-11ec-9b14-2ec403f6c47b"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "诊前检查表",
@@ -335,7 +341,8 @@
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "dedebd28-9aa1-11ec-bde1-8a6e55faf877",
                 "dee098fa-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "糖尿病专用问诊",
@@ -350,7 +357,8 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "1cad2116-a52a-11ec-a478-2ec403f6c47b"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "药事服务",
@@ -366,7 +374,8 @@
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "01ae1278-a659-11ec-9221-f6197eef9f67",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "院内辅助问诊",
@@ -381,7 +390,8 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "院外咨询",
@@ -396,7 +406,8 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "门诊医生问诊",
@@ -411,7 +422,8 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "糖尿病一般随访",
@@ -430,7 +442,8 @@
                 "decba0ee-9aa1-11ec-bde1-8a6e55faf877",
                 "1cad2116-a52a-11ec-a478-2ec403f6c47b",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "足背动脉检查",
@@ -445,7 +458,8 @@
             "components": [
                 "ded859ba-9aa1-11ec-bde1-8a6e55faf877",
                 "ded93d62-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "眼底检查",
@@ -459,7 +473,8 @@
             "api_fields": null,
             "components": [
                 "ded5a800-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "血压监测",
@@ -474,7 +489,8 @@
             "components": [
                 "deb35b74-9aa1-11ec-bde1-8a6e55faf877",
                 "deb416fe-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "空腹血糖检查",
@@ -488,7 +504,8 @@
             "api_fields": null,
             "components": [
                 "deb59434-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "院外辅助问诊",
@@ -503,7 +520,8 @@
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "糖尿病监测评估",
@@ -520,7 +538,8 @@
                 "ba6e088e-32fb-11ed-8023-0242ac120004",
                 "4bf17ad0-aa48-11ec-9f15-ee7ade4bced6",
                 "8c6b84ce-32fc-11ed-a506-0242ac120004"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "遗传病史",
@@ -535,7 +554,8 @@
             "components": [
                 "0178473c-cab3-11ec-a675-8e39d789b675",
                 "9c342812-cab9-11ec-a675-8e39d789b675"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "过敏史",
@@ -549,7 +569,8 @@
             "api_fields": null,
             "components": [
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "家族病史",
@@ -564,7 +585,8 @@
             "components": [
                 "5245480e-cab3-11ec-a675-8e39d789b675",
                 "888d068a-cab9-11ec-a675-8e39d789b675"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "手术史",
@@ -579,7 +601,8 @@
             "components": [
                 "deb645d2-9aa1-11ec-bde1-8a6e55faf877",
                 "dedbea3a-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "疾病史",
@@ -594,7 +617,8 @@
             "components": [
                 "deb70576-9aa1-11ec-bde1-8a6e55faf877",
                 "e2257bfc-cab2-11ec-a675-8e39d789b675"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "外伤史",
@@ -609,7 +633,8 @@
             "components": [
                 "35091e02-c9ee-11ec-b369-168d53e8234e",
                 "df91ce4e-cab3-11ec-b358-8e39d789b675"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "输血史",
@@ -624,7 +649,8 @@
             "components": [
                 "deb2a274-9aa1-11ec-bde1-8a6e55faf877",
                 "dd6c67a8-c9ed-11ec-b369-168d53e8234e"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "个人心理综合素质调查",
@@ -640,7 +666,8 @@
                 "dec70886-9aa1-11ec-bde1-8a6e55faf877",
                 "5024b3ea-a52c-11ec-9b14-2ec403f6c47b",
                 "5977c26a-a52d-11ec-a478-2ec403f6c47b"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "个人适应能力评估",
@@ -656,7 +683,8 @@
                 "de9bbcf8-9aa1-11ec-bde1-8a6e55faf877",
                 "dec7ec2e-9aa1-11ec-bde1-8a6e55faf877",
                 "dec8f9a2-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "个人身体健康评估",
@@ -674,7 +702,8 @@
                 "dece6cde-9aa1-11ec-bde1-8a6e55faf877",
                 "decf4d66-9aa1-11ec-bde1-8a6e55faf877",
                 "ded02d26-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "个人健康行为调查",
@@ -691,7 +720,8 @@
                 "de9d30a6-9aa1-11ec-bde1-8a6e55faf877",
                 "decabc92-9aa1-11ec-bde1-8a6e55faf877",
                 "decba0ee-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "社会环境评估",
@@ -706,7 +736,8 @@
             "components": [
                 "ded110f6-9aa1-11ec-bde1-8a6e55faf877",
                 "ded206d2-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "尿常规检查",
@@ -722,7 +753,8 @@
                 "f9eed08e-b091-11ec-b42a-5ed0e34457d3",
                 "04381988-b092-11ec-b42a-5ed0e34457d3",
                 "15957162-b092-11ec-b42a-5ed0e34457d3"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "糖化血红蛋白检查",
@@ -736,7 +768,8 @@
             "api_fields": null,
             "components": [
                 "deb4e084-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "非胰岛素依赖性糖尿病诊断表",
@@ -752,7 +785,8 @@
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "6a4b6984-9e93-11ec-a013-aa434405c3fc",
                 "5b880f4c-9e93-11ec-b91b-aa434405c3fc"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "家庭医生签约",
@@ -767,7 +801,8 @@
             "components": [
                 "5ff67f9c-aa45-11ec-8f0c-ee7ade4bced6",
                 "b19d4830-aa45-11ec-8f0c-ee7ade4bced6"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "输液注射单",
@@ -787,7 +822,8 @@
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
                 "abe7baaa-c9ef-11ec-b369-168d53e8234e",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "上门服务",
@@ -803,7 +839,8 @@
                 "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
                 "6ef43624-c975-11ed-9502-0242ac120003",
                 "2ca0627a-c975-11ed-a1d5-0242ac120003"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "个人基本信息",
@@ -833,7 +870,8 @@
                 "dec38ce2-9aa1-11ec-bde1-8a6e55faf877",
                 "dec46bf8-9aa1-11ec-bde1-8a6e55faf877",
                 "ded3d502-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "申请服务表",
@@ -850,7 +888,8 @@
                 "3604f812-d100-11ec-ab0d-823d1f108281",
                 "cde598b8-d0ff-11ec-b369-823d1f108281",
                 "9e873f3a-d100-11ec-ab0d-823d1f108281"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "药品基本信息表",
@@ -880,7 +919,8 @@
                 "5dc1e618-c5ce-11ec-b9d4-725badf7393d",
                 "f8c022f2-df4e-11ed-ba67-0242ac120003",
                 "0b9aad02-df4f-11ed-ba67-0242ac120003"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "物料供应商基本信息表",
@@ -900,7 +940,8 @@
                 "7c53c810-c5cb-11ec-b819-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "5f80d88c-c5ca-11ec-b819-725badf7393d"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "设备基本信息表",
@@ -921,7 +962,8 @@
                 "66ae19e2-c5cc-11ec-b9d4-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "ca6c7ec4-c5cc-11ec-b819-725badf7393d"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "服务分供机构基本信息表",
@@ -942,7 +984,8 @@
                 "7c53c810-c5cb-11ec-b819-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "5f80d88c-c5ca-11ec-b819-725badf7393d"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "职员基本信息表",
@@ -964,7 +1007,8 @@
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",
                 "ded78062-9aa1-11ec-bde1-8a6e55faf877",
                 "ded69094-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "机构基本信息表",
@@ -987,7 +1031,8 @@
                 "0b72d3cc-c5c9-11ec-b819-725badf7393d",
                 "13299560-c5c9-11ec-b9d4-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "餐后2小时血糖",
@@ -1001,7 +1046,8 @@
             "api_fields": null,
             "components": [
                 "d6f0beac-32fb-11ed-8023-0242ac120004"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "血压监测评估",
@@ -1015,7 +1061,8 @@
             "api_fields": null,
             "components": [
                 "4bf17ad0-aa48-11ec-9f15-ee7ade4bced6"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "诊后回访单",
@@ -1036,7 +1083,8 @@
                 "33f72e3e-e78d-11ec-8127-065284c7e455",
                 "5338730c-e78d-11ec-af5f-065284c7e455",
                 "a9a03950-e2d8-11ec-912b-dae07feb8058"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "满意度调查表",
@@ -1055,7 +1103,8 @@
                 "95f5faa2-e404-11ec-9eb0-42585b16dcd4",
                 "a47b3736-e404-11ec-9eb0-42585b16dcd4",
                 "4c7839d4-e405-11ec-9d3a-42585b16dcd4"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "营养处方",
@@ -1070,7 +1119,8 @@
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "abc77c0a-a4c3-11ec-8f29-cecec7a0e139"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "运动处方",
@@ -1085,7 +1135,8 @@
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "bcb64276-a4c3-11ec-a7bb-cecec7a0e139"
-            ]
+            ],
+            "list_components": []
         },
         {
             "label": "胰岛素依赖性糖尿病诊断表",
@@ -1101,7 +1152,8 @@
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
                 "6a4b6984-9e93-11ec-a013-aa434405c3fc",
                 "5b880f4c-9e93-11ec-b91b-aa434405c3fc"
-            ]
+            ],
+            "list_components": []
         }
     ],
     "managedentity": [

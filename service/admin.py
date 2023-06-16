@@ -530,12 +530,18 @@ class A6501Admin(HsscFormAdmin):
 admin.site.register(A6501, A6501Admin)
 clinic_site.register(A6501, A6501Admin)
 
+class Men_zhen_chu_fang_biao_listInline(admin.TabularInline):
+    model = Men_zhen_chu_fang_biao_list
+    extra = 1
+    autocomplete_fields = ["boolfield_yao_pin_ming", ]
+            
 class Men_zhen_chu_fang_biaoAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("药物处方", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_yao_pin_ming", "boolfield_yong_yao_tu_jing", "boolfield_yong_yao_liao_cheng", "boolfield_dan_ci_yong_yao_liang", "boolfield_yong_yao_pin_ci", )}), ]
-    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_yao_pin_ming", ]
+        ("药物处方", {"fields": ("boolfield_ji_bing_ming_cheng", )}), ]
+    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", ]
     change_form_template = "men_zhen_chu_fang_biao_change_form.html"
+    inlines = [Men_zhen_chu_fang_biao_listInline, ]
 
 admin.site.register(Men_zhen_chu_fang_biao, Men_zhen_chu_fang_biaoAdmin)
 clinic_site.register(Men_zhen_chu_fang_biao, Men_zhen_chu_fang_biaoAdmin)
