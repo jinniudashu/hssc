@@ -4,10 +4,10 @@ volumes:
   clinic-pgdata: # postgres数据文件目录
 
 networks: # 自定义网络(默认桥接), 不使用links通信
-  web:
-    external: true
   clinic_network:
     driver: bridge
+  nginx_network:
+    external: true
 
 services:
   app:
@@ -23,14 +23,14 @@ services:
       - ./.env
     networks:
       - clinic_network
-      - web # <== Connect to the web network
+      - nginx_network # <== Connect to the web network
     depends_on:
       - db
-    labels:
-      - "traefik.enable=true" # <== Enable traefik on itself to view dashboard and assign subdomain to view it
-      - "traefik.http.routers.clinic-test-http.rule=Host(`clinic-test.tpacn.com`)" # <== Setting the domain for the dashboard
-      - "traefik.http.routers.clinic-test-http.entrypoints=web" # <== Enabling the entrypoint for the whoami service
-      - "traefik.http.services.clinic-test-http.loadbalancer.server.port=8000" # <== Enabling the port for the whoami service
+    # labels:
+    #   - "traefik.enable=true" # <== Enable traefik on itself to view dashboard and assign subdomain to view it
+    #   - "traefik.http.routers.clinic-test-http.rule=Host(`clinic-test.tpacn.com`)" # <== Setting the domain for the dashboard
+    #   - "traefik.http.routers.clinic-test-http.entrypoints=web" # <== Enabling the entrypoint for the whoami service
+    #   - "traefik.http.services.clinic-test-http.loadbalancer.server.port=8000" # <== Enabling the port for the whoami service
 
   db:
     image: postgres:14-alpine

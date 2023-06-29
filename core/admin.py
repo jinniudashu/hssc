@@ -502,9 +502,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 from time import time
 
-# 每个需要备份的model都需要在这里添加
+# core中每个需要备份的model都需要在这里添加
 # 不备份在其他表新增内容时自动插入内容的表，Component, RelateFieldModel
-Backup_models = [
+Backup_core_models = [
     Customer,
     ContractServiceProc,
     OperationProc,
@@ -512,9 +512,12 @@ Backup_models = [
     Institution,
     Staff,
     Workgroup,
+    VirtualStaff,
     CustomerServiceLog,
     RecommendedService,
     Message,
+    Medicine,
+    ChengBaoRenYuanQingDan,
 ]
 
 @admin.register(BackupData)
@@ -533,7 +536,7 @@ class BackupDataAdmin(admin.ModelAdmin):
     # 备份设计数据
     def backup_data(self, request):
         backup_data = {}
-        for model in Backup_models:
+        for model in Backup_core_models:
             _model = model.__name__.lower()
             backup_data[_model]=model.objects.backup_data()
             json.dumps(backup_data[_model], indent=4, ensure_ascii=False, cls=DjangoJSONEncoder)
@@ -553,3 +556,4 @@ class BackupDataAdmin(admin.ModelAdmin):
             print(f'ICPC写入成功, id: {backup_name}')
 
         return HttpResponseRedirect("../")
+ 

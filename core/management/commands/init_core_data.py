@@ -1,5 +1,7 @@
 from django.core.management import BaseCommand
+from django.apps import apps
 import json
+import os
 
 from core.models import *
 from icpc.models import Icpc
@@ -103,3 +105,57 @@ class Command(BaseCommand):
         )
 
         print('创建周期任务完成！')
+
+
+        # 生成数据备份命令脚本, 备份三类models数据：
+        # 1. 系统组和用户: auth.User, auth.Group
+        # 2. app core中的运行时model:
+        # Backup_core_models = [
+        #     Customer,
+        #     ContractServiceProc,
+        #     OperationProc,
+        #     StaffTodo,
+        #     Institution,
+        #     Staff,
+        #     Workgroup,
+        #     VirtualStaff,
+        #     CustomerServiceLog,
+        #     RecommendedService,
+        #     Message,
+        #     Medicine,
+        #     ChengBaoRenYuanQingDan,
+        # ]
+        # 3. app service中的所有model
+
+        # Django的管理脚本路径
+        manage_py_path = "python manage.py"
+
+        # 需要备份的模型
+        backup_models = [
+            "auth.User", "auth.Group",  # 系统用户和组
+            "core.Customer",
+            "core.ContractServiceProc",
+            "core.OperationProc",
+            "core.StaffTodo",
+            "core.Institution",
+            "core.Staff",
+            "core.Workgroup",
+            "core.VirtualStaff",
+            "core.CustomerServiceLog",
+            "core.RecommendedService",
+            "core.Message",
+            "core.Medicine",
+            "core.ChengBaoRenYuanQingDan",  # core app的模型
+        ]
+
+        # 获取service app中的所有模型
+        service_app_config = apps.get_app_config('service')
+        for model in service_app_config.get_models():
+            backup_models.append(f"service.{model._meta.object_name}")
+
+        # 生成命令
+        backup_command = f"{manage_py_path} dumpdata {' '.join(backup_models)} --output=backup.json"
+
+        # 保存到文件
+        with open("backup.py", "w") as file:
+            file.write(f"import os\nos.system('{backup_command}')\n\n# 恢复数据命令：\n# python manage.py loaddata backup.json")
