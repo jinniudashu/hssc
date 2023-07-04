@@ -9,6 +9,8 @@ RUN apk add --update --no-cache postgresql-client jpeg-dev
 RUN apk add --update --no-cache --virtual .tmp-build-deps \ 
     gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev build-base python3-dev libffi-dev openssl-dev cargo
 
+RUN apk add --no-cache bash
+
 WORKDIR /app
 COPY ./requirements.txt /app/requirements.txt
 RUN python -m pip install --upgrade pip

@@ -1,19 +1,17 @@
 from django.core.management import BaseCommand
 import requests
 import json
+from django.conf import settings
 
 class Command(BaseCommand):
     help = '从设计系统导入脚本'
     def handle(self, *args, **kwargs):
         '''
         获取Hssc源码，创建脚本文件
-        '''
-        # 导入项目的项目id
-        project_name = 'Clinic'
-        
+        '''        
         print('开始导入脚本')
-        # SOURCECODE_URL = f'http://design.tpacn.com/define_backup/source_codes_list/{project_name}/'
-        SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{project_name}/'
+        SOURCECODE_URL = f'http://{settings.SUBDOMAIN}.{settings.DOMAIN}/define_backup/source_codes_list/{settings.PROJECT_NAME}/'
+        SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{settings.PROJECT_NAME}/'
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
         source_code =json.loads(res_json['code'])

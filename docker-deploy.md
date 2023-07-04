@@ -8,6 +8,7 @@
 
 ## Docker部署
 ### 开发环境
+0. python manage.py collectstatic
 1. 生成镜像：docker-compose -f docker-compose-build.yml build
 2. tag: docker tag clinic_app:v1 jinniudashu/clinic_app:v1
 3. push: docker push jinniudashu/clinic_app:v1
@@ -22,6 +23,6 @@
 8. 删除volume：docker volume rm clinic-test_clinic-pgdata
 9. 下载镜像：docker pull jinniudashu/clinic_app:v1
 10. 启动容器：docker-compose -f docker-compose-init-up.yml up
-11. 进入容器：docker exec -it clinic-test-app-1 /bin/sh
+11. 进入容器：docker exec -it clinic /bin/sh
 12. 创建管理员：python manage.py createsuperuser
 13. 退出：exit

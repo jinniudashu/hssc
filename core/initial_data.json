@@ -234,7 +234,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "form_style": "List",
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
@@ -255,7 +254,6 @@
             "name_icpc": "Z6201",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
@@ -276,7 +274,6 @@
             "name_icpc": "Z6230",
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea654a6-9aa1-11ec-bde1-8a6e55faf877",
@@ -292,7 +289,6 @@
             "name_icpc": "A6501",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": "[{\"scheduled_time\": \"boolfield_yu_yue_shi_jian\"}]",
             "components": [
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
@@ -309,7 +305,6 @@
             "name_icpc": "A6502",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
@@ -326,7 +321,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deae47e2-9aa1-11ec-bde1-8a6e55faf877",
@@ -352,7 +346,6 @@
             "name_icpc": "A6219",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -368,7 +361,6 @@
             "name_icpc": "A5002",
             "description": "",
             "form_class": 3,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
@@ -385,7 +377,6 @@
             "name_icpc": "A6217",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -401,7 +392,6 @@
             "name_icpc": "A6201",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -417,7 +407,6 @@
             "name_icpc": "A6218",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -433,7 +422,6 @@
             "name_icpc": "T6301",
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
@@ -453,7 +441,6 @@
             "name_icpc": "T3003",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "ded859ba-9aa1-11ec-bde1-8a6e55faf877",
@@ -469,7 +456,6 @@
             "name_icpc": "T3002",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "ded5a800-9aa1-11ec-bde1-8a6e55faf877"
@@ -484,7 +470,6 @@
             "name_icpc": "A3105",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb35b74-9aa1-11ec-bde1-8a6e55faf877",
@@ -500,7 +485,6 @@
             "name_icpc": "T3404",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb59434-9aa1-11ec-bde1-8a6e55faf877"
@@ -515,7 +499,6 @@
             "name_icpc": "A6202",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
@@ -531,7 +514,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 2,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "5dff3ef6-32fb-11ed-9164-0242ac120004",
@@ -549,7 +531,6 @@
             "name_icpc": "A6210",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "0178473c-cab3-11ec-a675-8e39d789b675",
@@ -565,7 +546,6 @@
             "name_icpc": "A6207",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
@@ -580,7 +560,6 @@
             "name_icpc": "A6209",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "5245480e-cab3-11ec-a675-8e39d789b675",
@@ -596,7 +575,6 @@
             "name_icpc": "A6205",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb645d2-9aa1-11ec-bde1-8a6e55faf877",
@@ -612,7 +590,6 @@
             "name_icpc": "A6204",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb70576-9aa1-11ec-bde1-8a6e55faf877",
@@ -628,7 +605,6 @@
             "name_icpc": "A6206",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "35091e02-c9ee-11ec-b369-168d53e8234e",
@@ -644,7 +620,6 @@
             "name_icpc": "A6208",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb2a274-9aa1-11ec-bde1-8a6e55faf877",
@@ -660,7 +635,6 @@
             "name_icpc": "A6213",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dec70886-9aa1-11ec-bde1-8a6e55faf877",
@@ -677,7 +651,6 @@
             "name_icpc": "A6215",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9bbcf8-9aa1-11ec-bde1-8a6e55faf877",
@@ -694,7 +667,6 @@
             "name_icpc": "A6214",
             "description": "",
             "form_class": 2,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "decc7fdc-9aa1-11ec-bde1-8a6e55faf877",
@@ -713,7 +685,6 @@
             "name_icpc": "A6212",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "de9c7012-9aa1-11ec-bde1-8a6e55faf877",
@@ -731,7 +702,6 @@
             "name_icpc": "A6216",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "ded110f6-9aa1-11ec-bde1-8a6e55faf877",
@@ -747,7 +717,6 @@
             "name_icpc": "A3502",
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "f9eed08e-b091-11ec-b42a-5ed0e34457d3",
@@ -764,7 +733,6 @@
             "name_icpc": "T3405",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deb4e084-9aa1-11ec-bde1-8a6e55faf877"
@@ -779,7 +747,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 2,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
@@ -796,7 +763,6 @@
             "name_icpc": "Z6261",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "5ff67f9c-aa45-11ec-8f0c-ee7ade4bced6",
@@ -812,7 +778,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "form_style": "List",
             "api_fields": null,
             "components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
@@ -833,7 +798,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
@@ -850,7 +814,6 @@
             "name_icpc": "A6203",
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
@@ -881,7 +844,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "1cdf93ec-d100-11ec-b369-823d1f108281",
@@ -899,7 +861,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "2c4ebf36-d5b7-11ec-a897-52d938fbdf73",
@@ -930,7 +891,6 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
@@ -951,7 +911,6 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "6f02d90c-c5cc-11ec-b9d4-725badf7393d",
@@ -973,7 +932,6 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
@@ -995,7 +953,6 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
@@ -1018,7 +975,6 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
@@ -1042,7 +998,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "d6f0beac-32fb-11ed-8023-0242ac120004"
@@ -1057,7 +1012,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 2,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "4bf17ad0-aa48-11ec-9f15-ee7ade4bced6"
@@ -1072,7 +1026,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "3174614a-e2d8-11ec-9a2f-dae07feb8058",
@@ -1094,7 +1047,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 1,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "a80571f6-e403-11ec-9eb0-42585b16dcd4",
@@ -1114,7 +1066,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "form_style": "List",
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
@@ -1130,7 +1081,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "form_style": "List",
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
@@ -1146,7 +1096,6 @@
             "name_icpc": null,
             "description": "",
             "form_class": 2,
-            "form_style": "Detail",
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",

@@ -1,21 +1,18 @@
 version: '3'
 
 volumes:
-  pgdata: # postgres数据文件目录
+  dental-pgdata: # postgres数据文件目录
 
 networks: # 自定义网络(默认桥接), 不使用links通信
   dental_network:
     driver: bridge
+  nginx_network:
+    external: true
 
 services:
-  app:
-    build:
-      context: .
-    image: dental_app:latest
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./:/app
+  dental:
+    image: jinniudashu/dental_app:v1
+    container_name: dental
     command:
       - sh
       - -c
@@ -26,59 +23,54 @@ services:
         python manage.py init_core_data
         daphne --port 8000 --bind 0.0.0.0 hssc.asgi:application
     env_file:
-      - ./.env
+      - ./dental/.env
     networks:
       - dental_network
+      - nginx_network # <== Connect to the web network
     depends_on:
-      - db
+      - dental_db
 
-  db:
+  dental_db:
     image: postgres:14-alpine
+    container_name: dental_db
     env_file:
-      - ./.env
+      - ./dental/.env
     volumes: 
-      - pgdata:/var/lib/postgresql/data
-    ports:
-        - "5432:5432"
+      -  dental-pgdata:/var/lib/postgresql/data
     networks:
       - dental_network
 
-  redis:
+  dental_redis:
     image: redis:alpine
+    container_name: dental_redis
     networks:
       - dental_network
     
-  celery:
+  dental_celery:
     restart: always
-    build:
-      context: .
-    image: dental_celery:latest
+    image: jinniudashu/dental_app:v1
+    container_name: dental_celery
     command: celery -A hssc worker -l info
-    volumes:
-      - ./:/app
     env_file:
-      - ./.env
+      - ./dental/.env
     networks:
       - dental_network
     depends_on:
-      - db
-      - redis
-      - app
+      - dental_db
+      - dental_redis
+      - dental
 
-  celerybeat:
+  dental_celerybeat:
     restart: always
-    build:
-      context: .
-    image: dental_celerybeat:latest
+    image: jinniudashu/dental_app:v1
+    container_name: dental_celerybeat
     command: celery -A hssc beat -l INFO
-    volumes:
-      - ./:/app
     env_file:
-      - ./.env
+      - ./dental/.env
     networks:
       - dental_network
     depends_on:
-      - db
-      - redis
-      - app
-      - celery
+      - dental_db
+      - dental_redis
+      - dental
+      - dental_celery

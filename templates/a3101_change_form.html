@@ -3,31 +3,31 @@
 {% block extrahead %}
 {{ block.super }}
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Retrieve DOM elements of all fields involved in the computation logic
-            const boolfield_shen_gao = document.getElementById("id_boolfield_shen_gao");
-            const boolfield_ti_zhong = document.getElementById("id_boolfield_ti_zhong");
-            const boolfield_ti_zhi_zhi_shu = document.getElementById("id_boolfield_ti_zhi_zhi_shu");
+    document.addEventListener('DOMContentLoaded', function() {
+        // Retrieve DOM elements of all fields involved in the computation logic
+        const boolfield_shen_gao = document.getElementById("id_boolfield_shen_gao");
+        const boolfield_ti_zhong = document.getElementById("id_boolfield_ti_zhong");
+        const boolfield_ti_zhi_zhi_shu = document.getElementById("id_boolfield_ti_zhi_zhi_shu");
 
-            // Calculation function implementing the business logic
-            const calculateBmi = (shenGao, tiZhong) => {
-            if (shenGao > 0 && tiZhong > 0) {
-                const shenGaoInMeters = shenGao / 100;
-                return (tiZhong / (shenGaoInMeters * shenGaoInMeters)).toFixed(1);
+        // Calculation function implementing the business logic
+        const calculateBmi = () => {
+            const shen_gao = parseFloat(boolfield_shen_gao.value);
+            const ti_zhong = parseFloat(boolfield_ti_zhong.value);
+            if (shen_gao > 0 && ti_zhong > 0) {
+                const shen_gao_in_meters = shen_gao / 100;
+                return (ti_zhong / (shen_gao_in_meters * shen_gao_in_meters)).toFixed(1);
             }
-            return None;
-            };
+            return "";
+        };
 
-            // Update the DOM element of the computed field
-            const update_boolfield_ti_zhi_zhi_shu = () => {
-                const shen_gao = parseFloat(boolfield_shen_gao.value);
-                const ti_zhong = parseFloat(boolfield_ti_zhong.value);
-                boolfield_ti_zhi_zhi_shu.value = calculateBmi(shen_gao, ti_zhong);
-            };
+        // Update the DOM element of the computed field
+        const update_boolfield_ti_zhi_zhi_shu = () => {
+            boolfield_ti_zhi_zhi_shu.value = calculateBmi();
+        };
 
-            // Add input event listener to related fields
-            boolfield_shen_gao.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);
-            boolfield_ti_zhong.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);
-        });
-    </script>
+        // Add input event listeners to related fields
+        boolfield_shen_gao.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);
+        boolfield_ti_zhong.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);
+    });
+</script>
 {% endblock %}

@@ -1,42 +1,45 @@
-[
-    {
-        "username": "金盘口腔诊所",
-        "password": "info1234",
-        "email": "test@test.com",
-        "is_superuser": false,
-        "is_staff": true,
-        "first_name": "口腔诊所",
-        "last_name": "金盘",
-        "role": ["牙科诊所管理员"]
-    },
-    {
-        "username": "金盘口腔小王",
-        "password": "info1234",
-        "email": "test@test.com",
-        "is_superuser": false,
-        "is_staff": true,
-        "first_name": "小王",
-        "last_name": "金盘口腔",
-        "role": ["牙科诊所管理员"]
-    },
-    {
-        "username": "金盘口腔小赵",
-        "password": "info1234",
-        "email": "test@test.com",
-        "is_superuser": false,
-        "is_staff": true,
-        "first_name": "小赵",
-        "last_name": "金盘口腔",
-        "role": ["牙科诊所管理员"]
-    },
-    {
-        "username": "张三",
-        "password": "info1234",
-        "email": "test@test.com",
-        "is_superuser": false,
-        "is_staff": true,
-        "first_name": "三",
-        "last_name": "张",
-        "role": ["保险人员"]
-    }
-]
+{
+    "user": [
+        {
+            "username": "金盘口腔诊所",
+            "password": "info1234",
+            "email": "test@test.com",
+            "is_superuser": false,
+            "is_staff": true,
+            "first_name": "口腔诊所",
+            "last_name": "金盘",
+            "role": ["牙科诊所管理员"]
+        },
+        {
+            "username": "金盘口腔小王",
+            "password": "info1234",
+            "email": "test@test.com",
+            "is_superuser": false,
+            "is_staff": true,
+            "first_name": "小王",
+            "last_name": "金盘口腔",
+            "role": ["牙科诊所管理员"]
+        },
+        {
+            "username": "金盘口腔小赵",
+            "password": "info1234",
+            "email": "test@test.com",
+            "is_superuser": false,
+            "is_staff": true,
+            "first_name": "小赵",
+            "last_name": "金盘口腔",
+            "role": ["牙科诊所管理员"]
+        },
+        {
+            "username": "张三",
+            "password": "info1234",
+            "email": "test@test.com",
+            "is_superuser": false,
+            "is_staff": true,
+            "first_name": "三",
+            "last_name": "张",
+            "role": ["保险人员"]
+        }
+    ],
+    "workgroup": []
+}

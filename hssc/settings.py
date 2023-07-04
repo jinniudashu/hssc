@@ -15,6 +15,24 @@ from .router import *
 
 import environ
 
+# 设定项目名称，测试数据，子域名，域名
+DOMAIN = 'tpacn.com'
+REDIS_HOST = 'redis://default:redispw@localhost:49153'
+# REDIS_HOST = 'redis://localhost:6379'
+
+PROJECT_NAME = 'Clinic'
+PROJECT_TEST_DATA = 'core/management/commands/test_data_clinic.json'
+SUBDOMAIN = 'clinic'
+DB_HOST = 'db'
+# REDIS_HOST = 'redis://redis:6379'
+
+# PROJECT_NAME = 'Dental'
+# PROJECT_TEST_DATA = 'core/management/commands/test_data_dental.json'
+# SUBDOMAIN = 'dental'
+# DB_HOST = 'dental_db'
+# REDIS_HOST = 'redis://dental_redis:6379'
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,10 +48,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'dental.tpacn.com', 'dental.tpahn.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'clinic-test.tpacn.com', 'clinic-test.tpahn.com', 'clinic.tpacn.com', 'clinic.tpahn.com', ]
+ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
 
 # Application definition
 
@@ -113,7 +130,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'HOST': os.environ.get('DB_HOST'),
+#         'HOST': DB_HOST,
 #         'NAME': os.environ.get('DB_NAME'),
 #         'USER': os.environ.get('DB_USER'),
 #         'PASSWORD': os.environ.get('DB_PASS'),
@@ -126,9 +143,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            # "hosts": [env('REDIS_URL')],
-            'hosts': ['redis://localhost:6379']
-            # 'hosts': ['redis://default:redispw@localhost:49153']
+            "hosts": [REDIS_HOST],
         },
     },
 }
@@ -169,12 +184,12 @@ USE_L10N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # 上传文件路径
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -191,9 +206,7 @@ SIMPLE_BACKEND_REDIRECT_URL = '/'
 # APPEND_SLASH=False
 
 # CELERY SETTINGS
-# CELERY_BROKER_URL = env('REDIS_URL')
-CELERY_BROKER_URL = 'redis://localhost:6379'
-# CELERY_BROKER_URL = 'redis://default:redispw@localhost:49153'
+CELERY_BROKER_URL = REDIS_HOST
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

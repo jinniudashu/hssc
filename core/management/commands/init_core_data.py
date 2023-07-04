@@ -3,6 +3,7 @@ from django.apps import apps
 import json
 import os
 
+from django.conf import settings
 from core.models import *
 from icpc.models import Icpc
 # from service.models import Yao_pin_ji_ben_xin_xi_biao
@@ -44,7 +45,7 @@ class Command(BaseCommand):
 
 
         # 读取测试数据文件
-        with open('core/management/commands/test_data_clinic.json', encoding="utf8") as f:
+        with open(settings.PROJECT_TEST_DATA, encoding="utf8") as f:
             test_data = json.loads(f.read())
 
         # 导入测试用户数据
@@ -157,5 +158,5 @@ class Command(BaseCommand):
         backup_command = f"{manage_py_path} dumpdata {' '.join(backup_models)} --output=backup.json"
 
         # 保存到文件
-        with open("backup.py", "w") as file:
+        with open("backup.py", "w", encoding='utf-8') as file:
             file.write(f"import os\nos.system('{backup_command}')\n\n# 恢复数据命令：\n# python manage.py loaddata backup.json")
