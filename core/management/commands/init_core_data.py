@@ -155,8 +155,8 @@ class Command(BaseCommand):
             backup_models.append(f"service.{model._meta.object_name}")
 
         # 生成命令
-        backup_command = f"{manage_py_path} dumpdata {' '.join(backup_models)} --output=backup.json"
+        backup_command = f"{manage_py_path} dumpdata {' '.join(backup_models)} --output=./backup/backup.json"
 
         # 保存到文件
         with open("backup.py", "w", encoding='utf-8') as file:
-            file.write(f"import os\nos.system('{backup_command}')\n\n# 恢复数据命令：\n# python manage.py loaddata backup.json")
+            file.write(f"import os\nos.system('{backup_command}')\n\n# 恢复数据命令：\n# python manage.py loaddata ./backup/backup.json")
