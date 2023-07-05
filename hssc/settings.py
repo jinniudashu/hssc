@@ -48,15 +48,13 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = bool(int(env('DJANGO_DEBUG', default=0)))
 
 ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'grappelli',
-    # 'django.contrib.sites',
     'registration',
     'django.contrib.admin',
     'django.contrib.auth',
