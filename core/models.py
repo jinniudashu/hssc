@@ -674,7 +674,7 @@ class Medicine(HsscPymBase):
     specification = models.CharField(max_length=100, null=True, verbose_name="规格")
     measure = models.CharField(max_length=30, null=True, verbose_name="单位")
     mz_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, verbose_name="门诊参考单价")
-    usage = models.CharField(max_length=60, null=True, verbose_name="用药途径")
+    usage = models.CharField(max_length=60, null=True, verbose_name="用药疗程")
     dosage = models.CharField(max_length=60, null=True, verbose_name="单次用药量")
     type = models.CharField(max_length=40, null=True, verbose_name="药剂类型")
     yp_sort = models.CharField(max_length=60, null=True, verbose_name="药品分类名称")
