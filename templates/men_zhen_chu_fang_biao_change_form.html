@@ -6,6 +6,9 @@
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>    
 <script>
     document.addEventListener('DOMContentLoaded', async function() {
+        const fetchCustomerServiceLogURL = "http://127.0.0.1:8000/core/api/customer_service_log/";
+        const autocompleteFieldsURL = "http://127.0.0.1:8000/core/api/get_medicine_item/";
+
         // 表单事件规则配置列表
         const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
         // 根据表单检测范围，从CustomerServiceLog获取历史记录，构造boolfield_ji_bing_ming_cheng数组上下文
@@ -13,13 +16,13 @@
         const period = 'ALL';  // 'ALL' or 'LAST_WEEK_SERVICES'
         const form_class = 0;  // 指定表单类别
         const fetchCustomerServiceLog = async (customerId, period=null, form_class=0) => {
-            let url = `http://127.0.0.1:8000/core/api/customer_service_log/?customer=${customerId}`;
+            let url = fetchCustomerServiceLogURL + `?customer=${customerId}`
             if (period !== null) {
                 url += `&period=${period}`;
             }
             if (form_class > 0) {
                 url += `&form_class=${form_class}`;
-            }    
+            }
             try {
                 const response = await fetch(url, {
                     headers: {
@@ -45,6 +48,65 @@
         }
         const context_boolfield_ji_bing_ming_cheng = await fetchCustomerServiceLog(customerId, period, form_class);
         console.log(context_boolfield_ji_bing_ming_cheng);
+        
+        // ******************************************
+        // 自动补全字典明细相关字段
+        // ******************************************
+        // 从明细表表头提取表头数组，用于获取字段名称数组
+        let headTr = document.querySelector('table thead tr')
+        headTr.removeChild(headTr.firstElementChild)
+        headTr.removeChild(headTr.lastElementChild)
+        const thElements = headTr.querySelectorAll('th')
+
+        // 自动补全字典字段
+        const autocompleteFields = async (node) => {
+            const fetchMedicineItem = async (itemId) => {
+                let url = autocompleteFieldsURL + `?itemId=${itemId}`
+                try {
+                    const response = await fetch(url, { headers: {'Accept': 'application/json',} });
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    const result = await response.json();
+                    return result;
+                } catch (error) {
+                    console.error('Error:', error);
+                    return null;
+                }
+            }
+
+            // 获取item纪录明细
+            const itemId = node.parentElement.parentElement.parentElement.parentElement.firstElementChild.value
+            const medicineItem = await fetchMedicineItem(itemId)
+
+            // 当前node字段名
+            let parts = node.id.split('-')
+            parts.pop()
+            let node_field_name = parts.pop()
+            // 当前tr
+            const tr = node.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+            console.log('id:', itemId, node.getAttribute('title').trim())
+            // 查找对应的<td>元素.input/select元素，填充相关属性字段
+            thElements.forEach(th => {
+                // 从表头类名解析出字段名
+                let fieldName = th.className.split(' ')[0].split('-')[1]  
+                if (fieldName !== node_field_name) {
+                    // 获取类名，用于从tr中查找节点
+                    let classStr = '.field-' + fieldName
+                    // 获取表头title，用于从item字典中查找对应键值
+                    let title = th.innerText
+                    console.log(title, ':', medicineItem[title])
+                    // 获取节点
+                    let relate_node = tr.querySelector(classStr).firstElementChild
+                    // 根据类型写入键值
+                    if (relate_node.nodeName === 'INPUT') {
+                        relate_node.value = medicineItem[title]
+                    } else if (relate_node.nodeName === 'DIV') {
+                        relate_node.firstElementChild.value = medicineItem[title]
+                    }
+                }
+            })
+        }
     
         // 定义全局变量，用于存储被跟踪的字段当前值
         const current_values = {
@@ -151,12 +213,16 @@
                 if (title !== current_values.boolfield_yao_pin_ming) {
                     current_values.boolfield_yao_pin_ming = title;
                     document.querySelector('input[name="_save"]').disabled = false;
-                    console.log(title)
+                    // 规则冲突检测
                     content_conflict_rules.find(item => {
                         if (item.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming)) {
                             detect_form_event(item);
                         }
                     });
+                    
+                    // 填充字典相关属性字段
+                    autocompleteFields(node)
+        
                 }
             }
         }
@@ -180,7 +246,7 @@
                         // 判断节点类型是不是元素节点，且节点名字是不是'tr'
                         if(addedNodes[i].nodeType === 1 && addedNodes[i].nodeName === 'TR') {
                             var trNode = addedNodes[i];
-                            // 找到包含药品名称的节点
+                            // 找到包含boolfield_yao_pin_ming名称的节点
                             var yaoPinMingNode = trNode.querySelector('span.select2-selection__rendered');
                             if(yaoPinMingNode) {
                                 // 为新tr创建观察器

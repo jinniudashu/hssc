@@ -6,13 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.db.models import Q
+from django.forms.models import model_to_dict
 
 from enum import Enum
 from requests import Response
 
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 
-from core.models import Service, ServicePackage, Customer, OperationProc, RecommendedService, CustomerServiceLog
+from core.models import Service, ServicePackage, Customer, OperationProc, RecommendedService, CustomerServiceLog, Medicine
 
 from dictionaries.models import *
 from service.models import *
@@ -32,6 +33,22 @@ class CustomerServiceLogView(View):
         else:
             return JsonResponse({"error": "Customer parameter is required"}, status=400)
 
+class MedicineItemView(View):
+    def get(self, request, *args, **kwargs):
+        itemId = request.GET.get('itemId', None)
+        if itemId is not None:
+            medicine = Medicine.objects.get(id=itemId)
+            medicine_dict = model_to_dict(medicine)
+            medicine_verbose_dict = {}
+
+            for field in Medicine._meta.fields:
+                if field.verbose_name:
+                    medicine_verbose_dict[field.verbose_name] = medicine_dict[field.name]
+                else:
+                    medicine_verbose_dict[field.name] = medicine_dict[field.name]
+            return JsonResponse(medicine_verbose_dict)
+        else:
+            return JsonResponse({"error": "itemId parameter is required"}, status=400)
 
 def index_customer(request):
     context = {}
