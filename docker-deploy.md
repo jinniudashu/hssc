@@ -1,12 +1,13 @@
 ## 从开发环境生成运行时代码
 0. 在settings.py中设置PROJECT_NAME
 1. 从设计系统导入脚本：python manage.py import_design
-2. 删除原有migrations文件：python delete_initial_migrations.py
-3. 生成migrations文件：python manage.py makemigrations
-4. 生成数据库：python manage.py migrate
-5. loaddata：python manage.py loaddata initial_data.json
-6. 初始化业务系统配置：python manage.py init_core_data
-7. 恢复业务数据（如果有）: python manage.py loaddata ./backup/backup.json
+2. 初始化业务系统：python dev_initial.py
+    - 删除原有migrations文件：python delete_initial_migrations.py
+    - 生成migrations文件：python manage.py makemigrations
+    - 生成数据库：python manage.py migrate
+    - loaddata：python manage.py loaddata initial_data.json
+    - 初始化业务系统配置：python manage.py init_core_data
+    - 恢复业务数据（如果有）: python manage.py loaddata ./backup/backup.json
 
 ## Docker部署
 ### 开发环境
