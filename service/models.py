@@ -773,11 +773,11 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
         
 class Men_zhen_chu_fang_biao_list(models.Model):
     men_zhen_chu_fang_biao = models.ForeignKey(Men_zhen_chu_fang_biao, on_delete=models.CASCADE, verbose_name='药品处方')
-    boolfield_yao_pin_ming = models.ForeignKey(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_men_zhen_chu_fang_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='药品名')
+    boolfield_yao_pin_ming = models.ForeignKey(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_men_zhen_chu_fang_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品名')
     boolfield_yong_yao_tu_jing = models.ForeignKey(Yong_yao_tu_jing, related_name='yong_yao_tu_jing_for_boolfield_yong_yao_tu_jing_men_zhen_chu_fang_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='用药途径')
-    boolfield_yong_yao_liao_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药疗程')
-    boolfield_dan_ci_yong_yao_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='单次用药量')
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
+    boolfield_dan_ci_yong_yao_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='单次用药量')
+    boolfield_yong_yao_liao_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药疗程')
     class Meta:
         verbose_name = '药品处方明细'
         verbose_name_plural = verbose_name
