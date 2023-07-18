@@ -7,16 +7,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', async function() {
         const domain = '127.0.0.1:8000';
-        const fetchCustomerServiceLogURL = `http://${domain}/core/api/customer_service_log/`;
-        const autocompleteFieldsURL = `http://${domain}/core/api/get_medicine_item/`;
-        const fetchIcpcItemURL = `http://${domain}/core/api/get_icpc_item/`;
-
-        // 表单事件规则配置列表
-        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
+        
         // 根据表单检测范围，从CustomerServiceLog获取历史记录，构造boolfield_ji_bing_ming_cheng数组上下文
         const customerId = Cookies.get('customer_id');
         const period = 'ALL';  // 'ALL' or 'LAST_WEEK_SERVICES'
         const form_class = 0;  // 指定表单类别
+        const fetchCustomerServiceLogURL = `http://${domain}/core/api/customer_service_log/`;
         const fetchCustomerServiceLog = async (customerId, period=null, form_class=0) => {
             let url = fetchCustomerServiceLogURL + `?customer=${customerId}`
             if (period !== null) {
@@ -52,9 +48,74 @@
         console.log(context_boolfield_ji_bing_ming_cheng);
         
         // ******************************************
+        // 检测是否发生符合特定规则的表单事件
+        // ******************************************
+        // 表单事件规则
+        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
+        // 接受一条来自表单事件规则列表的规则, 如果发生表单事件，执行规则配置表中指定的表单事件动作
+        const detect_form_event = (rule) => {
+            // 定义表单事件动作，接受一个选项，来自表单事件规则列表
+            const form_event_action = (action, conflict_items) => {
+                // 把冲突项目数组转换为字符串
+                const conflict_items_string = conflict_items.join('、');
+                if (action === 'WARN') {
+                    // 警告用户内容冲突
+                    alert(`表单内容冲突：${conflict_items_string}`);
+                } else if (action === 'PROHIBIT') {
+                    alert(`表单内容冲突：${conflict_items_string}`);
+                    // 禁止保存表单
+                    document.querySelector('input[name="_save"]').disabled = true;
+                }
+            }
+
+            if (!current_values.boolfield_yao_pin_ming) return;
+
+            // 构造冲突项列表
+            const conflict_items = [];
+
+            const events_context = {
+                event_0 : context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).length > 0,
+                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
+            }
+            // 检测是否发生上下文冲突
+            if (Object.values(events_context).every(value => value === true)) {
+                // 对于上下文冲突，添加产生冲突的具体疾病名称
+                if (events_context.event_0) {
+                    const conflictingDiseases = context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).map(item => item.value);
+                    if (conflictingDiseases.length > 0) {
+                        conflict_items.push(conflictingDiseases.join(', '));
+                    }
+                }
+                form_event_action(rule.form_event_action, conflict_items)
+            }
+
+            const events_input = {
+                event_0 : new Set(rule.boolfield_ji_bing_ming_cheng).has(current_values.boolfield_ji_bing_ming_cheng),
+                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
+            }
+            // 相与所有输入事件结果，如果全部为真，返回真
+            if (Object.values(events_input).every(value => value === true)) {
+                for (const key in current_values) {
+                    const value = current_values[key];
+                    // 如果值是数组，找出冲突项
+                    if (Array.isArray(value)) {
+                        const conflictingItems = value.filter(item => rule.boolfield_yao_pin_ming.includes(item));
+                        if (conflictingItems.length > 0) {
+                            conflict_items.push(conflictingItems.join(', '));
+                        }
+                    } else {
+                        conflict_items.push(value);
+                    }
+                }
+                form_event_action(rule.form_event_action, conflict_items)
+            }
+        };
+        
+        // ******************************************
         // 显示字段提示
         // ******************************************
         const showIcpcHint = async (node) => {
+            const fetchIcpcItemURL = `http://${domain}/core/api/get_icpc_item/`;
             const fetchIcpcItem = async (node_field_name, itemId) => {
                 let url = fetchIcpcItemURL + `?fieldName=${node_field_name}&itemId=${itemId}`
                 try {
@@ -104,7 +165,6 @@
             parentNode.insertAdjacentElement('afterend', hintDiv);
         }
         
-        
         // ******************************************
         // 自动补全字典明细相关字段
         // ******************************************
@@ -112,6 +172,7 @@
         const thElements = document.querySelector('table thead tr').querySelectorAll('th')
         // 自动补全字典字段
         const autocompleteFields = async (node) => {
+            const autocompleteFieldsURL = `http://${domain}/core/api/get_medicine_item/`;
             const fetchMedicineItem = async (itemId) => {
                 let url = autocompleteFieldsURL + `?itemId=${itemId}`
                 try {
@@ -161,71 +222,6 @@
                 }
             })
         }
-    
-        // 定义全局变量，用于存储被跟踪的字段当前值
-        const current_values = {
-            boolfield_ji_bing_ming_cheng: null,
-            boolfield_yao_pin_ming: null
-        }
-
-        // 定义表单事件动作，接受一个选项，来自表单事件规则列表
-        const form_event_action = (action, conflict_items) => {
-            // 把冲突项目数组转换为字符串
-            const conflict_items_string = conflict_items.join('、');
-            if (action === 'WARN') {
-                // 警告用户内容冲突
-                alert(`表单内容冲突：${conflict_items_string}`);
-            } else if (action === 'PROHIBIT') {
-                alert(`表单内容冲突：${conflict_items_string}`);
-                // 禁止保存表单
-                document.querySelector('input[name="_save"]').disabled = true;
-            }
-        }
-
-        // 检测是否发生符合特定规则的表单事件. 接受一条来自表单事件规则列表的规则, 如果发生表单事件，执行规则配置表中指定的表单事件动作
-        const detect_form_event = (rule) => {
-            if (!current_values.boolfield_yao_pin_ming) return;
-
-            // 构造冲突项列表
-            const conflict_items = [];
-
-            const events_context = {
-                event_0 : context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).length > 0,
-                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
-            }
-            // 检测是否发生上下文冲突
-            if (Object.values(events_context).every(value => value === true)) {
-                // 对于上下文冲突，添加产生冲突的具体疾病名称
-                if (events_context.event_0) {
-                    const conflictingDiseases = context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).map(item => item.value);
-                    if (conflictingDiseases.length > 0) {
-                        conflict_items.push(conflictingDiseases.join(', '));
-                    }
-                }
-                form_event_action(rule.form_event_action, conflict_items)
-            }
-
-            const events_input = {
-                event_0 : new Set(rule.boolfield_ji_bing_ming_cheng).has(current_values.boolfield_ji_bing_ming_cheng),
-                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
-            }
-            // 相与所有输入事件结果，如果全部为真，返回真
-            if (Object.values(events_input).every(value => value === true)) {
-                for (const key in current_values) {
-                    const value = current_values[key];
-                    // 如果值是数组，找出冲突项
-                    if (Array.isArray(value)) {
-                        const conflictingItems = value.filter(item => rule.boolfield_yao_pin_ming.includes(item));
-                        if (conflictingItems.length > 0) {
-                            conflict_items.push(conflictingItems.join(', '));
-                        }
-                    } else {
-                        conflict_items.push(value);
-                    }
-                }
-                form_event_action(rule.form_event_action, conflict_items)
-            }
-        };
 
         // 创建观察器，接受一个回调函数为参数
         function createObserver(callback) {
@@ -239,6 +235,12 @@
         }
         const mutationObserverConfig = { childList: true, subtree: true }
 
+        // 定义全局变量，用于存储被跟踪的字段当前值
+        const current_values = {
+            boolfield_ji_bing_ming_cheng: null,
+            boolfield_yao_pin_ming: null
+        }
+
         // boolfield_ji_bing_ming_cheng变化处理
         function boolfield_ji_bing_ming_chengHandleChanges(node) {
             if (node.hasAttribute('title')) {
@@ -246,6 +248,8 @@
                 if (title !== current_values.boolfield_ji_bing_ming_cheng) {
                     current_values.boolfield_ji_bing_ming_cheng = title;
                     document.querySelector('input[name="_save"]').disabled = false;
+                    
+                    // 检测是否发生符合特定规则的表单事件
                     content_conflict_rules.find(item => {
                         if (item.boolfield_ji_bing_ming_cheng.includes(current_values.boolfield_ji_bing_ming_cheng)) {
                             detect_form_event(item);
@@ -270,7 +274,8 @@
                 if (title !== current_values.boolfield_yao_pin_ming) {
                     current_values.boolfield_yao_pin_ming = title;
                     document.querySelector('input[name="_save"]').disabled = false;
-                    // 规则冲突检测
+                    
+                    // 检测是否发生符合特定规则的表单事件
                     content_conflict_rules.find(item => {
                         if (item.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming)) {
                             detect_form_event(item);
