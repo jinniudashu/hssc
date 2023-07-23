@@ -229,7 +229,7 @@ def operand_started_handler(sender, **kwargs):
 
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
-    def _is_rule_satified(event_rule, operation_proc):
+    def _detect_business_events(event_rule, operation_proc):
         '''
         检查表达式是否满足 return: Boolean
         parameters: form_data, self.expression
@@ -400,16 +400,16 @@ def operand_finished_handler(sender, **kwargs):
     operation_proc = kwargs['pid']
     request = kwargs['request']
 
-    # 删除当前客户的所有推荐服务条目
+    # 0. 删除当前客户的所有推荐服务条目
     RecommendedService.objects.filter(customer=operation_proc.customer).delete()
 
-    # 根据服务规则检查业务事件是否发生，执行系统作业    
+    # 1. 根据服务规则检查业务事件是否发生，执行系统作业    
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件
         print('*****************************')
         print('From check_rules 扫描规则：', service_rule.service, service_rule.event_rule)
-        if _is_rule_satified(service_rule.event_rule, operation_proc):
+        if _detect_business_events(service_rule.event_rule, operation_proc):
             print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
             # 构造作业参数
             print('operation_proc.operator:', operation_proc.operator)
@@ -435,9 +435,9 @@ def operand_finished_handler(sender, **kwargs):
                 print('From check_rules 执行结果:', _result)
     
 
-    # 执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
-    # 1. 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
-    # 2. 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
+    # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
+    # (1) 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
+    # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
     current_service = operation_proc.service
     if current_service.follow_up_required and current_service.follow_up_interval and current_service.follow_up_service:
         # 构造参数
