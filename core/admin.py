@@ -147,6 +147,18 @@ class ClinicSite(admin.AdminSite):
             recommended_service = RecommendedService.objects.get(id=kwargs['recommended_service_id'])
             proc_params['parent_proc'] = recommended_service.pid
             proc_params['passing_data'] = recommended_service.passing_data
+
+            # 获取父进程的表单数据
+            field_names = [field.name for field in recommended_service.pid.content_object._meta.get_fields()][12:]
+            form_data = {}
+            for field_name in field_names:
+                field_value = getattr(recommended_service.pid.content_object, field_name)
+                # 如果字段是多对多字段，则获取QuerySet
+                if isinstance(field_value, models.Manager):
+                    field_value = field_value.all()
+                form_data[field_name] = field_value                
+            proc_params['form_data'] = form_data
+
         else:
             # 人工创建服务，没有父进程
             proc_params['parent_proc'] = None

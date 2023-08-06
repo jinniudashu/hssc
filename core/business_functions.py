@@ -191,7 +191,11 @@ def create_customer_service_log(form_data, form_instance):
 
     print('完成预处理form_data:', form_data)
     # 从form_instance.pid.service.buessiness_form中获取form_class
-    form_class = form_instance.pid.service.buessiness_forms.all()[0].form_class
+    query_set = form_instance.pid.service.buessiness_forms.all()
+    if query_set:
+        form_class = query_set[0].form_class
+    else:
+        form_class = None  # Or some other default value
 
     # 保存form_data
     try:

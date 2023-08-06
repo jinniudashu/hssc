@@ -36,7 +36,7 @@ class HsscFormAdmin(admin.ModelAdmin):
         create_customer_service_log(form_data1, obj)
 
         # 发送服务作业完成信号
-        print('发送操作完成信号, From service.admin.HsscFormAdmin.save_model：', obj.pid)
+        print('发送操作完成信号, From service.admin.HsscFormAdmin.save_model：', obj.pid, 'form_data:', form_data2)
         operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form_data2)
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):

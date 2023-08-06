@@ -17,7 +17,7 @@ import environ
 
 # 设定项目名称，测试数据，子域名，域名
 DOMAIN = 'tpacn.com'
-REDIS_HOST = 'redis://default:redispw@localhost:49153'
+REDIS_HOST = 'redis://default:redispw@localhost:49154'
 # REDIS_HOST = 'redis://localhost:6379'
 
 PROJECT_NAME = 'Clinic'
