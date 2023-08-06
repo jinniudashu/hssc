@@ -248,7 +248,7 @@ class FieldsType(Enum):
     boolfield_yi_liao_ic_ka_hao = "String"  # 医疗ic卡号
     boolfield_jia_ting_qian_yue_fu_wu_xie_yi = "String"  # 家庭签约服务协议
     boolfield_yao_pin_bian_ma = "String"  # 药品编码
-    boolfield_yao_pin_gui_ge = "String"  # 药品规格
+    boolfield_gui_ge = "String"  # 规格
     boolfield_zhi_yuan_bian_ma = "String"  # 职员编码
     boolfield_ji_gou_bian_ma = "String"  # 机构编码
     boolfield_ji_gou_ming_cheng = "String"  # 机构名称
@@ -267,10 +267,8 @@ class FieldsType(Enum):
     boolfield_she_bei_fu_wu_dan_wei_hao_shi = "String"  # 设备服务单位耗时
     boolfield_she_bei_jian_xiu_zhou_qi = "String"  # 设备检修周期
     boolfield_she_bei_shi_yong_cheng_ben = "String"  # 设备使用成本
-    boolfield_dan_ci_yong_yao_liang = "String"  # 单次用药量
-    boolfield_dui_zhao_yi_bao_ming_cheng = "String"  # 对照医保名称
-    boolfield_dui_zhao_ji_yao_ming_cheng = "String"  # 对照基药名称
-    boolfield_huan_suan_gui_ze = "String"  # 换算规则
+    boolfield_chang_yong_ji_liang = "String"  # 常用剂量
+    boolfield_yi_bao_yao_pin_mu_lu_dui_ying_yao_pin_bian_ma = "String"  # 医保药品目录对应药品编码
     boolfield_zhi_xing_qian_ming = "String"  # 执行签名
     boolfield_yong_yao_liao_cheng = "String"  # 用药疗程
     boolfield_she_bei_ming_cheng = "String"  # 设备名称
@@ -283,6 +281,11 @@ class FieldsType(Enum):
     boolfield_you_dai_gai_jin_de_fu_wu = "String"  # 有待改进的服务
     boolfield_nin_hai_xu_yao_de_fu_wu = "String"  # 您还需要的服务
     boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu = "String"  # 希望增加的服务项目
+    boolfield_guo_jia_ji_ben_yao_pin_mu_lu_ming_cheng = "String"  # 国家基本药品目录名称
+    boolfield_pin_yin_ma = "String"  # 拼音码
+    boolfield_yong_yao_bei_zhu = "String"  # 用药备注
+    boolfield_bu_liang_fan_ying = "String"  # 不良反应
+    boolfield_chu_fang_ji_liang_dan_wei = "String"  # 处方计量单位
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -308,11 +311,7 @@ class FieldsType(Enum):
     boolfield_yu_yue_shi_jian = "Datetime"  # 预约时间
     boolfield_zhu_she_ri_qi = "Datetime"  # 注射日期
     boolfield_shang_men_fu_wu_shi_jian = "Datetime"  # 上门服务时间
-    boolfield_yao_pin_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 药品单位
     boolfield_xin_yu_ping_ji = "dictionaries.Xin_yu_ping_ji"  # 信誉评级
-    boolfield_chu_fang_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 处方计量单位
-    boolfield_ru_ku_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 入库计量单位
-    boolfield_xiao_shou_ji_liang_dan_wei = "dictionaries.Yao_pin_dan_wei"  # 销售计量单位
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = "icpc.Icpc4_physical_examination_and_tests"  # 设备适用服务功能
     boolfield_suo_shu_ji_gou = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
     boolfield_zheng_zhuang = "icpc.Icpc3_symptoms_and_problems"  # 症状
@@ -384,3 +383,6 @@ class FieldsType(Enum):
     boolfield_shi_ying_zheng = "icpc.Icpc5_evaluation_and_diagnoses"  # 适应症
     boolfield_bu_shi_ying_zheng = "icpc.Icpc5_evaluation_and_diagnoses"  # 不适应症
     boolfield_ze_ren_ren = "core.VirtualStaff"  # 责任人
+    boolfield_yao_pin_guan_li_shu_xing = "dictionaries.Yao_pin_guan_li_shu_xing"  # 药品管理属性
+    boolfield_yi_bao_bao_xiao_lei_bie = "dictionaries.Yi_bao_bao_xiao_lei_bie"  # 医保报销类别
+    boolfield_yao_ji_lei_xing = "dictionaries.Yao_ji_lei_xing"  # 药剂类型

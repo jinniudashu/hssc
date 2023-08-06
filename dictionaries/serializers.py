@@ -171,11 +171,6 @@ class Xin_yu_ping_jiSerializer(serializers.ModelSerializer):
         model = Xin_yu_ping_ji
         fields = 'value'
 
-class Yao_pin_dan_weiSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Yao_pin_dan_wei
-        fields = 'value'
-
 class Yao_pin_fen_leiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Yao_pin_fen_lei
@@ -219,4 +214,19 @@ class Nin_cong_he_chu_zhi_dao_wo_menSerializer(serializers.ModelSerializer):
 class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu
+        fields = 'value'
+
+class Yao_pin_guan_li_shu_xingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yao_pin_guan_li_shu_xing
+        fields = 'value'
+
+class Yi_bao_bao_xiao_lei_bieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yi_bao_bao_xiao_lei_bie
+        fields = 'value'
+
+class Yao_ji_lei_xingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yao_ji_lei_xing
         fields = 'value'

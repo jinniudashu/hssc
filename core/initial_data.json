@@ -236,12 +236,13 @@
             "form_class": 3,
             "api_fields": null,
             "components": [
+                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "list_components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
                 "2b80da60-c5ce-11ec-b819-725badf7393d",
-                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
+                "2c4feec6-3117-11ee-b246-0242ac170003",
                 "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -289,7 +290,7 @@
             "name_icpc": "A6501",
             "description": "",
             "form_class": 1,
-            "api_fields": "[{\"scheduled_time\": \"boolfield_yu_yue_shi_jian\"}]",
+            "api_fields": "[{\"scheduled_time\": \"boolfield_yu_yue_shi_jian\"}, {\"charge_staff\": \"boolfield_ze_ren_ren\"}]",
             "components": [
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
@@ -425,7 +426,6 @@
             "api_fields": null,
             "components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
-                "873f9a88-c13e-11ec-b731-2617a93150cd",
                 "decabc92-9aa1-11ec-bde1-8a6e55faf877",
                 "decba0ee-9aa1-11ec-bde1-8a6e55faf877",
                 "1cad2116-a52a-11ec-a478-2ec403f6c47b",
@@ -860,7 +860,7 @@
             "pym": "ypjbxxb",
             "name_icpc": null,
             "description": "",
-            "form_class": null,
+            "form_class": 1,
             "api_fields": null,
             "components": [
                 "2c4ebf36-d5b7-11ec-a897-52d938fbdf73",
@@ -870,16 +870,18 @@
                 "fbdc40fe-c115-11ec-b731-2617a93150cd",
                 "2b80da60-c5ce-11ec-b819-725badf7393d",
                 "33bc581c-c5ce-11ec-b9d4-725badf7393d",
-                "3e18992e-c5ce-11ec-b9d4-725badf7393d",
-                "4a10254e-c5ce-11ec-b9d4-725badf7393d",
-                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
-                "77226cfe-c5ce-11ec-b819-725badf7393d",
-                "654dfc0a-c5ce-11ec-b819-725badf7393d",
-                "6da75824-c5ce-11ec-b819-725badf7393d",
+                "2420aa4a-3114-11ee-a195-0242ac170003",
+                "648c6162-3116-11ee-afc4-0242ac170003",
+                "2c4feec6-3117-11ee-b246-0242ac170003",
+                "41ee8cfa-3118-11ee-bdd7-0242ac170003",
+                "ad99a114-3141-11ee-b246-0242ac170003",
                 "db0aa7e6-bf7e-11ec-8dcd-6afc6c25d902",
                 "5dc1e618-c5ce-11ec-b9d4-725badf7393d",
                 "f8c022f2-df4e-11ed-ba67-0242ac120003",
-                "0b9aad02-df4f-11ed-ba67-0242ac120003"
+                "0b9aad02-df4f-11ed-ba67-0242ac120003",
+                "d5c0c7a0-3117-11ee-9718-0242ac170003",
+                "78e2f746-3118-11ee-afc4-0242ac170003",
+                "8f456a76-3142-11ee-a2bb-0242ac170003"
             ],
             "list_components": []
         },
@@ -1098,9 +1100,7 @@
             "form_class": 2,
             "api_fields": null,
             "components": [
-                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
-                "6a4b6984-9e93-11ec-a013-aa434405c3fc",
-                "5b880f4c-9e93-11ec-b91b-aa434405c3fc"
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "list_components": []
         }
@@ -3481,12 +3481,12 @@
             "name": "kai_ju_zhu_she_lei_chu_fang",
             "hssc_id": "302378de-c9f2-11ec-b369-168d53e8234e",
             "pym": "kjzslcf",
-            "description": "用药途径 == ''注射类''",
+            "description": "",
             "detection_scope": "CURRENT_SERVICE",
             "form_class_scope": 3,
             "event_type": "SCHEDULE_EVENT",
             "weight": 1,
-            "expression": "len({'注射类'}.intersection(boolfield_yong_yao_tu_jing)) == 1",
+            "expression": "len({'静滴或静注'}.intersection(boolfield_yong_yao_tu_jing)) == 1",
             "expression_fields": "boolfield_yong_yao_tu_jing"
         },
         {

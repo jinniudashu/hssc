@@ -47,71 +47,6 @@
         const context_boolfield_ji_bing_ming_cheng = await fetchCustomerServiceLog(customerId, period, form_class);
         console.log(context_boolfield_ji_bing_ming_cheng);
         
-        // ******************************************
-        // 检测是否发生符合特定规则的表单事件
-        // ******************************************
-        // 表单事件规则
-        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
-        // 接受一条来自表单事件规则列表的规则, 如果发生表单事件，执行规则配置表中指定的表单事件动作
-        const detect_form_event = (rule) => {
-            // 定义表单事件动作，接受一个选项，来自表单事件规则列表
-            const form_event_action = (action, conflict_items) => {
-                // 把冲突项目数组转换为字符串
-                const conflict_items_string = conflict_items.join('、');
-                if (action === 'WARN') {
-                    // 警告用户内容冲突
-                    alert(`表单内容冲突：${conflict_items_string}`);
-                } else if (action === 'PROHIBIT') {
-                    alert(`表单内容冲突：${conflict_items_string}`);
-                    // 禁止保存表单
-                    document.querySelector('input[name="_save"]').disabled = true;
-                }
-            }
-
-            if (!current_values.boolfield_yao_pin_ming) return;
-
-            // 构造冲突项列表
-            const conflict_items = [];
-
-            const events_context = {
-                event_0 : context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).length > 0,
-                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
-            }
-            // 检测是否发生上下文冲突
-            if (Object.values(events_context).every(value => value === true)) {
-                // 对于上下文冲突，添加产生冲突的具体疾病名称
-                if (events_context.event_0) {
-                    const conflictingDiseases = context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).map(item => item.value);
-                    if (conflictingDiseases.length > 0) {
-                        conflict_items.push(conflictingDiseases.join(', '));
-                    }
-                }
-                form_event_action(rule.form_event_action, conflict_items)
-            }
-
-            const events_input = {
-                event_0 : new Set(rule.boolfield_ji_bing_ming_cheng).has(current_values.boolfield_ji_bing_ming_cheng),
-                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
-            }
-            // 相与所有输入事件结果，如果全部为真，返回真
-            if (Object.values(events_input).every(value => value === true)) {
-                for (const key in current_values) {
-                    const value = current_values[key];
-                    // 如果值是数组，找出冲突项
-                    if (Array.isArray(value)) {
-                        const conflictingItems = value.filter(item => rule.boolfield_yao_pin_ming.includes(item));
-                        if (conflictingItems.length > 0) {
-                            conflict_items.push(conflictingItems.join(', '));
-                        }
-                    } else {
-                        conflict_items.push(value);
-                    }
-                }
-                form_event_action(rule.form_event_action, conflict_items)
-            }
-        };
-
-        
         
         // ******************************************
         // 显示字段提示
@@ -167,63 +102,6 @@
             parentNode.insertAdjacentElement('afterend', hintDiv);
         }
         
-        // ******************************************
-        // 自动补全字典明细相关字段
-        // ******************************************
-        // 从明细表表头提取表头数组，用于获取字段名称数组
-        const thElements = document.querySelector('table thead tr').querySelectorAll('th')
-        // 自动补全字典字段
-        const autocompleteFields = async (node) => {
-            const autocompleteFieldsURL = `http://${domain}/core/api/get_medicine_item/`;
-            const fetchMedicineItem = async (itemId) => {
-                let url = autocompleteFieldsURL + `?itemId=${itemId}`
-                try {
-                    const response = await fetch(url, { headers: {'Accept': 'application/json',} });
-                    if (!response.ok) {
-                        throw new Error('HTTP error ' + response.status);
-                    }
-                    const result = await response.json();
-                    return result;
-                } catch (error) {
-                    console.error('Error:', error);
-                    return null;
-                }
-            }
-
-            // 获取item纪录明细
-            const itemId = node.parentElement.parentElement.parentElement.parentElement.firstElementChild.value
-            const medicineItem = await fetchMedicineItem(itemId)
-
-            // 当前node字段名
-            let parts = node.id.split('-')
-            parts.pop()
-            let node_field_name = parts.pop()
-            // 当前tr
-            const tr = node.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-            console.log('id:', itemId, node.getAttribute('title').trim())
-            // 查找对应的<td>元素.input/select元素，填充相关属性字段
-            thElements.forEach(th => {
-                if ((th.className) && (th.className !== 'original')) {
-                    // 从表头类名解析出字段名
-                    let fieldName = th.className.split(' ')[0].split('-')[1]  
-                    if (fieldName !== node_field_name) {
-                        // 获取类名，用于从tr中查找节点
-                        let classStr = '.field-' + fieldName
-                        // 获取表头title，用于从item字典中查找对应键值
-                        let title = th.innerText
-                        console.log(title, ':', medicineItem[title])
-                        // 获取节点
-                        let relate_node = tr.querySelector(classStr).firstElementChild
-                        // 根据类型写入键值
-                        if (relate_node.nodeName === 'INPUT') {
-                            relate_node.value = medicineItem[title]
-                        } else if (relate_node.nodeName === 'DIV') {
-                            relate_node.firstElementChild.value = medicineItem[title]
-                        }
-                    }
-                }
-            })
-        }
 
         // 创建观察器，接受一个回调函数为参数
         function createObserver(callback) {
@@ -251,12 +129,6 @@
                     current_values.boolfield_ji_bing_ming_cheng = title;
                     document.querySelector('input[name="_save"]').disabled = false;
                     
-                    // 检测是否发生符合特定规则的表单事件
-                    content_conflict_rules.find(item => {
-                        if (item.boolfield_ji_bing_ming_cheng.includes(current_values.boolfield_ji_bing_ming_cheng)) {
-                            detect_form_event(item);
-                        }
-                    });
                     
                     // 显示字段提示
                     showIcpcHint(node)
@@ -277,26 +149,18 @@
                     current_values.boolfield_yao_pin_ming = title;
                     document.querySelector('input[name="_save"]').disabled = false;
                     
-                    // 检测是否发生符合特定规则的表单事件
-                    content_conflict_rules.find(item => {
-                        if (item.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming)) {
-                            detect_form_event(item);
-                        }
-                    });
                     
-                    // 填充字典相关属性字段
-                    autocompleteFields(node)
                 }
             }
         }
 
         // 先为已存在的第一个boolfield_yao_pin_ming <select>元素添加事件监听器
-        const existingSpanElement = document.querySelector('.form-row.dynamic-men_zhen_chu_fang_biao_list_set .related-widget-wrapper span.select2-selection__rendered');
+        const existingSpanElement = document.querySelector('.form-row.dynamic-yi_xing_tang_niao_bing_zhen_duan_list_set .related-widget-wrapper span.select2-selection__rendered');
         const observer_boolfield_yao_pin_ming = createObserver(boolfield_yao_pin_mingHandleChanges);
         observer_boolfield_yao_pin_ming.observe(existingSpanElement, mutationObserverConfig);
 
         // 需要观察的目标节点
-        const targetNode = document.querySelector('#men_zhen_chu_fang_biao_form tbody');
+        const targetNode = document.querySelector('#yi_xing_tang_niao_bing_zhen_duan_form tbody');
 
         // 当观察到变动时执行的回调函数
         const trNodeCallback = function(mutationsList, observer) {

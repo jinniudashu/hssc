@@ -233,12 +233,6 @@ class Xin_yu_ping_ji(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Yao_pin_dan_wei(DictBase):
-    class Meta:
-        verbose_name = '药品计量单位'
-        verbose_name_plural = verbose_name
-
-
 class Yao_pin_fen_lei(DictBase):
     class Meta:
         verbose_name = '药品分类'
@@ -290,4 +284,22 @@ class Nin_cong_he_chu_zhi_dao_wo_men(DictBase):
 class Shi_fou_yuan_yi_xiang_jia_ren_peng_you_tui_jian_wo_men_de_fu_wu(DictBase):
     class Meta:
         verbose_name = '是否愿意向他人推荐我们'
+        verbose_name_plural = verbose_name
+
+
+class Yao_pin_guan_li_shu_xing(DictBase):
+    class Meta:
+        verbose_name = '药品管理属性'
+        verbose_name_plural = verbose_name
+
+
+class Yi_bao_bao_xiao_lei_bie(DictBase):
+    class Meta:
+        verbose_name = '医保报销类别'
+        verbose_name_plural = verbose_name
+
+
+class Yao_ji_lei_xing(DictBase):
+    class Meta:
+        verbose_name = '药剂类型'
         verbose_name_plural = verbose_name

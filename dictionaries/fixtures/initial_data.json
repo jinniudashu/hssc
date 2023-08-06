@@ -1364,83 +1364,6 @@
         }
     },
     {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5a48c8-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "支",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5a88f6-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "盒",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5ab66e-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "粒",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5af732-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "片",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5b2d9c-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "袋",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5b619a-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "瓶",
-            "icpc": null
-        }
-    },
-    {
-        "model": "dictionaries.Yao_pin_dan_wei",
-        "fields": {
-            "label": null,
-            "name": null,
-            "hssc_id": "ec5b93fe-c116-11ec-b731-2617a93150cd",
-            "pym": null,
-            "value": "ml",
-            "icpc": null
-        }
-    },
-    {
         "model": "dictionaries.Yao_pin_fen_lei",
         "fields": {
             "label": null,
@@ -1459,6 +1382,39 @@
             "hssc_id": "d8abe8ba-c5ce-11ec-b819-725badf7393d",
             "pym": null,
             "value": "激素类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_fen_lei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "80845e14-3117-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "皮肤科类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_fen_lei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "8084758e-3117-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "妇科类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_fen_lei",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "fc6d04d6-3117-11ee-9718-0242ac170003",
+            "pym": null,
+            "value": "疫苗类",
             "icpc": null
         }
     },
@@ -1943,6 +1899,248 @@
             "hssc_id": "185391a4-e78d-11ec-af5f-065284c7e455",
             "pym": null,
             "value": "不愿意",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_guan_li_shu_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "bc6e2a4a-3117-11ee-9718-0242ac170003",
+            "pym": null,
+            "value": "西药类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_guan_li_shu_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "bc6e3e68-3117-11ee-9718-0242ac170003",
+            "pym": null,
+            "value": "中药类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_guan_li_shu_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "bc6e4ba6-3117-11ee-9718-0242ac170003",
+            "pym": null,
+            "value": "基药类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_guan_li_shu_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "bc6e5a2e-3117-11ee-9718-0242ac170003",
+            "pym": null,
+            "value": "非处方药类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_guan_li_shu_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "0fa30474-3118-11ee-a195-0242ac170003",
+            "pym": null,
+            "value": "疫苗类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_pin_guan_li_shu_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "0fa31b58-3118-11ee-a195-0242ac170003",
+            "pym": null,
+            "value": "耗材类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yi_bao_bao_xiao_lei_bie",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6ab0c13a-3118-11ee-bdd7-0242ac170003",
+            "pym": null,
+            "value": "甲类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yi_bao_bao_xiao_lei_bie",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "6ab0d3be-3118-11ee-bdd7-0242ac170003",
+            "pym": null,
+            "value": "乙类",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d39d5ce-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "胶囊",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d39e8e8-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "片剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d39f572-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "粉剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a0198-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "丸剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a0ef4-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "贴剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a1b06-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "膏剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a27c2-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "滴剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a3550-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "栓剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a439c-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "颗粒剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a547c-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "糖浆",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a67dc-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "口服液",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a79de-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "溶液",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a8a96-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "注射剂",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yao_ji_lei_xing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "7d3a96b2-3142-11ee-a2ad-0242ac170003",
+            "pym": null,
+            "value": "中药",
             "icpc": null
         }
     }
