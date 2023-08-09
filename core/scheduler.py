@@ -234,6 +234,7 @@ def operand_finished_handler(sender, **kwargs):
         检查表达式是否满足 return: Boolean
         parameters: form_data, self.expression
 		'''
+        from decimal import Decimal
         def _get_scanned_data(event_rule, operation_proc, expression_fields_set):
             print('检测表单范围：', event_rule.detection_scope)
             # 1. 根据detection_scope生成待检测数据集合

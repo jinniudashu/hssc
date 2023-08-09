@@ -221,12 +221,6 @@ class Dan_bai_zhi(DictBase):
         verbose_name_plural = verbose_name
 
 
-class Yong_yao_tu_jing(DictBase):
-    class Meta:
-        verbose_name = '用药途径'
-        verbose_name_plural = verbose_name
-
-
 class Xin_yu_ping_ji(DictBase):
     class Meta:
         verbose_name = '信誉评级'

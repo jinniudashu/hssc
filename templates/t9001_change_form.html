@@ -155,12 +155,12 @@
         }
 
         // 先为已存在的第一个boolfield_yao_pin_ming <select>元素添加事件监听器
-        const existingSpanElement = document.querySelector('.form-row.dynamic-yi_xing_tang_niao_bing_zhen_duan_list_set .related-widget-wrapper span.select2-selection__rendered');
+        const existingSpanElement = document.querySelector('.form-row.dynamic-t9001_list_set .related-widget-wrapper span.select2-selection__rendered');
         const observer_boolfield_yao_pin_ming = createObserver(boolfield_yao_pin_mingHandleChanges);
         observer_boolfield_yao_pin_ming.observe(existingSpanElement, mutationObserverConfig);
 
         // 需要观察的目标节点
-        const targetNode = document.querySelector('#yi_xing_tang_niao_bing_zhen_duan_form tbody');
+        const targetNode = document.querySelector('#t9001_form tbody');
 
         // 当观察到变动时执行的回调函数
         const trNodeCallback = function(mutationsList, observer) {
