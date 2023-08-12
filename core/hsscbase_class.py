@@ -286,7 +286,6 @@ class FieldsType(Enum):
     boolfield_yong_yao_bei_zhu = "String"  # 用药备注
     boolfield_bu_liang_fan_ying = "String"  # 不良反应
     boolfield_chu_fang_ji_liang_dan_wei = "String"  # 处方计量单位
-    boolfield_yong_yao_tu_jing = "String"  # 用药途径
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -345,6 +344,8 @@ class FieldsType(Enum):
     boolfield_shou_shu_ming_cheng = "icpc.Icpc7_treatments"  # 手术名称
     boolfield_yan_bu = "dictionaries.Pharynx"  # 咽部
     boolfield_xia_zhi_shui_zhong = "dictionaries.Edema"  # 下肢水肿
+    boolfield_ke_neng_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 可能诊断
+    boolfield_pai_chu_zhen_duan = "icpc.Icpc5_evaluation_and_diagnoses"  # 排除诊断
     boolfield_tang_niao_bing_zheng_zhuang = "dictionaries.Tang_niao_bing_zheng_zhuang"  # 糖尿病症状
     boolfield_qian_dao_que_ren = "dictionaries.Qian_dao_que_ren"  # 签到确认
     boolfield_shi_mian_qing_kuang = "dictionaries.Shi_mian_qing_kuang"  # 失眠情况
@@ -357,6 +358,7 @@ class FieldsType(Enum):
     boolfield_niao_tang = "dictionaries.Niao_tang"  # 尿糖
     boolfield_dan_bai_zhi = "dictionaries.Dan_bai_zhi"  # 蛋白质
     boolfield_niao_tong_ti = "dictionaries.Tong_ti"  # 尿酮体
+    boolfield_yong_yao_tu_jing = "dictionaries.Yong_yao_tu_jing"  # 用药途径
     boolfield_yao_pin_fen_lei = "dictionaries.Yao_pin_fen_lei"  # 药品分类
     boolfield_fu_wu_jue_se = "dictionaries.Fu_wu_jue_se"  # 服务角色
     boolfield_ge_ren_bing_shi = "icpc.Icpc5_evaluation_and_diagnoses"  # 个人病史

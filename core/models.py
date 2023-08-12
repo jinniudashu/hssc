@@ -85,6 +85,8 @@ class Service(HsscPymBase):
     resource_materials = models.CharField(max_length=255, blank=True, null=True, verbose_name='配套物料')
     resource_devices = models.CharField(max_length=255, blank=True, null=True, verbose_name='配套设备')
     resource_knowledge = models.CharField(max_length=255, blank=True, null=True, verbose_name='服务知识')
+    arrange_service_package = models.OneToOneField('ServicePackage', blank=True, null=True, on_delete=models.CASCADE, verbose_name='安排服务包')    
+    arrange_service = models.OneToOneField('self', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='安排服务')    
 
     class Meta:
         verbose_name = "服务"

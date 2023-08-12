@@ -356,9 +356,8 @@ clinic_site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
 class T9001Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", )}), ]
-    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", ]
-    change_form_template = "t9001_change_form.html"
+        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
+    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
 
 admin.site.register(T9001, T9001Admin)
 clinic_site.register(T9001, T9001Admin)

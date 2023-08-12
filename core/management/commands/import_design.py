@@ -10,7 +10,7 @@ class Command(BaseCommand):
         获取Hssc源码，创建脚本文件
         '''        
         print('开始导入脚本')
-        SOURCECODE_URL = f'http://{settings.SUBDOMAIN}.{settings.DOMAIN}/define_backup/source_codes_list/{settings.PROJECT_NAME}/'
+        # SOURCECODE_URL = f'http://{settings.SUBDOMAIN}.{settings.DOMAIN}/define_backup/source_codes_list/{settings.PROJECT_NAME}/'
         SOURCECODE_URL = f'http://127.0.0.1:8001/define_backup/source_codes_list/{settings.PROJECT_NAME}/'
         res = requests.get(SOURCECODE_URL)
         res_json = res.json()[0]
