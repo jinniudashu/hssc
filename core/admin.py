@@ -290,7 +290,7 @@ class ClinicSite(admin.AdminSite):
         class CustomerSchedulePackageForm(ModelForm):
             class Meta:
                 model = CustomerSchedulePackage
-                fields = ('customer', 'servicepackage', )
+                fields = ('customer', 'servicepackage', 'start_time')
 
         CustomerScheduleFormset = modelformset_factory(CustomerSchedule, fields=('service', 'scheduled_time', 'scheduled_operator',), extra=0, can_delete=False)
         customerschedulepackage = CustomerSchedulePackage.objects.get(id=kwargs['customer_schedule_package_id'])

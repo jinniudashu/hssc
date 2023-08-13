@@ -12,6 +12,7 @@ from pypinyin import lazy_pinyin
 
 class CustomerSchedulePackage(HsscFormModel):
     servicepackage = models.ForeignKey(ServicePackage, on_delete=models.CASCADE, verbose_name='服务包')
+    start_time = models.DateTimeField(default=datetime.now, blank=True, null=True, verbose_name='开始时间')
     
     class Meta:
         verbose_name = '安排服务包'

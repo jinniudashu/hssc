@@ -127,7 +127,7 @@ class CustomerScheduleDraftInline(admin.TabularInline):
 
 class CustomerSchedulePackageAdmin(HsscFormAdmin):
     exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym"]
-    fieldsets = ((None, {'fields': (('customer', 'servicepackage'), )}),)
+    fieldsets = ((None, {'fields': (('customer', 'servicepackage'), 'start_time' )}),)
     readonly_fields = ['customer', 'servicepackage']
     inlines = [CustomerScheduleDraftInline, ]
 
