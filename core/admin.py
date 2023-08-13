@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import path
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models import Q
 
 from core.models import *
 
@@ -69,7 +70,6 @@ class ClinicSite(admin.AdminSite):
 
     # 搜索客户，返回客户列表
     def search_customers(self, request):
-        from django.db.models import Q
         from core.business_functions import search_customer_profile_list
         # 从request.POST获取search
         print('request.POST:', request.POST)
@@ -97,14 +97,8 @@ class ClinicSite(admin.AdminSite):
                 'label': service.label,
                 'enable_queue_counter': service.enable_queue_counter,
                 'queue_count': OperationProc.objects.get_service_queue_count(service)
-            } for service in Service.objects.filter(Q(service_type=2) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
+            } for service in Service.objects.filter(Q(service_type__in=[1,2]) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
         ]        
-        context['service_packages'] = [
-            {
-                'id': service_package.id, 
-                'label': service_package.label,
-            } for service_package in ServicePackage.objects.filter(Q(label__icontains=search_text) | Q(pym__icontains=search_text))
-        ]
         context['customer_id'] = kwargs['customer_id']
 
         return render(request, 'services_list.html', context)
@@ -121,7 +115,12 @@ class ClinicSite(admin.AdminSite):
         current_operator = User.objects.get(username=request.user).customer
         service = Service.objects.get(id=kwargs['service_id'])
         service_operator = dispatch_operator(customer, service, current_operator)
-        content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
+
+        # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
+        if service.service_type == 1:
+            content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+        else:
+            content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
 
         # 准备新的服务作业进程参数
         proc_params = {}
@@ -168,6 +167,9 @@ class ClinicSite(admin.AdminSite):
         # 创建新的OperationProc服务作业进程实例
         new_proc = create_service_proc(**proc_params)
 
+        # *************************************************
+        # 管理可选服务队列
+        # *************************************************
         # 如果请求来自可选服务，从可选服务队列中删除服务
         if kwargs['recommended_service_id']:
             RecommendedService.objects.get(id=kwargs['recommended_service_id']).delete()
@@ -180,6 +182,7 @@ class ClinicSite(admin.AdminSite):
             from django.contrib import messages
             messages.add_message(request, messages.INFO, f'{service.label}已开单')
             return redirect(customer)
+
 
     # 安排服务/创建新的服务日程
     def new_service_schedule(self, request, **kwargs):

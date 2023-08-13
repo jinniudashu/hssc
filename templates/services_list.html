@@ -14,13 +14,5 @@
             <td> {{ service.queue_count }} </td>
         </tr >
         {% endfor %}
-        {% for service_package in service_packages %} 
-        <tr >
-            <td> {{ service_package.label }} </td>
-            <td> <a href="/clinic/new_service_package_schedule/{{ customer_id }}/{{ service_package.id }}">安排</a> </td>
-            <td>-</td>
-        </tr >
-        {% endfor %}
-
     </tbody>
 </table>

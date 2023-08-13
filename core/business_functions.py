@@ -79,6 +79,35 @@ def create_form_instance(operation_proc, passing_data, form_data):
     return form_instance
 
 
+# 创建新的安排服务包进程
+def create_service_package_schedule_instance(proc):
+    from core.models import ServicePackageDetail
+    # 1. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
+    # 获取服务包信息: ServicePackage, ServicePackageDetail
+    servicepackage = proc.service.arrange_service_package
+    servicepackagedetails = ServicePackageDetail.objects.filter(servicepackage=servicepackage)
+    # 创建客户服务包
+    customerschedulepackage = CustomerSchedulePackage.objects.create(
+        customer=proc.customer,  # 客户
+        operator=proc.creater,  # 作业人员
+        creater=proc.creater,  # 创建者
+        pid=proc,  # 服务作业进程
+        cpid=None,
+        servicepackage=servicepackage,  # 服务包
+    )
+    # 创建服务项目安排
+    for servicepackagedetail in servicepackagedetails:
+        CustomerScheduleDraft.objects.create(
+            schedule_package=customerschedulepackage,  # 客户服务包
+            service=servicepackagedetail.service,  # 服务项目
+            cycle_unit=servicepackagedetail.cycle_unit,  # 周期单位
+            cycle_frequency=servicepackagedetail.cycle_frequency,  # 每周期频次
+            cycle_times=servicepackagedetail.cycle_times,  # 周期总数/天数
+            default_beginning_time=servicepackagedetail.default_beginning_time,  # 执行时间基准
+            base_interval=servicepackagedetail.base_interval,  # 基准间隔
+        )
+    return customerschedulepackage
+
 # 创建服务进程实例
 def create_service_proc(**kwargs):
     import json
@@ -135,11 +164,19 @@ def create_service_proc(**kwargs):
     role = kwargs['service'].role.all()
     new_proc.role.set(role)
 
-    print('create_form_instance:', 'new_proc:', new_proc, 'kwargs["passing_data"]:', kwargs['passing_data'], 'form_data:', form_data)
-    form = create_form_instance(new_proc, kwargs['passing_data'], form_data)
-    # 更新OperationProc服务进程的form实例信息
-    new_proc.object_id = form.id
-    new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
+    if new_proc.service.service_type == 1:  # 创建管理调度服务表单进程
+        print('create_service_package_schedule_instance:', new_proc)
+        customerschedulepackage = create_service_package_schedule_instance(new_proc)
+        new_proc.object_id = customerschedulepackage.id
+        new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
+        
+    else: # 创建诊疗服务表单进程
+        print('create_form_instance:', 'new_proc:', new_proc, 'kwargs["passing_data"]:', kwargs['passing_data'], 'form_data:', form_data)
+        form = create_form_instance(new_proc, kwargs['passing_data'], form_data)
+        # 更新OperationProc服务进程的form实例信息
+        new_proc.object_id = form.id
+        new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
+    
     new_proc.save()
 
     return new_proc

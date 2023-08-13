@@ -299,7 +299,12 @@ def operand_finished_handler(sender, **kwargs):
             customer = operation_proc.customer
             current_operator = kwargs['operator']
             service_operator = dispatch_operator(customer, service, current_operator)
-            content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
+
+            # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
+            if service.service_type == 1:
+                content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+            else:
+                content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
 
             proc_params = {}
             proc_params['service'] = service  # 进程所属服务
