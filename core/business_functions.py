@@ -178,10 +178,11 @@ def create_customer_service_log(form_data, form_instance):
     for field_name, field_val in form_data.items():
         # 根据字段类型做字段值的格式转换
         field_type = eval(f'FieldsType.{field_name}').value
+        print('字段名：', field_name, '字段类型：', field_type, '字段值：', field_val)
         if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
             form_data[field_name] = f'{field_val}'
-        elif field_type == 'Numbers':  # 如果字段类型是Numbers，直接使用字符串数值
-            form_data[field_name] = str({field_val}) if field_val != None else '{}'
+        elif field_type == 'Numbers' or field_type == 'Decimal':  # 如果字段类型是Numbers或Decimal，直接使用字符串数值
+            form_data[field_name] = str(field_val)
         elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
             form_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
         else:  # 如果字段类型是关联字段，转换为集合字符串
