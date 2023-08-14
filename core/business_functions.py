@@ -278,10 +278,6 @@ def get_customer_profile(customer):
 def dispatch_operator(customer, service, current_operator):
     from django.core.exceptions import ObjectDoesNotExist
 
-    # 系统自动生成客户服务日程时不传入操作员，直接返回None
-    if current_operator is None:
-        return None
-
     # 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
     charge_staff = customer.charge_staff
     if charge_staff:
@@ -290,6 +286,10 @@ def dispatch_operator(customer, service, current_operator):
             if set(charge_staff.staff.role.all()).intersection(set(service.role.all())):
                 return charge_staff.staff.customer
     
+    # 系统自动生成客户服务日程时不传入操作员，直接返回None
+    if current_operator is None:
+        return None
+
     # 否则，如当前作业员具有新增服务岗位权限务岗位权限，则开单给作业员
     try:
         if set(current_operator.staff.role.all()).intersection(set(service.role.all())):

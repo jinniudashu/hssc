@@ -15,23 +15,21 @@ from .router import *
 
 import environ
 
+# ENV = 'dev'
+ENV = 'prod'
+
 # 设定项目名称，测试数据，子域名，域名
 DOMAIN = 'tpacn.com'
-REDIS_HOST = 'redis://default:redispw@localhost:49153'
-# REDIS_HOST = 'redis://localhost:6379'
-
 PROJECT_NAME = 'Clinic'
 PROJECT_TEST_DATA = 'core/management/commands/test_data_clinic.json'
 SUBDOMAIN = 'clinic'
 DB_HOST = 'db'
-# REDIS_HOST = 'redis://redis:6379'
 
 # PROJECT_NAME = 'Dental'
 # PROJECT_TEST_DATA = 'core/management/commands/test_data_dental.json'
 # SUBDOMAIN = 'dental'
 # DB_HOST = 'dental_db'
 # REDIS_HOST = 'redis://dental_redis:6379'
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -113,27 +111,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-}
-
-# import dj_database_url
-# db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-# DATABASES['default'].update(db_from_env)
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'HOST': DB_HOST,
-#         'NAME': os.environ.get('DB_NAME'),
-#         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PASS'),
-#     }
-# }
+if ENV == 'dev':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+    }
+    REDIS_HOST = 'redis://default:redispw@localhost:32769'
+    # REDIS_HOST = 'redis://localhost:6379'  # Mac
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': DB_HOST,
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASS'),
+        }
+    }
+    REDIS_HOST = 'redis://redis:6379'
 
 DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
 
@@ -169,15 +166,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'zh-Hans'
-
 USE_TZ = True
-
 TIME_ZONE = 'Asia/Shanghai'
-
 USE_I18N = True
-
 USE_L10N = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

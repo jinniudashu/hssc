@@ -9,7 +9,7 @@ from core.business_functions import create_service_proc, dispatch_operator, eval
 
 @shared_task(bind=True)
 def test_task(self):
-    print('test task!!!!!!')
+    print('这是Celery beat测试!')
     return 'Done'
 
 
@@ -77,7 +77,8 @@ def check_proc_awaiting_timeout(self):
             state = 1
         else:
             # 如果没有指定执行人，则按照业务规则分配执行人, 服务进程状态为“创建”
-            service_operator = dispatch_operator(schedule.customer, schedule.service, schedule.creater)
+            # 系统自动生成客户服务日程时不传入操作员，如果客户没有服务责任人，直接返回None
+            service_operator = dispatch_operator(schedule.customer, schedule.service, None)
             state = 0
         proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
         proc_params['priority_operator'] = schedule.priority_operator  # 优先操作员
@@ -89,7 +90,11 @@ def check_proc_awaiting_timeout(self):
         proc_params['parent_proc'] = schedule.pid  # 安排服务/服务包进程是被创建服务进程的父进程
         proc_params['contract_service_proc'] = None  # 所属合约服务进程
 
-        content_type = ContentType.objects.get(app_label='service', model=schedule.service.name.lower())  # 表单类型
+        # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
+        if schedule.service.service_type == 1:
+            content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+        else:
+            content_type = ContentType.objects.get(app_label='service', model=schedule.service.name.lower())  # 表单类型
         proc_params['content_type'] = content_type
 
         # 检查是否有引用表单
