@@ -15,8 +15,8 @@ from .router import *
 
 import environ
 
+ENV = 'prod'
 ENV = 'dev'
-# ENV = 'prod'
 
 # 设定项目名称，测试数据，子域名，域名
 DOMAIN = 'tpacn.com'
