@@ -92,7 +92,7 @@ def user_logged_in_handler(sender, user, request, **kwargs):
     )
 
     # 发送登录作业完成信号
-    operand_finished.send(sender=user_logged_in_handler, pid=new_proc, request=request, form_data=None)
+    operand_finished.send(sender=user_logged_in_handler, pid=new_proc, request=request, form_data=None, formset_data=None)
 
 
 # 收到注册成功信号，生成用户注册事件：registration.signals.user_registered
@@ -119,7 +119,7 @@ def user_registered_handler(sender, user, request, **kwargs):
     )
 
     # 发送注册作业完成信号
-    operand_finished.send(sender=user_registered_handler, pid=new_proc, request=request, form_data=None)
+    operand_finished.send(sender=user_registered_handler, pid=new_proc, request=request, form_data=None, formset_data=None)
 
 
 @receiver(post_save, sender=User)
@@ -284,6 +284,38 @@ def operand_finished_handler(sender, **kwargs):
             except TypeError:
                 result = False
 
+    def _detect_formset_events(event_rule, formset_item):
+        '''
+        检查表达式是否满足 return: Boolean
+        parameters: form_data, self.expression
+		'''
+        from decimal import Decimal
+        def _get_formset_scanned_data(event_rule, formset_item, expression_fields_set):
+            scanned_data = {}
+            for field_name in expression_fields_set:
+                _value = formset_item.get(field_name, '')
+                scanned_data[field_name] = _value if bool(_value) else '{}'
+            print('From scheduler._get_formset_scanned_data:', scanned_data)
+            return scanned_data
+
+        # 数据预处理
+        expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # self.expression_fields: 去除空格，转为数组，再转为集合去重
+        scanned_data_dict = _get_formset_scanned_data(event_rule, formset_item, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
+        print('扫描内容:', scanned_data_dict)
+
+        expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及值的字典
+        for field_name in expression_fields_set:
+            expression_fields_val_dict[field_name] = f"{{'{scanned_data_dict.get(field_name, '')}'}}"
+
+        print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
+        _expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
+        print('eval表达式:', _expression)
+        try:
+            result = eval(_expression)  # 待检查的字段值带入表达式，并执行返回结果
+            return result
+        except TypeError:
+            result = False
+
     def _execute_system_operand(system_operand, **kwargs):
         '''
         执行系统自动作业
@@ -405,6 +437,7 @@ def operand_finished_handler(sender, **kwargs):
 
     operation_proc = kwargs['pid']
     request = kwargs['request']
+    formset_data = kwargs['formset_data']
 
     # 0. 删除当前客户的所有推荐服务条目
     RecommendedService.objects.filter(customer=operation_proc.customer).delete()
@@ -439,6 +472,34 @@ def operand_finished_handler(sender, **kwargs):
             if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
                 _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
                 print('From check_rules 执行结果:', _result)
+
+        if formset_data:
+            for formset_item in formset_data:
+                if _detect_formset_events(service_rule.event_rule, formset_item):
+                    print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
+                    # 构造作业参数
+                    print('operation_proc.operator:', operation_proc.operator)
+                    operation_params = {
+                        'operation_proc': operation_proc,
+                        'operator': operation_proc.operator,
+                        'priority_operator': service_rule.priority_operator,
+                        'service': service_rule.service,
+                        'next_service': service_rule.next_service,
+                        'passing_data': service_rule.passing_data,
+                        'complete_feedback': service_rule.complete_feedback,
+                        'reminders': service_rule.reminders,
+                        'message': service_rule.message,
+                        'interval_rule': service_rule.interval_rule,
+                        'interval_time': service_rule.interval_time,
+                        'request': request,
+                        'form_data': kwargs['form_data'],
+                        'formset_data': formset_data,
+                    }
+                    # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
+                    # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
+                    if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
+                        _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
+                        print('From check_rules 执行结果:', _result)
     
 
     # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程

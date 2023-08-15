@@ -1,6 +1,27 @@
 import os
 import shutil
 import subprocess
+import django
+import environ
+
+env = environ.Env()
+environ.Env.read_env('.env')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hssc.settings')
+django.setup()
+
+from django.contrib.auth.models import User
+
+def create_superuser(username, email, password):
+    # 创建管理员
+    print("创建管理员")
+    # 检查用户是否已经存在
+    if not User.objects.filter(username=username).exists():
+        User.objects.create_superuser(username, email, env('DJANGO_ADMIN_PASSWORD'))
+        print(f"Superuser {username} created successfully!")
+    else:
+        print(f"Superuser {username} already exists!")
+
 
 # 从项目根目录获取所有app目录
 app_dirs = [d for d in os.listdir() if os.path.isdir(d) and not d.startswith('.')]
@@ -33,24 +54,18 @@ if os.path.exists("db.sqlite3"):
 else:
     print("No db.sqlite3 found. Skipping deletion.")
 
-# 询问用户是否需要执行系统初始化
-choice = input("Do you want to initialize the system? (y/n): ")
+# 生成migrations文件
+print("生成migrations文件")
+os.system("python manage.py makemigrations")
+# 生成数据库
+print("生成数据库")
+os.system("python manage.py migrate")
+# loaddata
+print("初始化业务字典 loaddata")
+os.system("python manage.py loaddata initial_data.json")
+# 初始化业务系统配置
+print("初始化业务系统配置 init_core_data")
+os.system("python manage.py init_core_data")
 
-if choice.lower() == 'y':
-    # 生成migrations文件
-    print("生成migrations文件")
-    os.system("python manage.py makemigrations")
-    # 生成数据库
-    print("生成数据库")
-    os.system("python manage.py migrate")
-    # loaddata
-    print("初始化业务字典 loaddata")
-    os.system("python manage.py loaddata initial_data.json")
-    # 初始化业务系统配置
-    print("初始化业务系统配置 init_core_data")
-    os.system("python manage.py init_core_data")
-    # 创建管理员
-    print("创建管理员")
-    os.system("python manage.py createsuperuser")
-else:
-    print("Exiting without initialization.")
+# 创建管理员
+create_superuser('admin', 'admin@example.com', 'admin1234')

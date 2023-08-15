@@ -4,6 +4,7 @@ from django.urls import path
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Q
+from django.conf import settings
 
 from core.models import *
 
@@ -60,6 +61,7 @@ class ClinicSite(admin.AdminSite):
 
         # 向sessionStorage写入customer_id
         response.set_cookie('customer_id', kwargs['customer_id'])
+        response.set_cookie('environment', settings.ENV)
         
         # 获取操作员有操作权限的服务id列表, 写入cookie
         from core.business_functions import get_operator_permitted_services
@@ -430,7 +432,7 @@ class ServiceRuleAdmin(admin.ModelAdmin):
     readonly_fields = ['name', 'hssc_id']
     autocomplete_fields = ['service', 'next_service', 'event_rule']
     ordering = ['id']
-
+    search_fields = ['label', 'service__name__icontains', 'next_service__name__icontains', 'event_rule__name__icontains']
 
 admin.site.register(ContractService)
 

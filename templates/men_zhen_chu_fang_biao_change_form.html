@@ -6,7 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>    
 <script>
     document.addEventListener('DOMContentLoaded', async function() {
-        const domain = 'clinic.tpacn.com';
+        const domain = Cookies.get('environment') === 'dev' ? '127.0.0.1:8000' : 'clinic.tpacn.com';
 
         // 根据表单检测范围，从CustomerServiceLog获取历史记录，构造boolfield_ji_bing_ming_cheng数组上下文
         const customerId = Cookies.get('customer_id');
@@ -51,7 +51,7 @@
         // 检测是否发生符合特定规则的表单事件
         // ******************************************
         // 表单事件规则
-        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["胰岛素依赖型糖尿病，非胰岛素依赖性糖尿病，胰岛素依赖性糖尿病，", "非胰岛素依赖型糖尿病"], "boolfield_yao_pin_tong_yong_ming": ["葡萄糖"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
+        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖性糖尿病", "胰岛素依赖型糖尿病", "非胰岛素依赖性糖尿病"], "boolfield_yao_pin_ming": ["50%葡萄糖", "盐酸氨溴索葡萄糖注射液(坦刻抒）", "口服葡萄糖粉", "10%葡萄糖", "（奥诺）葡萄糖酸钙锌口服液", "葡萄糖酸氯已定软膏（顺峰宝宝）", "葡萄糖酸亚铁糖浆", "盐酸氨溴索葡萄糖注射液(耐邦）", "5%葡萄糖注射液(新）", "盐酸氨溴索葡萄糖注射液", "5%葡萄糖氯化钠注射液", "葡萄糖酸钙注射液", "5%葡萄糖（新）", "10%葡萄糖注射液", "10%葡萄糖(新）", "（奥泰灵）盐酸氨基葡萄糖胶囊", "氨基葡萄糖胶囊/奥泰灵", "复方葡萄糖酸钙口服液", "葡萄糖酸锌口服液（三精）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
         // 接受一条来自表单事件规则列表的规则, 如果发生表单事件，执行规则配置表中指定的表单事件动作
         const detect_form_event = (rule) => {
             // 定义表单事件动作，接受一个选项，来自表单事件规则列表

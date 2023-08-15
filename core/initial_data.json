@@ -240,7 +240,6 @@
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "list_components": [
-                "2c4ebf36-d5b7-11ec-a897-52d938fbdf73",
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
                 "2b80da60-c5ce-11ec-b819-725badf7393d",
                 "2c4feec6-3117-11ee-b246-0242ac170003",
@@ -549,7 +548,7 @@
             "form_class": 1,
             "api_fields": null,
             "components": [
-                "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
+                "c10d8e26-3a43-11ee-92a3-0242ac170003"
             ],
             "list_components": []
         },
@@ -1100,6 +1099,20 @@
             "api_fields": null,
             "components": [
                 "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
+            ],
+            "list_components": []
+        },
+        {
+            "label": "糖尿病健康教育处方",
+            "name": "tang_niao_bing_jian_kang_jiao_yu_chu_fang",
+            "hssc_id": "5ca1c7f0-3a42-11ee-8e31-0242ac170003",
+            "pym": "tnbjkjycf",
+            "name_icpc": null,
+            "description": "",
+            "form_class": 3,
+            "api_fields": null,
+            "components": [
+                "95314f1a-3a41-11ee-914d-0242ac170003"
             ],
             "list_components": []
         }
@@ -2906,6 +2919,48 @@
                 "de1992d2-9aa1-11ec-bde1-8a6e55faf877",
                 "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
             ]
+        },
+        {
+            "label": "糖尿病健康教育服务",
+            "name": "tang_niao_bing_jian_kang_jiao_yu_fu_wu",
+            "hssc_id": "a23e54ae-3a42-11ee-9518-0242ac170003",
+            "pym": "tnbjkjyfw",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "arrange_service_package": null,
+            "arrange_service": null,
+            "buessiness_forms": [
+                "5ca1c7f0-3a42-11ee-8e31-0242ac170003"
+            ],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
+                "de194c50-9aa1-11ec-bde1-8a6e55faf877",
+                "de1992d2-9aa1-11ec-bde1-8a6e55faf877",
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b05cc-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c1052-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
+            ]
         }
     ],
     "buessinessformssetting": [
@@ -3396,6 +3451,14 @@
             "service": "9086ce2c-c976-11ed-a229-0242ac120003",
             "buessiness_form": "f4aa4d44-011a-11ee-9434-0242ac120003",
             "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "a23f5228-3a42-11ee-9518-0242ac170003",
+            "service": "a23e54ae-3a42-11ee-9518-0242ac170003",
+            "buessiness_form": "5ca1c7f0-3a42-11ee-8e31-0242ac170003",
+            "is_list": false
         }
     ],
     "servicepackage": [
@@ -3632,8 +3695,8 @@
             "form_class_scope": 1,
             "event_type": "SCHEDULE_EVENT",
             "weight": 1,
-            "expression": "len({'非胰岛素依赖型糖尿病', '胰岛素依赖型糖尿病', '非胰岛素依赖性糖尿病，胰岛素依赖性糖尿病'}.intersection(boolfield_ji_bing_ming_cheng)) == 1 and len({'葡萄糖'}.intersection(boolfield_yao_pin_tong_yong_ming)) == 1",
-            "expression_fields": "boolfield_ji_bing_ming_cheng,boolfield_yao_pin_tong_yong_ming"
+            "expression": "len({'非胰岛素依赖型糖尿病', '胰岛素依赖性糖尿病', '胰岛素依赖型糖尿病', '非胰岛素依赖性糖尿病'}.intersection(boolfield_ji_bing_ming_cheng)) == 1 and len({'葡萄糖'}.intersection(boolfield_yao_pin_tong_yong_ming_cheng)) == 1",
+            "expression_fields": "boolfield_ji_bing_ming_cheng,boolfield_yao_pin_tong_yong_ming_cheng"
         },
         {
             "label": "开具注射类处方",
@@ -3697,8 +3760,8 @@
             "form_class_scope": 1,
             "event_type": "FORM_EVENT",
             "weight": 1,
-            "expression": "len({'胰岛素依赖型糖尿病，非胰岛素依赖性糖尿病，胰岛素依赖性糖尿病，', '非胰岛素依赖型糖尿病'}.intersection(boolfield_ji_bing_ming_cheng)) >= 1 and len({'葡萄糖'}.intersection(boolfield_yao_pin_tong_yong_ming)) == 1",
-            "expression_fields": "boolfield_ji_bing_ming_cheng,boolfield_yao_pin_tong_yong_ming"
+            "expression": "len({'非胰岛素依赖型糖尿病', '胰岛素依赖性糖尿病', '胰岛素依赖型糖尿病', '非胰岛素依赖性糖尿病'}.intersection(boolfield_ji_bing_ming_cheng)) >= 1 and len({'50%葡萄糖', '盐酸氨溴索葡萄糖注射液(坦刻抒）', '口服葡萄糖粉', '10%葡萄糖', '（奥诺）葡萄糖酸钙锌口服液', '葡萄糖酸氯已定软膏（顺峰宝宝）', '葡萄糖酸亚铁糖浆', '盐酸氨溴索葡萄糖注射液(耐邦）', '5%葡萄糖注射液(新）', '盐酸氨溴索葡萄糖注射液', '5%葡萄糖氯化钠注射液', '葡萄糖酸钙注射液', '5%葡萄糖（新）', '10%葡萄糖注射液', '10%葡萄糖(新）', '（奥泰灵）盐酸氨基葡萄糖胶囊', '氨基葡萄糖胶囊/奥泰灵', '复方葡萄糖酸钙口服液', '葡萄糖酸锌口服液（三精）'}.intersection(boolfield_yao_pin_ming)) == 1",
+            "expression_fields": "boolfield_ji_bing_ming_cheng,boolfield_yao_pin_ming"
         },
         {
             "label": "胰岛素不适用规则",
@@ -3738,6 +3801,19 @@
             "weight": 1,
             "expression": "len({'不太好', '非常差'}.intersection(boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia)) == 1",
             "expression_fields": "boolfield_zhi_liao_gan_shou_he_xiao_guo_ping_jia"
+        },
+        {
+            "label": "糖尿病遗传性判断",
+            "name": "tang_niao_bing_yi_chuan_xing_pan_duan",
+            "hssc_id": "7670974a-3a44-11ee-9757-0242ac170003",
+            "pym": "tnbycxpd",
+            "description": "",
+            "detection_scope": "CURRENT_SERVICE",
+            "form_class_scope": 0,
+            "event_type": "SCHEDULE_EVENT",
+            "weight": 1,
+            "expression": "len({'胰岛素依赖型糖尿病', '胰岛素依赖性糖尿病'}.intersection(boolfield_yi_chuan_xing_ji_bing)) == 1 or len({'非胰岛素依赖型糖尿病', '非胰岛素依赖性糖尿病，'}.intersection(boolfield_jia_zu_xing_ji_bing)) == 1",
+            "expression_fields": "boolfield_yi_chuan_xing_ji_bing,boolfield_jia_zu_xing_ji_bing"
         }
     ],
     "servicerule": [
@@ -4078,22 +4154,6 @@
             "is_active": true
         },
         {
-            "label": "预约完成",
-            "name": null,
-            "hssc_id": "b8253e10-de66-11ec-990e-9a796a47c5af",
-            "service": "d14d858c-e537-11ec-bc0a-ee06e95295ac",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
-            "next_service": "dfacb992-de5f-11ec-be26-9a796a47c5af",
-            "passing_data": 2,
-            "complete_feedback": 0,
-            "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true
-        },
-        {
             "label": "二型糖尿病推荐运动处方",
             "name": null,
             "hssc_id": "a6fb98ac-c978-11ed-8f38-0242ac120003",
@@ -4248,6 +4308,54 @@
             "passing_data": 1,
             "complete_feedback": 0,
             "reminders": 2,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "二型糖尿病初期推荐服务包",
+            "name": null,
+            "hssc_id": "2d686716-3a3b-11ee-8e31-0242ac170003",
+            "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "bae32714-39df-11ee-ab6f-4889e7cf38c9",
+            "passing_data": 1,
+            "complete_feedback": 0,
+            "reminders": 2,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "一型糖尿病初期推荐服务包",
+            "name": null,
+            "hssc_id": "4f4195b0-3a3b-11ee-9518-0242ac170003",
+            "service": "9086ce2c-c976-11ed-a229-0242ac120003",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "bae32714-39df-11ee-ab6f-4889e7cf38c9",
+            "passing_data": 1,
+            "complete_feedback": 0,
+            "reminders": 2,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "糖尿病遗传性判断",
+            "name": null,
+            "hssc_id": "a8d67f56-3a44-11ee-92a3-0242ac170003",
+            "service": "9582b822-ab23-11ec-bf5e-1ac10aeebbc4",
+            "event_rule": "7670974a-3a44-11ee-9757-0242ac170003",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "a23e54ae-3a42-11ee-9518-0242ac170003",
+            "passing_data": 0,
+            "complete_feedback": 0,
+            "reminders": 1,
             "message": null,
             "interval_rule": null,
             "interval_time": null,
