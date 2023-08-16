@@ -26,7 +26,7 @@ class ClinicSite(admin.AdminSite):
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
             path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', self.new_service, name='new_service'),
             path('new_service_schedule/<int:customer_id>/<int:service_id>/', self.new_service_schedule, name='new_service_schedule'),
-            path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>/', self.new_service_package_schedule, name='new_service_package_schedule'),
+            # path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>/', self.new_service_package_schedule, name='new_service_package_schedule'),
             path('update_customer_schedules/<int:customer_schedule_package_id>/', self.update_customer_schedules, name='update_customer_schedules'),
         ]
         return my_urls + urls
@@ -172,7 +172,7 @@ class ClinicSite(admin.AdminSite):
         # *************************************************
         # 管理可选服务队列
         # *************************************************
-        # 如果请求来自可选服务，从可选服务队列中删除服务
+        # 如果请求来自一个可选服务条目，从可选服务队列中删除该条目
         if kwargs['recommended_service_id']:
             RecommendedService.objects.get(id=kwargs['recommended_service_id']).delete()
 
@@ -232,58 +232,58 @@ class ClinicSite(admin.AdminSite):
         return redirect(new_proc.entry)
 
     # 创建新的服务包计划安排
-    def new_service_package_schedule(self, request, **kwargs):
-        # 1. 创建"安排服务计划"服务进程
-        customer_id = kwargs['customer_id']
-        customer = Customer.objects.get(id=customer_id)
-        current_operator = User.objects.get(username=request.user).customer
-        service = Service.objects.get(name='CustomerSchedulePackage')
-        content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
-        # 创建一个状态为“运行”的“安排服务计划”作业进程
-        new_proc=OperationProc.objects.create(
-            service=service,  # 服务
-            customer=customer,  # 客户
-            operator=current_operator,  # 作业人员
-            creater=current_operator,  # 创建者
-            state=2,  # 进程状态：运行
-            content_type=content_type,  # 内容类型
-            overtime=service.overtime,  # 超时时间
-            working_hours=service.working_hours,  # 工作时间
-        )
+    # def new_service_package_schedule(self, request, **kwargs):
+    #     # 1. 创建"安排服务计划"服务进程
+    #     customer_id = kwargs['customer_id']
+    #     customer = Customer.objects.get(id=customer_id)
+    #     current_operator = User.objects.get(username=request.user).customer
+    #     service = Service.objects.get(name='CustomerSchedulePackage')
+    #     content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+    #     # 创建一个状态为“运行”的“安排服务计划”作业进程
+    #     new_proc=OperationProc.objects.create(
+    #         service=service,  # 服务
+    #         customer=customer,  # 客户
+    #         operator=current_operator,  # 作业人员
+    #         creater=current_operator,  # 创建者
+    #         state=2,  # 进程状态：运行
+    #         content_type=content_type,  # 内容类型
+    #         overtime=service.overtime,  # 超时时间
+    #         working_hours=service.working_hours,  # 工作时间
+    #     )
 
-        # 2. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
-        # 获取服务包信息: ServicePackage, ServicePackageDetail
-        service_package_id = kwargs['service_package_id']
-        servicepackage = ServicePackage.objects.get(id=service_package_id)
-        servicepackagedetails = ServicePackageDetail.objects.filter(servicepackage=servicepackage)
-        # 创建客户服务包
-        from service.models import CustomerSchedulePackage, CustomerScheduleDraft
-        customerschedulepackage = CustomerSchedulePackage.objects.create(
-            customer=customer,  # 客户
-            operator=current_operator,  # 作业人员
-            creater=current_operator,  # 创建者
-            pid=new_proc,  # 服务作业进程
-            cpid=None,
-            servicepackage=servicepackage,  # 服务包
-        )
-        # 创建服务项目安排
-        for servicepackagedetail in servicepackagedetails:
-            CustomerScheduleDraft.objects.create(
-                schedule_package=customerschedulepackage,  # 客户服务包
-                service=servicepackagedetail.service,  # 服务项目
-                cycle_unit=servicepackagedetail.cycle_unit,  # 周期单位
-                cycle_frequency=servicepackagedetail.cycle_frequency,  # 每周期频次
-                cycle_times=servicepackagedetail.cycle_times,  # 周期总数/天数
-                default_beginning_time=servicepackagedetail.default_beginning_time,  # 执行时间基准
-                base_interval=servicepackagedetail.base_interval,  # 基准间隔
-            )
+    #     # 2. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
+    #     # 获取服务包信息: ServicePackage, ServicePackageDetail
+    #     service_package_id = kwargs['service_package_id']
+    #     servicepackage = ServicePackage.objects.get(id=service_package_id)
+    #     servicepackagedetails = ServicePackageDetail.objects.filter(servicepackage=servicepackage)
+    #     # 创建客户服务包
+    #     from service.models import CustomerSchedulePackage, CustomerScheduleDraft
+    #     customerschedulepackage = CustomerSchedulePackage.objects.create(
+    #         customer=customer,  # 客户
+    #         operator=current_operator,  # 作业人员
+    #         creater=current_operator,  # 创建者
+    #         pid=new_proc,  # 服务作业进程
+    #         cpid=None,
+    #         servicepackage=servicepackage,  # 服务包
+    #     )
+    #     # 创建服务项目安排
+    #     for servicepackagedetail in servicepackagedetails:
+    #         CustomerScheduleDraft.objects.create(
+    #             schedule_package=customerschedulepackage,  # 客户服务包
+    #             service=servicepackagedetail.service,  # 服务项目
+    #             cycle_unit=servicepackagedetail.cycle_unit,  # 周期单位
+    #             cycle_frequency=servicepackagedetail.cycle_frequency,  # 每周期频次
+    #             cycle_times=servicepackagedetail.cycle_times,  # 周期总数/天数
+    #             default_beginning_time=servicepackagedetail.default_beginning_time,  # 执行时间基准
+    #             base_interval=servicepackagedetail.base_interval,  # 基准间隔
+    #         )
 
-        # 3. 更新OperationProc服务进程的form实例信息
-        new_proc.object_id = customerschedulepackage.id
-        new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
-        new_proc.save()
+    #     # 3. 更新OperationProc服务进程的form实例信息
+    #     new_proc.object_id = customerschedulepackage.id
+    #     new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
+    #     new_proc.save()
 
-        return redirect(new_proc.entry)
+    #     return redirect(new_proc.entry)
 
     # 更新客户服务日程
     def update_customer_schedules(self, request, **kwargs):

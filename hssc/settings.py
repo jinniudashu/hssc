@@ -29,7 +29,6 @@ DB_HOST = 'db'
 # PROJECT_TEST_DATA = 'core/management/commands/test_data_dental.json'
 # SUBDOMAIN = 'dental'
 # DB_HOST = 'dental_db'
-# REDIS_HOST = 'redis://dental_redis:6379'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,7 +118,8 @@ if ENV == 'dev':
         },
     }
     REDIS_HOST = 'redis://default:redispw@localhost:32769'
-    # REDIS_HOST = 'redis://localhost:6379'  # Mac
+    REDIS_HOST = 'redis://localhost:6379'  # Mac
+    # REDIS_HOST = 'redis://dental_redis:6379'
 else:
     DATABASES = {
         'default': {

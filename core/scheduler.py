@@ -379,6 +379,7 @@ def operand_finished_handler(sender, **kwargs):
                 customer=operation_proc.customer,  # 客户
                 creater=kwargs['operator'],  # 创建者
                 pid=operation_proc,  # 当前进程是被推荐服务的父进程
+                recommended_batch=kwargs['recommended_batch'],  # 推荐批次号
                 cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
                 passing_data=kwargs['passing_data']
             )
@@ -439,10 +440,22 @@ def operand_finished_handler(sender, **kwargs):
     request = kwargs['request']
     formset_data = kwargs['formset_data']
 
-    # 0. 删除当前客户的所有推荐服务条目
-    RecommendedService.objects.filter(customer=operation_proc.customer).delete()
+    # *************************************************
+    # 1. 管理可选服务队列，删除当前客户的最近2批次以外的推荐服务条目
+    # *************************************************
+    # 1）获取RecommendedService中当前客户的最大批次号
+    from django.db import models
+    kwargs['recommended_batch'] = 1
+    max_batch = RecommendedService.objects.filter(customer=operation_proc.customer).aggregate(models.Max('recommended_batch'))
+    if max_batch.get('recommended_batch__max'):
+        kwargs['recommended_batch'] = max_batch.get('recommended_batch__max') + 1
+    del_target_batch = kwargs['recommended_batch'] - 3  # 删除目标批次号：当前批次号-3
+    # 2）删除当前客户的最近2批次以外的推荐服务条目
+    RecommendedService.objects.filter(customer=operation_proc.customer, recommended_batch__lte=del_target_batch).delete()
 
-    # 1. 根据服务规则检查业务事件是否发生，执行系统作业    
+    # *************************************************
+    # 2. 根据服务规则检查业务事件是否发生，执行系统作业
+    # *************************************************
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
         # 如果event_rule.expression为真，则构造事件参数，生成业务事件
@@ -501,8 +514,9 @@ def operand_finished_handler(sender, **kwargs):
                         _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
                         print('From check_rules 执行结果:', _result)
     
-
-    # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
+    # *************************************************
+    # 3.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
+    # *************************************************
     # (1) 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
     # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
     current_service = operation_proc.service

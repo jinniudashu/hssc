@@ -14,7 +14,7 @@ from requests import Response
 
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 
-from core.models import Service, ServicePackage, Customer, OperationProc, RecommendedService, CustomerServiceLog, Medicine
+from core.models import Service, ServicePackage, Customer, OperationProc, CustomerServiceLog, Medicine
 from core.hsscbase_class import FieldsType
 from icpc.models import IcpcBase
 from dictionaries.models import *
