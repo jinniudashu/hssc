@@ -118,7 +118,7 @@ if ENV == 'dev':
         },
     }
     REDIS_HOST = 'redis://default:redispw@localhost:32769'
-    REDIS_HOST = 'redis://localhost:6379'  # Mac
+    # REDIS_HOST = 'redis://localhost:6379'  # Mac
     # REDIS_HOST = 'redis://dental_redis:6379'
 else:
     DATABASES = {

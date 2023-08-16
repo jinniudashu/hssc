@@ -218,6 +218,7 @@ class HsscPymBase(HsscBase):
 from enum import Enum
 class FieldsType(Enum):
     # 手工添加CustomerSchedule字段数据类型
+    start_time = "Datetime"  # 开始时间
     scheduled_time = "Datetime"  # 计划执行时间
     overtime = "Datetime"  # 超期时限
     scheduled_operator = "entities.Stuff"  # 计划执行人员

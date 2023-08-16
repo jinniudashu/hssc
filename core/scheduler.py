@@ -1,3 +1,4 @@
+from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
@@ -440,21 +441,16 @@ def operand_finished_handler(sender, **kwargs):
     request = kwargs['request']
     formset_data = kwargs['formset_data']
 
-    # *************************************************
-    # 1. 管理可选服务队列，删除当前客户的最近2批次以外的推荐服务条目
-    # *************************************************
-    # 1）获取RecommendedService中当前客户的最大批次号
-    from django.db import models
-    kwargs['recommended_batch'] = 1
-    max_batch = RecommendedService.objects.filter(customer=operation_proc.customer).aggregate(models.Max('recommended_batch'))
-    if max_batch.get('recommended_batch__max'):
-        kwargs['recommended_batch'] = max_batch.get('recommended_batch__max') + 1
-    del_target_batch = kwargs['recommended_batch'] - 3  # 删除目标批次号：当前批次号-3
-    # 2）删除当前客户的最近2批次以外的推荐服务条目
-    RecommendedService.objects.filter(customer=operation_proc.customer, recommended_batch__lte=del_target_batch).delete()
+    # 获取RecommendedService中当前客户的最大批次号
+    max_batch = RecommendedService.objects.filter(customer=operation_proc.customer).aggregate(models.Max('recommended_batch')).get('recommended_batch__max') or 0
+    recommended_batch = max_batch + 1
+    # recommended_batch = 1  # 默认推荐批次号为1
+    # max_batch = RecommendedService.objects.filter(customer=operation_proc.customer).aggregate(models.Max('recommended_batch'))
+    # if max_batch.get('recommended_batch__max'):
+    #     recommended_batch = max_batch.get('recommended_batch__max') + 1
 
     # *************************************************
-    # 2. 根据服务规则检查业务事件是否发生，执行系统作业
+    # 1. 根据服务规则检查业务事件是否发生，执行系统作业
     # *************************************************
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
@@ -479,6 +475,7 @@ def operand_finished_handler(sender, **kwargs):
                 'interval_time': service_rule.interval_time,
                 'request': request,
                 'form_data': kwargs['form_data'],
+                'recommended_batch': recommended_batch,
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
             # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
@@ -515,7 +512,7 @@ def operand_finished_handler(sender, **kwargs):
                         print('From check_rules 执行结果:', _result)
     
     # *************************************************
-    # 3.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
+    # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
     # *************************************************
     # (1) 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
     # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
@@ -531,3 +528,9 @@ def operand_finished_handler(sender, **kwargs):
         # 调用create_customer_schedule函数，创建客户服务日程
         customer_schedule = create_customer_schedule(**params)
         print('质控管理--创建客户服务日程:', customer_schedule)
+
+    # *************************************************
+    # 3. 管理可选服务队列，删除当前客户的最近2批次以外的推荐服务条目
+    # *************************************************
+    del_target_batch = recommended_batch - 3  # 删除目标批次号：当前批次号-3
+    RecommendedService.objects.filter(customer=operation_proc.customer, recommended_batch__lte=del_target_batch).delete()
