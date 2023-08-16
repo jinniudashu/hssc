@@ -451,8 +451,12 @@ class OperationProcAdmin(admin.ModelAdmin):
 clinic_site.register(OperationProc, OperationProcAdmin)
 
 
-admin.site.register(StaffTodo)
-clinic_site.register(StaffTodo)
+@admin.register(StaffTodo)
+class StaffTodoAdmin(admin.ModelAdmin):
+    list_display = ['operation_proc', 'operator', 'scheduled_time', 'state', 'customer_name']
+    list_display_links = ['operation_proc', 'operator', 'scheduled_time', 'state', 'customer_name']
+    ordering = ['id']
+clinic_site.register(StaffTodo, StaffTodoAdmin)
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
