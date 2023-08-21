@@ -106,6 +106,12 @@ class CustomerScheduleListAdmin(admin.ModelAdmin):
     readonly_fields = ['customer', 'plan_serial_number', ]
     inlines = [CustomerScheduleInline, ]
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        # 设置当前CustomerScheduleList实例的is_ready = True
+        obj.is_ready = True
+        obj.save()
+
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
             'show_save': True,
@@ -133,7 +139,25 @@ class CustomerScheduleDraftInline(admin.TabularInline):
     can_delete = False
     # verbose_name_plural = '服务项目安排'
     exclude = ["hssc_id", "label", "name", ]
-    autocomplete_fields = ["scheduled_operator", ]
+    # autocomplete_fields = ["scheduled_operator", ]
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "scheduled_operator":
+            obj_id = request.resolver_match.kwargs.get('object_id')
+            if obj_id:
+                draft_instance = self.model.objects.get(id=obj_id)
+                print(obj_id, 'draft_instance:', draft_instance)
+                if draft_instance and draft_instance.service:
+                    # 获取所有该service关联的roles
+                    roles = draft_instance.service.role.all()
+                    print('roles:', roles)
+                    # 过滤Staff的记录，仅选择那些其role在上述roles里的记录
+                    kwargs["queryset"] = Staff.objects.filter(role__in=roles)
+                else:
+                    kwargs["queryset"] = Staff.objects.none()
+            else:
+                kwargs["queryset"] = Staff.objects.none()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request):
         # 重写get_queryset方法，设置缺省overtime为服务的overtime
@@ -163,6 +187,7 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
                 creater = schedule_package.creater,
                 plan_serial_number = schedule_package.servicepackage.label + '--' + schedule_package.created_time.strftime('%Y-%m-%d') + '--' + schedule_package.operator.name,
                 schedule_package = schedule_package,
+                is_ready = False
             )
 
             from core.business_functions import get_services_schedule
@@ -193,14 +218,6 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 # **********************************************************************************************************************
 # Service表单Admin
 # **********************************************************************************************************************
-
-class Tang_niao_bing_jian_kang_jiao_yu_fu_wuAdmin(HsscFormAdmin):
-    fieldssets = [
-        ("基本信息", {"fields": ((),)}), 
-        ("糖尿病健康教育处方", {"fields": ("boolfield_jian_kang_jiao_yu_chu_fang", )}), ]
-
-admin.site.register(Tang_niao_bing_jian_kang_jiao_yu_fu_wu, Tang_niao_bing_jian_kang_jiao_yu_fu_wuAdmin)
-clinic_site.register(Tang_niao_bing_jian_kang_jiao_yu_fu_wu, Tang_niao_bing_jian_kang_jiao_yu_fu_wuAdmin)
 
 class Yi_xing_tang_niao_bing_zhen_duanAdmin(HsscFormAdmin):
     fieldssets = [
@@ -335,7 +352,7 @@ clinic_site.register(Gong_ying_shang_ji_ben_xin_xi_diao_cha, Gong_ying_shang_ji_
 
 class Yao_pin_ji_ben_xin_xi_biaoAdmin(HsscFormAdmin):
     fieldssets = [
-        ("药品基本信息表", {"fields": ("boolfield_yao_pin_bian_ma", "boolfield_pin_yin_ma", "boolfield_yao_pin_ming_cheng", "boolfield_gui_ge", "boolfield_chu_fang_ji_liang_dan_wei", "boolfield_chang_yong_ji_liang", "boolfield_yong_yao_tu_jing", "boolfield_yong_yao_pin_ci", "boolfield_yong_yao_bei_zhu", "boolfield_yao_ji_lei_xing", "boolfield_yao_pin_fen_lei", "boolfield_yao_pin_guan_li_shu_xing", "boolfield_yao_pin_tong_yong_ming_cheng", "boolfield_guo_jia_ji_ben_yao_pin_mu_lu_ming_cheng", "boolfield_yi_bao_yao_pin_mu_lu_dui_ying_yao_pin_bian_ma", "boolfield_yi_bao_bao_xiao_lei_bie", "boolfield_shi_ying_zheng", "boolfield_bu_shi_ying_zheng", "boolfield_bu_liang_fan_ying", )}), ]
+        ("药品基本信息表", {"fields": ("boolfield_yao_pin_bian_ma", "boolfield_pin_yin_ma", "boolfield_yao_pin_ming_cheng", "boolfield_gui_ge", "boolfield_chu_fang_ji_liang_dan_wei", "boolfield_chang_yong_ji_liang", "boolfield_yong_yao_tu_jing", "boolfield_yong_yao_pin_ci", "boolfield_yong_yao_bei_zhu", "boolfield_yao_ji_lei_xing", "boolfield_yao_pin_fen_lei", "boolfield_yao_pin_guan_li_shu_xing", "boolfield_yao_pin_tong_yong_ming", "boolfield_guo_jia_ji_ben_yao_pin_mu_lu_ming_cheng", "boolfield_yi_bao_yao_pin_mu_lu_dui_ying_yao_pin_bian_ma", "boolfield_yi_bao_bao_xiao_lei_bie", "boolfield_shi_ying_zheng", "boolfield_bu_shi_ying_zheng", "boolfield_bu_liang_fan_ying", )}), ]
     autocomplete_fields = ["boolfield_shi_ying_zheng", "boolfield_bu_shi_ying_zheng", ]
     radio_fields = {"boolfield_yi_bao_bao_xiao_lei_bie": admin.VERTICAL, }
     search_fields = ["name", "pym", ]
@@ -382,9 +399,8 @@ clinic_site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
 class T9001Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", )}), ]
-    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", ]
-    change_form_template = "t9001_change_form.html"
+        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", )}), ]
+    autocomplete_fields = ["boolfield_ji_bing_ming_cheng", "boolfield_ke_neng_zhen_duan", "boolfield_pai_chu_zhen_duan", ]
 
 admin.site.register(T9001, T9001Admin)
 clinic_site.register(T9001, T9001Admin)
@@ -435,18 +451,18 @@ class A6299Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
         ("遗传病史", {"fields": ("boolfield_yi_chuan_xing_ji_bing", "boolfield_yi_chuan_bing_shi_cheng_yuan", )}), 
-        ("过敏史", {"fields": ("boolfield_guo_min_yao_wu", )}), 
+        ("过敏史", {"fields": ("boolfield_yao_pin_ming", )}), 
         ("家族病史", {"fields": ("boolfield_jia_zu_xing_ji_bing", "boolfield_jia_zu_bing_shi_cheng_yuan", )}), 
-        ("手术史", {"fields": ("boolfield_shou_shu_ming_cheng", "boolfield_shou_shu_ri_qi", )}), 
-        ("疾病史", {"fields": ("boolfield_ge_ren_bing_shi", "boolfield_que_zhen_shi_jian", )}), 
-        ("外伤史", {"fields": ("boolfield_wai_shang_xing_ji_bing", "boolfield_wai_shang_ri_qi", )}), 
+        ("手术史", {"fields": ("boolfield_shou_shu_ri_qi", "boolfield_shou_shu_ming_cheng", )}), 
+        ("疾病史", {"fields": ("boolfield_que_zhen_shi_jian", "boolfield_ge_ren_bing_shi", )}), 
+        ("外伤史", {"fields": ("boolfield_wai_shang_ri_qi", "boolfield_wai_shang_xing_ji_bing", )}), 
         ("输血史", {"fields": ("boolfield_shu_xue_liang", "boolfield_shu_xue_ri_qi", )}), 
         ("个人心理综合素质调查", {"fields": ("boolfield_xing_ge_qing_xiang", "boolfield_shi_mian_qing_kuang", "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang", )}), 
         ("个人适应能力评估", {"fields": ("boolfield_mei_tian_gong_zuo_ji_gong_zuo_wang_fan_zong_shi_chang", "boolfield_dui_mu_qian_sheng_huo_he_gong_zuo_man_yi_ma", "boolfield_dui_zi_ji_de_shi_ying_neng_li_man_yi_ma", )}), 
         ("个人身体健康评估", {"fields": ("boolfield_jue_de_zi_shen_jian_kang_zhuang_kuang_ru_he", "boolfield_jiao_zhi_guo_qu_yi_nian_zhuang_tai_ru_he", "boolfield_yun_dong_pian_hao", "boolfield_yun_dong_shi_chang", "boolfield_jin_lai_you_wu_shen_ti_bu_shi_zheng_zhuang", )}), 
         ("个人健康行为调查", {"fields": ("boolfield_ping_jun_shui_mian_shi_chang", "boolfield_chi_xu_shi_mian_shi_jian", "boolfield_yin_jiu_pin_ci", "boolfield_xi_yan_pin_ci", )}), 
         ("社会环境评估", {"fields": ("boolfield_nin_dui_ju_zhu_huan_jing_man_yi_ma", "boolfield_nin_suo_zai_de_she_qu_jiao_tong_fang_bian_ma", )}), ]
-    autocomplete_fields = ["boolfield_yi_chuan_xing_ji_bing", "boolfield_guo_min_yao_wu", "boolfield_jia_zu_xing_ji_bing", "boolfield_shou_shu_ming_cheng", "boolfield_ge_ren_bing_shi", "boolfield_wai_shang_xing_ji_bing", "boolfield_jin_lai_you_wu_shen_ti_bu_shi_zheng_zhuang", ]
+    autocomplete_fields = ["boolfield_yi_chuan_xing_ji_bing", "boolfield_yao_pin_ming", "boolfield_jia_zu_xing_ji_bing", "boolfield_shou_shu_ming_cheng", "boolfield_ge_ren_bing_shi", "boolfield_wai_shang_xing_ji_bing", "boolfield_jin_lai_you_wu_shen_ti_bu_shi_zheng_zhuang", ]
     radio_fields = {"boolfield_xing_ge_qing_xiang": admin.VERTICAL, "boolfield_shi_mian_qing_kuang": admin.VERTICAL, "boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang": admin.VERTICAL, "boolfield_jue_de_zi_shen_jian_kang_zhuang_kuang_ru_he": admin.VERTICAL, "boolfield_yun_dong_shi_chang": admin.VERTICAL, "boolfield_yin_jiu_pin_ci": admin.VERTICAL, "boolfield_xi_yan_pin_ci": admin.VERTICAL, }
 
 admin.site.register(A6299, A6299Admin)

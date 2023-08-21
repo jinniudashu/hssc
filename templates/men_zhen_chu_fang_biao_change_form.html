@@ -51,7 +51,7 @@
         // 检测是否发生符合特定规则的表单事件
         // ******************************************
         // 表单事件规则
-        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖性糖尿病", "胰岛素依赖型糖尿病", "非胰岛素依赖性糖尿病"], "boolfield_yao_pin_ming": ["50%葡萄糖", "盐酸氨溴索葡萄糖注射液(坦刻抒）", "口服葡萄糖粉", "10%葡萄糖", "（奥诺）葡萄糖酸钙锌口服液", "葡萄糖酸氯已定软膏（顺峰宝宝）", "葡萄糖酸亚铁糖浆", "盐酸氨溴索葡萄糖注射液(耐邦）", "5%葡萄糖注射液(新）", "盐酸氨溴索葡萄糖注射液", "5%葡萄糖氯化钠注射液", "葡萄糖酸钙注射液", "5%葡萄糖（新）", "10%葡萄糖注射液", "10%葡萄糖(新）", "（奥泰灵）盐酸氨基葡萄糖胶囊", "氨基葡萄糖胶囊/奥泰灵", "复方葡萄糖酸钙口服液", "葡萄糖酸锌口服液（三精）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
+        const content_conflict_rules = [{"boolfield_ji_bing_ming_cheng": ["非胰岛素依赖型糖尿病", "胰岛素依赖型糖尿病"], "boolfield_yao_pin_ming": ["5%葡萄糖氯化钠注射液", "10%葡萄糖(新）", "5%葡萄糖注射液(新）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 1}, {"boolfield_ji_bing_ming_cheng": ["低血糖症"], "boolfield_yao_pin_ming": ["甘精胰岛素注射液", "门冬胰岛素50注射液"], "form_event_action": "PROHIBIT", "detection_scope": "ALL", "form_class_scope": 2}, {"boolfield_ji_bing_ming_cheng": ["肾盂肾炎", "肾小球性肾炎/肾病"], "boolfield_yao_pin_ming": ["格华止片(盐酸二甲双胍片)", "圣邦杰（盐酸二甲双胍片）"], "form_event_action": "WARN", "detection_scope": "ALL", "form_class_scope": 2}]
         // 接受一条来自表单事件规则列表的规则, 如果发生表单事件，执行规则配置表中指定的表单事件动作
         const detect_form_event = (rule) => {
             // 定义表单事件动作，接受一个选项，来自表单事件规则列表
@@ -113,59 +113,6 @@
 
         
         
-        // ******************************************
-        // 显示字段提示
-        // ******************************************
-        const showIcpcHint = async (node) => {
-            const fetchIcpcItemURL = `http://${domain}/core/api/get_icpc_item/`;
-            const fetchIcpcItem = async (node_field_name, itemId) => {
-                let url = fetchIcpcItemURL + `?fieldName=${node_field_name}&itemId=${itemId}`
-                try {
-                    const response = await fetch(url, { headers: {'Accept': 'application/json',} });
-                    if (!response.ok) {
-                        throw new Error('HTTP error ' + response.status);
-                    }
-                    const result = await response.json();
-                    return result;
-                } catch (error) {
-                    console.error('Error:', error);
-                    return null;
-                }
-            }
-
-            // 1. 从node获取字段名称、itemId
-            // 当前node字段名
-            let parts = node.id.split('-')
-            parts.pop()
-            let node_field_name = parts.pop().substr(3)
-            // 获取itemId
-            const itemId = node.parentElement.parentElement.parentElement.parentElement.firstElementChild.value
-
-            // 2. fetch API获取item详细信息
-            const icpcItem = await fetchIcpcItem(node_field_name, itemId)
-
-            // 3. 显示字段提示
-            const hintFields = ['包含', '排除', '考虑']
-            const parentNode = node.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-            // 构造提示div
-            let hintDiv = document.createElement("div")
-            hintDiv.id = "dynamic_hint"; 
-            hintFields.forEach(field => {
-                console.log(field, ":", icpcItem[field])
-                let textContent = icpcItem[field]
-                if ((textContent === null) || (textContent === undefined))
-                    textContent = ''
-                let newLabel = document.createElement("div")
-                newLabel.textContent = `${field}: ${textContent}`
-                hintDiv.appendChild(newLabel)
-                hintDiv.appendChild(document.createElement("p"))
-            })
-            existingHintDiv = parentNode.parentElement.querySelector('#dynamic_hint')
-            if (existingHintDiv) {
-                parentNode.parentElement.removeChild(existingHintDiv)
-            }
-            parentNode.insertAdjacentElement('afterend', hintDiv);
-        }
         
         // ******************************************
         // 自动补全字典明细相关字段
@@ -258,8 +205,6 @@
                         }
                     });
                     
-                    // 显示字段提示
-                    showIcpcHint(node)
                 }
             }
         }

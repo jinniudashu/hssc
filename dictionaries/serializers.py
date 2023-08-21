@@ -161,6 +161,11 @@ class Dan_bai_zhiSerializer(serializers.ModelSerializer):
         model = Dan_bai_zhi
         fields = 'value'
 
+class Yong_yao_tu_jingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Yong_yao_tu_jing
+        fields = 'value'
+
 class Xin_yu_ping_jiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xin_yu_ping_ji

@@ -60,56 +60,60 @@ def check_proc_awaiting_timeout(self):
         scheduled_time__gte=timezone.now(),
         scheduled_time__lte=timezone.now() + timedelta(days=7),
         is_assigned=False,
+        customer_schedule_list__is_ready=True
     )
-    for schedule in schedules:
-        '''
-        生成后续服务
-        '''
-        # 准备新的服务作业进程参数
-        proc_params = {}
-        proc_params['service'] = schedule.service  # 进程所属服务
-        proc_params['customer'] = schedule.customer  # 客户
-        proc_params['creater'] = schedule.creater   # 创建者
+    # 检查customer_schedule_list.is_ready=True, 确保从CustomerScheduleList生成CustomerSchedule查询集记录的操作已完成
+    # if schedules and schedules[0].customer_schedule_list.is_ready:
+    if schedules:
+        for schedule in schedules:
+            '''
+            生成后续服务
+            '''
+            # 准备新的服务作业进程参数
+            proc_params = {}
+            proc_params['service'] = schedule.service  # 进程所属服务
+            proc_params['customer'] = schedule.customer  # 客户
+            proc_params['creater'] = schedule.creater   # 创建者
+            if schedule.scheduled_operator:
+                # 如果有指定执行人，则执行人为指定执行人, 服务进程状态为“就绪”
+                service_operator = schedule.scheduled_operator.customer
+                state = 1
+            else:
+                # 如果没有指定执行人，则按照业务规则分配执行人, 服务进程状态为“创建”
+                # 系统自动生成客户服务日程时不传入操作员，如果客户没有服务责任人，直接返回None
+                service_operator = dispatch_operator(schedule.customer, schedule.service, None)
+                state = 0
+            proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
+            proc_params['priority_operator'] = schedule.priority_operator  # 优先操作员
+            proc_params['state'] = state  # or 根据服务作业权限判断
 
-        if schedule.scheduled_operator:
-            # 如果有指定执行人，则执行人为指定执行人, 服务进程状态为“就绪”
-            service_operator = schedule.scheduled_operator.customer
-            state = 1
-        else:
-            # 如果没有指定执行人，则按照业务规则分配执行人, 服务进程状态为“创建”
-            # 系统自动生成客户服务日程时不传入操作员，如果客户没有服务责任人，直接返回None
-            service_operator = dispatch_operator(schedule.customer, schedule.service, None)
-            state = 0
-        proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
-        proc_params['priority_operator'] = schedule.priority_operator  # 优先操作员
-        proc_params['state'] = state  # or 根据服务作业权限判断
+            # 估算计划执行时间
+            # proc_params['scheduled_time'] = eval_scheduled_time(schedule.service, service_operator)
+            proc_params['scheduled_time'] = schedule.scheduled_time
 
-        # 估算计划执行时间
-        proc_params['scheduled_time'] = eval_scheduled_time(schedule.service, service_operator)
+            proc_params['parent_proc'] = schedule.pid  # 安排服务/服务包进程是被创建服务进程的父进程
+            proc_params['contract_service_proc'] = None  # 所属合约服务进程
 
-        proc_params['parent_proc'] = schedule.pid  # 安排服务/服务包进程是被创建服务进程的父进程
-        proc_params['contract_service_proc'] = None  # 所属合约服务进程
+            # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
+            if schedule.service.service_type == 1:
+                content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+            else:
+                content_type = ContentType.objects.get(app_label='service', model=schedule.service.name.lower())  # 表单类型
+            proc_params['content_type'] = content_type
 
-        # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
-        if schedule.service.service_type == 1:
-            content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
-        else:
-            content_type = ContentType.objects.get(app_label='service', model=schedule.service.name.lower())  # 表单类型
-        proc_params['content_type'] = content_type
+            # 检查是否有引用表单
+            if schedule.reference_operation:
+                proc_params['passing_data'] = 1  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+            else:
+                proc_params['passing_data'] = 0
+            
+            proc_params['form_data'] = None  # 待复制表单数据不使用
 
-        # 检查是否有引用表单
-        if schedule.reference_operation:
-            proc_params['passing_data'] = 1  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
-        else:
-            proc_params['passing_data'] = 0
-        
-        proc_params['form_data'] = None  # 待复制表单数据不使用
+            print('客户日程安排增加到服务进程队列:', proc_params)
 
-        print('客户日程安排增加到服务进程队列:', proc_params)
+            # 创建新的服务作业进程
+            new_proc = create_service_proc(**proc_params)
 
-        # 创建新的服务作业进程
-        new_proc = create_service_proc(**proc_params)
-
-        if new_proc:
-            schedule.is_assigned = True
-            schedule.save()
+            if new_proc:
+                schedule.is_assigned = True
+                schedule.save()

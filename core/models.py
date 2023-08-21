@@ -395,7 +395,7 @@ class StaffTodo(HsscBase):
     objects = StaffTodoManager()
 
     class Meta:
-        verbose_name = "员工任务清单"
+        verbose_name = "员工任务队列"
         verbose_name_plural = verbose_name
         ordering = ['id']
 

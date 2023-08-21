@@ -111,31 +111,38 @@ def create_service_package_schedule_instance(proc):
 # 创建服务进程实例
 def create_service_proc(**kwargs):
     import json
-    # 检查父进程表单是否携带进程控制信息(检查api_fields字段)，如果有，整合所有表单的进程控制信息(charge_staff, operator, scheduled_time)
+    # 检查父进程(诊疗类服务)表单是否携带进程控制信息(检查api_fields字段)，如果有，整合所有表单的进程控制信息(charge_staff, operator, scheduled_time)
     # 提取进程控制信息，更新相应控制项内容。Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
-    form_data = kwargs['form_data']
-    if kwargs['passing_data'] in [1, 2]:
-        # 获取父进程中api_fields不为空的表单, 并获取其中的进程控制信息api_fields
-        _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields is not None and form.api_fields != 'null']
-        api_fields = []
-        for _form in _forms:
-            api_fields.extend(json.loads(_form.api_fields))
-        # 逐一获取api接口字段的值，赋给相应控制字段
-        for api_field in api_fields:
-            for system_field, form_field in api_field.items():
-                if form_data.get(form_field):
-                    if system_field == 'operator':  # operator: 作业人员                    
-                        operator = form_data.get(form_field).customer
-                        kwargs['operator'] = operator
-                    elif system_field == 'scheduled_time':  # scheduled_time: 计划执行时间
-                        scheduled_time = form_data.get(form_field)
-                        kwargs['scheduled_time'] = scheduled_time
-                    elif system_field=='charge_staff':  # charge_staff: 责任人
-                        kwargs['customer'].charge_staff = form_data.get(form_field)
-                        kwargs['customer'].save()                        
-                    else:
-                        pass
-
+    try:
+        form_data = kwargs['form_data']
+        if kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data'] in [1, 2]:
+            # 获取父进程中api_fields不为空的表单, 并获取其中的进程控制信息api_fields
+            _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields is not None and form.api_fields != 'null']
+            api_fields = []
+            for _form in _forms:
+                api_fields.extend(json.loads(_form.api_fields))
+            # 逐一获取api接口字段的值，赋给相应控制字段
+            for api_field in api_fields:
+                for system_field, form_field in api_field.items():
+                    if form_data.get(form_field):
+                        if system_field == 'operator':  # operator: 作业人员                    
+                            operator = form_data.get(form_field).customer
+                            kwargs['operator'] = operator
+                        elif system_field == 'scheduled_time':  # scheduled_time: 计划执行时间
+                            scheduled_time = form_data.get(form_field)
+                            kwargs['scheduled_time'] = scheduled_time
+                        elif system_field=='charge_staff':  # charge_staff: 责任人
+                            kwargs['customer'].charge_staff = form_data.get(form_field)
+                            kwargs['customer'].save()                        
+                        else:
+                            pass
+    except KeyError as e:
+        print(f"Missing key in kwargs: {e}")
+    except AttributeError as e:
+        print(f"Attribute error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    
     # 创建新的服务作业进程
     from core.models import OperationProc
 
