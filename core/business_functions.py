@@ -356,6 +356,7 @@ def update_unassigned_procs(operator):
                 'customer_name': proc.customer.name,
                 'charge_staff': proc.customer.charge_staff.label if proc.customer.charge_staff else '',
                 'acceptance_timeout': proc.acceptance_timeout,
+                'scheduled_time': proc.scheduled_time.strftime("%y.%m.%d %H:%M"),
             } for proc in available_operation_proc
         ]
     }
