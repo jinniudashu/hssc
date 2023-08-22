@@ -43,7 +43,7 @@ class ClinicSite(admin.AdminSite):
     def receive_task(self, request, **kwargs):
         operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
         operation_proc.operator = User.objects.get(username=request.user).customer
-        operation_proc.state = 5  # 进程状态：撤销
+        operation_proc.state = 1
         operation_proc.save()
         return redirect('/clinic/')
 
@@ -51,7 +51,7 @@ class ClinicSite(admin.AdminSite):
     def cancel_task(self, request, **kwargs):
         operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
         operation_proc.operator = User.objects.get(username=request.user).customer
-        operation_proc.state = 1
+        operation_proc.state = 5  # 进程状态：撤销
         operation_proc.save()
         return redirect('/clinic/')
 
@@ -120,7 +120,7 @@ class ClinicSite(admin.AdminSite):
         人工创建新服务：作业进程+表单进程
         从kwargs获取参数：customer_id, service_id
         '''
-        from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
+        from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time, manage_recommended_service
         # 从request获取参数：customer, service, operator
         customer = Customer.objects.get(id=kwargs['customer_id'])
         current_operator = User.objects.get(username=request.user).customer
@@ -132,6 +132,9 @@ class ClinicSite(admin.AdminSite):
             content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
         else:
             content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
+
+        # 维护推荐服务队列
+        manage_recommended_service(customer)
 
         # 准备新的服务作业进程参数
         proc_params = {}

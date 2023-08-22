@@ -11,7 +11,7 @@ from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
 
 from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message, ChengBaoRenYuanQingDan
-from core.business_functions import field_name_replace, create_customer_schedule
+from core.business_functions import field_name_replace, create_customer_schedule, manage_recommended_service
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
 
 
@@ -380,7 +380,7 @@ def operand_finished_handler(sender, **kwargs):
                 customer=operation_proc.customer,  # 客户
                 creater=kwargs['operator'],  # 创建者
                 pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                recommended_batch=kwargs['recommended_batch'],  # 推荐批次号
+                age=0,  # 年龄
                 cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
                 passing_data=kwargs['passing_data']
             )
@@ -441,13 +441,8 @@ def operand_finished_handler(sender, **kwargs):
     request = kwargs['request']
     formset_data = kwargs['formset_data']
 
-    # 获取RecommendedService中当前客户的最大批次号
-    max_batch = RecommendedService.objects.filter(customer=operation_proc.customer).aggregate(models.Max('recommended_batch')).get('recommended_batch__max') or 0
-    recommended_batch = max_batch + 1
-    # recommended_batch = 1  # 默认推荐批次号为1
-    # max_batch = RecommendedService.objects.filter(customer=operation_proc.customer).aggregate(models.Max('recommended_batch'))
-    # if max_batch.get('recommended_batch__max'):
-    #     recommended_batch = max_batch.get('recommended_batch__max') + 1
+    # 0. 维护推荐服务队列
+    manage_recommended_service(operation_proc.customer)
 
     # *************************************************
     # 1. 根据服务规则检查业务事件是否发生，执行系统作业
@@ -475,7 +470,6 @@ def operand_finished_handler(sender, **kwargs):
                 'interval_time': service_rule.interval_time,
                 'request': request,
                 'form_data': kwargs['form_data'],
-                'recommended_batch': recommended_batch,
             }
             # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
             # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
@@ -528,9 +522,3 @@ def operand_finished_handler(sender, **kwargs):
         # 调用create_customer_schedule函数，创建客户服务日程
         customer_schedule = create_customer_schedule(**params)
         print('质控管理--创建客户服务日程:', customer_schedule)
-
-    # *************************************************
-    # 3. 管理可选服务队列，删除当前客户的最近2批次以外的推荐服务条目
-    # *************************************************
-    del_target_batch = recommended_batch - 3  # 删除目标批次号：当前批次号-3
-    RecommendedService.objects.filter(customer=operation_proc.customer, recommended_batch__lte=del_target_batch).delete()

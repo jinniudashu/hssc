@@ -612,7 +612,7 @@ class RecommendedService(HsscBase):
     operator = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_operator', verbose_name="操作员")
     creater = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='recommended_service_creater', verbose_name="创建者")
     pid = models.ForeignKey(OperationProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="推荐进程")
-    recommended_batch = models.SmallIntegerField(blank=True, null=True, verbose_name="推荐批次")
+    age = models.SmallIntegerField(blank=True, null=True, verbose_name="年龄")
     cpid = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="上层服务进程")
     slug = models.SlugField(max_length=250, blank=True, null=True, verbose_name="slug")
     created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")

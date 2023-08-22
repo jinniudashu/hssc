@@ -108,6 +108,7 @@ def create_service_package_schedule_instance(proc):
         )
     return customerschedulepackage
 
+
 # 创建服务进程实例
 def create_service_proc(**kwargs):
     import json
@@ -187,6 +188,15 @@ def create_service_proc(**kwargs):
     new_proc.save()
 
     return new_proc
+
+
+# 维护推荐服务队列, 删除年龄大于2的推荐条目
+def manage_recommended_service(customer):
+    from core.models import RecommendedService
+    # 1. 当前客户的所有推荐服务条目的年龄加1
+    RecommendedService.objects.filter(customer=customer).update(age=F('age')+1)
+    # 2. 然后删除年龄大于3的条目
+    RecommendedService.objects.filter(customer=customer, age__gt=3).delete()
 
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
@@ -392,7 +402,6 @@ def update_staff_todo_list(operator):
                 'scheduled_time': todo.scheduled_time.strftime("%m.%d %H:%M"),
             })
         items.append({'title': _item['title'], 'todos': todos})
-
     # 发送channel_message给操作员
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
 

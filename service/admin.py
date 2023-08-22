@@ -54,6 +54,10 @@ class HsscFormAdmin(admin.ModelAdmin):
         form_data = copy.copy(form.cleaned_data)
         formset_data = copy.copy(formset.cleaned_data)
 
+        # # 把表单内容存入CustomerServiceLog
+        # create_customer_service_log(form_data1, obj)
+
+        # 发送服务作业完成信号
         print('发送操作完成信号, From service.admin.HsscFormAdmin.save_formset', formset_data)
         operand_finished.send(sender=self, pid=obj.pid, request=request, form_data=form_data, formset_data=formset_data)
 

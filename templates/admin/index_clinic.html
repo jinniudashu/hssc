@@ -69,7 +69,7 @@
             </tbody>
         </table>        
         <br>
-        <h3>近期任务</h3>
+        <!-- <h3>近期任务</h3>
         <br>
         <table class="table table-hover">
             <thead>
@@ -89,7 +89,7 @@
                 </tr>
             </tbody>
         </table>        
-        <br>
+        <br> -->
         <hr>
         <br>
         <div v-for="item in staffTodos" :key="item.title">
@@ -214,7 +214,7 @@
                         _this.permittedServicesId = _data.permittedServicesId
                     }
                 };
-            }
+            },
         };
 
         createApp(customerServiceApp).mount('#app');
