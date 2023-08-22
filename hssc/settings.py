@@ -41,13 +41,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(env('DJANGO_DEBUG', default=0)))
-
-ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
-
 # Application definition
-
 INSTALLED_APPS = [
     'registration',
     'django.contrib.admin',
@@ -107,7 +101,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
-if env('DJANGO_ENV', default='prod') == 'dev':
+DJANGO_ENV = env('DJANGO_ENV', default='prod')
+if DJANGO_ENV == 'dev':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -117,6 +112,10 @@ if env('DJANGO_ENV', default='prod') == 'dev':
     REDIS_HOST = 'redis://default:redispw@localhost:32769'
     REDIS_HOST = 'redis://localhost:6379'  # Mac
     # REDIS_HOST = 'redis://dental_redis:6379'
+
+    DEBUG = True
+    ALLOWED_HOSTS = []
+
 else:
     DATABASES = {
         'default': {
@@ -128,6 +127,9 @@ else:
         }
     }
     REDIS_HOST = 'redis://redis:6379'
+    DEBUG = False
+    ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
+
 
 DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
 
