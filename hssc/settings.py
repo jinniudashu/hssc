@@ -15,9 +15,6 @@ from .router import *
 
 import environ
 
-ENV = 'prod'
-ENV = 'dev'
-
 # 设定项目名称，测试数据，子域名，域名
 DOMAIN = 'tpacn.com'
 PROJECT_NAME = 'Clinic'
@@ -110,7 +107,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
-if ENV == 'dev':
+if env('DJANGO_ENV', default='prod') == 'dev':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
