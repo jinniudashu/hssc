@@ -101,22 +101,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
-DJANGO_ENV = env('DJANGO_ENV', default='prod')
+# DJANGO_ENV = env('DJANGO_ENV', default='prod')
+DJANGO_ENV = 'dev'
+DJANGO_ENV = 'prod'
 if DJANGO_ENV == 'dev':
+    DEBUG = True
+    ALLOWED_HOSTS = []
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         },
     }
-    REDIS_HOST = 'redis://default:redispw@localhost:32769'
     REDIS_HOST = 'redis://localhost:6379'  # Mac
     # REDIS_HOST = 'redis://dental_redis:6379'
-
-    DEBUG = True
-    ALLOWED_HOSTS = []
-
 else:
+    DEBUG = False
+    ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -127,9 +128,6 @@ else:
         }
     }
     REDIS_HOST = 'redis://redis:6379'
-    DEBUG = False
-    ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
-
 
 DATABASE_ROUTERS = ['hssc.router.DatabaseRouter']
 
