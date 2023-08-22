@@ -21,6 +21,7 @@ class ClinicSite(admin.AdminSite):
         urls = super().get_urls()
         my_urls = [
             path('receive_task/<int:proc_id>/', self.receive_task),
+            path('cancel_task/<int:proc_id>/', self.cancel_task),
             path('customer_service/<int:customer_id>/', self.customer_service),
             path('search_customers/', self.search_customers),
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
@@ -40,6 +41,14 @@ class ClinicSite(admin.AdminSite):
 
     # 接受任务：把任务放入当前用户的待办列表中
     def receive_task(self, request, **kwargs):
+        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        operation_proc.operator = User.objects.get(username=request.user).customer
+        operation_proc.state = 5  # 进程状态：撤销
+        operation_proc.save()
+        return redirect('/clinic/')
+
+    # 撤销任务：把任务放入当前用户的待办列表中
+    def cancel_task(self, request, **kwargs):
         operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
         operation_proc.operator = User.objects.get(username=request.user).customer
         operation_proc.state = 1

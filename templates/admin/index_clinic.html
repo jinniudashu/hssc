@@ -53,16 +53,18 @@
                 <tr>
                     <th scope="col">客户姓名</th>
                     <th scope="col">服务项目</th>
-                    <th scope="col">负责人</th>
                     <th scope="col">计划日期</th>
+                    <th scope="col">负责人</th>
+                    <th scope="col">撤销</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="proc in expiredUnassignedProcs" :key="proc.id">
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
                     <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
-                    <td>{{ proc.charge_staff }}</td>
                     <td>{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
+                    <td>{{ proc.charge_staff }}</td>
+                    <td style="text-align: center;"><a :href="'cancel_task/' + proc.id">x</a></td>
                 </tr>
             </tbody>
         </table>        
@@ -74,23 +76,22 @@
                 <tr>
                     <th scope="col">客户姓名</th>
                     <th scope="col">服务项目</th>
-                    <th scope="col">负责人</th>
                     <th scope="col">计划日期</th>
+                    <th scope="col">负责人</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="proc in recentUnassignedProcs" :key="proc.id">
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
                     <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
-                    <td>{{ proc.charge_staff }}</td>
                     <td>{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
+                    <td>{{ proc.charge_staff }}</td>
                 </tr>
             </tbody>
         </table>        
         <br>
         <hr>
         <br>
-
         <div v-for="item in staffTodos" :key="item.title">
             <h3>{{ item.title }}</h3>
             <br>
@@ -121,7 +122,6 @@
             <br>
         </div>
     </div>
-
     {% endverbatim %}
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -134,7 +134,6 @@
             month: '2-digit',
             day: '2-digit'
         }).replace(/\//g, '.');
-        console.log('today', today)
 
         const customerServiceApp = {
             data() {
