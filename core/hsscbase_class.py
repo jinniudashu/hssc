@@ -351,9 +351,9 @@ class FieldsType(Enum):
     boolfield_qian_dao_que_ren = "dictionaries.Qian_dao_que_ren"  # 签到确认
     boolfield_shi_mian_qing_kuang = "dictionaries.Shi_mian_qing_kuang"  # 失眠情况
     boolfield_sheng_huo_gong_zuo_ya_li_qing_kuang = "dictionaries.Ya_li_qing_kuang"  # 生活工作压力情况
-    T4501 = "icpc.Icpc8_other_health_interventions"  # 营养干预
+    boolfield_ying_yang_gan_yu = "icpc.Icpc8_other_health_interventions"  # 营养干预
     boolfield_shi_fou_ji_xu_shi_yong = "dictionaries.Ji_xu_shi_yong_qing_kuang"  # 是否继续使用
-    T4502 = "icpc.Icpc8_other_health_interventions"  # 运动干预
+    boolfield_yun_dong_gan_yu = "icpc.Icpc8_other_health_interventions"  # 运动干预
     boolfield_qian_yue_que_ren = "dictionaries.Qian_yue_que_ren"  # 签约确认
     boolfield_xue_ya_jian_ce_ping_gu = "dictionaries.Sui_fang_ping_gu"  # 血压监测评估
     boolfield_niao_tang = "dictionaries.Niao_tang"  # 尿糖

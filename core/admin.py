@@ -120,7 +120,7 @@ class ClinicSite(admin.AdminSite):
         人工创建新服务：作业进程+表单进程
         从kwargs获取参数：customer_id, service_id
         '''
-        from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time, manage_recommended_service
+        from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
         # 从request获取参数：customer, service, operator
         customer = Customer.objects.get(id=kwargs['customer_id'])
         current_operator = User.objects.get(username=request.user).customer
@@ -132,9 +132,6 @@ class ClinicSite(admin.AdminSite):
             content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
         else:
             content_type = ContentType.objects.get(app_label='service', model=service.name.lower())
-
-        # 维护推荐服务队列
-        manage_recommended_service(customer)
 
         # 准备新的服务作业进程参数
         proc_params = {}

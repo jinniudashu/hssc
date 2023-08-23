@@ -101,9 +101,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hssc.wsgi.application'
 ASGI_APPLICATION = 'hssc.asgi.application'
 
-# DJANGO_ENV = env('DJANGO_ENV', default='prod')
-DJANGO_ENV = 'dev'
-DJANGO_ENV = 'prod'
+DJANGO_ENV = env('DJANGO_ENV', default='prod')
+# DJANGO_ENV = 'dev'
+# DJANGO_ENV = 'prod'
 if DJANGO_ENV == 'dev':
     DEBUG = True
     ALLOWED_HOSTS = []
@@ -113,7 +113,7 @@ if DJANGO_ENV == 'dev':
             'NAME': BASE_DIR / 'db.sqlite3',
         },
     }
-    REDIS_HOST = 'redis://localhost:6379'  # Mac
+    REDIS_HOST = 'redis://localhost:6379'
     # REDIS_HOST = 'redis://dental_redis:6379'
 else:
     DEBUG = False

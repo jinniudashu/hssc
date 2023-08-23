@@ -140,6 +140,7 @@
             let node_field_name = parts.pop().substr(3)
             // 获取itemId
             const itemId = node.parentElement.parentElement.parentElement.parentElement.firstElementChild.value
+            if (!itemId) return
 
             // 2. fetch API获取item详细信息
             const icpcItem = await fetchIcpcItem(node_field_name, itemId)
@@ -268,6 +269,7 @@
         const boolfield_ji_bing_ming_cheng = document.querySelector('.form-row.field-boolfield_ji_bing_ming_cheng .related-widget-wrapper span.select2-selection__rendered');
         const observer_boolfield_ji_bing_ming_cheng = createObserver(boolfield_ji_bing_ming_chengHandleChanges);
         observer_boolfield_ji_bing_ming_cheng.observe(boolfield_ji_bing_ming_cheng, mutationObserverConfig)
+        showIcpcHint(boolfield_ji_bing_ming_cheng)
 
         // boolfield_yao_pin_ming变化处理
         function boolfield_yao_pin_mingHandleChanges(node) {
