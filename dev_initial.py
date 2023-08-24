@@ -1,11 +1,7 @@
 import os
 import shutil
-import subprocess
 import django
-import environ
 
-env = environ.Env()
-environ.Env.read_env('.env')
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hssc.settings')
 django.setup()
@@ -17,7 +13,7 @@ def create_superuser(username, email, password):
     print("创建管理员")
     # 检查用户是否已经存在
     if not User.objects.filter(username=username).exists():
-        User.objects.create_superuser(username, email, env('DJANGO_ADMIN_PASSWORD'))
+        User.objects.create_superuser(username, email, os.environ.get('DJANGO_ADMIN_PASSWORD'))
         print(f"Superuser {username} created successfully!")
     else:
         print(f"Superuser {username} already exists!")
