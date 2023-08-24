@@ -427,14 +427,14 @@ def search_customer_profile_list(search_text):
     for customer in Customer.objects.filter(name__icontains=search_text):
         # 获取客户最新基本信息
         profile = eval(customer_profile_model).objects.filter(customer=customer).last()
+        if profile:
+            selected_profile = []
+            for field in customer_profile_fields:
+                selected_profile.append(getattr(profile, field['name']))
 
-        selected_profile = []
-        for field in customer_profile_fields:
-            selected_profile.append(getattr(profile, field['name']))
-
-        # 构造客户基本信息列表
-        customer_profile = {'id': customer.id, 'name': customer.name, 'selected_profile': selected_profile}
-        customer_profiles.append(customer_profile)
+            # 构造客户基本信息列表
+            customer_profile = {'id': customer.id, 'name': customer.name, 'selected_profile': selected_profile}
+            customer_profiles.append(customer_profile)
 
     # 返回客户基本信息列表和表头
     return customer_profiles, customer_profile_fields_header
@@ -524,8 +524,8 @@ def update_customer_recommended_services_list(customer):
 
 
 # 把客户服务计划安排转为客户服务日程安排
-def get_services_schedule(instances):
-    def _get_schedule_times(instance, idx, first_start_time, previous_end_time):
+def get_services_schedule(instances, customer_start_time):
+    def _get_schedule_times(instance, idx, first_start_time, previous_end_time, customer_start_time):
         # 返回: 计划时间列表
         def _add_base_interval(time, interval):
             if interval:
@@ -544,9 +544,11 @@ def get_services_schedule(instances):
 
         # 计算开始时间
         start_time = None
-        # (0, '无'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
+        # (0, '指定开始时间'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
         from django.utils import timezone
-        if begin_option == 1:
+        if begin_option == 0:
+            start_time = customer_start_time
+        elif begin_option == 1:
             start_time = _add_base_interval(timezone.now(), base_interval)
         elif begin_option == 2:
             start_time = _add_base_interval(first_start_time, base_interval)
@@ -554,7 +556,7 @@ def get_services_schedule(instances):
             start_time = _add_base_interval(previous_end_time, base_interval)
         elif begin_option == 4:
             start_time = _add_base_interval(timezone.now(), base_interval)  # TODO: 客户出生日期
-
+        print('start_time:', start_time)
         if start_time:
             # 计算总次数
             times = total_days // unit_days * cycle_frequency
@@ -580,7 +582,8 @@ def get_services_schedule(instances):
             idx,  
             first_start_time,  # 首个服务开始时间
             previous_end_time,  # 上个服务结束时间
-            )
+            customer_start_time, # 用户指定开始时间
+        )
 
         if schedule_times:
             if idx == 0:
