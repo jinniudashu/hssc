@@ -83,7 +83,7 @@ class HsscFormAdmin(admin.ModelAdmin):
 class CustomerScheduleAdmin(HsscFormAdmin):
     exclude = ["hssc_id", "label", "name", "operator", "creater", "pid", "cpid", "slug", "created_time", "updated_time", "pym", 'customer_schedule_list', 'schedule_package', ]
     autocomplete_fields = ["scheduled_operator", ]
-    list_display = ['service', 'scheduled_time', 'scheduled_operator', 'overtime', 'is_assigned']
+    list_display = ['customer', 'service', 'scheduled_time', 'scheduled_operator', 'priority_operator', 'operator', 'creater', 'pid', 'overtime', 'is_assigned']
     list_editable = ['scheduled_time', 'scheduled_operator', 'overtime', 'is_assigned']
     readonly_fields = ['customer', 'service']
     filter_horizontal = ('reference_operation',)
@@ -191,7 +191,7 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
             )
 
             from core.business_functions import get_services_schedule
-            schedule = get_services_schedule(instances)
+            schedule = get_services_schedule(instances, schedule_package.start_time)
             # 创建客户服务日程
             for item in schedule:
                 CustomerSchedule.objects.create(
