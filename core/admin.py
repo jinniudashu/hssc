@@ -501,7 +501,10 @@ clinic_site.register(Institution, InstitutionAdmin)
 admin.site.register(CustomerServiceLog)
 clinic_site.register(CustomerServiceLog)
 
-admin.site.register(RecommendedService)
+@admin.register(RecommendedService)
+class RecommendedServiceAdmin(admin.ModelAdmin):
+    list_display = ('customer', 'service', 'pid', 'age')
+    list_display_links = ('customer', 'service', 'pid', 'age')
 clinic_site.register(RecommendedService)
 
 admin.site.register(Message)
