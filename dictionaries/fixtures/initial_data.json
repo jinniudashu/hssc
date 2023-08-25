@@ -1298,6 +1298,39 @@
         }
     },
     {
+        "model": "dictionaries.Yong_yao_tu_jing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ff333b92-bf7e-11ec-8dcd-6afc6c25d902",
+            "pym": null,
+            "value": "口服",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yong_yao_tu_jing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ff352092-bf7e-11ec-8dcd-6afc6c25d902",
+            "pym": null,
+            "value": "注射",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Yong_yao_tu_jing",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "ff357d76-bf7e-11ec-8dcd-6afc6c25d902",
+            "pym": null,
+            "value": "外用",
+            "icpc": null
+        }
+    },
+    {
         "model": "dictionaries.Xin_yu_ping_ji",
         "fields": {
             "label": null,

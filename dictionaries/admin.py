@@ -260,6 +260,14 @@ class Dan_bai_zhiAdmin(admin.ModelAdmin):
 clinic_site.register(Dan_bai_zhi, Dan_bai_zhiAdmin)
 
 
+@admin.register(Yong_yao_tu_jing)
+class Yong_yao_tu_jingAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+clinic_site.register(Yong_yao_tu_jing, Yong_yao_tu_jingAdmin)
+
+
 @admin.register(Xin_yu_ping_ji)
 class Xin_yu_ping_jiAdmin(admin.ModelAdmin):
     search_fields = ['value', 'pym']
