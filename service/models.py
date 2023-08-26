@@ -79,12 +79,23 @@ class CustomerSchedule(HsscFormModel):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+class Tang_niao_bing_jian_kang_jiao_yu_fu_wu(HsscFormModel):
+    boolfield_jian_kang_jiao_yu_chu_fang = models.CharField(max_length=255, default="糖尿病是一组以高血糖为特征的代谢性疾病.多饮,多食,多尿,体重下降是其典型症状,合称“三多一少”.", null=True, blank=False, verbose_name='健康教育处方')
+
+    class Meta:
+        verbose_name = '糖尿病健康教育服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 
 def get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance():
     return Icpc5_evaluation_and_diagnoses.objects.get(iname="胰岛素依赖型糖尿病")
 
 class Yi_xing_tang_niao_bing_zhen_duan(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, default=get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance, null=True, blank=True, verbose_name='疾病名称')
+    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, default=get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance, null=True, blank=False, verbose_name='疾病名称')
 
     class Meta:
         verbose_name = '一型糖尿病诊断'
@@ -370,13 +381,13 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
     boolfield_gui_ge = models.CharField(max_length=255, null=True, blank=False, verbose_name='规格')
     boolfield_chu_fang_ji_liang_dan_wei = models.CharField(max_length=255, null=True, blank=False, verbose_name='处方计量单位')
     boolfield_chang_yong_ji_liang = models.CharField(max_length=255, null=True, blank=False, verbose_name='常用剂量')
-    boolfield_yong_yao_tu_jing = models.ForeignKey(Yong_yao_tu_jing, related_name='yong_yao_tu_jing_for_boolfield_yong_yao_tu_jing_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='用药途径')
+    boolfield_yong_yao_tu_jing = models.CharField(max_length=255, null=True, blank=False, verbose_name='用药途径')
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=False, verbose_name='用药频次')
     boolfield_yong_yao_bei_zhu = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药备注')
     boolfield_yao_ji_lei_xing = models.ForeignKey(Yao_ji_lei_xing, related_name='yao_ji_lei_xing_for_boolfield_yao_ji_lei_xing_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='药剂类型')
     boolfield_yao_pin_fen_lei = models.ForeignKey(Yao_pin_fen_lei, related_name='yao_pin_fen_lei_for_boolfield_yao_pin_fen_lei_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=False, verbose_name='药品分类')
     boolfield_yao_pin_guan_li_shu_xing = models.ManyToManyField(Yao_pin_guan_li_shu_xing, related_name='yao_pin_guan_li_shu_xing_for_boolfield_yao_pin_guan_li_shu_xing_yao_pin_ji_ben_xin_xi_biao', blank=False, verbose_name='药品管理属性')
-    boolfield_yao_pin_tong_yong_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='药品通用名')
+    boolfield_yao_pin_tong_yong_ming_cheng = models.CharField(max_length=255, null=True, blank=False, verbose_name='药品通用名称')
     boolfield_guo_jia_ji_ben_yao_pin_mu_lu_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='国家基本药品目录名称')
     boolfield_yi_bao_yao_pin_mu_lu_dui_ying_yao_pin_bian_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='医保药品目录对应药品编码')
     boolfield_yi_bao_bao_xiao_lei_bie = models.ForeignKey(Yi_bao_bao_xiao_lei_bie, related_name='yi_bao_bao_xiao_lei_bie_for_boolfield_yi_bao_bao_xiao_lei_bie_yao_pin_ji_ben_xin_xi_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='医保报销类别')
@@ -492,7 +503,7 @@ def get_T9001_boolfield_ji_bing_ming_cheng_instance():
     return Icpc5_evaluation_and_diagnoses.objects.get(iname="非胰岛素依赖型糖尿病")
 
 class T9001(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T9001', on_delete=models.CASCADE, default=get_T9001_boolfield_ji_bing_ming_cheng_instance, null=True, blank=True, verbose_name='疾病名称')
+    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T9001', on_delete=models.CASCADE, default=get_T9001_boolfield_ji_bing_ming_cheng_instance, null=True, blank=False, verbose_name='疾病名称')
 
     class Meta:
         verbose_name = '二型糖尿病诊断'
@@ -565,15 +576,15 @@ class A3502(HsscFormModel):
 class A6299(HsscFormModel):
     boolfield_yi_chuan_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_yi_chuan_xing_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='遗传性疾病')
     boolfield_yi_chuan_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_yi_chuan_bing_shi_cheng_yuan_A6299', blank=True, verbose_name='遗传病史成员')
-    boolfield_yao_pin_ming = models.ForeignKey(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品名')
+    boolfield_guo_min_yao_wu = models.ManyToManyField(Medicine, related_name='medicine_for_boolfield_guo_min_yao_wu_A6299', blank=True, verbose_name='过敏药物')
     boolfield_jia_zu_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_jia_zu_xing_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='家族性疾病')
     boolfield_jia_zu_bing_shi_cheng_yuan = models.ManyToManyField(Qin_shu_guan_xi, related_name='qin_shu_guan_xi_for_boolfield_jia_zu_bing_shi_cheng_yuan_A6299', blank=True, verbose_name='家族病史成员')
-    boolfield_shou_shu_ri_qi = models.DateField(null=True, blank=True, verbose_name='手术日期')
     boolfield_shou_shu_ming_cheng = models.ForeignKey(Icpc7_treatments, related_name='icpc7_treatments_for_boolfield_shou_shu_ming_cheng_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='手术名称')
-    boolfield_que_zhen_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
+    boolfield_shou_shu_ri_qi = models.DateField(null=True, blank=True, verbose_name='手术日期')
     boolfield_ge_ren_bing_shi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ge_ren_bing_shi_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='个人病史')
-    boolfield_wai_shang_ri_qi = models.DateField(null=True, blank=True, verbose_name='外伤日期')
+    boolfield_que_zhen_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='确诊时间')
     boolfield_wai_shang_xing_ji_bing = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_wai_shang_xing_ji_bing_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='外伤性疾病')
+    boolfield_wai_shang_ri_qi = models.DateField(null=True, blank=True, verbose_name='外伤日期')
     boolfield_shu_xue_liang = models.IntegerField(null=True, blank=True, verbose_name='输血量')
     boolfield_shu_xue_ri_qi = models.DateField(null=True, blank=True, verbose_name='输血日期')
     boolfield_xing_ge_qing_xiang = models.ForeignKey(Character, related_name='character_for_boolfield_xing_ge_qing_xiang_A6299', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性格倾向')
@@ -773,10 +784,10 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
 class Men_zhen_chu_fang_biao_list(models.Model):
     men_zhen_chu_fang_biao = models.ForeignKey(Men_zhen_chu_fang_biao, on_delete=models.CASCADE, verbose_name='药品处方')
     boolfield_yao_pin_ming = models.ForeignKey(Medicine, related_name='medicine_for_boolfield_yao_pin_ming_men_zhen_chu_fang_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='药品名')
-    boolfield_yong_yao_bei_zhu = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药备注')
-    boolfield_yong_yao_tu_jing = models.ForeignKey(Yong_yao_tu_jing, related_name='yong_yao_tu_jing_for_boolfield_yong_yao_tu_jing_men_zhen_chu_fang_biao', on_delete=models.CASCADE, null=True, blank=True, verbose_name='用药途径')
+    boolfield_yong_yao_tu_jing = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药途径')
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_chang_yong_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用剂量')
+    boolfield_yong_yao_bei_zhu = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药备注')
     class Meta:
         verbose_name = '药品处方明细'
         verbose_name_plural = verbose_name

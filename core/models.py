@@ -384,7 +384,7 @@ class StaffTodo(HsscBase):
     operation_proc = models.OneToOneField(OperationProc, on_delete=models.CASCADE, verbose_name="作业进程")
     operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
     scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划执行时间")
-    Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束')]
+    Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束'), (5, '撤销'), (10, '等待超时')]
     state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
     customer_number = models.CharField(max_length=250, blank=True, null=True, verbose_name="居民档案号")
     customer_name = models.CharField(max_length=250, blank=True, null=True, verbose_name="姓名")

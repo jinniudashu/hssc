@@ -348,7 +348,7 @@ def update_unassigned_procs(operator):
     from core.models import OperationProc
 
     available_operation_proc = OperationProc.objects.filter(
-        state=0,  # 状态为0（未分配）
+        state__in=[0, 3],  # 状态为0（未分配）或3（挂起）
         operator__isnull=True,  # 操作员为空
     ).filter(
         Q(priority_operator__isnull=True) |  # 优先操作员为空
@@ -367,6 +367,7 @@ def update_unassigned_procs(operator):
                 'charge_staff': proc.customer.charge_staff.label if proc.customer.charge_staff else '',
                 'acceptance_timeout': proc.acceptance_timeout,
                 'scheduled_time': proc.scheduled_time.strftime("%y.%m.%d %H:%M"),
+                'state': proc.state,
             } for proc in available_operation_proc
         ]
     }
@@ -400,6 +401,7 @@ def update_staff_todo_list(operator):
                 'customer_address': todo.customer_address,
                 'completion_timeout': todo.operation_proc.completion_timeout,
                 'scheduled_time': todo.scheduled_time.strftime("%m.%d %H:%M"),
+                'state': todo.state,
             })
         items.append({'title': _item['title'], 'todos': todos})
     # 发送channel_message给操作员

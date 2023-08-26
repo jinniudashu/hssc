@@ -35,6 +35,7 @@
                     <th scope="col">客户姓名</th>
                     <th scope="col">服务项目</th>
                     <th scope="col">负责人</th>
+                    <th scope="col">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,7 +43,14 @@
                     <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
                     <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
                     <td>{{ proc.charge_staff }}</td>
-                </tr>
+                    <td>
+                        <select>
+                            <option value="0">-</option>
+                            <option value="1">{{ proc.state==0? '挂起' : '恢复'}}</option>
+                            <option value="3">撤销</option>
+                    </select>
+                    </td>
+            </tr>
             </tbody>
         </table>        
         <br>
@@ -55,7 +63,7 @@
                     <th scope="col">服务项目</th>
                     <th scope="col">计划日期</th>
                     <th scope="col">负责人</th>
-                    <th scope="col">撤销</th>
+                    <th scope="col">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,7 +73,14 @@
                     <td>{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
                     <td>{{ proc.charge_staff }}</td>
                     <td style="text-align: center;"><a :href="'cancel_task/' + proc.id">x</a></td>
-                </tr>
+                    <td>
+                        <select>
+                            <option value="0">-</option>
+                            <option value="1">{{ proc.state==0? '挂起' : '恢复'}}</option>
+                            <option value="3">撤销</option>
+                    </select>
+                    </td>
+            </tr>
             </tbody>
         </table>        
         <br>
@@ -104,6 +119,7 @@
                         <th v-if="item.title == '本周服务安排'" scope="col">计划时间</th>
                         <th scope="col">联系电话</th>
                         <th scope="col">家庭地址</th>
+                        <th scope="col">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,6 +130,14 @@
                         <td v-if="item.title == '本周服务安排'">{{ todo.scheduled_time }}</td>
                         <td>{{ todo.customer_phone }}</td>
                         <td>{{ todo.customer_address }}</td>
+                        <td>
+                            <select>
+                                <option value="0">-</option>
+                                <option value="1">{{ todo.state==1? '挂起' : '恢复'}}</option>
+                                <option value="2">换班</option>
+                                <option value="3">撤销</option>
+                            </select>
+                        </td>
                     </tr>
                 </tbody>
             </table>
