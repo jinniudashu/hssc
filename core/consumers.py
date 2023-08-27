@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 import json
 
 from core.models import Customer
-from core.business_functions import update_unassigned_procs, get_operator_permitted_services
+from core.business_functions import update_unassigned_procs
 # 职员任务工作台待分配服务进程列表
 class UnassignedProcsConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -13,9 +13,6 @@ class UnassignedProcsConsumer(AsyncWebsocketConsumer):
         
         # 获取操作员，获取有操作权限的服务id列表，发送给客户端
         operator = await sync_to_async(Customer.objects.get)(user=self.scope['user'])
-        permitted_services_id = await sync_to_async(get_operator_permitted_services)(operator)
-        await self.send(json.dumps({'permittedServicesId': permitted_services_id}))
-
         # 初始化更新职员任务工作台待分配服务进程列表
         await sync_to_async(update_unassigned_procs)(operator)
 

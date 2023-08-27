@@ -319,16 +319,6 @@ def dispatch_operator(customer, service, current_operator):
     return None
 
 
-# 获取操作员有操作权限的服务id列表
-def get_operator_permitted_services(operator):
-    from core.models import Service
-    return [
-        service.id
-        for service in Service.objects.filter(service_type__in=[1,2]) 
-        if set(service.role.all()).intersection(set(operator.staff.role.all()))
-    ]
-
-
 # 发送channel_message
 def send_channel_message(group_name, message):
     from asgiref.sync import async_to_sync
@@ -345,9 +335,18 @@ def update_unassigned_procs(operator):
     # 2. 服务作业进程的操作员为空；
     # 3. priority_operator为空或者当前操作员隶属于priority_operator；
     from django.db.models import Q
-    from core.models import OperationProc
+    from core.models import OperationProc, Service
+    import datetime
 
-    available_operation_proc = OperationProc.objects.filter(
+    # 有权限操作的服务id列表
+    allowed_services = [
+        service
+        for service in Service.objects.filter(service_type__in=[1,2]) 
+        if set(service.role.all()).intersection(set(operator.staff.role.all()))
+    ]
+    allowed_operation_proc = OperationProc.objects.filter(service__in=allowed_services)
+
+    available_operation_proc = allowed_operation_proc.filter(
         state__in=[0, 3],  # 状态为0（未分配）或3（挂起）
         operator__isnull=True,  # 操作员为空
     ).filter(
@@ -356,10 +355,20 @@ def update_unassigned_procs(operator):
         Q(priority_operator__is_workgroup=True, priority_operator__workgroup__members__in=[operator.staff])  # 当前操作员是职员，且隶属于Workgroup.members
     )
 
-    # 可申领的服务作业
-    unassigned_procs = {
-        'unassignedProcs': [
-            {
+    # 根据日期过滤出共享服务（今日待处理服务），过期任务，近期任务(本周待处理服务）
+    today = datetime.date.today()
+    layout_items = [
+        {'title': '共享服务', 'unassigned_procs': available_operation_proc.filter(scheduled_time__date=today)},
+        {'title': '过期服务', 'unassigned_procs': available_operation_proc.filter(scheduled_time__date__lt=today)},
+        # {'title': '近期任务', 'unassigned_procs': available_operation_proc.filter(scheduled_time__date__gt=today, scheduled_time__date__lt=today+datetime.timedelta(days=7))},
+    ]
+
+    # 构造channel_message items
+    items = []
+    for item in layout_items:
+        unassigned_procs = []
+        for proc in item['unassigned_procs']:
+            unassigned_procs.append({
                 'id': proc.id,
                 'service_id': proc.service.id,
                 'service_label': proc.service.label,
@@ -368,12 +377,11 @@ def update_unassigned_procs(operator):
                 'acceptance_timeout': proc.acceptance_timeout,
                 'scheduled_time': proc.scheduled_time.strftime("%y.%m.%d %H:%M"),
                 'state': proc.state,
-            } for proc in available_operation_proc
-        ]
-    }
+            })
+        items.append({'title': item['title'], 'unassigned_procs': unassigned_procs})
 
     # 发送channel_message给操作员
-    send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': unassigned_procs})
+    send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': {'unassignedProcs': items}})
 
 
 from core.models import StaffTodo
@@ -388,9 +396,9 @@ def update_staff_todo_list(operator):
 
     # 构造channel_message items
     items = []
-    for _item in layout_items:
+    for item in layout_items:
         todos = []
-        for todo in _item['todos']:
+        for todo in item['todos']:
             todos.append({
                 'id': todo.id,
                 'customer_id': todo.operation_proc.customer.id,
@@ -403,7 +411,7 @@ def update_staff_todo_list(operator):
                 'scheduled_time': todo.scheduled_time.strftime("%m.%d %H:%M"),
                 'state': todo.state,
             })
-        items.append({'title': _item['title'], 'todos': todos})
+        items.append({'title': item['title'], 'todos': todos})
     # 发送channel_message给操作员
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
 

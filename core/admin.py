@@ -22,6 +22,7 @@ class ClinicSite(admin.AdminSite):
         my_urls = [
             path('receive_task/<int:proc_id>/', self.receive_task),
             path('cancel_task/<int:proc_id>/', self.cancel_task),
+            path('suspend_or_resume_task/<int:proc_id>/', self.suspend_or_resume_task),
             path('customer_service/<int:customer_id>/', self.customer_service),
             path('search_customers/', self.search_customers),
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
@@ -55,6 +56,16 @@ class ClinicSite(admin.AdminSite):
         operation_proc.save()
         return redirect('/clinic/')
 
+    # 暂停/恢复任务：任务状态在暂停和恢复之间切换
+    def suspend_or_resume_task(self, request, **kwargs):
+        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        if operation_proc.state == 3:
+            operation_proc.state = 0 
+        else:
+            operation_proc.state = 3
+        operation_proc.save()
+        return redirect('/clinic/')
+
     # 客户服务首页
     def customer_service(self, request, **kwargs):
         context = {}
@@ -72,9 +83,12 @@ class ClinicSite(admin.AdminSite):
         response.set_cookie('customer_id', kwargs['customer_id'])
         response.set_cookie('environment', settings.DJANGO_ENV)
         
-        # 获取操作员有操作权限的服务id列表, 写入cookie
-        from core.business_functions import get_operator_permitted_services
-        permitted_services_id = get_operator_permitted_services(operator)
+        # # 获取操作员有操作权限的服务id列表, 写入cookie
+        permitted_services_id = [
+            service.id
+            for service in Service.objects.filter(service_type__in=[1,2]) 
+            if set(service.role.all()).intersection(set(operator.staff.role.all()))
+        ]
         response.set_cookie('permitted_services_id', permitted_services_id)
 
         return response

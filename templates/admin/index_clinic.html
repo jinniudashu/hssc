@@ -27,84 +27,39 @@
 
     {% verbatim %}
     <div id="app">
-        <h3>共享服务</h3>
-        <br>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">客户姓名</th>
-                    <th scope="col">服务项目</th>
-                    <th scope="col">负责人</th>
-                    <th scope="col">操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="proc in todayUnassignedProcs" :key="proc.id">
-                    <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
-                    <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
-                    <td>{{ proc.charge_staff }}</td>
-                    <td>
-                        <select>
-                            <option value="0">-</option>
-                            <option value="1">{{ proc.state==0? '挂起' : '恢复'}}</option>
-                            <option value="3">撤销</option>
-                    </select>
-                    </td>
-            </tr>
-            </tbody>
-        </table>        
-        <br>
-        <h3>过期任务</h3>
-        <br>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">客户姓名</th>
-                    <th scope="col">服务项目</th>
-                    <th scope="col">计划日期</th>
-                    <th scope="col">负责人</th>
-                    <th scope="col">操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="proc in expiredUnassignedProcs" :key="proc.id">
-                    <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
-                    <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
-                    <td>{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
-                    <td>{{ proc.charge_staff }}</td>
-                    <td style="text-align: center;"><a :href="'cancel_task/' + proc.id">x</a></td>
-                    <td>
-                        <select>
-                            <option value="0">-</option>
-                            <option value="1">{{ proc.state==0? '挂起' : '恢复'}}</option>
-                            <option value="3">撤销</option>
-                    </select>
-                    </td>
-            </tr>
-            </tbody>
-        </table>        
-        <br>
-        <!-- <h3>近期任务</h3>
-        <br>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">客户姓名</th>
-                    <th scope="col">服务项目</th>
-                    <th scope="col">计划日期</th>
-                    <th scope="col">负责人</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="proc in recentUnassignedProcs" :key="proc.id">
-                    <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
-                    <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
-                    <td>{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
-                    <td>{{ proc.charge_staff }}</td>
-                </tr>
-            </tbody>
-        </table>        
-        <br> -->
+        <div v-for="item in unassignedProcs" :key="item.title">
+            <div v-if="item.unassigned_procs.length > 0">
+            <h3>{{ item.title }}</h3>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">客户姓名</th>
+                        <th scope="col">服务项目</th>
+                        <th v-if="item.title != '共享服务'" scope="col">计划日期</th>
+                        <th scope="col">负责人</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="proc in item.unassigned_procs" :key="proc.id">
+                        <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
+                        <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
+                        <td v-if="item.title != '共享服务'">{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
+                        <td>{{ proc.charge_staff }}</td>
+                        <td>
+                            <select v-model="selectedOption" @change="handleProcOperation(proc.id, false)">
+                                <option value="0">-</option>
+                                <option value="3">{{ proc.state==3? '恢复' : '挂起'}}</option>
+                                <option value="5">撤销</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br> 
+            </div>
+        </div> 
         <hr>
         <br>
         <div v-for="item in staffTodos" :key="item.title">
@@ -131,11 +86,11 @@
                         <td>{{ todo.customer_phone }}</td>
                         <td>{{ todo.customer_address }}</td>
                         <td>
-                            <select>
+                            <select v-model="selectedOption" @change="handleProcOperation(todo.id, true)">
                                 <option value="0">-</option>
-                                <option value="1">{{ todo.state==1? '挂起' : '恢复'}}</option>
-                                <option value="2">换班</option>
-                                <option value="3">撤销</option>
+                                <option value="1">换班</option>
+                                <option value="3">{{ todo.state==3? '恢复' : '挂起'}}</option>
+                                <option value="5">撤销</option>
                             </select>
                         </td>
                     </tr>
@@ -163,54 +118,23 @@
             data() {
                 return {
                     staffTodos: null,
-                    permittedServicesId: [],
                     unassignedProcs: [],
+                    selectedOption: null,
                 }
             },
-            computed: {
-                // 所有任务：用permittedServicesId过滤unassignedProcs，返回当前操作员有操作权限的进程列表，且proc.scheduled_time仅限当天
-                permittedUnassignedProcs() {
-                    return this.unassignedProcs.filter(
-                        proc => {
-                            return this.permittedServicesId.includes(proc.service_id)
+
+            methods: {
+                handleProcOperation(id, hasAssigned) {
+                    // hasAssigned: true表示已分配任务，来自StaffTodo，false表示未分配任务, 来自OperationProc
+                    if (hasAssigned) {
+                        console.log('操作：', this.selectedOption,'员工任务:', 'id', id);
+                    } else {
+                        if (this.selectedOption == '3') {
+                            window.location.href = 'suspend_or_resume_task/' + id;
+                        } else if (this.selectedOption == '5') {
+                            window.location.href = 'cancel_task/' + id;
                         }
-                    )
-                },
-                // 当天任务：用permittedServicesId过滤unassignedProcs，且proc.scheduled_time仅限当天
-                todayUnassignedProcs() {
-                    return this.unassignedProcs.filter(
-                        proc => this.permittedServicesId.includes(proc.service_id) && proc.scheduled_time.split(' ')[0] === today
-                    )
-                },
-                // 过期任务：用permittedServicesId过滤unassignedProcs，返回当前操作员有操作权限的进程列表，且proc.scheduled_time在当天之前
-                expiredUnassignedProcs() {
-                    expiredProcs = this.unassignedProcs.filter(
-                        proc => {
-                            return this.permittedServicesId.includes(proc.service_id)
-                        }
-                    )
-                    return expiredProcs.filter(
-                        proc => {
-                            const procDate = new Date("20" + proc.scheduled_time.split(' ')[0].replace(/\./g, '/'));
-                            const currentDate = new Date("20" + today.replace(/\./g, '/'));
-                            return procDate < currentDate;
-                        }
-                    )
-                },
-                // 近期服务：用permittedServicesId过滤unassignedProcs，返回当前操作员有操作权限的进程列表，且proc.scheduled_time在当天之后
-                recentUnassignedProcs() {
-                    recentProcs = this.unassignedProcs.filter(
-                        proc => {
-                            return this.permittedServicesId.includes(proc.service_id)
-                        }
-                    )
-                    return recentProcs.filter(
-                        proc => {
-                            const procDate = new Date("20" + proc.scheduled_time.split(' ')[0].replace(/\./g, '/'));
-                            const currentDate = new Date("20" + today.replace(/\./g, '/'));
-                            return procDate > currentDate;
-                        }
-                    )
+                    }
                 },
             },
 
@@ -229,16 +153,14 @@
                 const unassignedProcsSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/unassigned_procs/`);
                 unassignedProcsSocket.onmessage = function (event) {
                     _data = JSON.parse(event.data);
-                    // 区分后台发来的内容，赋给各自的响应式变量：
                     // 未分配服务进程unassignedProcs
-                    // 有操作权限的服务id列表permittedServicesId
                     if (_data.hasOwnProperty('unassignedProcs')) {
                         _this.unassignedProcs = _data.unassignedProcs
-                    } else {
-                        _this.permittedServicesId = _data.permittedServicesId
+                        console.log('unassignedProcs',  _data.unassignedProcs)
                     }
                 };
             },
+
         };
 
         createApp(customerServiceApp).mount('#app');
