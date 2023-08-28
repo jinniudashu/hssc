@@ -382,7 +382,6 @@ class Customer(HsscBase):
     health_record = models.JSONField(blank=True, null=True, verbose_name="健康记录")
     weixin_openid = models.CharField(max_length=255, blank=True, null=True, verbose_name="微信openid")
 
-
     class Meta:
         verbose_name = "客户注册信息"
         verbose_name_plural = "客户注册信息"
