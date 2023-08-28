@@ -381,7 +381,7 @@ def update_unassigned_procs(operator):
         items.append({'title': item['title'], 'unassigned_procs': unassigned_procs})
 
     # 发送channel_message给操作员
-    send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': {'unassignedProcs': items}})
+    send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': items})
 
 
 from core.models import StaffTodo

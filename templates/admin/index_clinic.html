@@ -140,7 +140,6 @@
 
             created() {
                 let _this = this;
-                
                 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws"
 
                 // 建立信道：操作员任务列表
@@ -152,15 +151,10 @@
                 // 建立信道：未分配服务进程
                 const unassignedProcsSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/unassigned_procs/`);
                 unassignedProcsSocket.onmessage = function (event) {
-                    _data = JSON.parse(event.data);
                     // 未分配服务进程unassignedProcs
-                    if (_data.hasOwnProperty('unassignedProcs')) {
-                        _this.unassignedProcs = _data.unassignedProcs
-                        console.log('unassignedProcs',  _data.unassignedProcs)
-                    }
+                    _this.unassignedProcs = JSON.parse(event.data);
                 };
             },
-
         };
 
         createApp(customerServiceApp).mount('#app');
