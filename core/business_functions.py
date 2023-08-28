@@ -384,14 +384,13 @@ def update_unassigned_procs(operator):
     send_channel_message('unassigned_procs', {'type': 'send_unassigned_procs', 'data': items})
 
 
-from core.models import StaffTodo
 # 更新工作台职员任务列表
 def update_staff_todo_list(operator):
     # 根据operator过滤出操作员的今日安排、紧要安排、本周安排
     layout_items = [
-        {'title': '今日服务安排', 'todos': StaffTodo.objects.today_todos(operator)},
-        {'title': '紧要服务安排', 'todos': StaffTodo.objects.urgent_todos(operator)},
-        {'title': '本周服务安排', 'todos': StaffTodo.objects.week_todos(operator)},
+        {'title': '今日服务安排', 'todos': OperationProc.objects.staff_todos_today(operator)},
+        {'title': '紧要服务安排', 'todos': OperationProc.objects.staff_todos_urgent(operator)},
+        {'title': '本周服务安排', 'todos': OperationProc.objects.staff_todos_week(operator)},
     ]
 
     # 构造channel_message items
@@ -401,13 +400,13 @@ def update_staff_todo_list(operator):
         for todo in item['todos']:
             todos.append({
                 'id': todo.id,
-                'customer_id': todo.operation_proc.customer.id,
-                'customer_number': todo.customer_number,
-                'customer_name': todo.customer_name,
-                'service_label': todo.service_label,
-                'customer_phone': todo.customer_phone,
-                'customer_address': todo.customer_address,
-                'completion_timeout': todo.operation_proc.completion_timeout,
+                'customer_id': todo.customer.id,
+                'customer_number': todo.customer.name,
+                'customer_name': todo.customer.name,
+                'service_label': todo.service.label,
+                'customer_phone': todo.customer.phone,
+                'customer_address': todo.customer.address,
+                'completion_timeout': todo.completion_timeout,
                 'scheduled_time': todo.scheduled_time.strftime("%m.%d %H:%M"),
                 'state': todo.state,
             })
@@ -640,13 +639,13 @@ def create_customer_schedule(customer, service, scheduled_time, pid):
 # 估算服务项目的计划执行时间
 def eval_scheduled_time(_service, _operator):
     from django.utils import timezone
-    from core.models import OperationProc, StaffTodo
+    from core.models import OperationProc
 
     scheduled_time = timezone.now()
 
     if _operator:  # 若存在operator，返回operator当天的todo队列的队尾时间，
         # 查询当天最后一条服务进程
-        last_staff_todo = StaffTodo.objects.filter(
+        last_staff_todo = OperationProc.objects.filter(
             operator=_operator,
             state__in=[0, 1, 2, 3],
             scheduled_time__date=timezone.now().date()
@@ -685,17 +684,6 @@ def eval_scheduled_time(_service, _operator):
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
-
-@receiver(post_save, sender=StaffTodo)
-def staff_todo_post_save_handler(sender, instance, created, **kwargs):
-    # 根据operator过滤出操作员的今日安排、紧要安排、本周安排
-    update_staff_todo_list(instance.operator)
-
-@receiver(post_delete, sender=StaffTodo)
-def staff_todo_post_delete_handler(sender, instance, **kwargs):
-    # 根据operator过滤出操作员的今日安排、紧要安排、本周安排
-    update_staff_todo_list(instance.operator)
-
 from core.models import RecommendedService
 
 @receiver(post_save, sender=RecommendedService)

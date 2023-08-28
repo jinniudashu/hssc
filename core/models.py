@@ -278,6 +278,31 @@ class OperationProcManager(models.Manager):
 	# 获取待分配作业进程: 状态为创建，且未分配操作员，服务岗位为操作员所属岗位，以及用户服务小组为操作员所属服务小组
         return self.filter(state=0, operator=None, service__in=Service.objects.filter(role__in=operator.staff.role.all()),)
 
+	# 员工当天常规任务
+    def staff_todos_today(self, operator):
+        today = timezone.now().date()
+        return self.filter(
+            operator=operator, 
+            priority=3,
+            scheduled_time__year=int(today.strftime('%Y')),
+            scheduled_time__month=int(today.strftime('%m')),
+            scheduled_time__day=int(today.strftime('%d')),
+            ).exclude(state=4)
+        
+	# 员工紧要任务安排
+    def staff_todos_urgent(self, operator):
+        return self.filter(operator=operator, priority__lt=3).exclude(state=4).order_by('priority')
+
+	# 员工未来七天任务
+    def staff_todos_week(self, operator):
+        startTime = timezone.now() + timedelta(days=1)
+        endTime = timezone.now() + timedelta(days=7)
+        return self.filter(
+            operator=operator, 
+            priority=3, 
+            scheduled_time__range=(startTime, endTime),
+            ).exclude(state=4)
+
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
     # 作业进程id: pid
@@ -345,67 +370,6 @@ class OperationProc(HsscBase):
             RTC = 4  # RUNNING TO COMPLETED
         self.state = OperationCode[ocode].value
         self.save()
-
-        # 更新作业进程对应的职员任务队列状态
-        if self.stafftodo:
-            self.stafftodo.state = 4
-            self.stafftodo.save()
-    
-
-class StaffTodoManager(models.Manager):
-	# 当天常规任务
-    def today_todos(self, operator):
-        today = timezone.now().date()
-        return self.filter(
-            operator=operator, 
-            priority=3,
-            scheduled_time__year=int(today.strftime('%Y')),
-            scheduled_time__month=int(today.strftime('%m')),
-            scheduled_time__day=int(today.strftime('%d')),
-            ).exclude(state=4)
-        
-	# 紧要任务安排
-    def urgent_todos(self, operator):
-        return self.filter(operator=operator, priority__lt=3).exclude(state=4).order_by('priority')
-
-	# 未来七天任务
-    def week_todos(self, operator):
-        startTime = timezone.now() + timedelta(days=1)
-        endTime = timezone.now() + timedelta(days=7)
-        return self.filter(
-            operator=operator, 
-            priority=3, 
-            # scheduled_time__year=int(today.strftime('%Y')),
-            # scheduled_time__week=int(today.strftime('%W')),
-            scheduled_time__range=(startTime, endTime),
-            ).exclude(state=4)
-
-class StaffTodo(HsscBase):
-    operation_proc = models.OneToOneField(OperationProc, on_delete=models.CASCADE, verbose_name="作业进程")
-    operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="操作员")
-    scheduled_time = models.DateTimeField(blank=True, null=True, verbose_name="计划执行时间")
-    Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束'), (5, '撤销'), (10, '等待超时')]
-    state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
-    customer_number = models.CharField(max_length=250, blank=True, null=True, verbose_name="居民档案号")
-    customer_name = models.CharField(max_length=250, blank=True, null=True, verbose_name="姓名")
-    service_label = models.CharField(max_length=250, blank=True, null=True, verbose_name="服务项目")
-    customer_phone = models.CharField(max_length=250, blank=True, null=True, verbose_name="联系电话")
-    customer_address = models.CharField(max_length=250, blank=True, null=True, verbose_name="家庭地址")
-    priority = models.PositiveSmallIntegerField(choices=[(0, '0级'), (1, '紧急'), (2, '优先'), (3, '一般')], default=3, verbose_name="优先级")
-    objects = StaffTodoManager()
-
-    class Meta:
-        verbose_name = "员工任务队列"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-        return self.service_label
-
-    def save(self, *args, **kwargs):
-        if not self.label:
-            self.label = f'{self.customer_name} - {self.service_label}'
-        return super().save(*args, **kwargs)
 
 
 # 用户基本信息

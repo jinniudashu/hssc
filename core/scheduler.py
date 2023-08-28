@@ -10,7 +10,7 @@ from django.forms import model_to_dict
 from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
 
-from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, StaffTodo, RecommendedService, Message, ChengBaoRenYuanQingDan
+from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, RecommendedService, Message, ChengBaoRenYuanQingDan
 from core.business_functions import field_name_replace, create_customer_schedule, manage_recommended_service
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
 
@@ -188,36 +188,16 @@ def user_post_delete_handler(sender, instance, **kwargs):
 
 @receiver(post_save, sender=OperationProc)
 def operation_proc_post_save_handler(sender, instance, created, **kwargs):
-    from core.business_functions import update_unassigned_procs, update_customer_services_list
+    from core.business_functions import update_unassigned_procs, update_customer_services_list, update_staff_todo_list
     # 如果操作员是员工，更新职员任务工作台可申领的服务作业
     if instance.operator and instance.operator.user.is_staff:
         update_unassigned_procs(instance.operator)
+        # 更新操作员的今日安排、紧要安排、本周安排
+        update_staff_todo_list(instance.operator)
 
     # 根据customer过滤出用户的已安排服务和历史服务，发送channel_message给“用户服务组”
     if instance.service.service_type in [1,2]:
         update_customer_services_list(instance.customer)
-
-    # 根据服务进程创建待办事项: sync_proc_todo_list
-    if instance.operator and instance.customer and instance.state < 4:
-        try :
-            todo = instance.stafftodo
-            todo.scheduled_time = instance.scheduled_time
-            todo.state = instance.state
-            todo.priority = instance.priority
-            todo.save()
-        except StaffTodo.DoesNotExist:
-            todo = StaffTodo.objects.create(
-                operation_proc=instance,
-                operator=instance.operator,
-                scheduled_time=instance.scheduled_time,
-                state=instance.state,
-                customer_number=instance.customer.name,
-                customer_name=instance.customer.name,
-                service_label=instance.service.label,
-                customer_phone=instance.customer.phone,
-                customer_address=instance.customer.address,
-                priority = instance.priority
-            )
 
 
 @receiver(operand_started)

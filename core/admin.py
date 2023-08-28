@@ -473,14 +473,6 @@ class OperationProcAdmin(admin.ModelAdmin):
     ordering = ['id']
 clinic_site.register(OperationProc, OperationProcAdmin)
 
-
-@admin.register(StaffTodo)
-class StaffTodoAdmin(admin.ModelAdmin):
-    list_display = ['operation_proc', 'operator', 'scheduled_time', 'state', 'customer_name']
-    list_display_links = ['operation_proc', 'operator', 'scheduled_time', 'state', 'customer_name']
-    ordering = ['id']
-clinic_site.register(StaffTodo, StaffTodoAdmin)
-
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['name', 'phone']
@@ -558,7 +550,6 @@ Backup_core_models = [
     Customer,
     ContractServiceProc,
     OperationProc,
-    StaffTodo,
     Institution,
     Staff,
     Workgroup,
