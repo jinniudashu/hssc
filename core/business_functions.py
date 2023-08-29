@@ -304,16 +304,8 @@ def dispatch_operator(customer, service, current_operator):
                 return charge_staff.staff.customer
     
     # 系统自动生成客户服务日程时不传入操作员，直接返回None
-    if current_operator is None:
-        return None
-
-    # 否则，如当前作业员具有新增服务岗位权限务岗位权限，则开单给作业员
-    try:
-        if set(current_operator.staff.role.all()).intersection(set(service.role.all())):
-            return current_operator
-
-    except ObjectDoesNotExist:
-        return None
+    # if current_operator is None:
+    #     return None
 
     # 否则，操作员为空，进入共享队列
     return None
@@ -344,15 +336,16 @@ def update_unassigned_procs(operator):
         for service in Service.objects.filter(service_type__in=[1,2]) 
         if set(service.role.all()).intersection(set(operator.staff.role.all()))
     ]
-    allowed_operation_proc = OperationProc.objects.filter(service__in=allowed_services)
+    allowed_operation_proc = OperationProc.objects.filter(
+        operator__isnull=True,  # 操作员为空
+        state__in=[0, 3],  # 状态为0（未分配）或3（挂起）
+        service__in=allowed_services, # 服务作业进程的服务在allowed_services中
+    )
 
     available_operation_proc = allowed_operation_proc.filter(
-        state__in=[0, 3],  # 状态为0（未分配）或3（挂起）
-        operator__isnull=True,  # 操作员为空
-    ).filter(
         Q(priority_operator__isnull=True) |  # 优先操作员为空
-        Q(priority_operator__is_workgroup=False, priority_operator__staff__customer=operator) |  # 当前操作员即是Staff.customer
-        Q(priority_operator__is_workgroup=True, priority_operator__workgroup__members__in=[operator.staff])  # 当前操作员是职员，且隶属于Workgroup.members
+        Q(priority_operator__is_workgroup=True, priority_operator__workgroup__members__in=[operator.staff])  # 当前操作员隶属于优先操作小组
+        # Q(priority_operator__is_workgroup=False, priority_operator__staff__customer=operator) |  # 当前操作员即是Staff.customer
     )
 
     # 根据日期过滤出共享服务（今日待处理服务），过期任务，近期任务(本周待处理服务）

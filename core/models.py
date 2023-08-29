@@ -287,11 +287,11 @@ class OperationProcManager(models.Manager):
             scheduled_time__year=int(today.strftime('%Y')),
             scheduled_time__month=int(today.strftime('%m')),
             scheduled_time__day=int(today.strftime('%d')),
-            ).exclude(state=4)
+            ).exclude(state__in=[4, 5])
         
 	# 员工紧要任务安排
     def staff_todos_urgent(self, operator):
-        return self.filter(operator=operator, priority__lt=3).exclude(state=4).order_by('priority')
+        return self.filter(operator=operator, priority__lt=3).exclude(state__in=[4, 5]).order_by('priority')
 
 	# 员工未来七天任务
     def staff_todos_week(self, operator):
@@ -301,7 +301,7 @@ class OperationProcManager(models.Manager):
             operator=operator, 
             priority=3, 
             scheduled_time__range=(startTime, endTime),
-            ).exclude(state=4)
+            ).exclude(state__in=[4, 5])
 
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
