@@ -80,8 +80,7 @@ def check_proc_awaiting_timeout(self):
                 state = 1
             else:
                 # 如果没有指定执行人，则按照业务规则分配执行人, 服务进程状态为“创建”
-                # 系统自动生成客户服务日程时不传入操作员，如果客户没有服务责任人，直接返回None
-                service_operator = dispatch_operator(schedule.customer, schedule.service, None)
+                service_operator = dispatch_operator(schedule.customer, schedule.service, schedule.creater, schedule.scheduled_time)
                 state = 0
             proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断 
             proc_params['priority_operator'] = schedule.priority_operator  # 优先操作员

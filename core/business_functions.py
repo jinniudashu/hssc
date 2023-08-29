@@ -292,10 +292,10 @@ def get_customer_profile(customer):
 
 
 # 为新服务分配操作员，返回操作员(Customer类型)
-def dispatch_operator(customer, service, current_operator):
-    from django.core.exceptions import ObjectDoesNotExist
+def dispatch_operator(customer, service, current_operator, scheduled_time):
+    from django.utils import timezone
 
-    # 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
+    # 1. 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
     charge_staff = customer.charge_staff
     if charge_staff:
         if charge_staff.staff:  # 责任人是具体职员
@@ -303,9 +303,9 @@ def dispatch_operator(customer, service, current_operator):
             if set(charge_staff.staff.role.all()).intersection(set(service.role.all())):
                 return charge_staff.staff.customer
     
-    # 系统自动生成客户服务日程时不传入操作员，直接返回None
-    # if current_operator is None:
-    #     return None
+    # 2. 如当前作业员具有新增服务岗位权限，且scheduled_time为当天，则开单给当前作业员
+    if set(current_operator.staff.role.all()).intersection(set(service.role.all())) and scheduled_time.date()==timezone.now().date():
+        return current_operator
 
     # 否则，操作员为空，进入共享队列
     return None
