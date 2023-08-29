@@ -127,7 +127,13 @@
                 handleProcOperation(id, hasAssigned) {
                     // hasAssigned: true表示已分配任务，false表示未分配任务, 来自OperationProc
                     if (hasAssigned) {
-                        console.log('操作：', this.selectedOption,'员工任务:', 'id', id);
+                        if (this.selectedOption == '1') {
+                            console.log('换班', id);
+                        } else if (this.selectedOption == '3') {
+                            window.location.href = 'suspend_or_resume_task/' + id;
+                        } else if (this.selectedOption == '5') {
+                            window.location.href = 'cancel_task/' + id;
+                        }
                     } else {
                         if (this.selectedOption == '3') {
                             window.location.href = 'suspend_or_resume_task/' + id;
