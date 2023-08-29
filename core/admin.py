@@ -70,6 +70,7 @@ class ClinicSite(admin.AdminSite):
     def customer_service(self, request, **kwargs):
         context = {}
         customer = Customer.objects.get(id = kwargs['customer_id'])
+        print('request.user:', request.user)
         operator = User.objects.get(username=request.user).customer
         
         # 病例首页

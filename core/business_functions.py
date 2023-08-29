@@ -116,7 +116,7 @@ def create_service_proc(**kwargs):
     # 提取进程控制信息，更新相应控制项内容。Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
     try:
         form_data = kwargs['form_data']
-        if kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data'] in [1, 2]:
+        if kwargs['parent_proc'] and kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data'] in [1, 2]:
             # 获取父进程中api_fields不为空的表单, 并获取其中的进程控制信息api_fields
             _forms = [form for form in kwargs['parent_proc'].service.buessiness_forms.all() if form.api_fields is not None and form.api_fields != 'null']
             api_fields = []
@@ -143,7 +143,7 @@ def create_service_proc(**kwargs):
         print(f"Attribute error: {e}")
     except Exception as e:
         print(f"Unexpected error: {e}")
-    
+
     # 创建新的服务作业进程
     from core.models import OperationProc
 
@@ -303,9 +303,10 @@ def dispatch_operator(customer, service, current_operator, scheduled_time):
             if set(charge_staff.staff.role.all()).intersection(set(service.role.all())):
                 return charge_staff.staff.customer
     
-    # 2. 如当前作业员具有新增服务岗位权限，且scheduled_time为当天，则开单给当前作业员
-    if set(current_operator.staff.role.all()).intersection(set(service.role.all())) and scheduled_time.date()==timezone.now().date():
-        return current_operator
+    if current_operator.user.is_staff:  # 当前操作员是具体职员
+        # 2. 如当前作业员具有新增服务岗位权限，且scheduled_time为当天，则开单给当前作业员
+        if set(current_operator.staff.role.all()).intersection(set(service.role.all())) and scheduled_time.date()==timezone.now().date():
+            return current_operator
 
     # 否则，操作员为空，进入共享队列
     return None
