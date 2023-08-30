@@ -647,8 +647,8 @@ def eval_scheduled_time(_service, _operator):
 
         # 如果存在当天最后一条服务进程，则计算队列时间，否则返回当前时间
         if last_staff_todo:
-            if last_staff_todo.operation_proc.service.working_hours:
-                scheduled_time = last_staff_todo.scheduled_time + last_staff_todo.operation_proc.service.working_hours
+            if last_staff_todo.service.working_hours:
+                scheduled_time = last_staff_todo.scheduled_time + last_staff_todo.service.working_hours
             else:
                 scheduled_time = last_staff_todo.scheduled_time
 
