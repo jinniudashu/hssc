@@ -119,6 +119,7 @@ class ClinicSite(admin.AdminSite):
             {
                 'id': service.id, 
                 'label': service.label,
+                'type': service.service_type,
                 'enable_queue_counter': service.enable_queue_counter,
                 'queue_count': OperationProc.objects.get_service_queue_count(service)
             } for service in Service.objects.filter(Q(service_type__in=[1,2]) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
