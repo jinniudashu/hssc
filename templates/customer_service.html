@@ -40,7 +40,7 @@
     {% verbatim %}
     <div id="app">
         <h3>已安排服务</h3>
-        <div v-for="service in servicesList.scheduled_services" :key="service.service_id">
+        <div v-for="service in servicesList.scheduled_services_today" :key="service.service_id">
             <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null"
                 :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
             >
@@ -66,6 +66,19 @@
         <h3>历史服务</h3>
         <div v-for="service in servicesList.history_services" :key="service.service_id">
             <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null">
+                {{ service.service_label }}
+            </a>
+            <br>
+        </div>
+        <br>
+        <hr>
+        <br>
+
+        <h3>近期服务</h3>
+        <div v-for="service in servicesList.scheduled_services_recent" :key="service.service_id">
+            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null"
+                :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
+            >
                 {{ service.service_label }}
             </a>
             <br>

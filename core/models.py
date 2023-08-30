@@ -403,11 +403,16 @@ class Customer(HsscBase):
         '''
         return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(service_type=0))
 
-    def get_scheduled_services(self) -> 'QuerySet[OperationProc]':
+    def get_scheduled_services(self, date) -> 'QuerySet[OperationProc]':
         '''
         获取已安排服务列表
         '''
-        return self.operation_proc_customer.filter(state__in = [0, 1, 2, 3])
+        if date == 'TODAY':
+            return self.operation_proc_customer.filter(scheduled_time__date=timezone.now().date(), state__in = [0, 1, 2, 3])
+        elif date == 'RECENT':  # 今天以后的服务
+            return self.operation_proc_customer.filter(scheduled_time__date__gt=timezone.now().date(), state__in = [0, 1, 3])
+        else:
+            return self.operation_proc_customer.filter(state__in = [0, 1, 2, 3])
 
     def get_absolute_url(self):
         return reverse('customer_homepage', args=[self.id])

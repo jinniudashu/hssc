@@ -467,7 +467,7 @@ clinic_site.register(ContractServiceProc)
 
 @admin.register(OperationProc)
 class OperationProcAdmin(admin.ModelAdmin):
-    list_display = ['id', 'service', 'operator', 'customer', 'state', 'entry', 'parent_proc', 'contract_service_proc']
+    list_display = ['id', 'service', 'operator', 'customer', 'state', 'scheduled_time', 'entry', 'parent_proc', 'contract_service_proc']
     list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'parent_proc', 'contract_service_proc']
     ordering = ['id']
 clinic_site.register(OperationProc, OperationProcAdmin)

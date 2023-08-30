@@ -347,12 +347,15 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'创建服务作业进程: {new_proc}'
         
-        def _recommend_next_service(**kwargs):  # 由GPT-4重构的推荐服务函数
+        def _recommend_next_service(**kwargs): 
             '''
             推荐后续服务
             '''
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
+
+            # 删除旧的相同推荐服务条目
+            old_recommend_services = RecommendedService.objects.filter(service=kwargs['next_service'], customer=operation_proc.customer).delete()
             
             # 创建新的推荐服务条目
             obj = RecommendedService(

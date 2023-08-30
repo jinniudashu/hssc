@@ -320,6 +320,40 @@ def send_channel_message(group_name, message):
     async_to_sync(channel_layer.group_send)(group_name, message)
 
 
+# 搜索给定关键字的客户基本信息列表
+def search_customer_profile_list(search_text):
+    from core.models import Customer, ManagedEntity
+    import json
+    # 获取客户实体对象
+    customer_entity = ManagedEntity.objects.get(name='customer')
+
+    # 获取客户基本信息表model，用于后续查询
+    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
+
+    # 获取客户基本信息的展示表头
+    customer_profile_fields = json.loads(customer_entity.header_fields_json)
+    # 构造客户基本信息表头
+    customer_profile_fields_header = ['用户名']
+    for field in customer_profile_fields:
+        customer_profile_fields_header.append(field['label'])
+
+    customer_profiles = []
+    for customer in Customer.objects.filter(name__icontains=search_text):
+        # 获取客户最新基本信息
+        profile = eval(customer_profile_model).objects.filter(customer=customer).last()
+        if profile:
+            selected_profile = []
+            for field in customer_profile_fields:
+                selected_profile.append(getattr(profile, field['name']))
+
+            # 构造客户基本信息列表
+            customer_profile = {'id': customer.id, 'name': customer.name, 'selected_profile': selected_profile}
+            customer_profiles.append(customer_profile)
+
+    # 返回客户基本信息列表和表头
+    return customer_profiles, customer_profile_fields_header
+
+
 # 更新操作员可见的未分配的服务作业进程
 def update_unassigned_procs(operator):
     # 业务逻辑：
@@ -409,40 +443,6 @@ def update_staff_todo_list(operator):
     send_channel_message(operator.hssc_id, {'type': 'send_staff_todo_list', 'data': items})
 
 
-# 搜索给定关键字的客户基本信息列表
-def search_customer_profile_list(search_text):
-    from core.models import Customer, ManagedEntity
-    import json
-    # 获取客户实体对象
-    customer_entity = ManagedEntity.objects.get(name='customer')
-
-    # 获取客户基本信息表model，用于后续查询
-    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
-
-    # 获取客户基本信息的展示表头
-    customer_profile_fields = json.loads(customer_entity.header_fields_json)
-    # 构造客户基本信息表头
-    customer_profile_fields_header = ['用户名']
-    for field in customer_profile_fields:
-        customer_profile_fields_header.append(field['label'])
-
-    customer_profiles = []
-    for customer in Customer.objects.filter(name__icontains=search_text):
-        # 获取客户最新基本信息
-        profile = eval(customer_profile_model).objects.filter(customer=customer).last()
-        if profile:
-            selected_profile = []
-            for field in customer_profile_fields:
-                selected_profile.append(getattr(profile, field['name']))
-
-            # 构造客户基本信息列表
-            customer_profile = {'id': customer.id, 'name': customer.name, 'selected_profile': selected_profile}
-            customer_profiles.append(customer_profile)
-
-    # 返回客户基本信息列表和表头
-    return customer_profiles, customer_profile_fields_header
-
-
 # 更新客户服务列表
 def update_customer_services_list(customer):
     from core.models import HsscFormModel
@@ -466,13 +466,21 @@ def update_customer_services_list(customer):
         return ''
 
     # 已安排服务
-    scheduled_services = [
+    scheduled_services_today = [
         {
             'service_entry': proc.entry,
             'service_label': proc.service.label,
             'service_id': proc.service.id,
             'completion_timeout': proc.completion_timeout,
-        } for proc in customer.get_scheduled_services()
+        } for proc in customer.get_scheduled_services('TODAY')
+    ]
+    scheduled_services_recent = [
+        {
+            'service_entry': proc.entry,
+            'service_label': proc.service.label,
+            'service_id': proc.service.id,
+            'completion_timeout': proc.completion_timeout,
+        } for proc in customer.get_scheduled_services('RECENT')
     ]
 
     # 历史服务
@@ -498,7 +506,8 @@ def update_customer_services_list(customer):
         })
 
     servicesList = {
-        'scheduled_services': scheduled_services,
+        'scheduled_services_today': scheduled_services_today,
+        'scheduled_services_recent': scheduled_services_recent,
         'history_services': history_services,
     }
     # 发送channel_message给操作员
