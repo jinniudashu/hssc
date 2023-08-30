@@ -28,7 +28,6 @@ class ClinicSite(admin.AdminSite):
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
             path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', self.new_service, name='new_service'),
             path('new_service_schedule/<int:customer_id>/<int:service_id>/', self.new_service_schedule, name='new_service_schedule'),
-            # path('new_service_package_schedule/<int:customer_id>/<int:service_package_id>/', self.new_service_package_schedule, name='new_service_package_schedule'),
             path('update_customer_schedules/<int:customer_schedule_package_id>/', self.update_customer_schedules, name='update_customer_schedules'),
         ]
         return my_urls + urls
@@ -37,7 +36,6 @@ class ClinicSite(admin.AdminSite):
     def index(self, request, extra_context=None):
         # extra_context = extra_context or {}
         # user = User.objects.get(username=request.user).customer
-
         return super().index(request, extra_context=extra_context)
 
     # 接受任务：把任务放入当前用户的待办列表中
