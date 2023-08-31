@@ -56,13 +56,13 @@ def check_proc_awaiting_timeout(self):
 
     # 检查任务三：7天内的客户日程安排增加到任务队列
     # 从CustomerSchedule表中获取所有7天内应执行的服务进程
+    # 检查customer_schedule_list.is_ready=True, 确保从CustomerScheduleList生成CustomerSchedule查询集记录的操作已完成
     schedules = CustomerSchedule.objects.filter(
         scheduled_time__gte=timezone.now(),
         scheduled_time__lte=timezone.now() + timedelta(days=7),
         is_assigned=False,
         customer_schedule_list__is_ready=True
     )
-    # 检查customer_schedule_list.is_ready=True, 确保从CustomerScheduleList生成CustomerSchedule查询集记录的操作已完成
     # if schedules and schedules[0].customer_schedule_list.is_ready:
     if schedules:
         for schedule in schedules:

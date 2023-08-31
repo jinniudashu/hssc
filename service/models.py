@@ -25,6 +25,7 @@ class CustomerSchedulePackage(HsscFormModel):
 class CustomerScheduleList(HsscFormModel):
     plan_serial_number = models.CharField(max_length=255, null=True, blank=True, verbose_name='服务计划')
     schedule_package = models.ForeignKey(CustomerSchedulePackage, null=True, on_delete=models.CASCADE, verbose_name='服务包')
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name='服务项目')
     is_ready = models.BooleanField(default=False, verbose_name='已生成schedules')
     
     class Meta:
