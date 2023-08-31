@@ -68,7 +68,6 @@ class ClinicSite(admin.AdminSite):
     def customer_service(self, request, **kwargs):
         context = {}
         customer = Customer.objects.get(id = kwargs['customer_id'])
-        print('request.user:', request.user)
         operator = User.objects.get(username=request.user).customer
         
         # 病例首页
@@ -96,7 +95,6 @@ class ClinicSite(admin.AdminSite):
     def search_customers(self, request):
         from core.business_functions import search_customer_profile_list
         # 从request.POST获取search
-        print('request.POST:', request.POST)
         search_text = request.POST.get('search')
         context = {}
         if search_text is None or search_text == '':
@@ -111,7 +109,6 @@ class ClinicSite(admin.AdminSite):
     # 搜索服务，返回服务/服务包列表
     def search_services(self, request, **kwargs):
         # 从request.POST获取search
-        print('request.POST:', request.POST)
         search_text = request.POST.get('search')
 
         context = {}
@@ -122,8 +119,8 @@ class ClinicSite(admin.AdminSite):
                 'type': service.service_type,
                 'enable_queue_counter': service.enable_queue_counter,
                 'queue_count': OperationProc.objects.get_service_queue_count(service)
-            } for service in Service.objects.filter(Q(service_type__in=[1,2]) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text)))
-        ]        
+            } for service in Service.objects.filter(Q(service_type__in=[1,2]) & (Q(label__icontains=search_text) | Q(pym__icontains=search_text))) if service.label != '安排服务'
+        ]
         context['customer_id'] = kwargs['customer_id']
 
         return render(request, 'services_list.html', context)
@@ -235,7 +232,7 @@ class ClinicSite(admin.AdminSite):
         from service.models import CustomerSchedule, CustomerScheduleList
         service=Service.objects.get(id=kwargs['service_id'])  # 服务
 
-        # 生成CustomerScheduleList记录
+        # 2.1 生成CustomerScheduleList记录
         schedule_list = CustomerScheduleList.objects.create(
             customer = customer,
             operator = current_operator,
@@ -247,6 +244,7 @@ class ClinicSite(admin.AdminSite):
 
         # 估算服务排队时间
         scheduled_time = eval_scheduled_time(service, None)
+        # 2.2 生成CustomerSchedule记录
         customerschedule = CustomerSchedule.objects.create(
             customer_schedule_list = schedule_list,
             customer=customer,  # 客户
@@ -262,7 +260,8 @@ class ClinicSite(admin.AdminSite):
         new_proc.entry = f'/clinic/service/customerschedule/{customerschedule.id}/change'
         new_proc.save()
 
-        schedule_list.is_ready = True  # 完成一次创建服务计划安排事务
+        # 4. 更新CustomerScheduleList的is_ready状态，完成一次创建服务计划安排事务
+        schedule_list.is_ready = True
         schedule_list.save()
 
         return redirect(new_proc.entry)
