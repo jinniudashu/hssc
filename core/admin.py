@@ -21,6 +21,7 @@ class ClinicSite(admin.AdminSite):
         urls = super().get_urls()
         my_urls = [
             path('receive_task/<int:proc_id>/', self.receive_task),
+            path('rollback_task/<int:proc_id>/', self.rollback_task),
             path('cancel_task/<int:proc_id>/', self.cancel_task),
             path('suspend_or_resume_task/<int:proc_id>/', self.suspend_or_resume_task),
             path('customer_service/<int:customer_id>/', self.customer_service),
@@ -43,6 +44,14 @@ class ClinicSite(admin.AdminSite):
         operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
         operation_proc.operator = User.objects.get(username=request.user).customer
         operation_proc.state = 1
+        operation_proc.save()
+        return redirect('/clinic/')
+
+    # 回退任务：清除任务的操作员，状态改为0
+    def rollback_task(self, request, **kwargs):
+        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        operation_proc.operator = None
+        operation_proc.state = 0  # 进程状态：创建
         operation_proc.save()
         return redirect('/clinic/')
 
