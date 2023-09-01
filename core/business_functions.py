@@ -568,7 +568,7 @@ def get_services_schedule(instances, customer_start_time):
             start_time = _add_base_interval(previous_end_time, base_interval)
         elif begin_option == 4:
             start_time = _add_base_interval(timezone.now(), base_interval)  # TODO: 客户出生日期
-        print('start_time:', start_time)
+        print(instance.service.label, 'start_time:', start_time, 'previous_end_time:', previous_end_time)
         if start_time:
             # 计算总次数
             times = total_days // unit_days * cycle_frequency
@@ -584,7 +584,7 @@ def get_services_schedule(instances, customer_start_time):
         else:
             return []
 
-    schedule = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator, 'overtime': overtime}, ]
+    schedules = []  # 客户服务日程:[{'customer': customer, 'servicepackage': servicepackage, 'service': service, 'scheduled_time': scheduled_time, 'scheduled_operator': scheduled_operator, 'overtime': overtime}, ]
     first_start_time = None
     previous_end_time = None
 
@@ -603,7 +603,7 @@ def get_services_schedule(instances, customer_start_time):
             previous_end_time = schedule_times[-1]  # 获取上个服务结束时间
 
         for time in schedule_times:
-            schedule.append({
+            schedules .append({
                 'scheduled_draft': instance,
                 'service': instance.service,  # 服务项目
                 'scheduled_time': time,
@@ -612,7 +612,7 @@ def get_services_schedule(instances, customer_start_time):
                 'overtime': instance.overtime,
             })
 
-    return schedule
+    return schedules 
 
 
 # 创建一条客户服务日程

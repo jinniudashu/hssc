@@ -115,7 +115,7 @@ class ClinicSite(admin.AdminSite):
             context['customer_profile_fields_header'] = customer_profile_fields_header
         return render(request, 'customers_list.html', context)
 
-    # 搜索服务，返回服务/服务包列表
+    # 搜索服务，返回服务列表
     def search_services(self, request, **kwargs):
         # 从request.POST获取search
         search_text = request.POST.get('search')
@@ -214,7 +214,6 @@ class ClinicSite(admin.AdminSite):
             messages.add_message(request, messages.INFO, f'{service.label}已开单')
             return redirect(customer)
 
-
     # 安排服务/创建新的服务日程
     def new_service_schedule(self, request, **kwargs):
         from core.business_functions import eval_scheduled_time
@@ -274,7 +273,6 @@ class ClinicSite(admin.AdminSite):
         schedule_list.save()
 
         return redirect(new_proc.entry)
-
 
     # 更新客户服务日程
     def update_customer_schedules(self, request, **kwargs):
