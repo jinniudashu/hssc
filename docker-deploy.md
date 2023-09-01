@@ -13,8 +13,7 @@
 ### 开发环境
 0. python manage.py collectstatic
 1. 生成镜像：docker-compose -f docker-compose-build.yml build
-2. tag: docker tag clinic_app:v1 jinniudashu/clinic_app:v1
-3. push: docker push jinniudashu/clinic_app:v1
+2. push: docker push jinniudashu/clinic_app:v1
 ### 生产环境，使用SSH连接到服务器
 1. 进入项目目录：cd clinic-test
 2. 查看容器：docker ps
