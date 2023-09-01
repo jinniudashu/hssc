@@ -8,7 +8,7 @@
             "is_staff": true,
             "first_name": "管家",
             "last_name": "林",
-            "role": ["健康管理师", "医生助理"]
+            "role": ["健康管理师"]
         },
         {
             "username": "黄医生",
@@ -18,7 +18,7 @@
             "is_staff": true,
             "first_name": "医生",
             "last_name": "黄",
-            "role": ["健康管理师", "医生", "医生助理"]
+            "role": ["医生"]
         },
         {
             "username": "陈医生",
@@ -28,7 +28,7 @@
             "is_staff": true,
             "first_name": "医生",
             "last_name": "陈",
-            "role": ["健康管理师", "医生", "医生助理"]
+            "role": ["医生"]
         },
         {
             "username": "杨医生",
@@ -38,7 +38,7 @@
             "is_staff": true,
             "first_name": "医生",
             "last_name": "杨",
-            "role": ["健康管理师", "医生", "医生助理", "公卫"]
+            "role": ["医生"]
         },
         {
             "username": "孙护士",
@@ -48,7 +48,7 @@
             "is_staff": true,
             "first_name": "护士",
             "last_name": "孙",
-            "role": ["护士", "医生助理"]
+            "role": ["护士"]
         },
         {
             "username": "周药师",

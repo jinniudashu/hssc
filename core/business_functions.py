@@ -243,8 +243,8 @@ def create_customer_service_log(form_data, form_instance):
             # if field_type == 'entities.Service':
             #     field_val = field_val.label
             form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
-
     print('完成预处理form_data:', form_data)
+    
     # 从form_instance.pid.service.buessiness_form中获取form_class
     query_set = form_instance.pid.service.buessiness_forms.all()
     if query_set:
