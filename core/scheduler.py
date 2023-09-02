@@ -215,9 +215,32 @@ def operand_finished_handler(sender, **kwargs):
         检查表达式是否满足 return: Boolean
         parameters: form_data, self.expression
 		'''
+        def _transform_dict(input_dict):
+            '''
+            把含子字典列表的字典扁平化，转化为一个字典列表
+            '''
+            keys = input_dict.keys()
+            dict_list = []
+            found_list = False
+            
+            # Find the list element in the dictionary
+            for key, value in input_dict.items():
+                if isinstance(value, list):
+                    found_list = True
+                    for sub_dict in value:
+                        new_dict = {k: input_dict[k] for k in keys if k != key}
+                        new_dict.update(sub_dict)
+                        dict_list.append(new_dict)
+                    break
+            
+            # If there is no list in the dictionary, just return the dictionary as an element in a list
+            if not found_list:
+                dict_list.append(input_dict)
+
+            return dict_list
+        
         from decimal import Decimal
-        def _get_scanned_data(event_rule, operation_proc, expression_fields_set):
-            print('检测表单范围：', event_rule.detection_scope)
+        def _get_scanned_data_list(event_rule, operation_proc, expression_fields_set):
             # 1. 根据detection_scope生成待检测数据集合
             if event_rule.detection_scope == 'CURRENT_SERVICE':
                 _scanned_data = operation_proc.customerservicelog.data
@@ -232,70 +255,42 @@ def operand_finished_handler(sender, **kwargs):
                 logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period, form_class_scope)            
                 for log in logs:
                     _scanned_data = {**_scanned_data, **log.data}
-                    
-            print('From scheduler._get_scanned_data: 1. _scanned_data:', event_rule.detection_scope, _scanned_data)
+                
+            # 子字典列表扁平化，转化为一个字典列表
+            _scanned_data_list = _transform_dict(_scanned_data)
 
-            # 2. 根据表达式字段集合剪裁生成待检测数据字典
-            scanned_data = {}
-            for field_name in expression_fields_set:
-                _value = _scanned_data.get(field_name, '')
-                scanned_data[field_name] = _value if bool(_value) else '{}'
-            print('From scheduler._get_scanned_data: 2. scanned_data:', scanned_data)
+            # 2. 根据表达式字段集合剪裁生成待检测数据字典列表
+            scanned_data_list = []
+            for _scanned_data in _scanned_data_list:
+                scanned_data = {}
+                for field_name in expression_fields_set:
+                    _value = _scanned_data.get(field_name, '')
+                    scanned_data[field_name] = _value if bool(_value) else '{}'
+                scanned_data_list.append(scanned_data)
 
-            return scanned_data
+            return scanned_data_list
 
         if event_rule.expression == 'completed':  # 完成事件直接返回
             return True
         else:  # 判断是否发生其他业务事件
             # 数据预处理
             expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # self.expression_fields: 去除空格，转为数组，再转为集合去重
-            scanned_data_dict = _get_scanned_data(event_rule, operation_proc, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
-            print('扫描内容:', scanned_data_dict)
+            scanned_data_list = _get_scanned_data_list(event_rule, operation_proc, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
+            print('扫描内容列表:', scanned_data_list)
 
-            expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及值的字典
-            for field_name in expression_fields_set:
-                expression_fields_val_dict[field_name] = scanned_data_dict.get(field_name, '')            
-
-            print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
-            _expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
-            print('eval表达式:', _expression)
-            try:
-                result = eval(_expression)  # 待检查的字段值带入表达式，并执行返回结果
-                return result
-            except TypeError:
-                result = False
-
-    def _detect_formset_events(event_rule, formset_item):
-        '''
-        检查表达式是否满足 return: Boolean
-        parameters: form_data, self.expression
-		'''
-        from decimal import Decimal
-        def _get_formset_scanned_data(event_rule, formset_item, expression_fields_set):
-            scanned_data = {}
-            for field_name in expression_fields_set:
-                _value = formset_item.get(field_name, '')
-                scanned_data[field_name] = _value if bool(_value) else '{}'
-            print('From scheduler._get_formset_scanned_data:', scanned_data)
-            return scanned_data
-
-        # 数据预处理
-        expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # self.expression_fields: 去除空格，转为数组，再转为集合去重
-        scanned_data_dict = _get_formset_scanned_data(event_rule, formset_item, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
-        print('扫描内容:', scanned_data_dict)
-
-        expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及值的字典
-        for field_name in expression_fields_set:
-            expression_fields_val_dict[field_name] = f"{{'{scanned_data_dict.get(field_name, '')}'}}"
-
-        print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
-        _expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
-        print('eval表达式:', _expression)
-        try:
-            result = eval(_expression)  # 待检查的字段值带入表达式，并执行返回结果
-            return result
-        except TypeError:
-            result = False
+            for scanned_data in scanned_data_list:
+                expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及其值的字典
+                for field_name in expression_fields_set:
+                    expression_fields_val_dict[field_name] = scanned_data.get(field_name, '')
+                print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
+                value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
+                print('eval表达式:', value_expression)
+                try:
+                    if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
+                        return True
+                except TypeError:
+                    return False
+            return False
 
     def _execute_system_operand(system_operand, **kwargs):
         '''
@@ -336,7 +331,7 @@ def operand_finished_handler(sender, **kwargs):
             proc_params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             proc_params['form_data'] = kwargs['form_data']  # 表单数据
 
-            print('Debug: _create_next_service(proc_params):', proc_params)
+            print('_create_next_service(proc_params):', proc_params)
 
             # 创建新的服务作业进程
             new_proc = create_service_proc(**proc_params)
@@ -422,7 +417,6 @@ def operand_finished_handler(sender, **kwargs):
 
     operation_proc = kwargs['pid']
     request = kwargs['request']
-    formset_data = kwargs['formset_data']
 
     # 0. 维护推荐服务队列
     manage_recommended_service(operation_proc.customer)
@@ -438,7 +432,6 @@ def operand_finished_handler(sender, **kwargs):
         if _detect_business_events(service_rule.event_rule, operation_proc):
             print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
             # 构造作业参数
-            print('operation_proc.operator:', operation_proc.operator)
             operation_params = {
                 'operation_proc': operation_proc,
                 'operator': operation_proc.operator,
@@ -459,34 +452,6 @@ def operand_finished_handler(sender, **kwargs):
             if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
                 _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
                 print('From check_rules 执行结果:', _result)
-
-        if formset_data:
-            for formset_item in formset_data:
-                if _detect_formset_events(service_rule.event_rule, formset_item):
-                    print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
-                    # 构造作业参数
-                    print('operation_proc.operator:', operation_proc.operator)
-                    operation_params = {
-                        'operation_proc': operation_proc,
-                        'operator': operation_proc.operator,
-                        'priority_operator': service_rule.priority_operator,
-                        'service': service_rule.service,
-                        'next_service': service_rule.next_service,
-                        'passing_data': service_rule.passing_data,
-                        'complete_feedback': service_rule.complete_feedback,
-                        'reminders': service_rule.reminders,
-                        'message': service_rule.message,
-                        'interval_rule': service_rule.interval_rule,
-                        'interval_time': service_rule.interval_time,
-                        'request': request,
-                        'form_data': kwargs['form_data'],
-                        'formset_data': formset_data,
-                    }
-                    # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
-                    # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
-                    if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
-                        _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
-                        print('From check_rules 执行结果:', _result)
     
     # *************************************************
     # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程

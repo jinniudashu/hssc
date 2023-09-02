@@ -204,7 +204,6 @@ def create_customer_service_log(form_data, form_instance):
     from django.db.models.query import QuerySet
     from django.core.exceptions import ObjectDoesNotExist
     from core.models import CustomerServiceLog
-    from core.hsscbase_class import FieldsType
 
     def _get_set_value(field_type, id_list):
         # 转换id列表为对应的字典值列表
@@ -224,51 +223,71 @@ def create_customer_service_log(form_data, form_instance):
                 val_iterator = [id_list.value]
             elif app_label == 'core':
                 val_iterator = [id_list.label]  # 适配core.Service
+            elif app_label == 'entities':
+                val_iterator = [id_list.label]  # 适配core.Medicine
             else:
                 val_iterator = [id_list.name]  # 适配entities.Stuff
         return f'{set(val_iterator)}'
 
-    # 数据格式预处理
-    for field_name, field_val in form_data.items():
-        # 根据字段类型做字段值的格式转换
-        field_type = eval(f'FieldsType.{field_name}').value
-        print('字段名：', field_name, '字段类型：', field_type, '字段值：', field_val)
-        if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
-            form_data[field_name] = f'{field_val}'
-        elif field_type == 'Numbers' or field_type == 'Decimal':  # 如果字段类型是Numbers或Decimal，直接使用字符串数值
-            form_data[field_name] = str(field_val)
-        elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
-            form_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
-        else:  # 如果字段类型是关联字段，转换为集合字符串
-            # if field_type == 'entities.Service':
-            #     field_val = field_val.label
-            form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
-    print('完成预处理form_data:', form_data)
-    
-    # 从form_instance.pid.service.buessiness_form中获取form_class
-    query_set = form_instance.pid.service.buessiness_forms.all()
-    if query_set:
-        form_class = query_set[0].form_class
-    else:
-        form_class = None  # Or some other default value
+    # 根据dict字段类型做字段值的格式转换
+    def _trans_format(dict_data):
+        from core.hsscbase_class import FieldsType
+        for field_name, field_val in dict_data.items():
+            # 根据字段类型做字段值的格式转换
+            field_type = eval(f'FieldsType.{field_name}').value
+            if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
+                dict_data[field_name] = f'{field_val}'
+            elif field_type == 'Numbers' or field_type == 'Decimal':  # 如果字段类型是Numbers或Decimal，直接使用字符串数值
+                dict_data[field_name] = str(field_val)
+            elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
+                dict_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
+            else:  # 如果字段类型是关联字段，转换为集合字符串
+                dict_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
+        return dict_data
 
-    # 保存form_data
-    try:
+    # 数据格式预处理
+    if type(form_data) == dict:
+        _form_data = _trans_format(form_data)
+
+        # 从form_instance.pid.service.buessiness_form中获取form_class
+        query_set = form_instance.pid.service.buessiness_forms.all()
+        if query_set:
+            form_class = query_set[0].form_class
+        else:
+            form_class = None  # Or some other default value
+
+        # 保存form_data
+        try:
+            log = CustomerServiceLog.objects.get(pid = form_instance.pid)
+            log.data = _form_data
+            log.save()
+        except ObjectDoesNotExist:
+            log = CustomerServiceLog.objects.create(
+                name=form_instance.name,
+                label=form_instance.label,
+                customer=form_instance.customer,
+                operator=form_instance.operator,
+                creater=form_instance.creater,
+                pid=form_instance.pid,
+                cpid=form_instance.cpid,
+                form_class=form_class,
+                data=_form_data,
+            )
+    elif type(form_data) == list: # 添加list到本次服务作业记录中
         log = CustomerServiceLog.objects.get(pid = form_instance.pid)
-        log.data = form_data
+        form_name = form_instance.__class__.__name__.lower()
+        # 预处理后的formset data添加到本次服务作业记录中
+        # 预处理逻辑：1）清理空dict；2）删除键：'id','DELETE', form_name
+        _form_data = []
+        for data in form_data:
+            if data:
+                data.pop('id')
+                data.pop('DELETE')
+                data.pop(form_name)
+                _data = _trans_format(data)
+                _form_data.append(_data)
+        log.data[f'{form_name}_list'] = _form_data
         log.save()
-    except ObjectDoesNotExist:
-        log = CustomerServiceLog.objects.create(
-            name=form_instance.name,
-            label=form_instance.label,
-            customer=form_instance.customer,
-            operator=form_instance.operator,
-            creater=form_instance.creater,
-            pid=form_instance.pid,
-            cpid=form_instance.cpid,
-            form_class=form_class,
-            data=form_data,
-        )
 
 
 # 获取客户基本信息
