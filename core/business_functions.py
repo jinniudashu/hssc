@@ -6,7 +6,9 @@ def copy_previous_form_data(form, previous_form_data):
     
     if form.pid.parent_proc:
         previous_form = form.pid.parent_proc.content_object
+        print('有父进程表单：', previous_form)
     else:
+        print('无父进程表单')
         previous_form = None
 
     if previous_form:
@@ -200,37 +202,37 @@ def manage_recommended_service(customer):
 
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
-def create_customer_service_log(form_data, form_instance):
+def create_customer_service_log(form, form_set, form_instance):
     from django.db.models.query import QuerySet
     from django.core.exceptions import ObjectDoesNotExist
     from core.models import CustomerServiceLog
 
-    def _get_set_value(field_type, id_list):
-        # 转换id列表为对应的字典值列表
-        app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
-        val_iterator = []
-        if isinstance(id_list, QuerySet):
-            if app_label == 'icpc':
-                val_iterator = map(lambda x: x.iname, id_list)
-            elif app_label == 'dictionaries':
-                val_iterator = map(lambda x: x.value, id_list)
-            else:
-                val_iterator = map(lambda x: x.name, id_list)
-        else:
-            if app_label == 'icpc':
-                val_iterator = [id_list.iname]
-            elif app_label == 'dictionaries':
-                val_iterator = [id_list.value]
-            elif app_label == 'core':
-                val_iterator = [id_list.label]  # 适配core.Service
-            elif app_label == 'entities':
-                val_iterator = [id_list.label]  # 适配core.Medicine
-            else:
-                val_iterator = [id_list.name]  # 适配entities.Stuff
-        return f'{set(val_iterator)}'
-
     # 根据dict字段类型做字段值的格式转换
     def _trans_format(dict_data):
+        def _get_set_value(field_type, id_list):
+            # 转换id列表为对应的字典值列表
+            app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
+            val_iterator = []
+            if isinstance(id_list, QuerySet):
+                if app_label == 'icpc':
+                    val_iterator = map(lambda x: x.iname, id_list)
+                elif app_label == 'dictionaries':
+                    val_iterator = map(lambda x: x.value, id_list)
+                else:
+                    val_iterator = map(lambda x: x.name, id_list)
+            else:
+                if app_label == 'icpc':
+                    val_iterator = [id_list.iname]
+                elif app_label == 'dictionaries':
+                    val_iterator = [id_list.value]
+                elif app_label == 'core':
+                    val_iterator = [id_list.label]  # 适配core.Service
+                elif app_label == 'entities':
+                    val_iterator = [id_list.label]  # 适配core.Medicine
+                else:
+                    val_iterator = [id_list.name]  # 适配entities.Stuff
+            return f'{set(val_iterator)}'
+
         from core.hsscbase_class import FieldsType
         for field_name, field_val in dict_data.items():
             # 根据字段类型做字段值的格式转换
@@ -245,49 +247,47 @@ def create_customer_service_log(form_data, form_instance):
                 dict_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
         return dict_data
 
-    # 数据格式预处理
-    if type(form_data) == dict:
-        _form_data = _trans_format(form_data)
-
-        # 从form_instance.pid.service.buessiness_form中获取form_class
-        query_set = form_instance.pid.service.buessiness_forms.all()
-        if query_set:
-            form_class = query_set[0].form_class
-        else:
-            form_class = None  # Or some other default value
-
-        # 保存form_data
-        try:
-            log = CustomerServiceLog.objects.get(pid = form_instance.pid)
-            log.data = _form_data
-            log.save()
-        except ObjectDoesNotExist:
-            log = CustomerServiceLog.objects.create(
-                name=form_instance.name,
-                label=form_instance.label,
-                customer=form_instance.customer,
-                operator=form_instance.operator,
-                creater=form_instance.creater,
-                pid=form_instance.pid,
-                cpid=form_instance.cpid,
-                form_class=form_class,
-                data=_form_data,
-            )
-    elif type(form_data) == list: # 添加list到本次服务作业记录中
-        log = CustomerServiceLog.objects.get(pid = form_instance.pid)
+    log_data = _trans_format(form)
+    if form_set:
+        form_set_data = []
         form_name = form_instance.__class__.__name__.lower()
         # 预处理后的formset data添加到本次服务作业记录中
         # 预处理逻辑：1）清理空dict；2）删除键：'id','DELETE', form_name
-        _form_data = []
-        for data in form_data:
-            if data:
-                data.pop('id')
-                data.pop('DELETE')
-                data.pop(form_name)
-                _data = _trans_format(data)
-                _form_data.append(_data)
-        log.data[f'{form_name}_list'] = _form_data
+        for item in form_set:
+            if item:
+                item.pop('id')
+                item.pop('DELETE')
+                item.pop(form_name)
+                _data = _trans_format(item)
+                form_set_data.append(_data)
+
+        log_data[f'{form_name}_list'] = form_set_data
+
+    # 从form_instance.pid.service.buessiness_form中获取form_class
+    query_set = form_instance.pid.service.buessiness_forms.all()
+    if query_set:
+        form_class = query_set[0].form_class
+    else:
+        form_class = None  # Or some other default value
+
+    # 保存form_data
+    try:
+        log = CustomerServiceLog.objects.get(pid = form_instance.pid)
+        log.data = log_data
         log.save()
+    except ObjectDoesNotExist:
+        log = CustomerServiceLog.objects.create(
+            name=form_instance.name,
+            label=form_instance.label,
+            customer=form_instance.customer,
+            operator=form_instance.operator,
+            creater=form_instance.creater,
+            pid=form_instance.pid,
+            cpid=form_instance.cpid,
+            form_class=form_class,
+            data=log_data,
+        )
+    return log
 
 
 # 获取客户基本信息

@@ -210,11 +210,9 @@ def operand_started_handler(sender, **kwargs):
 
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
-    def _detect_business_events(event_rule, operation_proc):
-        '''
-        检查表达式是否满足 return: Boolean
-        parameters: form_data, self.expression
-		'''
+
+    from decimal import Decimal
+    def _get_scanned_data_list(event_rule, operation_proc, expression_fields_set):
         def _transform_dict(input_dict):
             '''
             把含子字典列表的字典扁平化，转化为一个字典列表
@@ -238,59 +236,43 @@ def operand_finished_handler(sender, **kwargs):
                 dict_list.append(input_dict)
 
             return dict_list
-        
-        from decimal import Decimal
-        def _get_scanned_data_list(event_rule, operation_proc, expression_fields_set):
-            # 1. 根据detection_scope生成待检测数据集合
-            if event_rule.detection_scope == 'CURRENT_SERVICE':
-                _scanned_data = operation_proc.customerservicelog.data
-            else:
-                '''
-                获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
-                '''
-                period = event_rule.detection_scope
-                form_class_scope = event_rule.form_class_scope
-                # 取客户健康档案记录构造检测数据dict
-                _scanned_data = {}
-                logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period, form_class_scope)            
-                for log in logs:
-                    _scanned_data = {**_scanned_data, **log.data}
-                
-            # 子字典列表扁平化，转化为一个字典列表
-            _scanned_data_list = _transform_dict(_scanned_data)
+    
+        # 1. 根据detection_scope生成待检测数据集合
+        if event_rule.detection_scope == 'CURRENT_SERVICE':
+            _scanned_data = operation_proc.customerservicelog.data
+        else:
+            '''
+            获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
+            '''
+            period = event_rule.detection_scope
+            form_class_scope = event_rule.form_class_scope
+            # 取客户健康档案记录构造检测数据dict
+            _scanned_data = {}
+            logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period, form_class_scope)
+            for log in logs:
+                _scanned_data = {**_scanned_data, **log.data}
+            
+        # 子字典列表扁平化，转化为一个字典列表
+        scanned_data_list = _transform_dict(_scanned_data)
 
-            # 2. 根据表达式字段集合剪裁生成待检测数据字典列表
-            scanned_data_list = []
-            for _scanned_data in _scanned_data_list:
-                scanned_data = {}
-                for field_name in expression_fields_set:
-                    _value = _scanned_data.get(field_name, '')
-                    scanned_data[field_name] = _value if bool(_value) else '{}'
-                scanned_data_list.append(scanned_data)
+        return scanned_data_list
 
-            return scanned_data_list
-
-        if event_rule.expression == 'completed':  # 完成事件直接返回
-            return True
-        else:  # 判断是否发生其他业务事件
-            # 数据预处理
-            expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # self.expression_fields: 去除空格，转为数组，再转为集合去重
-            scanned_data_list = _get_scanned_data_list(event_rule, operation_proc, expression_fields_set)  # 获取待扫描字段数据的字符格式字典，适配field_name_replace()的格式要求
-            print('扫描内容列表:', scanned_data_list)
-
-            for scanned_data in scanned_data_list:
-                expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及其值的字典
-                for field_name in expression_fields_set:
-                    expression_fields_val_dict[field_name] = scanned_data.get(field_name, '')
-                print('检查表达式及值:', event_rule.expression, expression_fields_val_dict)
-                value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
-                print('eval表达式:', value_expression)
-                try:
-                    if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
-                        return True
-                except TypeError:
-                    return False
+    def _detect_business_events(event_rule, form_data, expression_fields_set):
+        '''
+        检查表达式是否满足 return: Boolean
+		'''
+        expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及其值的字典
+        for field_name in expression_fields_set:
+            expression_fields_val_dict[field_name] = form_data.get(field_name, '')
+        value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
+        print('检查表达式:', event_rule.expression, '字段值:', expression_fields_val_dict)
+        try:
+            if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
+                print('eval表达式:', value_expression, '发生业务事件：', event_rule)
+                return True
+        except TypeError:
             return False
+        return False
 
     def _execute_system_operand(system_operand, **kwargs):
         '''
@@ -405,7 +387,6 @@ def operand_finished_handler(sender, **kwargs):
 
             return result
 
-
         class SystemOperandFunc(Enum):
             CREATE_NEXT_SERVICE = _create_next_service  # 生成后续服务
             RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
@@ -415,9 +396,31 @@ def operand_finished_handler(sender, **kwargs):
 		# 调用OperandFuncMixin中的系统自动作业函数
         return eval(f'SystemOperandFunc.{system_operand}')(**kwargs)
 
-    operation_proc = kwargs['pid']
-    request = kwargs['request']
+    def _schedule(service_rule, **kwargs):
+        # 构造作业参数
+        params = {
+            'operation_proc': kwargs['pid'],
+            'operator': kwargs['pid'].operator,
+            'priority_operator': service_rule.priority_operator,
+            'service': service_rule.service,
+            'next_service': service_rule.next_service,
+            'passing_data': service_rule.passing_data,
+            'complete_feedback': service_rule.complete_feedback,
+            'reminders': service_rule.reminders,
+            'message': service_rule.message,
+            'interval_rule': service_rule.interval_rule,
+            'interval_time': service_rule.interval_time,
+            'request': kwargs['request'],
+            'form_data': kwargs['form_data'],
+        }
+        # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
+        # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
+        if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
+            result = _execute_system_operand(service_rule.system_operand.func, **params)
+            return result 
+        return None
 
+    operation_proc = kwargs['pid']
     # 0. 维护推荐服务队列
     manage_recommended_service(operation_proc.customer)
 
@@ -426,38 +429,41 @@ def operand_finished_handler(sender, **kwargs):
     # *************************************************
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
-        # 如果event_rule.expression为真，则构造事件参数，生成业务事件
-        print('*****************************')
-        print('From check_rules 扫描规则：', service_rule.service, service_rule.event_rule)
-        if _detect_business_events(service_rule.event_rule, operation_proc):
-            print('From check_rules 满足规则：', service_rule.service, service_rule.event_rule)
-            # 构造作业参数
-            operation_params = {
-                'operation_proc': operation_proc,
-                'operator': operation_proc.operator,
-                'priority_operator': service_rule.priority_operator,
-                'service': service_rule.service,
-                'next_service': service_rule.next_service,
-                'passing_data': service_rule.passing_data,
-                'complete_feedback': service_rule.complete_feedback,
-                'reminders': service_rule.reminders,
-                'message': service_rule.message,
-                'interval_rule': service_rule.interval_rule,
-                'interval_time': service_rule.interval_time,
-                'request': request,
-                'form_data': kwargs['form_data'],
-            }
-            # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
-            # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
-            if service_rule.system_operand.operand_type == "SCHEDULE_OPERAND":
-                _result = _execute_system_operand(service_rule.system_operand.func, **operation_params)
-                print('From check_rules 执行结果:', _result)
+        event_rule = service_rule.event_rule
+        if event_rule.expression == 'completed':  # 完成事件直接返回
+            result = _schedule(service_rule, **kwargs)
+        else:  # 判断是否发生其他业务事件
+            # 获取待检测数据集合, 数据预处理
+            expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # expression_fields去除空格，转为数组，再转为集合去重
+            # 获取待扫描字段数据的字符格式字典列表，适配field_name_replace()的格式要求
+            scanned_data_list = _get_scanned_data_list(event_rule, operation_proc, expression_fields_set)
+            print('扫描内容列表:', scanned_data_list)
+            for scanned_data in scanned_data_list:
+                # 根据表达式字段集合剪裁生成待检测数据字典
+                clipped_scanned_data = {}
+                for field_name in expression_fields_set:
+                    _value = scanned_data.get(field_name, '')
+                    clipped_scanned_data[field_name] = _value if bool(_value) else '{}'
+
+                # 逐一检测是否满足规则
+                if _detect_business_events(event_rule, clipped_scanned_data, expression_fields_set):
+                    # 调度系统作业
+                    print('From check_rules 满足规则：', service_rule.service, event_rule)
+                    kwargs['form_data'] = scanned_data  # 传递表单数据
+                    result = _schedule(service_rule, **kwargs)
+                    print('From check_rules 调度结果:', result)
     
+
     # *************************************************
     # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
     # *************************************************
     # (1) 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
     # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
+
+    
+    # ***待修改，需要添加CustomerScheduleList.is_ready逻辑
+
+
     current_service = operation_proc.service
     if current_service.follow_up_required and current_service.follow_up_interval and current_service.follow_up_service:
         # 构造参数
