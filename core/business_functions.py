@@ -3,12 +3,9 @@ from service.models import *
 # 从前道表单复制数据到后道表单
 def copy_previous_form_data(form, previous_form_data):
     # 获取父进程表单
-    
     if form.pid.parent_proc:
         previous_form = form.pid.parent_proc.content_object
-        print('有父进程表单：', previous_form)
     else:
-        print('无父进程表单')
         previous_form = None
 
     if previous_form:
@@ -17,11 +14,12 @@ def copy_previous_form_data(form, previous_form_data):
         # 获取父进程表单和当前进程表单字段的交集
         base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
         base_fields_name.add('id')
-
-        previous_form_fields_name = {field.name for field in previous_form._meta.fields} - base_fields_name
+        # previous_form_fields_name = {field.name for field in previous_form._meta.fields} - base_fields_name
+        previous_form_fields_name = set(previous_form_data.keys()) - base_fields_name
         form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
         copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
-
+        # 获取多对多字段名
+        # formset暂不支持多对多字段，待补充
         previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
         form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
         copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
@@ -200,67 +198,67 @@ def manage_recommended_service(customer):
     # 2. 然后删除年龄大于3的条目
     RecommendedService.objects.filter(customer=customer, age__gt=3).delete()
 
+# 根据dict字段类型做字段值的格式转换
+def trans_form_to_dict(dict_data):
+    def _get_set_value(field_type, id_list):
+        from django.db.models.query import QuerySet
+        # 转换id列表为对应的字典值列表
+        app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
+        val_iterator = []
+        if isinstance(id_list, QuerySet):
+            if app_label == 'icpc':
+                val_iterator = map(lambda x: x.iname, id_list)
+            elif app_label == 'dictionaries':
+                val_iterator = map(lambda x: x.value, id_list)
+            else:
+                val_iterator = map(lambda x: x.name, id_list)
+        else:
+            if app_label == 'icpc':
+                val_iterator = [id_list.iname]
+            elif app_label == 'dictionaries':
+                val_iterator = [id_list.value]
+            elif app_label == 'core':
+                val_iterator = [id_list.label]  # 适配core.Service
+            elif app_label == 'entities':
+                val_iterator = [id_list.label]  # 适配core.Medicine
+            else:
+                val_iterator = [id_list.name]  # 适配entities.Stuff
+        return f'{set(val_iterator)}'
+
+    from core.hsscbase_class import FieldsType
+    for field_name, field_val in dict_data.items():
+        # 根据字段类型做字段值的格式转换
+        field_type = eval(f'FieldsType.{field_name}').value
+        if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
+            dict_data[field_name] = f'{field_val}'
+        elif field_type == 'Numbers' or field_type == 'Decimal':  # 如果字段类型是Numbers或Decimal，直接使用字符串数值
+            dict_data[field_name] = str(field_val)
+        elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
+            dict_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
+        else:  # 如果字段类型是关联字段，转换为集合字符串
+            dict_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
+    return dict_data
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(form, form_set, form_instance):
-    from django.db.models.query import QuerySet
     from django.core.exceptions import ObjectDoesNotExist
     from core.models import CustomerServiceLog
+    import copy
 
-    # 根据dict字段类型做字段值的格式转换
-    def _trans_format(dict_data):
-        def _get_set_value(field_type, id_list):
-            # 转换id列表为对应的字典值列表
-            app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
-            val_iterator = []
-            if isinstance(id_list, QuerySet):
-                if app_label == 'icpc':
-                    val_iterator = map(lambda x: x.iname, id_list)
-                elif app_label == 'dictionaries':
-                    val_iterator = map(lambda x: x.value, id_list)
-                else:
-                    val_iterator = map(lambda x: x.name, id_list)
-            else:
-                if app_label == 'icpc':
-                    val_iterator = [id_list.iname]
-                elif app_label == 'dictionaries':
-                    val_iterator = [id_list.value]
-                elif app_label == 'core':
-                    val_iterator = [id_list.label]  # 适配core.Service
-                elif app_label == 'entities':
-                    val_iterator = [id_list.label]  # 适配core.Medicine
-                else:
-                    val_iterator = [id_list.name]  # 适配entities.Stuff
-            return f'{set(val_iterator)}'
-
-        from core.hsscbase_class import FieldsType
-        for field_name, field_val in dict_data.items():
-            # 根据字段类型做字段值的格式转换
-            field_type = eval(f'FieldsType.{field_name}').value
-            if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
-                dict_data[field_name] = f'{field_val}'
-            elif field_type == 'Numbers' or field_type == 'Decimal':  # 如果字段类型是Numbers或Decimal，直接使用字符串数值
-                dict_data[field_name] = str(field_val)
-            elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
-                dict_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
-            else:  # 如果字段类型是关联字段，转换为集合字符串
-                dict_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
-        return dict_data
-
-    log_data = _trans_format(form)
+    form_copy = copy.copy(form)
+    log_data = trans_form_to_dict(form_copy)
     if form_set:
+        formset_copy = copy.deepcopy(form_set)
         form_set_data = []
         form_name = form_instance.__class__.__name__.lower()
         # 预处理后的formset data添加到本次服务作业记录中
         # 预处理逻辑：1）清理空dict；2）删除键：'id','DELETE', form_name
-        for item in form_set:
+        for item in formset_copy:
             if item:
                 item.pop('id')
                 item.pop('DELETE')
                 item.pop(form_name)
-                _data = _trans_format(item)
-                form_set_data.append(_data)
-
+                form_set_data.append(trans_form_to_dict(item))
         log_data[f'{form_name}_list'] = form_set_data
 
     # 从form_instance.pid.service.buessiness_form中获取form_class

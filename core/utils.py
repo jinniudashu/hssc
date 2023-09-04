@@ -22,13 +22,9 @@ def get_wechat_template_message_data(open_id, message, form_data):
     data['template_id'] = message.pop('template_id', None)  # 从message中取出模板参数template_id
     data['data']['first']['value'] = message.pop('title', None)  # 从message中取出模板参数title
     data['data']['remark']['value'] = message.pop('remark', None)  # 从message中取出模板参数remark
-    print('template_id:', data['template_id'])
-    print('title:', data['data']['first']['value'])
-    print('remark:', data['data']['remark']['value'])
 
     # 构造模板参数keyword
     for key in message:
-        print(key, form_data[message[key]])
         data['data'][key] = {"value": "", "color":"#173177"}
 
         # 获取模板参数keyword包含的表单字段的值

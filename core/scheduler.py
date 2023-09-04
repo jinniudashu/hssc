@@ -210,10 +210,12 @@ def operand_started_handler(sender, **kwargs):
 
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
-
+    import copy
     from decimal import Decimal
-    def _get_scanned_data_list(event_rule, operation_proc, expression_fields_set):
-        def _transform_dict(input_dict):
+    from core.business_functions import trans_form_to_dict
+
+    def _get_scanned_data_list(event_rule, operation_proc):
+        def _flat_dict(input_dict):
             '''
             把含子字典列表的字典扁平化，转化为一个字典列表
             '''
@@ -239,6 +241,7 @@ def operand_finished_handler(sender, **kwargs):
     
         # 1. 根据detection_scope生成待检测数据集合
         if event_rule.detection_scope == 'CURRENT_SERVICE':
+            print('检索范围：', '当前服务')
             _scanned_data = operation_proc.customerservicelog.data
         else:
             '''
@@ -251,9 +254,9 @@ def operand_finished_handler(sender, **kwargs):
             logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period, form_class_scope)
             for log in logs:
                 _scanned_data = {**_scanned_data, **log.data}
-            
-        # 子字典列表扁平化，转化为一个字典列表
-        scanned_data_list = _transform_dict(_scanned_data)
+        
+        # 2. 子字典列表扁平化，转化为一个字典列表
+        scanned_data_list = _flat_dict(_scanned_data)
 
         return scanned_data_list
 
@@ -265,9 +268,9 @@ def operand_finished_handler(sender, **kwargs):
         for field_name in expression_fields_set:
             expression_fields_val_dict[field_name] = form_data.get(field_name, '')
         value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
-        print('检查表达式:', event_rule.expression, '字段值:', expression_fields_val_dict)
         try:
             if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
+                print('检查表达式:', event_rule.expression, '字段值:', expression_fields_val_dict)
                 print('eval表达式:', value_expression, '发生业务事件：', event_rule)
                 return True
         except TypeError:
@@ -332,7 +335,7 @@ def operand_finished_handler(sender, **kwargs):
             operation_proc = kwargs['operation_proc']
 
             # 删除旧的相同推荐服务条目
-            old_recommend_services = RecommendedService.objects.filter(service=kwargs['next_service'], customer=operation_proc.customer).delete()
+            RecommendedService.objects.filter(service=kwargs['next_service'], customer=operation_proc.customer).delete()
             
             # 创建新的推荐服务条目
             obj = RecommendedService(
@@ -433,23 +436,60 @@ def operand_finished_handler(sender, **kwargs):
         if event_rule.expression == 'completed':  # 完成事件直接返回
             result = _schedule(service_rule, **kwargs)
         else:  # 判断是否发生其他业务事件
-            # 获取待检测数据集合, 数据预处理
+            # 获取当前服务进程表单数据
+            # 1. 如果有forset，整合form_data和formset_data，扁平化为一个字典列表，否则把form_data转换为一个字典列表
+            form_data = kwargs['form_data']
+            scanned_data_list = []
+            if kwargs.get('formset_data', None):
+                formset_data = kwargs['formset_data']
+                for formset_item in formset_data:
+                    if formset_item:
+                        new_dict = {**form_data, **formset_item}
+                        scanned_data_list.append(new_dict)
+            else:
+                scanned_data_list.append(form_data)
+
+            # 2. 获取待检测数据集合, 数据预处理
             expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # expression_fields去除空格，转为数组，再转为集合去重
-            # 获取待扫描字段数据的字符格式字典列表，适配field_name_replace()的格式要求
-            scanned_data_list = _get_scanned_data_list(event_rule, operation_proc, expression_fields_set)
-            print('扫描内容列表:', scanned_data_list)
-            for scanned_data in scanned_data_list:
-                # 根据表达式字段集合剪裁生成待检测数据字典
+            
+            # 3. 准备历史数据
+            history_data = {}
+            if event_rule.detection_scope != 'CURRENT_SERVICE':
+                '''
+                获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
+                '''
+                # history_data = get_history_data()
+                period = event_rule.detection_scope
+                form_class_scope = event_rule.form_class_scope
+                # 取客户健康档案记录构造检测数据dict
+                logs = CustomerServiceLog.logs.get_customer_service_log(operation_proc.customer, period, form_class_scope)
+                for log in logs:
+                    history_data = {**history_data, **log.data}
+
+            # 4. 按照规则构造检测数据集，并逐一检测是否满足规则
+            for scanned_item in scanned_data_list:
+                # 1) 转换数据格式，适配field_name_replace()的格式要求
+                scanned_item_copy = copy.copy(scanned_item)
+                scanned_item_copy.pop('id', None)  # 删除id字段
+                scanned_item_copy.pop('DELETE', None)  # 删除DELETE字段
+                form_name = operation_proc.content_object.__class__.__name__.lower()  # 表单名称
+                scanned_item_copy.pop(form_name, None)  # 删除表单名称字段
+                scanned_data = trans_form_to_dict(scanned_item_copy)
+
+                # 2) 整合历史表单数据
+                scanned_data = {**history_data, **scanned_data}
+                
+                # 3) 根据检测表达式字段集合剪裁生成待检测数据字典
                 clipped_scanned_data = {}
                 for field_name in expression_fields_set:
                     _value = scanned_data.get(field_name, '')
                     clipped_scanned_data[field_name] = _value if bool(_value) else '{}'
 
-                # 逐一检测是否满足规则
+                # 4) 逐一检测是否满足规则
                 if _detect_business_events(event_rule, clipped_scanned_data, expression_fields_set):
                     # 调度系统作业
                     print('From check_rules 满足规则：', service_rule.service, event_rule)
-                    kwargs['form_data'] = scanned_data  # 传递表单数据
+                    kwargs['form_data'] = scanned_item  # 传递表单数据
                     result = _schedule(service_rule, **kwargs)
                     print('From check_rules 调度结果:', result)
     
