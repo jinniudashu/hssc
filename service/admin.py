@@ -41,7 +41,7 @@ class HsscFormAdmin(admin.ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         super().save_formset(request, form, formset, change)
-        
+
         # Retrieve obj from the request
         obj = getattr(request, '_saved_obj', None)
 
@@ -74,6 +74,7 @@ class HsscFormAdmin(admin.ModelAdmin):
         # # 如果是创建服务包计划，保存后跳转到修改服务计划列表的页面
         # if obj.__class__.__name__ == 'CustomerSchedulePackage':
         #     schedule_list = CustomerScheduleList.objects.get(schedule_package=obj)
+        #     print('Change CustomerSchedulePackage', obj, 'to', schedule_list)
         #     return redirect(f'/clinic/service/customerschedulelist/{schedule_list.id}/change/')
 
         # 按照service.route_to的配置跳转
