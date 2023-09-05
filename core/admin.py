@@ -22,6 +22,7 @@ class ClinicSite(admin.AdminSite):
         my_urls = [
             path('receive_task/<int:proc_id>/', self.receive_task),
             path('rollback_task/<int:proc_id>/', self.rollback_task),
+            path('shift_task/<int:proc_id>/<int:operator_id>/', self.shift_task),
             path('cancel_task/<int:proc_id>/', self.cancel_task),
             path('suspend_or_resume_task/<int:proc_id>/', self.suspend_or_resume_task),
             path('customer_service/<int:customer_id>/', self.customer_service),
@@ -55,6 +56,14 @@ class ClinicSite(admin.AdminSite):
         operation_proc.save()
         return redirect('/clinic/')
 
+    # 变更任务操作员
+    def shift_task(self, request, **kwargs):
+        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        operation_proc.operator = Customer.objects.get(id = kwargs['operator_id'])
+        operation_proc.state = 1  # 进程状态：就绪
+        operation_proc.save()
+        return redirect('/clinic/')
+
     # 撤销任务：把任务放入当前用户的待办列表中
     def cancel_task(self, request, **kwargs):
         operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
@@ -72,7 +81,7 @@ class ClinicSite(admin.AdminSite):
             operation_proc.state = 3
         operation_proc.save()
         return redirect('/clinic/')
-
+    
     # 客户服务首页
     def customer_service(self, request, **kwargs):
         context = {}

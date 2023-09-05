@@ -449,6 +449,7 @@ def update_staff_todo_list(operator):
                 'customer_number': todo.customer.name,
                 'customer_name': todo.customer.name,
                 'service_label': todo.service.label,
+                'service_id': todo.service.id,
                 'customer_phone': todo.customer.phone,
                 'customer_address': todo.customer.address,
                 'completion_timeout': todo.completion_timeout,
