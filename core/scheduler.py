@@ -433,7 +433,7 @@ def operand_finished_handler(sender, **kwargs):
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
     for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
         event_rule = service_rule.event_rule
-        if event_rule.expression == 'completed':  # 完成事件直接返回
+        if event_rule.expression == 'completed':  # 完成事件直接调度系统作业
             result = _schedule(service_rule, **kwargs)
         else:  # 判断是否发生其他业务事件
             # 获取当前服务进程表单数据
@@ -449,10 +449,10 @@ def operand_finished_handler(sender, **kwargs):
             else:
                 scanned_data_list.append(form_data)
 
-            # 2. 获取待检测数据集合, 数据预处理
+            # 2. 获取待检测表达式字段集合, 格式预处理
             expression_fields_set = set(event_rule.expression_fields.strip().split(','))  # expression_fields去除空格，转为数组，再转为集合去重
             
-            # 3. 准备历史数据
+            # 3. 准备环境上下文数据：客户历史服务记录
             history_data = {}
             if event_rule.detection_scope != 'CURRENT_SERVICE':
                 '''
@@ -468,7 +468,7 @@ def operand_finished_handler(sender, **kwargs):
 
             # 4. 按照规则构造检测数据集，并逐一检测是否满足规则
             for scanned_item in scanned_data_list:
-                # 1) 转换数据格式，适配field_name_replace()的格式要求
+                # 1) 转换数据格式，适配field_name_replace的格式要求
                 scanned_item_copy = copy.copy(scanned_item)
                 scanned_item_copy.pop('id', None)  # 删除id字段
                 scanned_item_copy.pop('DELETE', None)  # 删除DELETE字段
@@ -488,10 +488,9 @@ def operand_finished_handler(sender, **kwargs):
                 # 4) 逐一检测是否满足规则
                 if _detect_business_events(event_rule, clipped_scanned_data, expression_fields_set):
                     # 调度系统作业
-                    print('From check_rules 满足规则：', service_rule.service, event_rule)
                     kwargs['form_data'] = scanned_item  # 传递表单数据
                     result = _schedule(service_rule, **kwargs)
-                    print('From check_rules 调度结果:', result)
+                    print('_detect_business_events --> ', service_rule.service, '满足规则：', event_rule, '调度结果:', result)
     
 
     # *************************************************
@@ -509,6 +508,8 @@ def operand_finished_handler(sender, **kwargs):
         # 构造参数
         params = {
             'customer': operation_proc.customer,
+            'operator': operation_proc.operator,
+            'creater': operation_proc.operator,
             'service': current_service.follow_up_service,
             'scheduled_time': timezone.now() + current_service.follow_up_interval,
             'pid': operation_proc,

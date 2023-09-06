@@ -634,15 +634,35 @@ def get_services_schedule(instances, customer_start_time):
 
 
 # 创建一条客户服务日程
-def create_customer_schedule(customer, service, scheduled_time, pid):
+def create_customer_schedule(**kwargs):
     from django.utils import timezone
+
+    customer = kwargs['customer']
+    operator = kwargs['operator']
+    creater = kwargs['creater']
+    service = kwargs['service']
+    scheduled_time = kwargs['scheduled_time']
+    pid = kwargs['pid']
+
+    # 生成CustomerScheduleList记录
+    schedule_list = CustomerScheduleList.objects.create(
+        customer = customer,
+        operator = operator,
+        creater = creater,
+        plan_serial_number = service.label + '--' + pid.created_time.strftime('%Y-%m-%d') + '--' + pid.operator.name,
+        service = service,
+        is_ready = False
+    )
 
     # 创建客户服务日程对象
     customer_schedule = CustomerSchedule(
+        customer_schedule_list = schedule_list,
         customer=customer,
+        operator=operator,  # 作业人员
+        creater=creater,  # 创建者
         service=service,
         scheduled_time=scheduled_time,
-        pid = pid
+        pid = pid,
     )
 
     # 设置其他默认值
@@ -653,6 +673,10 @@ def create_customer_schedule(customer, service, scheduled_time, pid):
 
     # 保存客户服务日程对象
     customer_schedule.save()
+
+    # 更新CustomerScheduleList的is_ready状态，完成一次创建服务计划安排事务
+    schedule_list.is_ready = True
+    schedule_list.save()
 
     return customer_schedule
 
