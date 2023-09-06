@@ -497,12 +497,7 @@ def operand_finished_handler(sender, **kwargs):
     # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
     # *************************************************
     # (1) 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
-    # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程。传入参数：客户，服务，计划执行时间，服务进程
-
-    
-    # ***待修改，需要添加CustomerScheduleList.is_ready逻辑
-
-
+    # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程
     current_service = operation_proc.service
     if current_service.follow_up_required and current_service.follow_up_interval and current_service.follow_up_service:
         # 构造参数

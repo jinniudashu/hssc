@@ -225,7 +225,7 @@ class ClinicSite(admin.AdminSite):
 
     # 安排服务/创建新的服务日程
     def new_service_schedule(self, request, **kwargs):
-        from core.business_functions import eval_scheduled_time
+        from core.business_functions import eval_scheduled_time, create_customer_schedule
         # 1. 创建"安排服务计划"服务进程
         customer_id = kwargs['customer_id']
         customer = Customer.objects.get(id=customer_id)
@@ -246,42 +246,19 @@ class ClinicSite(admin.AdminSite):
         )
 
         # 2. 创建服务计划安排: CustomerSchedule
-        from service.models import CustomerSchedule, CustomerScheduleList
-        service=Service.objects.get(id=kwargs['service_id'])  # 服务
-        # 估算服务排队时间
-        scheduled_time = eval_scheduled_time(service, None)
+        params = {
+            'customer': customer,
+            'operator': current_operator,
+            'creater': current_operator,
+            'service': Service.objects.get(id=kwargs['service_id']),  # 服务
+            'scheduled_time': eval_scheduled_time(service, None),
+            'pid': new_proc,
+        }
+        customer_schedule = create_customer_schedule(**params)  # 创建服务计划安排
 
-        # # 调用create_customer_schedule函数，创建客户服务日程
-        # customer_schedule = create_customer_schedule(**params)
-
-        # 2.1 生成CustomerScheduleList记录
-        schedule_list = CustomerScheduleList.objects.create(
-            customer = customer,
-            operator = current_operator,
-            creater = current_operator,
-            plan_serial_number = service.label + '--' + new_proc.created_time.strftime('%Y-%m-%d') + '--' + new_proc.operator.name,
-            service = service,
-            is_ready = False
-        )
-
-        # 2.2 生成CustomerSchedule记录
-        customerschedule = CustomerSchedule.objects.create(
-            customer_schedule_list = schedule_list,
-            customer=customer,  # 客户
-            operator=current_operator,  # 作业人员
-            creater=current_operator,  # 创建者
-            service=service,  # 服务
-            scheduled_time=scheduled_time,  # 计划执行时间
-            pid=new_proc,  # 服务作业进程
-        )
-
-        # 3. 更新CustomerScheduleList的is_ready状态，完成一次创建服务计划安排事务
-        schedule_list.is_ready = True
-        schedule_list.save()
-
-        # 4. 更新OperationProc服务进程的form实例信息
-        new_proc.object_id = customerschedule.id
-        new_proc.entry = f'/clinic/service/customerschedule/{customerschedule.id}/change'
+        # 3. 更新OperationProc服务进程的form实例信息
+        new_proc.object_id = customer_schedule.id
+        new_proc.entry = f'/clinic/service/customerschedule/{customer_schedule.id}/change'
         new_proc.save()
 
         return redirect(new_proc.entry)

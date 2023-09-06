@@ -198,6 +198,7 @@ def manage_recommended_service(customer):
     # 2. 然后删除年龄大于3的条目
     RecommendedService.objects.filter(customer=customer, age__gt=3).delete()
 
+
 # 根据dict字段类型做字段值的格式转换
 def trans_form_to_dict(dict_data):
     def _get_set_value(field_type, id_list):
@@ -238,6 +239,7 @@ def trans_form_to_dict(dict_data):
         else:  # 如果字段类型是关联字段，转换为集合字符串
             dict_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
     return dict_data
+
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(form, form_set, form_instance):
@@ -637,12 +639,12 @@ def get_services_schedule(instances, customer_start_time):
 def create_customer_schedule(**kwargs):
     from django.utils import timezone
 
-    customer = kwargs['customer']
-    operator = kwargs['operator']
-    creater = kwargs['creater']
-    service = kwargs['service']
-    scheduled_time = kwargs['scheduled_time']
-    pid = kwargs['pid']
+    customer = kwargs.get('customer', None)
+    operator = kwargs.get('operator', None)
+    creater = kwargs.get('creater', None)
+    service = kwargs.get('service', None)
+    scheduled_time = kwargs.get('scheduled_time', None)
+    pid = kwargs.get('pid', None)
 
     # 生成CustomerScheduleList记录
     schedule_list = CustomerScheduleList.objects.create(
