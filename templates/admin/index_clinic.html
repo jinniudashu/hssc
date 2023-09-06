@@ -43,7 +43,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="proc in item.unassigned_procs" :key="proc.id">
-                        <td><a :href="'receive_task/' + proc.id">{{ proc.customer_name }}</a></td>
+                        <td><a href="#" @click="handleProcOperation(proc.id, false, 'RECEIVE')">{{ proc.customer_name }}</a></td>
                         <td :class="{'red': proc.acceptance_timeout}">{{ proc.service_label }}</td>
                         <td v-if="item.title != '共享服务'">{{ proc.scheduled_time.split(' ')[0].split('.').slice(1, 3).join('.') }}</td>
                         <td>{{ proc.charge_staff }}</td>
@@ -140,20 +140,7 @@
 
             methods: {
                 handleProcOperation(id, hasAssigned, opCode) {
-                    // hasAssigned: true表示已分配任务，false表示未分配任务, 来自OperationProc
-                    if (hasAssigned) {
-                        if (opCode == 'ROLLBACK') {
-                            window.location.href = 'rollback_task/' + id;
-                        } else if (opCode == 'SUSPEND_OR_RESUME') {
-                            window.location.href = 'suspend_or_resume_task/' + id;
-                        } else if (opCode == 'CANCEL') {
-                            window.location.href = 'cancel_task/' + id;
-                        }
-                    } else {
-                        if (opCode == 'CANCEL') {
-                            window.location.href = 'cancel_task/' + id;
-                        }
-                    }
+                    window.location.href = 'manage_task/' + id + '/' + opCode
                 },
                 openMenu(id) {
                     this.openMenuTodoId = id;

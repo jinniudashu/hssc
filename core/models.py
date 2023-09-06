@@ -353,6 +353,38 @@ class OperationProc(HsscBase):
     def get_absolute_url(self):
         # 返回作业入口url
         return self.entry
+    
+    def receive_task(self, operator):
+        # 接收作业进程
+        self.operator = operator
+        self.state = 1
+        self.save()
+
+    def rollback_task(self):
+        # 作业进程回退
+        self.operator = None
+        self.state = 0
+        self.save()
+
+    def cancel_task(self, operator):
+        # 作业进程撤销
+        self.operator = operator
+        self.state = 5
+        self.save()
+
+    def suspend_or_resume_task(self):
+        # 作业进程挂起或恢复
+        if self.state == 3:
+            self.state = 0
+        else:
+            self.state = 3
+        self.save()
+
+    def shift_task(self, operator):
+        # 作业进程转移操作员
+        self.operator = operator
+        self.state = 1
+        self.save()
 
     def set_operator(self, operator):
         # 设置作业进程操作员

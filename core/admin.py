@@ -20,11 +20,8 @@ class ClinicSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('receive_task/<int:proc_id>/', self.receive_task),
-            path('rollback_task/<int:proc_id>/', self.rollback_task),
+            path('manage_task/<int:proc_id>/<str:op_code>/', self.manage_task),
             path('shift_task/<int:proc_id>/<int:operator_id>/', self.shift_task),
-            path('cancel_task/<int:proc_id>/', self.cancel_task),
-            path('suspend_or_resume_task/<int:proc_id>/', self.suspend_or_resume_task),
             path('customer_service/<int:customer_id>/', self.customer_service),
             path('search_customers/', self.search_customers),
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
@@ -40,46 +37,27 @@ class ClinicSite(admin.AdminSite):
         # user = User.objects.get(username=request.user).customer
         return super().index(request, extra_context=extra_context)
 
-    # 接受任务：把任务放入当前用户的待办列表中
-    def receive_task(self, request, **kwargs):
-        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        operation_proc.operator = User.objects.get(username=request.user).customer
-        operation_proc.state = 1
-        operation_proc.save()
-        return redirect('/clinic/')
-
-    # 回退任务：清除任务的操作员，状态改为0
-    def rollback_task(self, request, **kwargs):
-        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        operation_proc.operator = None
-        operation_proc.state = 0  # 进程状态：创建
-        operation_proc.save()
+    # 管理任务状态
+    def manage_task(self, request, **kwargs):
+        operator = User.objects.get(username=request.user).customer
+        proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        op_code = kwargs['op_code']
+        # op_code: RECEIVE, ROLLBACK, SUSPEND_OR_RESUME, CANCEL, SHIFT
+        if op_code == 'RECEIVE':
+            proc.receive_task(operator)
+        elif op_code == 'ROLLBACK':
+            proc.rollback_task()
+        elif op_code == 'SUSPEND_OR_RESUME':
+            proc.suspend_or_resume_task()
+        elif op_code == 'CANCEL':
+            proc.cancel_task(operator)
         return redirect('/clinic/')
 
     # 变更任务操作员
     def shift_task(self, request, **kwargs):
-        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        operation_proc.operator = Customer.objects.get(id = kwargs['operator_id'])
-        operation_proc.state = 1  # 进程状态：就绪
-        operation_proc.save()
-        return redirect('/clinic/')
-
-    # 撤销任务：把任务放入当前用户的待办列表中
-    def cancel_task(self, request, **kwargs):
-        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        operation_proc.operator = User.objects.get(username=request.user).customer
-        operation_proc.state = 5  # 进程状态：撤销
-        operation_proc.save()
-        return redirect('/clinic/')
-
-    # 暂停/恢复任务：任务状态在暂停和恢复之间切换
-    def suspend_or_resume_task(self, request, **kwargs):
-        operation_proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        if operation_proc.state == 3:
-            operation_proc.state = 0 
-        else:
-            operation_proc.state = 3
-        operation_proc.save()
+        proc = OperationProc.objects.get(id = kwargs['proc_id'])
+        operator = Customer.objects.get(id = kwargs['operator_id'])
+        proc.shift_task(operator)
         return redirect('/clinic/')
     
     # 客户服务首页
