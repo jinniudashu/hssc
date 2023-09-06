@@ -65,12 +65,10 @@ def create_form_instance(operation_proc, passing_data, form_data):
     if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
         # 父进程服务类型为诊疗服务（service_type=2）时，直接copy父进程表单数据
         if operation_proc.service.service_type==2 and form_data:
-            print('copy_previous_form_data:', 'form_instance:', form_instance, 'form_data:', form_data)
             copy_previous_form_data(form_instance, form_data)
         # 父进程服务类型为管理调度服务（service_type=1）时，且父进程content_object类型为CustomerSchedule时，
         # 尝试从content_object.reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
         elif operation_proc.service.service_type==1 and operation_proc.content_object.__class__.__name__=='CustomerSchedule':
-            print('reference_operation:', operation_proc.content_object.reference_operation)
             for proc in operation_proc.content_object.reference_operation:
                 form_obj = proc.content_object
                 # form_obj转换为form_data类型
@@ -173,13 +171,11 @@ def create_service_proc(**kwargs):
     new_proc.role.set(role)
 
     if new_proc.service.service_type == 1:  # 创建管理调度服务表单进程
-        print('create_service_package_schedule_instance:', new_proc)
         customerschedulepackage = create_service_package_schedule_instance(new_proc)
         new_proc.object_id = customerschedulepackage.id
         new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
         
     else: # 创建诊疗服务表单进程
-        print('create_form_instance:', 'new_proc:', new_proc, 'kwargs["passing_data"]:', kwargs['passing_data'], 'form_data:', form_data)
         form = create_form_instance(new_proc, kwargs['passing_data'], form_data)
         # 更新OperationProc服务进程的form实例信息
         new_proc.object_id = form.id
@@ -200,7 +196,9 @@ def manage_recommended_service(customer):
 
 
 # 根据dict字段类型做字段值的格式转换
-def trans_form_to_dict(dict_data):
+def trans_form_to_dict(form_data, form_name):
+    from core.hsscbase_class import FieldsType
+
     def _get_set_value(field_type, id_list):
         from django.db.models.query import QuerySet
         # 转换id列表为对应的字典值列表
@@ -226,19 +224,23 @@ def trans_form_to_dict(dict_data):
                 val_iterator = [id_list.name]  # 适配entities.Stuff
         return f'{set(val_iterator)}'
 
-    from core.hsscbase_class import FieldsType
-    for field_name, field_val in dict_data.items():
+    # 预处理--删除键：'id','DELETE', form_name
+    form_data.pop('id', None)
+    form_data.pop('DELETE', None)
+    form_data.pop(form_name, None)
+
+    for field_name, field_val in form_data.items():
         # 根据字段类型做字段值的格式转换
         field_type = eval(f'FieldsType.{field_name}').value
         if field_type == 'Datetime' or field_type == 'Date' or field_type == 'Boolean':  # 日期/布尔类型暂时不处理
-            dict_data[field_name] = f'{field_val}'
+            form_data[field_name] = f'{field_val}'
         elif field_type == 'Numbers' or field_type == 'Decimal':  # 如果字段类型是Numbers或Decimal，直接使用字符串数值
-            dict_data[field_name] = str(field_val)
+            form_data[field_name] = str(field_val)
         elif field_type == 'String':  # 如果字段类型是String，转换为集合字符串
-            dict_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
+            form_data[field_name] = str({field_val}) if field_val and field_val!=[''] else '{}'
         else:  # 如果字段类型是关联字段，转换为集合字符串
-            dict_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
-    return dict_data
+            form_data[field_name] = _get_set_value(field_type, field_val) if field_val and field_val!=['']  else '{}'
+    return form_data
 
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
@@ -247,20 +249,18 @@ def create_customer_service_log(form, form_set, form_instance):
     from core.models import CustomerServiceLog
     import copy
 
+    form_name = form_instance.__class__.__name__.lower()
     form_copy = copy.copy(form)
-    log_data = trans_form_to_dict(form_copy)
+    log_data = trans_form_to_dict(form_copy, form_name)
     if form_set:
         formset_copy = copy.deepcopy(form_set)
         form_set_data = []
-        form_name = form_instance.__class__.__name__.lower()
         # 预处理后的formset data添加到本次服务作业记录中
-        # 预处理逻辑：1）清理空dict；2）删除键：'id','DELETE', form_name
+        # 预处理清理空dict
         for item in formset_copy:
             if item:
-                item.pop('id')
-                item.pop('DELETE')
-                item.pop(form_name)
-                form_set_data.append(trans_form_to_dict(item))
+                dict_data = trans_form_to_dict(item, form_name)
+                form_set_data.append(dict_data)
         log_data[f'{form_name}_list'] = form_set_data
 
     # 从form_instance.pid.service.buessiness_form中获取form_class
