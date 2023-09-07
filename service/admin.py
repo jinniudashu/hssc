@@ -170,6 +170,7 @@ class CustomerSchedulePackageAdmin(HsscFormAdmin):
 
         if instances:
             schedules = get_services_schedule(instances, schedule_package.start_time)
+            
             # 生成CustomerScheduleList记录
             schedule_list = CustomerScheduleList.objects.create(
                 customer = schedule_package.customer,

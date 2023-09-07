@@ -557,6 +557,9 @@ def update_customer_recommended_services_list(customer):
 
 # 把客户服务计划安排转为客户服务日程安排
 def get_services_schedule(instances, customer_start_time):
+    from django.utils import timezone
+    from datetime import timedelta
+
     def _get_schedule_times(instance, idx, first_start_time, previous_end_time, customer_start_time):
         # 返回: 计划时间列表
         def _add_base_interval(time, interval):
@@ -570,14 +573,12 @@ def get_services_schedule(instances, customer_start_time):
         begin_option = instance.default_beginning_time  # 执行时间基准
         base_interval = instance.base_interval  # 基准间隔
 
-        if idx == 0:  # 调整首个服务的开始时间
-            if begin_option in [2,3]:
-                begin_option = 1
+        if idx == 0 and begin_option in [2,3]:  # 修正首个服务的开始时间
+            begin_option = 0
 
         # 计算开始时间
         start_time = None
         # (0, '指定开始时间'), (1, '当前系统时间'), (2, '首个服务开始时间'), (3, '上个服务结束时间'), (4, '客户出生日期')
-        from django.utils import timezone
         if begin_option == 0:
             start_time = customer_start_time
         elif begin_option == 1:
@@ -596,7 +597,6 @@ def get_services_schedule(instances, customer_start_time):
             interval_hours = unit_days * 24 // cycle_frequency
             # 从开始时间开始，每次间隔interval_hours小时，给出时间列表
             schedule_times = []
-            from datetime import timedelta
             for i in range(times):
                 schedule_times.append(start_time + timedelta(hours=interval_hours * i))
 
