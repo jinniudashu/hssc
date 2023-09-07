@@ -1,27 +1,18 @@
-from urllib import response
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
-from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.apps import apps
-
-from enum import Enum
-from requests import Response
+from django.views import View
+from django.core import serializers
 
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 
-from core.models import Service, ServicePackage, Customer, OperationProc, CustomerServiceLog, Medicine
+from core.models import Service, Customer, OperationProc, CustomerServiceLog, Medicine
 from core.hsscbase_class import FieldsType
 from icpc.models import IcpcBase
 from dictionaries.models import *
 from service.models import *
-
-from django.views import View
-from django.core import serializers
 
 class CustomerServiceLogView(View):
     def get(self, request, *args, **kwargs):
@@ -97,8 +88,9 @@ def index_customer(request):
 
 # 获取员工列表
 def get_employees(request):
+    operator = User.objects.get(username=request.user).customer.staff
     shift_employees = []
-    for staff in Staff.objects.filter(role__isnull=False).distinct():
+    for staff in Staff.objects.filter(role__isnull=False).distinct().exclude(id=operator.id):
         allowed_services = [service.id for service in Service.objects.filter(service_type__in=[1,2]) if set(service.role.all()).intersection(set(staff.role.all()))]
         shift_employees.append({'id': staff.customer.id, 'name': staff.name, 'allowed_services': allowed_services})
     return JsonResponse(shift_employees, safe=False)
