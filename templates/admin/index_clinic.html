@@ -117,13 +117,6 @@
     <script>
         const { createApp } = Vue;
 
-        // 获取当前日期（格式化为 "yy.mm.dd"）
-        const today = new Date().toLocaleDateString('zh-CN', {
-            year: '2-digit',
-            month: '2-digit',
-            day: '2-digit'
-        }).replace(/\//g, '.');
-
         const customerServiceApp = {
             data() {
                 return {
