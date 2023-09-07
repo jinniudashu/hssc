@@ -1,3 +1,6 @@
+from django.utils import timezone
+from datetime import timedelta
+
 from service.models import *
 
 # 从前道表单复制数据到后道表单
@@ -312,7 +315,6 @@ def get_customer_profile(customer):
 
 # 为新服务分配操作员，返回操作员(Customer类型)
 def dispatch_operator(customer, service, current_operator, scheduled_time):
-    from django.utils import timezone
 
     # 1. 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
     charge_staff = customer.charge_staff
@@ -382,7 +384,6 @@ def update_unassigned_procs(operator):
     # 3. priority_operator为空或者当前操作员隶属于priority_operator；
     from django.db.models import Q
     from core.models import OperationProc, Service
-    import datetime
 
     # 有权限操作的服务id列表
     allowed_services = [
@@ -403,7 +404,7 @@ def update_unassigned_procs(operator):
     )
 
     # 根据日期过滤出共享服务（今日待处理服务），过期任务，近期任务(本周待处理服务）
-    today = datetime.date.today()
+    today = timezone.now().date()
     layout_items = [
         {'title': '共享服务', 'unassigned_procs': available_operation_proc.filter(scheduled_time__date=today)},
         {'title': '过期服务', 'unassigned_procs': available_operation_proc.filter(scheduled_time__date__lt=today)},
@@ -557,9 +558,6 @@ def update_customer_recommended_services_list(customer):
 
 # 把客户服务计划安排转为客户服务日程安排
 def get_services_schedule(instances, customer_start_time):
-    from django.utils import timezone
-    from datetime import timedelta
-
     def _get_schedule_times(instance, idx, first_start_time, previous_end_time, customer_start_time):
         # 返回: 计划时间列表
         def _add_base_interval(time, interval):
@@ -637,7 +635,6 @@ def get_services_schedule(instances, customer_start_time):
 
 # 创建一条客户服务日程
 def create_customer_schedule(**kwargs):
-    from django.utils import timezone
 
     customer = kwargs.get('customer', None)
     operator = kwargs.get('operator', None)
@@ -685,7 +682,6 @@ def create_customer_schedule(**kwargs):
 
 # 估算服务项目的计划执行时间
 def eval_scheduled_time(_service, _operator):
-    from django.utils import timezone
     from core.models import OperationProc
 
     scheduled_time = timezone.now()
