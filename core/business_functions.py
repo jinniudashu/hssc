@@ -1,6 +1,16 @@
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Q
+from django.db.models.query import QuerySet
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 
+import copy
+import json
+
+from core.models import HsscFormModel, ServicePackageDetail, OperationProc, Service, RecommendedService, CustomerServiceLog, ManagedEntity, Customer
+from core.hsscbase_class import FieldsType
 from service.models import *
 
 # 从前道表单复制数据到后道表单
@@ -13,7 +23,6 @@ def copy_previous_form_data(form, previous_form_data):
 
     if previous_form:
         # 如果有父进程表单，获取父进程表单字段
-        from core.models import HsscFormModel
         # 获取父进程表单和当前进程表单字段的交集
         base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
         base_fields_name.add('id')
@@ -82,7 +91,6 @@ def create_form_instance(operation_proc, passing_data, form_data):
 
 # 创建新的安排服务包进程
 def create_service_package_schedule_instance(proc):
-    from core.models import ServicePackageDetail
     # 1. 创建客户服务包和服务项目安排: CustomerSchedulePackage, CustomerScheduleDraft
     # 获取服务包信息: ServicePackage, ServicePackageDetail
     servicepackage = proc.service.arrange_service_package
@@ -112,7 +120,6 @@ def create_service_package_schedule_instance(proc):
 
 # 创建服务进程实例
 def create_service_proc(**kwargs):
-    import json
     # 检查父进程(诊疗类服务)表单是否携带进程控制信息(检查api_fields字段)，如果有，整合所有表单的进程控制信息(charge_staff, operator, scheduled_time)
     # 提取进程控制信息，更新相应控制项内容。Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
     try:
@@ -146,8 +153,6 @@ def create_service_proc(**kwargs):
         print(f"Unexpected error: {e}")
 
     # 创建新的服务作业进程
-    from core.models import OperationProc
-
     params = {
         'service': kwargs['service'],
         'customer': kwargs['customer'],
@@ -191,7 +196,6 @@ def create_service_proc(**kwargs):
 
 # 维护推荐服务队列, 删除年龄大于2的推荐条目
 def manage_recommended_service(customer):
-    from core.models import RecommendedService
     # 1. 当前客户的所有推荐服务条目的年龄加1
     RecommendedService.objects.filter(customer=customer).update(age=F('age')+1)
     # 2. 然后删除年龄大于3的条目
@@ -200,10 +204,7 @@ def manage_recommended_service(customer):
 
 # 根据dict字段类型做字段值的格式转换
 def trans_form_to_dict(form_data, form_name):
-    from core.hsscbase_class import FieldsType
-
     def _get_set_value(field_type, id_list):
-        from django.db.models.query import QuerySet
         # 转换id列表为对应的字典值列表
         app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
         val_iterator = []
@@ -248,10 +249,6 @@ def trans_form_to_dict(form_data, form_name):
 
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(form, form_set, form_instance):
-    from django.core.exceptions import ObjectDoesNotExist
-    from core.models import CustomerServiceLog
-    import copy
-
     form_name = form_instance.__class__.__name__.lower()
     form_copy = copy.copy(form)
     log_data = trans_form_to_dict(form_copy, form_name)
@@ -295,7 +292,6 @@ def create_customer_service_log(form, form_set, form_instance):
 
 # 获取客户基本信息
 def get_customer_profile(customer):
-    from core.models import ManagedEntity
     from service.forms import Ju_min_ji_ben_xin_xi_diao_cha_HeaderForm
     # 获取客户的基本信息表单
     base_form = ManagedEntity.objects.get(name='customer').base_form
@@ -343,8 +339,6 @@ def send_channel_message(group_name, message):
 
 # 搜索给定关键字的客户基本信息列表
 def search_customer_profile_list(search_text):
-    from core.models import Customer, ManagedEntity
-    import json
     # 获取客户实体对象
     customer_entity = ManagedEntity.objects.get(name='customer')
 
@@ -382,8 +376,6 @@ def update_unassigned_procs(operator):
     # 1. 服务作业进程的状态为0（未分配）；
     # 2. 服务作业进程的操作员为空；
     # 3. priority_operator为空或者当前操作员隶属于priority_operator；
-    from django.db.models import Q
-    from core.models import OperationProc, Service
 
     # 有权限操作的服务id列表
     allowed_services = [
@@ -466,8 +458,6 @@ def update_staff_todo_list(operator):
 
 # 更新客户服务列表
 def update_customer_services_list(customer):
-    from core.models import HsscFormModel
-
     # 判断服务表单是否已经完成，已完成返回空字符串''，否则返回'*'
     def is_service_form_completed(proc):
         content_object = proc.content_object
@@ -537,7 +527,6 @@ def update_customer_services_list(customer):
 
 # 更新客户推荐服务项目列表
 def update_customer_recommended_services_list(customer):
-    from core.models import OperationProc, RecommendedService
     # # 推荐服务
     recommend_services = RecommendedService.objects.filter(customer=customer)
     recommendedServices = [
@@ -682,8 +671,6 @@ def create_customer_schedule(**kwargs):
 
 # 估算服务项目的计划执行时间
 def eval_scheduled_time(_service, _operator):
-    from core.models import OperationProc
-
     scheduled_time = timezone.now()
 
     if _operator:  # 若存在operator，返回operator当天的todo队列的队尾时间，
@@ -724,10 +711,6 @@ def eval_scheduled_time(_service, _operator):
 
     return scheduled_time
 
-
-from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
-from core.models import RecommendedService
 
 @receiver(post_save, sender=RecommendedService)
 def recommended_service_post_save_handler(sender, instance, created, **kwargs):
