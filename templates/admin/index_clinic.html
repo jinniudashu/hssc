@@ -140,7 +140,7 @@
 
             methods: {
                 handleProcOperation(id, hasAssigned, opCode) {
-                    window.location.href = 'manage_task/' + id + '/' + opCode
+                    window.location.href = 'manage_task/?proc_id=' + id + '&op_code=' + opCode
                 },
                 openMenu(id) {
                     this.openMenuTodoId = id;
@@ -153,7 +153,7 @@
                 handleShift(todoId, employeeId) {
                     this.currentEmployeeId = employeeId;                    
                     // this.showConfirmation = true;
-                    window.location.href = 'shift_task/' + todoId + '/' + employeeId;
+                    window.location.href = 'manage_task/?proc_id=' + todoId + '&op_code=SHIFT&operator_id=' + employeeId;
                 },                
                 confirmShift() {
                     console.log('确认换班到员工ID:', this.currentEmployeeId);

@@ -394,6 +394,11 @@ def operand_finished_handler(sender, **kwargs):
         return None
 
     operation_proc = kwargs['pid']
+    # 把服务进程状态修改为已完成
+    if operation_proc:
+        operation_proc.update_state('RTC')
+
+
     # 0. 维护推荐服务队列
     manage_recommended_service(operation_proc.customer)
 

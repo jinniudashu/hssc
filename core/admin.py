@@ -20,8 +20,7 @@ class ClinicSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('manage_task/<int:proc_id>/<str:op_code>/', self.manage_task),
-            path('shift_task/<int:proc_id>/<int:operator_id>/', self.shift_task),
+            path('manage_task/', self.manage_task),
             path('customer_service/<int:customer_id>/', self.customer_service),
             path('search_customers/', self.search_customers),
         	path('search_services/<int:customer_id>/', self.search_services, name='search_services'),
@@ -40,8 +39,10 @@ class ClinicSite(admin.AdminSite):
     # 管理任务状态
     def manage_task(self, request, **kwargs):
         operator = User.objects.get(username=request.user).customer
-        proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        op_code = kwargs['op_code']
+        proc_id = request.GET.get('proc_id', None)
+        proc = OperationProc.objects.get(id = proc_id)
+        op_code = request.GET.get('op_code', None)
+
         # op_code: RECEIVE, ROLLBACK, SUSPEND_OR_RESUME, CANCEL, SHIFT
         if op_code == 'RECEIVE':
             proc.receive_task(operator)
@@ -51,13 +52,10 @@ class ClinicSite(admin.AdminSite):
             proc.suspend_or_resume_task()
         elif op_code == 'CANCEL':
             proc.cancel_task(operator)
-        return redirect('/clinic/')
-
-    # 变更任务操作员
-    def shift_task(self, request, **kwargs):
-        proc = OperationProc.objects.get(id = kwargs['proc_id'])
-        operator = Customer.objects.get(id = kwargs['operator_id'])
-        proc.shift_task(operator)
+        elif op_code == 'SHIFT':
+            operator_id = request.GET.get('operator_id', None)
+            shift_operator = Customer.objects.get(id = operator_id)
+            proc.shift_task(shift_operator)
         return redirect('/clinic/')
     
     # 客户服务首页
