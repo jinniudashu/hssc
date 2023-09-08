@@ -323,6 +323,22 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'推荐服务作业: {obj}'
 
+        def _create_service_schedule(**kwargs):
+            def _get_schedule_times(**kwargs):
+                print('kwargs:', kwargs)
+                schedule_times = []
+                return schedule_times
+            print('生成服务计划：', kwargs['next_service'])
+            schedule_times = _get_schedule_times(**kwargs)
+            # # 构造参数
+            # params = {
+            #     'service': kwargs['next_service'],
+            #     'scheduled_times': schedule_times,
+            # }
+            # # 调用create_customer_schedule函数，创建客户服务日程
+            # customer_schedule = create_customer_schedule(**params)
+
+
         def _send_wechat_template_message(**kwargs):
             '''
             发送公众号模板消息
@@ -365,6 +381,7 @@ def operand_finished_handler(sender, **kwargs):
         class SystemOperandFunc(Enum):
             CREATE_NEXT_SERVICE = _create_next_service  # 生成后续服务
             RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
+            CREATE_SERVICE_SCHEDULE = _create_service_schedule # 生成服务计划
             SEND_WECHART_TEMPLATE_MESSAGE = _send_wechat_template_message  # 发送公众号消息
             SEND_WECOM_MESSAGE = _send_wecom_message  # 发送企业微信消息
 
@@ -459,9 +476,8 @@ def operand_finished_handler(sender, **kwargs):
             'operator': operation_proc.operator,
             'creater': operation_proc.operator,
             'service': current_service.follow_up_service,
-            'scheduled_time': timezone.now() + current_service.follow_up_interval,
+            'scheduled_times': [timezone.now() + current_service.follow_up_interval],
             'pid': operation_proc,
         }
         # 调用create_customer_schedule函数，创建客户服务日程
         customer_schedule = create_customer_schedule(**params)
-        print('质控管理--创建客户服务日程:', customer_schedule)

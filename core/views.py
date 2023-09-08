@@ -86,7 +86,7 @@ def index_customer(request):
 
     return render(request, 'index_customer.html', context)
 
-# 获取员工列表
+# 获取员工列表，过滤掉操作员自己，用于排班
 def get_employees(request):
     operator = User.objects.get(username=request.user).customer.staff
     shift_employees = []

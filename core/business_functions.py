@@ -576,7 +576,6 @@ def get_services_schedule(instances, customer_start_time):
             start_time = _add_base_interval(previous_end_time, base_interval)
         elif begin_option == 4:
             start_time = _add_base_interval(timezone.now(), base_interval)  # TODO: 客户出生日期
-        print(instance.service.label, 'start_time:', start_time, 'previous_end_time:', previous_end_time)
         if start_time:
             # 计算总次数
             times = total_days // unit_days * cycle_frequency
@@ -610,7 +609,7 @@ def get_services_schedule(instances, customer_start_time):
             previous_end_time = schedule_times[-1]  # 获取上个服务结束时间
 
         for time in schedule_times:
-            schedules .append({
+            schedules.append({
                 'scheduled_draft': instance,
                 'service': instance.service,  # 服务项目
                 'scheduled_time': time,
@@ -629,7 +628,7 @@ def create_customer_schedule(**kwargs):
     operator = kwargs.get('operator', None)
     creater = kwargs.get('creater', None)
     service = kwargs.get('service', None)
-    scheduled_time = kwargs.get('scheduled_time', None)
+    scheduled_times = kwargs.get('scheduled_times', None)
     pid = kwargs.get('pid', None)
 
     # 生成CustomerScheduleList记录
@@ -642,25 +641,22 @@ def create_customer_schedule(**kwargs):
         is_ready = False
     )
 
-    # 创建客户服务日程对象
-    customer_schedule = CustomerSchedule(
-        customer_schedule_list = schedule_list,
-        customer=customer,
-        operator=operator,  # 作业人员
-        creater=creater,  # 创建者
-        service=service,
-        scheduled_time=scheduled_time,
-        pid = pid,
-    )
-
-    # 设置其他默认值
-    customer_schedule.created_time = timezone.now()
-    customer_schedule.updated_time = timezone.now()
-    customer_schedule.label = f"{service.label}-{customer.name}"
-    customer_schedule.name = f"{type(customer_schedule).__name__}-{customer_schedule.hssc_id}"
-
-    # 保存客户服务日程对象
-    customer_schedule.save()
+    for scheduled_time in scheduled_times:
+        # 创建客户服务日程对象
+        customer_schedule = CustomerSchedule(
+            customer_schedule_list = schedule_list,
+            customer=customer,
+            operator=operator,  # 作业人员
+            creater=creater,  # 创建者
+            service=service,
+            scheduled_time=scheduled_time,
+            pid = pid,
+            # reference_operation = reference_operation,
+            label = f"{service.label}-{customer.name}",
+        )
+        # 设置其他默认值
+        customer_schedule.name = f"{type(customer_schedule).__name__}-{customer_schedule.hssc_id}"
+        customer_schedule.save()
 
     # 更新CustomerScheduleList的is_ready状态，完成一次创建服务计划安排事务
     schedule_list.is_ready = True
