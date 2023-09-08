@@ -210,8 +210,10 @@ def operand_started_handler(sender, **kwargs):
 
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
+    from django.contrib import messages
     import copy
-    from core.business_functions import trans_form_to_dict
+    import re
+    from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time, trans_form_to_dict
 
     def _intergrate_form_data(form_data, formset_data):
         # 如果有forset，整合form_data和formset_data，扁平化为一个字典列表，否则把form_data转换为一个字典列表
@@ -246,8 +248,7 @@ def operand_finished_handler(sender, **kwargs):
         value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
         try:
             if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
-                print('检查表达式:', event_rule.expression, '字段值:', expression_fields_val_dict)
-                print('eval表达式:', value_expression, '发生业务事件：', event_rule)
+                print('表达式:', event_rule.expression, '发生业务事件：', event_rule, '字段值:', expression_fields_val_dict)
                 return True
         except TypeError:
             return False
@@ -258,7 +259,6 @@ def operand_finished_handler(sender, **kwargs):
             '''
             生成后续服务
             '''
-            from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
             # 准备新的服务作业进程参数
             operation_proc = kwargs['operation_proc']
             service = kwargs['next_service']
@@ -293,7 +293,6 @@ def operand_finished_handler(sender, **kwargs):
             new_proc = create_service_proc(**proc_params)
 
             # 显示提示消息：开单成功
-            from django.contrib import messages
             messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单')
 
             return f'创建服务作业进程: {new_proc}'
@@ -324,30 +323,65 @@ def operand_finished_handler(sender, **kwargs):
 
         def _create_batch_services(**kwargs):
             def _get_schedule_times(form_data):
-                import re
+                def get_next_hour():
+                    # 获取当前时间
+                    now = timezone.now()                    
+                    # 获取当前小时数并加1
+                    next_hour = now.hour + 1
+                    # 如果当前小时数为23时，将小时数设置为0，并增加一天
+                    if next_hour == 24:
+                        next_hour = 0
+                        now += timezone.timedelta(days=1)
+                    # 使用replace()方法设置新的小时数，并重置分钟、秒和微秒为0
+                    nearest_hour = now.replace(hour=next_hour, minute=0, second=0, microsecond=0)
+                    return nearest_hour
                 # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
-                duration = form_data.get('boolfield_yong_yao_liao_cheng', 0)
+                duration = int(form_data.get('boolfield_yong_yao_liao_cheng', 0))
                 # 提取频次数字
                 frequency = int(re.search(r'(\d+)', form_data.get('boolfield_yong_yao_pin_ci', '0')).group(1))
                 # 获取基准时间，当前时区时间30分钟以内的准点时间（半点或整点）
-                
-                for day_x in duration:
-                    for batch in frequency:
-                        pass
-                print('批次参数:', frequency, '次/天', duration, '天')
+                base_time = get_next_hour()
                 schedule_times = []
+                for day_x in range(duration):
+                    for batch in range(frequency):
+                        schedule_times.append(base_time + timedelta(hours=batch*4))
+                    base_time = base_time + timedelta(days=1)
                 return schedule_times
-            print('生成批量服务：', kwargs['next_service'])
+
             # 解析表单内容，生成计划时间列表
             schedule_times = _get_schedule_times(kwargs['form_data'])
-            # # 构造参数
-            # params = {
-            #     'service': kwargs['next_service'],
-            #     'scheduled_times': schedule_times,
-            # }
-            # # 调用create_customer_schedule函数，创建客户服务日程
-            # customer_schedule = create_customer_schedule(**params)
 
+            # 准备新的服务作业进程参数
+            proc = kwargs['operation_proc']
+            service = kwargs['next_service']
+            # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
+            if service.service_type == 1:
+                content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+            else:
+                content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
+
+            params = {}
+            params['service'] = service  # 进程所属服务
+            params['customer'] = proc.customer  # 客户
+            params['creater'] = kwargs['operator']   # 创建者  
+            params['operator'] = None  # 未分配服务作业人员
+            params['priority_operator'] = kwargs['priority_operator'] # 优先操作者
+            params['state'] = 0  # or 根据服务作业权限判断
+            params['parent_proc'] = proc  # 当前进程是被创建进程的父进程
+            params['contract_service_proc'] = proc.contract_service_proc  # 所属合约服务进程
+            params['content_type'] = content_type
+            params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+            params['form_data'] = kwargs['form_data']  # 表单数据
+
+            for schedule_time in schedule_times:
+                # 估算计划执行时间
+                params['scheduled_time'] = schedule_time            
+                # 创建新的服务作业进程
+                new_proc = create_service_proc(**params)
+
+            # 显示提示消息：开单成功
+            messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
+            return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
 
         def _send_wechat_template_message(**kwargs):
             '''
