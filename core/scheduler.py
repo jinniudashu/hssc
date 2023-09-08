@@ -215,28 +215,29 @@ def operand_finished_handler(sender, **kwargs):
     import re
     from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time, trans_form_to_dict
 
-    def _intergrate_form_data(form_data, formset_data):
-        # 如果有forset，整合form_data和formset_data，扁平化为一个字典列表，否则把form_data转换为一个字典列表
+    def _preprocess_data(proc, event_rule, **kwargs):
+        # 1. 整合当前服务进程表单数据的formset部分（如果有）
+        form_data = kwargs['form_data']
+        formset_data = kwargs.get('formset_data', None)
         if formset_data:
             data_list = [{**form_data, **item} for item in formset_data if item]
         else:
             data_list =[form_data]
-        return data_list
 
-    def _get_history_data(proc, event_rule):
+        # 2. 准备环境上下文数据：客户历史服务记录
         history_data = {}
         if event_rule.detection_scope != 'CURRENT_SERVICE':
             '''
             获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
             '''
-            # history_data = get_history_data()
             period = event_rule.detection_scope
             form_class_scope = event_rule.form_class_scope
             # 取客户健康档案记录构造检测数据dict
             logs = CustomerServiceLog.logs.get_customer_service_log(proc.customer, period, form_class_scope)
             for log in logs:
                 history_data = {**history_data, **log.data}
-        return history_data
+
+        return data_list, history_data
 
     def _detect_business_events(event_rule, form_data, expression_fields_set):
         '''
@@ -248,13 +249,16 @@ def operand_finished_handler(sender, **kwargs):
         value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
         try:
             if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
-                print('表达式:', event_rule.expression, '发生业务事件：', event_rule, '字段值:', expression_fields_val_dict)
+                print('表达式:', event_rule.expression, '事件：', event_rule, '字段值:', expression_fields_val_dict)
                 return True
         except TypeError:
             return False
         return False
 
     def _schedule(service_rule, **kwargs):
+        '''
+        调度系统作业
+        '''
         def _create_next_service(**kwargs):
             '''
             生成后续服务
@@ -339,7 +343,7 @@ def operand_finished_handler(sender, **kwargs):
                 duration = int(form_data.get('boolfield_yong_yao_liao_cheng', 0))
                 # 提取频次数字
                 frequency = int(re.search(r'(\d+)', form_data.get('boolfield_yong_yao_pin_ci', '0')).group(1))
-                # 获取基准时间，当前时区时间30分钟以内的准点时间（半点或整点）
+                # 获取基准时间，最近整点时间
                 base_time = get_next_hour()
                 schedule_times = []
                 for day_x in range(duration):
@@ -472,25 +476,20 @@ def operand_finished_handler(sender, **kwargs):
         if event_rule.expression == 'completed':  # 完成事件直接调度系统作业
             result = _schedule(service_rule, **kwargs)
         else:  # 判断是否发生其他业务事件
-            # 1. 整合当前服务进程表单数据的formset部分（如果有）
-            form_data = kwargs['form_data']
-            formset_data = kwargs.get('formset_data', None)
-            scan_list = _intergrate_form_data(form_data, formset_data)
+            # 1. 数据预处理：整合表单数据的formset，准备服务记录环境上下文
+            scan_list, history_data = _preprocess_data(operation_proc, event_rule, **kwargs)
 
-            # 2. 准备环境上下文数据：客户历史服务记录
-            history_data = _get_history_data(operation_proc, event_rule)
-
-            # 3. 获取待检测表达式字段expression_fields集合, 格式预处理：去除空格，转为数组，再转为集合去重
+            # 2. 获取待检测表达式字段expression_fields集合, 格式预处理：去除空格，转为数组，再转为集合去重
             expression_fields_set = set(event_rule.expression_fields.strip().split(','))
             
-            # 4. 按照规则构造检测数据集，并逐一检测是否满足规则
+            # 3. 按照规则构造检测数据集，并逐一检测是否满足规则
             form_name = operation_proc.content_object.__class__.__name__.lower()  # 表单名称
             for scan_item in scan_list:
                 # 1) 转换数据格式，适配field_name_replace的格式要求
                 item_copy = copy.copy(scan_item)
                 scan_dict = trans_form_to_dict(item_copy, form_name)
 
-                # 2) 整合历史表单数据
+                # 2) 整合历史上下文
                 scan_data = {**history_data, **scan_dict}
                 
                 # 3) 根据检测表达式字段集合剪裁生成待检测数据字典
@@ -499,12 +498,12 @@ def operand_finished_handler(sender, **kwargs):
                     _value = scan_data.get(field_name, '')
                     clipped_scan_data[field_name] = _value if bool(_value) else '{}'
 
-                # 4) 逐一检测是否满足规则
+                # 4) 检测是否满足规则
                 if _detect_business_events(event_rule, clipped_scan_data, expression_fields_set):
                     # 调度系统作业
                     kwargs['form_data'] = scan_item  # 传递表单数据
                     result = _schedule(service_rule, **kwargs)
-                    print('_detect_business_events --> ', service_rule.service, '满足规则：', event_rule, '调度结果:', result)
+                    # print('_detect_business_events --> ', service_rule.service, '满足规则：', event_rule, '调度结果:', result)
     
 
     # *************************************************
