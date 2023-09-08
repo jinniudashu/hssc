@@ -623,12 +623,11 @@ def get_services_schedule(instances, customer_start_time):
 
 # 创建一条客户服务日程
 def create_customer_schedule(**kwargs):
-
     customer = kwargs.get('customer', None)
     operator = kwargs.get('operator', None)
     creater = kwargs.get('creater', None)
     service = kwargs.get('service', None)
-    scheduled_times = kwargs.get('scheduled_times', None)
+    scheduled_time = kwargs.get('scheduled_time', None)
     pid = kwargs.get('pid', None)
 
     # 生成CustomerScheduleList记录
@@ -641,22 +640,21 @@ def create_customer_schedule(**kwargs):
         is_ready = False
     )
 
-    for scheduled_time in scheduled_times:
-        # 创建客户服务日程对象
-        customer_schedule = CustomerSchedule(
-            customer_schedule_list = schedule_list,
-            customer=customer,
-            operator=operator,  # 作业人员
-            creater=creater,  # 创建者
-            service=service,
-            scheduled_time=scheduled_time,
-            pid = pid,
-            # reference_operation = reference_operation,
-            label = f"{service.label}-{customer.name}",
-        )
-        # 设置其他默认值
-        customer_schedule.name = f"{type(customer_schedule).__name__}-{customer_schedule.hssc_id}"
-        customer_schedule.save()
+    # 创建客户服务日程对象
+    customer_schedule = CustomerSchedule(
+        customer_schedule_list = schedule_list,
+        customer=customer,
+        operator=operator,  # 作业人员
+        creater=creater,  # 创建者
+        service=service,
+        scheduled_time=scheduled_time,
+        pid = pid,
+        # reference_operation = reference_operation,
+        label = f"{service.label}-{customer.name}",
+    )
+    # 设置其他默认值
+    customer_schedule.name = f"{type(customer_schedule).__name__}-{customer_schedule.hssc_id}"
+    customer_schedule.save()
 
     # 更新CustomerScheduleList的is_ready状态，完成一次创建服务计划安排事务
     schedule_list.is_ready = True

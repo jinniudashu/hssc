@@ -211,7 +211,6 @@ def operand_started_handler(sender, **kwargs):
 @receiver(operand_finished)
 def operand_finished_handler(sender, **kwargs):
     import copy
-    from decimal import Decimal
     from core.business_functions import trans_form_to_dict
 
     def _intergrate_form_data(form_data, formset_data):
@@ -323,13 +322,24 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'推荐服务作业: {obj}'
 
-        def _create_service_schedule(**kwargs):
-            def _get_schedule_times(**kwargs):
-                print('kwargs:', kwargs)
+        def _create_batch_services(**kwargs):
+            def _get_schedule_times(form_data):
+                import re
+                # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
+                duration = form_data.get('boolfield_yong_yao_liao_cheng', 0)
+                # 提取频次数字
+                frequency = int(re.search(r'(\d+)', form_data.get('boolfield_yong_yao_pin_ci', '0')).group(1))
+                # 获取基准时间，当前时区时间30分钟以内的准点时间（半点或整点）
+                
+                for day_x in duration:
+                    for batch in frequency:
+                        pass
+                print('批次参数:', frequency, '次/天', duration, '天')
                 schedule_times = []
                 return schedule_times
-            print('生成服务计划：', kwargs['next_service'])
-            schedule_times = _get_schedule_times(**kwargs)
+            print('生成批量服务：', kwargs['next_service'])
+            # 解析表单内容，生成计划时间列表
+            schedule_times = _get_schedule_times(kwargs['form_data'])
             # # 构造参数
             # params = {
             #     'service': kwargs['next_service'],
@@ -381,7 +391,7 @@ def operand_finished_handler(sender, **kwargs):
         class SystemOperandFunc(Enum):
             CREATE_NEXT_SERVICE = _create_next_service  # 生成后续服务
             RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
-            CREATE_SERVICE_SCHEDULE = _create_service_schedule # 生成服务计划
+            CREATE_BATCH_SERVICES = _create_batch_services # 生成批量服务
             SEND_WECHART_TEMPLATE_MESSAGE = _send_wechat_template_message  # 发送公众号消息
             SEND_WECOM_MESSAGE = _send_wecom_message  # 发送企业微信消息
 
@@ -476,7 +486,7 @@ def operand_finished_handler(sender, **kwargs):
             'operator': operation_proc.operator,
             'creater': operation_proc.operator,
             'service': current_service.follow_up_service,
-            'scheduled_times': [timezone.now() + current_service.follow_up_interval],
+            'scheduled_time': timezone.now() + current_service.follow_up_interval,
             'pid': operation_proc,
         }
         # 调用create_customer_schedule函数，创建客户服务日程

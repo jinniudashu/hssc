@@ -227,7 +227,7 @@ class ClinicSite(admin.AdminSite):
             'operator': current_operator,
             'creater': current_operator,
             'service': Service.objects.get(id=kwargs['service_id']),  # 服务
-            'scheduled_times': [eval_scheduled_time(service, None)],
+            'scheduled_time': eval_scheduled_time(service, None),
             'pid': new_proc,
         }
         customer_schedule = create_customer_schedule(**params)  # 创建服务计划安排

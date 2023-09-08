@@ -55,10 +55,10 @@
             "operand_type": "FORM_OPERAND"
         },
         {
-            "label": "生成服务计划",
-            "name": "create_service_schedule",
+            "label": "生成批次服务",
+            "name": "create_batch_services",
             "hssc_id": "73f20134-4d80-11ee-868d-4889e7cf38c9",
-            "func": "CREATE_SERVICE_SCHEDULE",
+            "func": "CREATE_BATCH_SERVICES",
             "parameters": null,
             "description": null,
             "operand_type": "SCHEDULE_OPERAND"
