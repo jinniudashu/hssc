@@ -18,6 +18,7 @@ class Command(BaseCommand):
 
         initial_models=[
             SystemOperand,
+            SystemOperandParameter,
             CycleUnit,
             Role,
             BuessinessForm,

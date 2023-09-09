@@ -326,7 +326,24 @@ def operand_finished_handler(sender, **kwargs):
             return f'推荐服务作业: {obj}'
 
         def _create_batch_services(**kwargs):
-            def _get_schedule_times(form_data):
+            def _get_schedule_times(form_data, system_operand_parameter):
+                def _get_schedule_params(form_data, system_operand_parameter):
+                    '''
+                    返回计算时间计划的表达式：period_number, frequency
+                    '''
+                    parameter = {system_operand_parameter.parameter1: system_operand_parameter.form_field1, system_operand_parameter.parameter2: system_operand_parameter.form_field2}
+                    field_name_duration = parameter.get('总天数', 'no_duration')
+                    field_name_frequency = parameter.get('频次', 'no_frequency')
+                    # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
+                    duration = int(form_data.get(field_name_duration, 0))
+                    # 提取期间单位
+                    period_nuit = 1
+                    # 提取期间频次
+                    frequency = int(re.search(r'(\d+)', form_data.get(field_name_frequency, '0')).group(1))
+                    period_number = int(duration / period_nuit)
+                    
+                    return period_number, frequency
+                
                 def _get_basetime():
                     '''
                     返回最近整点时间
@@ -343,21 +360,7 @@ def operand_finished_handler(sender, **kwargs):
                     nearest_hour = now.replace(hour=next_hour, minute=0, second=0, microsecond=0)
                     return nearest_hour
                 
-                def _get_schedule_params(form_data):
-                    '''
-                    返回计算时间计划的表达式：duration, frequency, period
-                    '''
-                    # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
-                    duration = int(form_data.get('boolfield_yong_yao_liao_cheng', 0))
-                    # 提取期间单位
-                    period_nuit = 1
-                    # 提取期间频次
-                    frequency = int(re.search(r'(\d+)', form_data.get('boolfield_yong_yao_pin_ci', '0')).group(1))
-                    period_number = int(duration / period_nuit)
-                    
-                    return period_number, frequency
-                
-                period_number, frequency = _get_schedule_params(form_data)  # 获取计划时间计算参数
+                period_number, frequency = _get_schedule_params(form_data, system_operand_parameter)  # 获取计划时间计算参数
 
                 # 获取基准时间
                 base_time = _get_basetime()
@@ -369,7 +372,7 @@ def operand_finished_handler(sender, **kwargs):
                 return schedule_times
 
             # 解析表单内容，生成计划时间列表
-            schedule_times = _get_schedule_times(kwargs['form_data'])
+            schedule_times = _get_schedule_times(kwargs['form_data'], kwargs['system_operand_parameter'])
 
             # 准备新的服务作业进程参数
             proc = kwargs['operation_proc']
@@ -465,6 +468,7 @@ def operand_finished_handler(sender, **kwargs):
             'interval_time': service_rule.interval_time,
             'request': kwargs['request'],
             'form_data': kwargs['form_data'],
+            'system_operand_parameter': service_rule.system_operand_parameter,
         }
         # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
         # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业

@@ -366,7 +366,11 @@ class ServicePackageAdmin(admin.ModelAdmin):
     ordering = ['id']
 
 
-# admin.site.register(SystemOperand)
+admin.site.register(SystemOperand)
+@admin.register(SystemOperandParameter)
+class SystemOperandParameterAdmin(admin.ModelAdmin):
+    list_display = ('label', 'parameter1', 'form_field1', 'parameter2', 'form_field2', 'parameter3', 'form_field3', 'description')
+    ordering = ('id',)
 
 
 @admin.register(EventRule)
@@ -380,8 +384,8 @@ class EventRuleAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceRule)
 class ServiceRuleAdmin(admin.ModelAdmin):
-    list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'priority_operator', 'passing_data', 'complete_feedback', 'is_active']
-    list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'priority_operator', 'passing_data', 'complete_feedback', 'is_active']
+    list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'system_operand_parameter','complete_feedback', 'is_active']
+    list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'system_operand_parameter','complete_feedback', 'is_active']
     list_display_links = ['label', ]
     readonly_fields = ['name', 'hssc_id']
     autocomplete_fields = ['service', 'next_service', 'event_rule']
