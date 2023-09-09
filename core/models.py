@@ -306,6 +306,7 @@ class OperationProcManager(models.Manager):
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
     # 作业进程id: pid
+    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
     operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_operator', verbose_name="操作员")  # 作业员id: uid
     customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_customer', verbose_name="客户")  # 客户id: cid
@@ -348,6 +349,8 @@ class OperationProc(HsscBase):
         self.modified_time = timezone.now()
         if not self.name:
             self.name = self.service.label
+        if not self.label:
+            self.label = self.name
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
