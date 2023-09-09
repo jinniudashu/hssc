@@ -327,7 +327,10 @@ def operand_finished_handler(sender, **kwargs):
 
         def _create_batch_services(**kwargs):
             def _get_schedule_times(form_data):
-                def get_next_hour():
+                def _get_basetime():
+                    '''
+                    返回最近整点时间
+                    '''
                     # 获取当前时间
                     now = timezone.now()                    
                     # 获取当前小时数并加1
@@ -339,14 +342,27 @@ def operand_finished_handler(sender, **kwargs):
                     # 使用replace()方法设置新的小时数，并重置分钟、秒和微秒为0
                     nearest_hour = now.replace(hour=next_hour, minute=0, second=0, microsecond=0)
                     return nearest_hour
-                # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
-                duration = int(form_data.get('boolfield_yong_yao_liao_cheng', 0))
-                # 提取频次数字
-                frequency = int(re.search(r'(\d+)', form_data.get('boolfield_yong_yao_pin_ci', '0')).group(1))
-                # 获取基准时间，最近整点时间
-                base_time = get_next_hour()
+                
+                def _get_schedule_params(form_data):
+                    '''
+                    返回计算时间计划的表达式：duration, frequency, period
+                    '''
+                    # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
+                    duration = int(form_data.get('boolfield_yong_yao_liao_cheng', 0))
+                    # 提取期间单位
+                    period_nuit = 1
+                    # 提取期间频次
+                    frequency = int(re.search(r'(\d+)', form_data.get('boolfield_yong_yao_pin_ci', '0')).group(1))
+                    period_number = int(duration / period_nuit)
+                    
+                    return period_number, frequency
+                
+                period_number, frequency = _get_schedule_params(form_data)  # 获取计划时间计算参数
+
+                # 获取基准时间
+                base_time = _get_basetime()
                 schedule_times = []
-                for day_x in range(duration):
+                for day_x in range(period_number):
                     for batch in range(frequency):
                         schedule_times.append(base_time + timedelta(hours=batch*4))
                     base_time = base_time + timedelta(days=1)
