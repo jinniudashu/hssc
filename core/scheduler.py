@@ -335,7 +335,7 @@ def operand_finished_handler(sender, **kwargs):
                     field_name_duration = parameter.get('总天数', 'no_duration')
                     field_name_frequency = parameter.get('频次', 'no_frequency')
                     # 根据kwargs['form_data']的系统字段提取参数信息，生成计划时间列表
-                    duration = int(form_data.get(field_name_duration, 0))
+                    duration = int(re.search(r'(\d+)', form_data.get(field_name_duration, '0')).group(1))
                     # 提取期间单位
                     period_nuit = 1
                     # 提取期间频次
