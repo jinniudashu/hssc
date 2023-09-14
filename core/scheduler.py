@@ -326,15 +326,22 @@ def operand_finished_handler(sender, **kwargs):
             return f'推荐服务作业: {obj}'
 
         def _create_batch_services(**kwargs):
-            def _get_schedule_times(form_data):
-                def _get_schedule_params(form_data):
+            def _get_schedule_times(form_data, api_fields):
+                def _get_schedule_params(form_data, api_fields):
                     '''
                     返回计算时间计划的表达式：period_number, frequency
                     '''
-                    # 从kwargs['form_data']的系统API字段提取参数信息，生成计划时间列表
-                    duration = int(re.search(r'(\d+)', form_data.get('hssc_duration', '0')).group(1))
-                    # 提取期间频次
-                    frequency = int(re.search(r'(\d+)', form_data.get('hssc_frequency', '0')).group(1))
+                    # 从api_fields字典中获取系统API字段的对应表单字段名称
+                    duration_field = api_fields.get('hssc_duration', None)
+                    frequency_field = api_fields.get('hssc_frequency', None)
+
+                    # 从kwargs['form_data']中的对应字段提取参数信息，生成计划时间列表
+                    if duration_field and frequency_field:
+                        duration = int(re.search(r'(\d+)', form_data.get(duration_field, '0')).group(1))
+                        frequency = int(re.search(r'(\d+)', form_data.get(frequency_field, '0')).group(1))
+                    else:
+                        duration = 0
+                        frequency = 0
                     
                     return duration, frequency
                 
@@ -354,7 +361,7 @@ def operand_finished_handler(sender, **kwargs):
                     nearest_hour = now.replace(hour=next_hour, minute=0, second=0, microsecond=0)
                     return nearest_hour
                 
-                period_number, frequency = _get_schedule_params(form_data)  # 获取计划时间计算参数
+                period_number, frequency = _get_schedule_params(form_data, api_fields)  # 获取计划时间计算参数
 
                 # 获取基准时间
                 base_time = _get_basetime()
@@ -365,17 +372,9 @@ def operand_finished_handler(sender, **kwargs):
                     base_time = base_time + timedelta(days=1)
                 return schedule_times
 
-            # 解析表单内容，生成计划时间列表
-            schedule_times = _get_schedule_times(kwargs['form_data'])
-
             # 准备新的服务作业进程参数
             proc = kwargs['operation_proc']
             service = kwargs['next_service']
-            # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
-            if service.service_type == 1:
-                content_type = ContentType.objects.get(app_label='service', model='customerschedulepackage')
-            else:
-                content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
 
             params = {}
             params['service'] = service  # 进程所属服务
@@ -386,10 +385,18 @@ def operand_finished_handler(sender, **kwargs):
             params['state'] = 0  # or 根据服务作业权限判断
             params['parent_proc'] = proc  # 当前进程是被创建进程的父进程
             params['contract_service_proc'] = proc.contract_service_proc  # 所属合约服务进程
-            params['content_type'] = content_type
             params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             params['form_data'] = kwargs['form_data']  # 表单数据
+            # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
+            if service.service_type == 1:
+                params['content_type'] = ContentType.objects.get(app_label='service', model='customerschedulepackage')
+            else:
+                params['content_type'] = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
 
+            # 获取服务表单的API字段
+            api_fields = proc.service.buessiness_forms.all()[0].api_fields
+            # 解析表单内容，生成计划时间列表
+            schedule_times = _get_schedule_times(kwargs['form_data'], api_fields)
             for schedule_time in schedule_times:
                 # 估算计划执行时间
                 params['scheduled_time'] = schedule_time            
