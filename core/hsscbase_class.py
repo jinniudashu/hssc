@@ -306,6 +306,7 @@ class FieldsType(Enum):
     boolfield_kong_fu_xue_tang_ping_jun_zhi = "Numbers"  # 空腹血糖平均值
     boolfield_can_hou_2_xiao_shi_xue_tang_ping_jun_zhi = "Numbers"  # 餐后2小时血糖平均值
     boolfield_can_hou_2_xiao_shi_xue_tang = "Numbers"  # 餐后2小时血糖
+    boolfield_zu_bie = "Numbers"  # 组别
     boolfield_shou_shu_ri_qi = "Date"  # 手术日期
     boolfield_shu_xue_ri_qi = "Date"  # 输血日期
     boolfield_wai_shang_ri_qi = "Date"  # 外伤日期

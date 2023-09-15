@@ -7,8 +7,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta, datetime
 from django.forms import model_to_dict
-from enum import Enum
 from registration.signals import user_registered, user_activated, user_approved
+from enum import Enum
+from collections import defaultdict
 
 from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, RecommendedService, Message, ChengBaoRenYuanQingDan
 from core.business_functions import field_name_replace, create_customer_schedule, manage_recommended_service
@@ -215,8 +216,18 @@ def operand_finished_handler(sender, **kwargs):
     import re
     from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time, trans_form_to_dict
 
-    def _preprocess_data(proc, event_rule, **kwargs):
-        # 1. 整合当前服务进程表单数据的formset部分（如果有）
+    def _get_history_data(event_rule, customer):
+        # 准备上下文数据：客户历史服务记录
+        history_data = {}
+        if event_rule.detection_scope != 'CURRENT_SERVICE':
+            # 取客户健康档案记录
+            logs = CustomerServiceLog.logs.get_customer_service_log(customer, event_rule.detection_scope, event_rule.form_class_scope)
+            for log in logs:
+                history_data = {**history_data, **log.data}
+        return history_data
+
+    def _preprocess_data(**kwargs):
+        # 整合当前服务进程表单数据的formset部分（如果有）
         form_data = kwargs['form_data']
         formset_data = kwargs.get('formset_data', None)
         if formset_data:
@@ -224,28 +235,22 @@ def operand_finished_handler(sender, **kwargs):
         else:
             data_list =[form_data]
 
-        # 2. 准备环境上下文数据：客户历史服务记录
-        history_data = {}
-        if event_rule.detection_scope != 'CURRENT_SERVICE':
-            '''
-            获取一个时间段健康记录，按时间从早到晚的顺序合并成一个dict
-            '''
-            period = event_rule.detection_scope
-            form_class_scope = event_rule.form_class_scope
-            # 取客户健康档案记录构造检测数据dict
-            logs = CustomerServiceLog.logs.get_customer_service_log(proc.customer, period, form_class_scope)
-            for log in logs:
-                history_data = {**history_data, **log.data}
+        return data_list
 
-        return data_list, history_data
-
-    def _detect_business_events(event_rule, form_data, expression_fields_set):
+    def _detect_business_events(event_rule, scan_data):
         '''
         检查表达式是否满足 return: Boolean
 		'''
-        expression_fields_val_dict = {}  # 构造一个仅存储表达式内的字段及其值的字典
+        # 1. 获取待检测表达式字段expression_fields集合, 格式预处理：去除空格，转为数组，再转为集合去重
+        expression_fields_set = set(event_rule.expression_fields.strip().split(','))
+
+        # 2. 构造一个仅存储表达式内的字段及其值的字典
+        expression_fields_val_dict = {}
         for field_name in expression_fields_set:
-            expression_fields_val_dict[field_name] = form_data.get(field_name, '')
+            _value = scan_data.get(field_name, '')
+            expression_fields_val_dict[field_name] = _value if bool(_value) else '{}'  # 如果字段值为空，用{}代替
+
+        # 3. 把待检测字段值带入表达式，执行表达式，返回结果
         value_expression = field_name_replace(event_rule.expression, expression_fields_val_dict)
         try:
             if eval(value_expression):  # 待检查的字段值带入表达式，并执行返回结果
@@ -276,25 +281,24 @@ def operand_finished_handler(sender, **kwargs):
             else:
                 content_type = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
 
-            proc_params = {}
-            proc_params['service'] = service  # 进程所属服务
-            proc_params['customer'] = customer  # 客户
-            proc_params['creater'] = current_operator   # 创建者  
-            proc_params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断
-            proc_params['priority_operator'] = kwargs['priority_operator'] # 优先操作者
-            proc_params['state'] = 0  # or 根据服务作业权限判断
+            params = {}
+            params['service'] = service  # 进程所属服务
+            params['customer'] = customer  # 客户
+            params['creater'] = current_operator   # 创建者  
+            params['operator'] = service_operator  # 操作者 or 根据 责任人 和 服务作业权限判断
+            params['priority_operator'] = kwargs['priority_operator'] # 优先操作者
+            params['state'] = 0  # or 根据服务作业权限判断
+            params['scheduled_time'] = eval_scheduled_time(service, service_operator)  # 估算计划执行时间
+            params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
+            params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
+            params['content_type'] = content_type
+            params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+            params['form_data'] = kwargs['form_data']  # 表单数据
+            params['group_form_data'] = kwargs.get('group_form_data', None)  # 分组表单数据
 
-            # 估算计划执行时间
-            proc_params['scheduled_time'] = eval_scheduled_time(service, service_operator)
-            
-            proc_params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
-            proc_params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
-            proc_params['content_type'] = content_type
-            proc_params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
-            proc_params['form_data'] = kwargs['form_data']  # 表单数据
 
             # 创建新的服务作业进程
-            new_proc = create_service_proc(**proc_params)
+            new_proc = create_service_proc(**params)
 
             # 显示提示消息：开单成功
             messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单')
@@ -387,6 +391,8 @@ def operand_finished_handler(sender, **kwargs):
             params['contract_service_proc'] = proc.contract_service_proc  # 所属合约服务进程
             params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             params['form_data'] = kwargs['form_data']  # 表单数据
+            params['group_form_data'] = kwargs.get('group_form_data', None)  # 分组表单数据
+
             # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
             if service.service_type == 1:
                 params['content_type'] = ContentType.objects.get(app_label='service', model='customerschedulepackage')
@@ -453,8 +459,8 @@ def operand_finished_handler(sender, **kwargs):
             SEND_WECHART_TEMPLATE_MESSAGE = _send_wechat_template_message  # 发送公众号消息
             SEND_WECOM_MESSAGE = _send_wecom_message  # 发送企业微信消息
 
-        system_operand = service_rule.system_operand
         # 构造作业参数
+        system_operand = service_rule.system_operand
         params = {
             'operation_proc': kwargs['pid'],
             'operator': kwargs['pid'].operator,
@@ -469,6 +475,7 @@ def operand_finished_handler(sender, **kwargs):
             'interval_time': service_rule.interval_time,
             'request': kwargs['request'],
             'form_data': kwargs['form_data'],
+            'group_form_data': kwargs.get('group_form_data', None),
             'apply_to_group': service_rule.apply_to_group,
         }
         # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
@@ -476,59 +483,82 @@ def operand_finished_handler(sender, **kwargs):
         if system_operand.operand_type == "SCHEDULE_OPERAND":
             # 调用OperandFuncMixin中的系统自动作业函数
             result = eval(f'SystemOperandFunc.{system_operand.func}')(**params)
-            return result 
+            return result
         return None
 
     operation_proc = kwargs['pid']
-    # 把服务进程状态修改为已完成
+    service = operation_proc.service
+
+    # 1. 把服务进程状态修改为已完成
     if operation_proc:
         operation_proc.update_state('RTC')
 
-
-    # 0. 维护推荐服务队列
+    # 2. 维护推荐服务队列
     manage_recommended_service(operation_proc.customer)
 
     # *************************************************
-    # 1. 根据服务规则检查业务事件是否发生，执行系统作业
+    # 3. 根据服务规则检查业务事件是否发生，执行系统作业
     # *************************************************
     # 逐一检查service_rule.event_rule.expression是否满足, 只检查规则的触发事件的event_type为SCHEDULE_EVENT的规则
-    for service_rule in ServiceRule.objects.filter(service=operation_proc.service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
+    for service_rule in ServiceRule.objects.filter(service=service, is_active=True, event_rule__event_type = "SCHEDULE_EVENT"):
         event_rule = service_rule.event_rule
+        history_data = _get_history_data(event_rule, operation_proc.customer)  # 准备环境上下文数据：客户历史服务记录
+        form_name = operation_proc.content_object.__class__.__name__.lower()  # 表单名称
+
         if event_rule.expression == 'completed':  # 完成事件直接调度系统作业
             result = _schedule(service_rule, **kwargs)
-        else:  # 判断是否发生其他业务事件
-            # 1. 数据预处理：整合表单数据的formset，准备服务记录环境上下文
-            scan_list, history_data = _preprocess_data(operation_proc, event_rule, **kwargs)
+        # 判断是否发生其他业务事件
+        else:
+            # 数据预处理：整合表单数据的formset
+            form_data_list = _preprocess_data(**kwargs)  
 
-            # 2. 获取待检测表达式字段expression_fields集合, 格式预处理：去除空格，转为数组，再转为集合去重
-            expression_fields_set = set(event_rule.expression_fields.strip().split(','))
-            
-            # 3. 按照规则构造检测数据集，并逐一检测是否满足规则
-            form_name = operation_proc.content_object.__class__.__name__.lower()  # 表单名称
-            for scan_item in scan_list:
-                # 1) 转换数据格式，适配field_name_replace的格式要求
-                item_copy = copy.copy(scan_item)
-                scan_dict = trans_form_to_dict(item_copy, form_name)
+            if service_rule.apply_to_group:  # 按组检查调度
+                # 查找当前form中对应系统API字段“hssc_group_no”的表单分组字段名
+                api_fields = service.buessiness_forms.all()[0].api_fields
+                group_field = api_fields.get('hssc_group_no', None)
+                if group_field:
+                    # 1. 按分组字段的值对表单数据进行分组，构造检测数据集
+                    grouped_form_list_dict = defaultdict(list)
+                    for item in form_data_list:
+                        group_val = item[group_field]
+                        # 创建一个不包含分组字段的新字典
+                        item_without_group_field = {key: value for key, value in item.items() if key != 'z'}
+                        grouped_form_list_dict[group_val].append(item_without_group_field)
+                    grouped_form_list = [{'hssc_group_no': key, 'form_list': value} for key, value in grouped_form_list_dict.items()]
 
-                # 2) 整合历史上下文
-                scan_data = {**history_data, **scan_dict}
-                
-                # 3) 根据检测表达式字段集合剪裁生成待检测数据字典
-                clipped_scan_data = {}
-                for field_name in expression_fields_set:
-                    _value = scan_data.get(field_name, '')
-                    clipped_scan_data[field_name] = _value if bool(_value) else '{}'
+                    # 2. 分组检测是否满足规则
+                    for group_item in grouped_form_list:
+                        for form_item in group_item['form_list']:
+                            # 1) 生成扫描数据， 转换数据格式，整合历史上下文
+                            item_copy = copy.copy(form_item)
+                            scan_dict = trans_form_to_dict(item_copy, form_name)  # 转换数据格式以适配field_name_replace的格式要求
+                            scan_data = {**history_data, **scan_dict}
+                            
+                            # 2) 检测是否满足规则
+                            if _detect_business_events(event_rule, scan_data):
+                                kwargs['group_form_data'] = group_item['form_list']  # 传递分组表单数据
+                                # 调度系统作业
+                                result = _schedule(service_rule, **kwargs)
+                                break # 按组检查调度，只要有一条记录满足规则，就跳出当前分组循环，检查下一个分组
 
-                # 4) 检测是否满足规则
-                if _detect_business_events(event_rule, clipped_scan_data, expression_fields_set):
-                    # 调度系统作业
-                    kwargs['form_data'] = scan_item  # 传递表单数据
-                    result = _schedule(service_rule, **kwargs)
-                    # print('_detect_business_events --> ', service_rule.service, '满足规则：', event_rule, '调度结果:', result)
+            else:  # 按记录检查调度
+                # 2. 构造检测数据集，并逐一检测是否满足规则
+                for form_item in form_data_list:
+                    # 1) 生成扫描数据， 转换数据格式，整合历史上下文
+                    item_copy = copy.copy(form_item)
+                    scan_dict = trans_form_to_dict(item_copy, form_name)  # 转换数据格式以适配field_name_replace的格式要求
+                    scan_data = {**history_data, **scan_dict}
+                    
+                    # 2) 检测是否满足规则
+                    if _detect_business_events(event_rule, scan_data):
+                        # 调度系统作业
+                        kwargs['form_data'] = form_item  # 传递表单数据
+                        result = _schedule(service_rule, **kwargs)
+                        # print('_detect_business_events --> ', service_rule.service, '满足规则：', event_rule, '调度结果:', result)
     
 
     # *************************************************
-    # 2.执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
+    # 4. 执行质控管理逻辑，检查是否需要随访，如需要则按照指定间隔时间添加客户服务日程
     # *************************************************
     # (1) 检查已完成的服务进程的follow_up_required, follow_up_interval, follow_up_service 这三个字段是否为True
     # (2) 如果为True，构造参数，调用create_customer_schedule函数，创建客户服务日程
