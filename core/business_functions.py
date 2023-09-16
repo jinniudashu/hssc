@@ -198,7 +198,7 @@ def manage_recommended_service(customer):
 
 
 # 根据dict字段类型做字段值的格式转换
-def trans_form_to_dict(form_data, form_name):
+def trans_form_to_dict(form_item, form_name):
     def _get_set_value(field_type, id_list):
         # 转换id列表为对应的字典值列表
         app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
@@ -224,6 +224,7 @@ def trans_form_to_dict(form_data, form_name):
         return f'{set(val_iterator)}'
 
     # 预处理--删除键：'id','DELETE', form_name
+    form_data = copy.copy(form_item)
     form_data.pop('id', None)
     form_data.pop('DELETE', None)
     form_data.pop(form_name, None)
@@ -245,8 +246,7 @@ def trans_form_to_dict(form_data, form_name):
 # 创建客户服务日志：把服务表单内容写入客户服务日志
 def create_customer_service_log(form, form_set, form_instance):
     form_name = form_instance.__class__.__name__.lower()
-    form_copy = copy.copy(form)
-    log_data = trans_form_to_dict(form_copy, form_name)
+    log_data = trans_form_to_dict(form, form_name)
     if form_set:
         formset_copy = copy.deepcopy(form_set)
         form_set_data = []

@@ -530,8 +530,7 @@ def operand_finished_handler(sender, **kwargs):
                     for group_item in grouped_form_list:
                         for form_item in group_item['form_list']:
                             # 1) 生成扫描数据， 转换数据格式，整合历史上下文
-                            item_copy = copy.copy(form_item)
-                            scan_dict = trans_form_to_dict(item_copy, form_name)  # 转换数据格式以适配field_name_replace的格式要求
+                            scan_dict = trans_form_to_dict(form_item, form_name)  # 转换数据格式以适配field_name_replace的格式要求
                             scan_data = {**history_data, **scan_dict}
                             
                             # 2) 检测是否满足规则
@@ -545,8 +544,7 @@ def operand_finished_handler(sender, **kwargs):
                 # 2. 构造检测数据集，并逐一检测是否满足规则
                 for form_item in form_data_list:
                     # 1) 生成扫描数据， 转换数据格式，整合历史上下文
-                    item_copy = copy.copy(form_item)
-                    scan_dict = trans_form_to_dict(item_copy, form_name)  # 转换数据格式以适配field_name_replace的格式要求
+                    scan_dict = trans_form_to_dict(form_item, form_name)  # 转换数据格式以适配field_name_replace的格式要求
                     scan_data = {**history_data, **scan_dict}
                     
                     # 2) 检测是否满足规则
