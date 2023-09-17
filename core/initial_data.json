@@ -807,17 +807,21 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_frequency": "boolfield_yong_yao_pin_ci",
+                "hssc_duration": "boolfield_yong_yao_liao_cheng"
+            },
             "components": [
+                "e98d52f2-c9ef-11ec-b452-168d53e8234e",
+                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
+                "abe7baaa-c9ef-11ec-b369-168d53e8234e"
+            ],
+            "list_components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
                 "fbdc40fe-c115-11ec-b731-2617a93150cd",
                 "2b80da60-c5ce-11ec-b819-725badf7393d",
-                "e98d52f2-c9ef-11ec-b452-168d53e8234e",
-                "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
-                "abe7baaa-c9ef-11ec-b369-168d53e8234e",
                 "dec637d0-9aa1-11ec-bde1-8a6e55faf877"
-            ],
-            "list_components": []
+            ]
         },
         {
             "label": "上门服务",

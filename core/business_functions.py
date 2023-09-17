@@ -14,56 +14,123 @@ from core.hsscbase_class import FieldsType
 from service.models import *
 
 # 从前道表单复制数据到后道表单
-def copy_previous_form_data(form, previous_form_data):
-    # 获取父进程表单
-    if form.pid.parent_proc:
-        previous_form = form.pid.parent_proc.content_object
+def copy_previous_form_data(form, previous_form_data, apply_to_group):
+    def _copy_dict_data(form, previous_form_data):
+        # 获取父进程表单
+        if form.pid.parent_proc:
+            previous_form = form.pid.parent_proc.content_object
+        else:
+            previous_form = None
+
+        if previous_form:
+            # 获取表单可拷贝的字段名
+            base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
+            base_fields_name.add('id')
+            previous_form_fields_name = set(previous_form_data.keys()) - base_fields_name
+            form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
+            copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
+            # 获取表单可拷贝的多对多字段名
+            previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
+            form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+            copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+        # else:
+        #     # 否则是外部进程表单，获取表单字段
+        #     copy_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+        #     copy_fields_name = {key for key in previous_form_data.keys()} - copy_fields_name_m2m
+
+        # 向当前表单写入可拷贝的字段内容
+        for field_name in copy_fields_name:
+            field_value = previous_form_data.get(field_name)
+            if field_value:
+                exec(f'form.{field_name} = field_value')
+        form.save()
+
+        # 向当前表单写入可拷贝的多对多字段内容
+        for field_name in copy_fields_name_m2m:
+            m2m_objs = previous_form_data.get(field_name)
+            if m2m_objs:
+                if m2m_objs.__class__.__name__ == 'QuerySet':
+                    exec(f'form.{field_name}.add(*m2m_objs)')
+
+    def _copy_list_data(form, previous_form_data):
+        # 获取父进程表单
+        if form.pid.parent_proc:
+            previous_form = form.pid.parent_proc.content_object
+        else:
+            previous_form = None
+        if previous_form:
+            form_name = form.__class__.__name__
+            list_model_name = form_name + '_list'
+            field_form_name = form_name.lower()
+            create_string = f'{list_model_name}.objects.create({field_form_name}=form)'
+            print(create_string)
+
+            # 向主表单写入数据
+            # 获取主表单可拷贝的字段名
+            previous_form_fields_name = set(previous_form_data[0].keys())
+            form_fields_name = {field.name for field in form._meta.fields}
+            copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
+
+            # 获取主表单可拷贝的多对多字段名
+            previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
+            form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+            copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+
+            # 向主表单写入可拷贝字段内容
+            for field_name in copy_fields_name:
+                field_value = previous_form_data[0].get(field_name)
+                if field_value:
+                    exec(f'form.{field_name} = field_value')
+            form.save()
+
+            # 向主表单写入可拷贝多对多字段内容
+            for field_name in copy_fields_name_m2m:
+                m2m_objs = previous_form_data[0].get(field_name)
+                print('copy_fields_name_m2m', copy_fields_name_m2m, 'field_name', field_name, 'm2m_objs', m2m_objs)
+                if m2m_objs:
+                    if m2m_objs.__class__.__name__ == 'QuerySet':
+                        exec(f'form.{field_name}.add(*m2m_objs)')
+
+            # 向明细表单写入数据
+            for item in previous_form_data:
+                # 创建明细表单明细项
+                form_instance = eval(create_string)
+
+                # 获取明细表单可拷贝的字段名
+                previous_form_fields_name = set(item.keys())
+                form_fields_name = {field.name for field in form_instance._meta.fields}
+                copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
+                # 获取明细表单可拷贝的多对多字段名
+                previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
+                form_fields_name_m2m = {field.name for field in form_instance._meta.many_to_many}
+                copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+
+                # 向明细表单写入可拷贝的字段内容
+                for field_name in copy_fields_name:
+                    field_value = item.get(field_name)
+                    if field_value:
+                        exec(f'form_instance.{field_name} = field_value')
+                form_instance.save()
+
+                # 向明细表单写入可拷贝的多对多字段内容
+                for field_name in copy_fields_name_m2m:
+                    m2m_objs = item.get(field_name)
+                    if m2m_objs:
+                        if m2m_objs.__class__.__name__ == 'QuerySet':
+                            exec(f'form_instance.{field_name}.add(*m2m_objs)')
+
+
+    # 根据“分组”标识判断如何copy previous_form_data
+    if apply_to_group:
+        _copy_list_data(form, previous_form_data)
     else:
-        previous_form = None
-
-    if previous_form:
-        # 如果有父进程表单，获取父进程表单字段
-        # 获取父进程表单和当前进程表单字段的交集
-        base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
-        base_fields_name.add('id')
-        # previous_form_fields_name = {field.name for field in previous_form._meta.fields} - base_fields_name
-        previous_form_fields_name = set(previous_form_data.keys()) - base_fields_name
-        form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
-        copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
-        # 获取多对多字段名
-        # formset暂不支持多对多字段，待补充
-        previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
-        form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
-        copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
-    else:
-        # 否则是外部进程表单，获取表单字段
-        copy_fields_name_m2m = {field.name for field in form._meta.many_to_many}
-        copy_fields_name = {key for key in previous_form_data.keys()} - copy_fields_name_m2m
-
-    # 向当前进程表单写入交集字段内容
-    for field_name in copy_fields_name:
-        field_value = previous_form_data.get(field_name)
-        if field_value:
-            exec(f'form.{field_name} = field_value')
-    form.save()
-
-    # 向当前进程表单写入交集多对多字段内容
-    for field_name in copy_fields_name_m2m:
-        m2m_objs = previous_form_data.get(field_name)
-        print('copy_fields_name_m2m', copy_fields_name_m2m, 'field_name', field_name, 'm2m_objs', m2m_objs)
-        if m2m_objs:
-            if m2m_objs.__class__.__name__ == 'QuerySet':
-                exec(f'form.{field_name}.add(*m2m_objs)')
-            else:
-                # 如果m2m_objs不是QuerySet和List类型，转换为列表类型，以适配外部表单copy_form_data
-                if not isinstance(m2m_objs, list):
-                    m2m_objs = [m2m_objs]
+        _copy_dict_data(form, previous_form_data)
 
     return form
 
 
 # 创建服务表单实例
-def create_form_instance(operation_proc, passing_data, form_data):
+def create_form_instance(operation_proc, passing_data, form_data, apply_to_group):
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
@@ -77,7 +144,7 @@ def create_form_instance(operation_proc, passing_data, form_data):
     if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
         # 父进程服务类型为诊疗服务（service_type=2）时，直接copy父进程表单数据
         if operation_proc.service.service_type==2 and form_data:
-            copy_previous_form_data(form_instance, form_data)
+            copy_previous_form_data(form_instance, form_data, apply_to_group)
         # 父进程服务类型为管理调度服务（service_type=1）时，且父进程content_object类型为CustomerSchedule时，
         # 尝试从content_object.reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
         elif operation_proc.service.service_type==1 and operation_proc.content_object.__class__.__name__=='CustomerSchedule':
@@ -85,7 +152,7 @@ def create_form_instance(operation_proc, passing_data, form_data):
                 form_obj = proc.content_object
                 # form_obj转换为form_data类型
                 form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
-                copy_previous_form_data(form_instance, form_data)
+                copy_previous_form_data(form_instance, form_data, apply_to_group)
     return form_instance
 
 
@@ -124,19 +191,23 @@ def create_service_proc(**kwargs):
     # 提取进程控制信息，更新相应控制项内容。Api_field = [('charge_staff', '责任人'), ('operator', '作业人员'), ('scheduled_time', '计划执行时间')]
     try:
         form_data = kwargs['form_data']
+        if type(kwargs['form_data']) == dict:
+            form_item = form_data
+        else:
+            form_item = form_data[0]
         if kwargs['parent_proc'] and kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data'] in [1, 2]:
             # 获取父进程表单的api_fields中的进程控制信息：作业人员，计划执行时间，责任人
             api_fields = kwargs['parent_proc'].service.buessiness_forms.all()[0].api_fields
             for system_field, form_field in api_fields.items():
-                field_value = form_data.get(form_field, None)
+                field_value = form_item.get(form_field, None)
                 if field_value and system_field == 'hssc_operator':  # operator: 作业人员                    
-                    operator = form_data.get(form_field).customer
+                    operator = form_item.get(form_field).customer
                     kwargs['operator'] = operator
                 elif field_value and system_field == 'hssc_scheduled_time':  # scheduled_time: 计划执行时间
-                    scheduled_time = form_data.get(form_field)
+                    scheduled_time = form_item.get(form_field)
                     kwargs['scheduled_time'] = scheduled_time
                 elif field_value and system_field=='hssc_charge_staff':  # charge_staff: 责任人
-                    kwargs['customer'].charge_staff = form_data.get(form_field)
+                    kwargs['customer'].charge_staff = form_item.get(form_field)
                     kwargs['customer'].save()                        
                 else:
                     pass
@@ -179,7 +250,7 @@ def create_service_proc(**kwargs):
         new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
         
     else: # 创建诊疗服务表单进程
-        form = create_form_instance(new_proc, kwargs['passing_data'], form_data)
+        form = create_form_instance(new_proc, kwargs['passing_data'], form_data, kwargs['apply_to_group'])
         # 更新OperationProc服务进程的form实例信息
         new_proc.object_id = form.id
         new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'

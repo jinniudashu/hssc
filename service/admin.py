@@ -234,11 +234,16 @@ class Yi_xing_tang_niao_bing_zhen_duanAdmin(HsscFormAdmin):
 admin.site.register(Yi_xing_tang_niao_bing_zhen_duan, Yi_xing_tang_niao_bing_zhen_duanAdmin)
 clinic_site.register(Yi_xing_tang_niao_bing_zhen_duan, Yi_xing_tang_niao_bing_zhen_duanAdmin)
 
+class Zhu_she_fu_wu_listInline(admin.TabularInline):
+    model = Zhu_she_fu_wu_list
+    extra = 1
+    autocomplete_fields = ["boolfield_yao_pin_ming", ]
+            
 class Zhu_she_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("输液注射单", {"fields": ("boolfield_yong_yao_pin_ci", "boolfield_gui_ge", "boolfield_chang_yong_ji_liang", "boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", "boolfield_yao_pin_ming", )}), ]
-    autocomplete_fields = ["boolfield_yao_pin_ming", ]
+        ("输液注射单", {"fields": ("boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", )}), ]
+    inlines = [Zhu_she_fu_wu_listInline, ]
 
 admin.site.register(Zhu_she_fu_wu, Zhu_she_fu_wuAdmin)
 clinic_site.register(Zhu_she_fu_wu, Zhu_she_fu_wuAdmin)
@@ -383,12 +388,18 @@ class Ju_min_ji_ben_xin_xi_diao_chaAdmin(HsscFormAdmin):
 admin.site.register(Ju_min_ji_ben_xin_xi_diao_cha, Ju_min_ji_ben_xin_xi_diao_chaAdmin)
 clinic_site.register(Ju_min_ji_ben_xin_xi_diao_cha, Ju_min_ji_ben_xin_xi_diao_chaAdmin)
 
+class Shu_ye_zhu_she_listInline(admin.TabularInline):
+    model = Shu_ye_zhu_she_list
+    extra = 1
+    autocomplete_fields = ["boolfield_yao_pin_ming", ]
+            
 class Shu_ye_zhu_sheAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("输液注射单", {"fields": ("boolfield_yong_yao_pin_ci", "boolfield_gui_ge", "boolfield_chang_yong_ji_liang", "boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", "boolfield_yao_pin_ming", )}), 
+        ("输液注射单", {"fields": ("boolfield_zhi_xing_qian_ming", "boolfield_yong_yao_liao_cheng", "boolfield_zhu_she_ri_qi", )}), 
         ("上门服务", {"fields": ("boolfield_shang_men_fu_wu_xiang_mu", "boolfield_jia_ting_di_zhi", "boolfield_shang_men_fu_wu_shi_jian", )}), ]
-    autocomplete_fields = ["boolfield_yao_pin_ming", "boolfield_shang_men_fu_wu_xiang_mu", ]
+    autocomplete_fields = ["boolfield_shang_men_fu_wu_xiang_mu", ]
+    inlines = [Shu_ye_zhu_she_listInline, ]
 
 admin.site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)
 clinic_site.register(Shu_ye_zhu_she, Shu_ye_zhu_sheAdmin)

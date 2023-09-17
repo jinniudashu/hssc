@@ -294,8 +294,7 @@ def operand_finished_handler(sender, **kwargs):
             params['content_type'] = content_type
             params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             params['form_data'] = kwargs['form_data']  # 表单数据
-            params['group_form_data'] = kwargs.get('group_form_data', None)  # 分组表单数据
-
+            params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
 
             # 创建新的服务作业进程
             new_proc = create_service_proc(**params)
@@ -305,33 +304,9 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'创建服务作业进程: {new_proc}'
         
-        def _recommend_next_service(**kwargs): 
-            '''
-            推荐后续服务
-            '''
-            # 准备新的服务作业进程参数
-            operation_proc = kwargs['operation_proc']
-
-            # 删除旧的相同推荐服务条目
-            RecommendedService.objects.filter(service=kwargs['next_service'], customer=operation_proc.customer).delete()
-            
-            # 创建新的推荐服务条目
-            obj = RecommendedService(
-                service=kwargs['next_service'],  # 推荐的服务
-                customer=operation_proc.customer,  # 客户
-                creater=kwargs['operator'],  # 创建者
-                pid=operation_proc,  # 当前进程是被推荐服务的父进程
-                age=0,  # 年龄
-                cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-                passing_data=kwargs['passing_data']
-            )
-            obj.save()
-
-            return f'推荐服务作业: {obj}'
-
         def _create_batch_services(**kwargs):
             def _get_schedule_times(form_data, api_fields):
-                def _get_schedule_params(form_data, api_fields):
+                def _get_schedule_params(form_item, api_fields):
                     '''
                     返回计算时间计划的表达式：period_number, frequency
                     '''
@@ -339,10 +314,10 @@ def operand_finished_handler(sender, **kwargs):
                     duration_field = api_fields.get('hssc_duration', None)
                     frequency_field = api_fields.get('hssc_frequency', None)
 
-                    # 从kwargs['form_data']中的对应字段提取参数信息，生成计划时间列表
+                    # 从对应字段提取参数信息，生成计划时间列表
                     if duration_field and frequency_field:
-                        duration = int(re.search(r'(\d+)', form_data.get(duration_field, '0')).group(1))
-                        frequency = int(re.search(r'(\d+)', form_data.get(frequency_field, '0')).group(1))
+                        duration = int(re.search(r'(\d+)', form_item.get(duration_field, '0')).group(1))
+                        frequency = int(re.search(r'(\d+)', form_item.get(frequency_field, '0')).group(1))
                     else:
                         duration = 0
                         frequency = 0
@@ -365,7 +340,12 @@ def operand_finished_handler(sender, **kwargs):
                     nearest_hour = now.replace(hour=next_hour, minute=0, second=0, microsecond=0)
                     return nearest_hour
                 
-                period_number, frequency = _get_schedule_params(form_data, api_fields)  # 获取计划时间计算参数
+                if type(form_data) == dict:
+                    form_item = form_data
+                else:
+                    form_item = form_data[0]
+
+                period_number, frequency = _get_schedule_params(form_item, api_fields)  # 获取计划时间计算参数
 
                 # 获取基准时间
                 base_time = _get_basetime()
@@ -391,7 +371,7 @@ def operand_finished_handler(sender, **kwargs):
             params['contract_service_proc'] = proc.contract_service_proc  # 所属合约服务进程
             params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             params['form_data'] = kwargs['form_data']  # 表单数据
-            params['group_form_data'] = kwargs.get('group_form_data', None)  # 分组表单数据
+            params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
 
             # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
             if service.service_type == 1:
@@ -407,11 +387,36 @@ def operand_finished_handler(sender, **kwargs):
                 # 估算计划执行时间
                 params['scheduled_time'] = schedule_time            
                 # 创建新的服务作业进程
+                print('创建服务作业进程: apply_to_group', params['apply_to_group'])
                 new_proc = create_service_proc(**params)
 
             # 显示提示消息：开单成功
             messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
             return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
+
+        def _recommend_next_service(**kwargs): 
+            '''
+            推荐后续服务
+            '''
+            # 准备新的服务作业进程参数
+            operation_proc = kwargs['operation_proc']
+
+            # 删除旧的相同推荐服务条目
+            RecommendedService.objects.filter(service=kwargs['next_service'], customer=operation_proc.customer).delete()
+            
+            # 创建新的推荐服务条目
+            obj = RecommendedService(
+                service=kwargs['next_service'],  # 推荐的服务
+                customer=operation_proc.customer,  # 客户
+                creater=kwargs['operator'],  # 创建者
+                pid=operation_proc,  # 当前进程是被推荐服务的父进程
+                age=0,  # 年龄
+                cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
+                passing_data=kwargs['passing_data']
+            )
+            obj.save()
+
+            return f'推荐服务作业: {obj}'
 
         def _send_wechat_template_message(**kwargs):
             '''
@@ -475,7 +480,6 @@ def operand_finished_handler(sender, **kwargs):
             'interval_time': service_rule.interval_time,
             'request': kwargs['request'],
             'form_data': kwargs['form_data'],
-            'group_form_data': kwargs.get('group_form_data', None),
             'apply_to_group': service_rule.apply_to_group,
         }
         # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
@@ -535,7 +539,7 @@ def operand_finished_handler(sender, **kwargs):
                             
                             # 2) 检测是否满足规则
                             if _detect_business_events(event_rule, scan_data):
-                                kwargs['group_form_data'] = group_item['form_list']  # 传递分组表单数据
+                                kwargs['form_data'] = group_item['form_list']  # 传递表单数据
                                 # 调度系统作业
                                 result = _schedule(service_rule, **kwargs)
                                 break # 按组检查调度，只要有一条记录满足规则，就跳出当前分组循环，检查下一个分组
