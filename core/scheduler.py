@@ -387,7 +387,6 @@ def operand_finished_handler(sender, **kwargs):
                 # 估算计划执行时间
                 params['scheduled_time'] = schedule_time            
                 # 创建新的服务作业进程
-                print('创建服务作业进程: apply_to_group', params['apply_to_group'])
                 new_proc = create_service_proc(**params)
 
             # 显示提示消息：开单成功

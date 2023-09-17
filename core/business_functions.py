@@ -15,12 +15,29 @@ from service.models import *
 
 # 从前道表单复制数据到后道表单
 def copy_previous_form_data(form, previous_form_data, apply_to_group):
+    def _get_parent_form(form):
+        """Get the parent form of the given form."""
+        if form.pid.parent_proc:
+            return form.pid.parent_proc.content_object
+        return None    
+
+    def _copy_fields_data(new_form, previous_form_data, copy_fields_name, copy_fields_name_m2m):
+        # 向当前表单写入可拷贝的字段内容
+        for field_name in copy_fields_name:
+            field_value = previous_form_data.get(field_name)
+            if field_value:
+                setattr(new_form, field_name, field_value)
+        new_form.save()
+
+        # 向当前表单写入可拷贝的多对多字段内容
+        for field_name in copy_fields_name_m2m:
+            m2m_objs = previous_form_data.get(field_name)
+            if m2m_objs and isinstance(m2m_objs, QuerySet):
+                getattr(new_form, field_name).add(*m2m_objs)
+
     def _copy_dict_data(form, previous_form_data):
         # 获取父进程表单
-        if form.pid.parent_proc:
-            previous_form = form.pid.parent_proc.content_object
-        else:
-            previous_form = None
+        previous_form = _get_parent_form(form)
 
         if previous_form:
             # 获取表单可拷贝的字段名
@@ -33,42 +50,25 @@ def copy_previous_form_data(form, previous_form_data, apply_to_group):
             previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
             form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
             copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
-        # else:
-        #     # 否则是外部进程表单，获取表单字段
-        #     copy_fields_name_m2m = {field.name for field in form._meta.many_to_many}
-        #     copy_fields_name = {key for key in previous_form_data.keys()} - copy_fields_name_m2m
 
-        # 向当前表单写入可拷贝的字段内容
-        for field_name in copy_fields_name:
-            field_value = previous_form_data.get(field_name)
-            if field_value:
-                exec(f'form.{field_name} = field_value')
-        form.save()
-
-        # 向当前表单写入可拷贝的多对多字段内容
-        for field_name in copy_fields_name_m2m:
-            m2m_objs = previous_form_data.get(field_name)
-            if m2m_objs:
-                if m2m_objs.__class__.__name__ == 'QuerySet':
-                    exec(f'form.{field_name}.add(*m2m_objs)')
+            _copy_fields_data(form, previous_form_data, copy_fields_name, copy_fields_name_m2m)
 
     def _copy_list_data(form, previous_form_data):
         # 获取父进程表单
-        if form.pid.parent_proc:
-            previous_form = form.pid.parent_proc.content_object
-        else:
-            previous_form = None
+        previous_form = _get_parent_form(form)
+
         if previous_form:
             form_name = form.__class__.__name__
             list_model_name = form_name + '_list'
             field_form_name = form_name.lower()
-            create_string = f'{list_model_name}.objects.create({field_form_name}=form)'
-            print(create_string)
 
             # 向主表单写入数据
+            # 获取表单可拷贝的字段名
+            base_fields_name = {field.name for field in HsscFormModel._meta.fields}  # 表单基础字段集合
+            base_fields_name.add('id')
             # 获取主表单可拷贝的字段名
-            previous_form_fields_name = set(previous_form_data[0].keys())
-            form_fields_name = {field.name for field in form._meta.fields}
+            previous_form_fields_name = set(previous_form_data[0].keys()) - base_fields_name
+            form_fields_name = {field.name for field in form._meta.fields} - base_fields_name
             copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
 
             # 获取主表单可拷贝的多对多字段名
@@ -76,51 +76,26 @@ def copy_previous_form_data(form, previous_form_data, apply_to_group):
             form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
             copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
 
-            # 向主表单写入可拷贝字段内容
-            for field_name in copy_fields_name:
-                field_value = previous_form_data[0].get(field_name)
-                if field_value:
-                    exec(f'form.{field_name} = field_value')
-            form.save()
-
-            # 向主表单写入可拷贝多对多字段内容
-            for field_name in copy_fields_name_m2m:
-                m2m_objs = previous_form_data[0].get(field_name)
-                print('copy_fields_name_m2m', copy_fields_name_m2m, 'field_name', field_name, 'm2m_objs', m2m_objs)
-                if m2m_objs:
-                    if m2m_objs.__class__.__name__ == 'QuerySet':
-                        exec(f'form.{field_name}.add(*m2m_objs)')
+            _copy_fields_data(form, previous_form_data[0], copy_fields_name, copy_fields_name_m2m)
 
             # 向明细表单写入数据
+            create_string = f'{list_model_name}.objects.create({field_form_name}=form)'
             for item in previous_form_data:
                 # 创建明细表单明细项
                 form_instance = eval(create_string)
 
                 # 获取明细表单可拷贝的字段名
-                previous_form_fields_name = set(item.keys())
+                previous_form_fields_name = set(item.keys()) - {'id', 'DELETE'}
                 form_fields_name = {field.name for field in form_instance._meta.fields}
                 copy_fields_name = previous_form_fields_name.intersection(form_fields_name)
                 # 获取明细表单可拷贝的多对多字段名
                 previous_form_fields_name_m2m = {field.name for field in previous_form._meta.many_to_many}
                 form_fields_name_m2m = {field.name for field in form_instance._meta.many_to_many}
                 copy_fields_name_m2m = previous_form_fields_name_m2m.intersection(form_fields_name_m2m)
+            
+                _copy_fields_data(form_instance, item, copy_fields_name, copy_fields_name_m2m)
 
-                # 向明细表单写入可拷贝的字段内容
-                for field_name in copy_fields_name:
-                    field_value = item.get(field_name)
-                    if field_value:
-                        exec(f'form_instance.{field_name} = field_value')
-                form_instance.save()
-
-                # 向明细表单写入可拷贝的多对多字段内容
-                for field_name in copy_fields_name_m2m:
-                    m2m_objs = item.get(field_name)
-                    if m2m_objs:
-                        if m2m_objs.__class__.__name__ == 'QuerySet':
-                            exec(f'form_instance.{field_name}.add(*m2m_objs)')
-
-
-    # 根据“分组”标识判断如何copy previous_form_data
+    # 根据“分组”标识分别处理copy previous_form_data
     if apply_to_group:
         _copy_list_data(form, previous_form_data)
     else:

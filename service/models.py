@@ -125,6 +125,7 @@ class Zhu_she_fu_wu_list(models.Model):
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_gui_ge = models.CharField(max_length=255, null=True, blank=True, verbose_name='规格')
     boolfield_chang_yong_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用剂量')
+
     class Meta:
         verbose_name = '门诊注射服务明细'
         verbose_name_plural = verbose_name
@@ -495,6 +496,7 @@ class Shu_ye_zhu_she_list(models.Model):
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_gui_ge = models.CharField(max_length=255, null=True, blank=True, verbose_name='规格')
     boolfield_chang_yong_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用剂量')
+
     class Meta:
         verbose_name = '上门代注服务明细'
         verbose_name_plural = verbose_name
@@ -802,7 +804,8 @@ class Men_zhen_chu_fang_biao_list(models.Model):
     boolfield_chang_yong_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用剂量')
     boolfield_yong_yao_bei_zhu = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药备注')
     boolfield_zu_bie = models.IntegerField(null=True, blank=True, verbose_name='组别')
+
     class Meta:
         verbose_name = '药品处方明细'
         verbose_name_plural = verbose_name
-                
+
