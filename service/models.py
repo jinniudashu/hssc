@@ -802,8 +802,8 @@ class Men_zhen_chu_fang_biao_list(models.Model):
     boolfield_yong_yao_tu_jing = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药途径')
     boolfield_yong_yao_pin_ci = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药频次')
     boolfield_chang_yong_ji_liang = models.CharField(max_length=255, null=True, blank=True, verbose_name='常用剂量')
-    boolfield_yong_yao_bei_zhu = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药备注')
     boolfield_zu_bie = models.IntegerField(null=True, blank=True, verbose_name='组别')
+    boolfield_yong_yao_bei_zhu = models.CharField(max_length=255, null=True, blank=True, verbose_name='用药备注')
 
     class Meta:
         verbose_name = '药品处方明细'

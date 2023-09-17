@@ -64,20 +64,6 @@
             "operand_type": "SCHEDULE_OPERAND"
         }
     ],
-    "systemoperandparameter": [
-        {
-            "label": "生成批次服务参数test",
-            "name": "sheng_cheng_pi_ci_fu_wu_can_shu",
-            "hssc_id": "d62ccc3c-4eeb-11ee-8985-4889e7cf38c9",
-            "description": "系统自动生成某一服务的多次服务任务，需要计算每次服务的计划时间，完成计算必须的条件信息是系统参数。\r\n\r\n系统算法：\r\n1. 系统需要从当前业务表单获取频次（几次/天、总天数信息，用来计算服务时间表。\r\n2. “频次”、“总天数”均为系统参数\r\n3. 以当前时间的最近整点时间为基准时间（首次服务时间）。\r\n\r\n用法：\r\n1. 提供与系统参数对应的业务表单字段名，以便系统采集业务表单信息，自动生成多次服务任务。\r\n2. 新增服务参数记录时请拷贝系统参数",
-            "parameter1": "频次",
-            "form_field1": "boolfield_yong_yao_pin_ci",
-            "parameter2": "总天数",
-            "form_field2": "boolfield_yong_yao_liao_cheng",
-            "parameter3": null,
-            "form_field3": null
-        }
-    ],
     "cycleunit": [
         {
             "label": "每天",

@@ -368,10 +368,6 @@ class ServicePackageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(SystemOperand)
-@admin.register(SystemOperandParameter)
-class SystemOperandParameterAdmin(admin.ModelAdmin):
-    list_display = ('label', 'parameter1', 'form_field1', 'parameter2', 'form_field2', 'parameter3', 'form_field3', 'description')
-    ordering = ('id',)
 
 
 @admin.register(EventRule)
