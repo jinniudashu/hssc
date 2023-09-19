@@ -305,6 +305,13 @@ def operand_finished_handler(sender, **kwargs):
             return f'创建服务作业进程: {new_proc}'
         
         def _create_batch_services(**kwargs):
+            def _get_operators(form_data, api_fields):
+                operators = []
+                # 从api_fields字典中获取系统API字段的对应表单字段名称
+                _operator = api_fields.get('hssc_operator', None)
+                print('form_data:', form_data)
+                return operators
+
             def _get_schedule_times(form_data, api_fields):
                 def _get_schedule_params(form_item, api_fields):
                     '''
@@ -381,17 +388,34 @@ def operand_finished_handler(sender, **kwargs):
 
             # 获取服务表单的API字段
             api_fields = proc.service.buessiness_forms.all()[0].api_fields
+
+            # 获取服务作业人员列表
+            operators = _get_operators(kwargs['form_data'], api_fields)
+
             # 解析表单内容，生成计划时间列表
             schedule_times = _get_schedule_times(kwargs['form_data'], api_fields)
-            for schedule_time in schedule_times:
-                # 估算计划执行时间
-                params['scheduled_time'] = schedule_time            
-                # 创建新的服务作业进程
-                new_proc = create_service_proc(**params)
 
-            # 显示提示消息：开单成功
-            messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
-            return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
+            if operators:
+                for operator in operators:
+                    params['operator'] = operator
+                    for schedule_time in schedule_times:
+                        # 估算计划执行时间
+                        params['scheduled_time'] = schedule_time            
+                        # 创建新的服务作业进程
+                        new_proc = create_service_proc(**params)
+                    # 显示提示消息：开单成功
+                    messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
+                return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
+            else:
+                for schedule_time in schedule_times:
+                    # 估算计划执行时间
+                    params['scheduled_time'] = schedule_time            
+                    # 创建新的服务作业进程
+                    new_proc = create_service_proc(**params)
+
+                # 显示提示消息：开单成功
+                messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
+                return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
 
         def _recommend_next_service(**kwargs): 
             '''

@@ -362,3 +362,19 @@ class Yao_ji_lei_xingAdmin(admin.ModelAdmin):
     list_display = ["value"]
 
 clinic_site.register(Yao_ji_lei_xing, Yao_ji_lei_xingAdmin)
+
+
+@admin.register(Shi_fou_zhuan_zhen)
+class Shi_fou_zhuan_zhenAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+clinic_site.register(Shi_fou_zhuan_zhen, Shi_fou_zhuan_zhenAdmin)
+
+
+@admin.register(Shi_fou_hui_zhen)
+class Shi_fou_hui_zhenAdmin(admin.ModelAdmin):
+    search_fields = ['value', 'pym']
+    list_display = ["value"]
+
+clinic_site.register(Shi_fou_hui_zhen, Shi_fou_hui_zhenAdmin)

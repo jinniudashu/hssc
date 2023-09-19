@@ -1,0 +1,222 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>    
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const domain = Cookies.get('environment') === 'dev' ? '127.0.0.1:8000' : 'clinic.tpacn.com';
+
+        // 根据表单检测范围，从CustomerServiceLog获取历史记录，构造boolfield_ji_bing_ming_cheng数组上下文
+        const customerId = Cookies.get('customer_id');
+        const period = 'ALL';  // 'ALL' or 'LAST_WEEK_SERVICES'
+        const form_class = 0;  // 指定表单类别
+        const fetchCustomerServiceLogURL = `http://${domain}/core/api/customer_service_log/`;
+        const fetchCustomerServiceLog = async (customerId, period=null, form_class=0) => {
+            let url = fetchCustomerServiceLogURL + `?customer=${customerId}`
+            if (period !== null) {
+                url += `&period=${period}`;
+            }
+            if (form_class > 0) {
+                url += `&form_class=${form_class}`;
+            }
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('HTTP error ' + response.status);
+                }
+                const result = await response.json();
+                // 将获取的boolfield_ji_bing_ming_cheng历史记录保存在数组中返回
+                const logs = JSON.parse(result);
+                arrayValue = logs.filter(log => log.fields.data.hasOwnProperty('boolfield_ji_bing_ming_cheng'))
+                    .map(log => {
+                        s = log.fields.data.boolfield_ji_bing_ming_cheng;
+                        v = s.replace("{", "").replace("}", "").replace(/'/g, "")
+                        return {value: v, datetime: log.fields.created_time};
+                    });
+                return arrayValue;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        const context_boolfield_ji_bing_ming_cheng = await fetchCustomerServiceLog(customerId, period, form_class);
+        console.log(context_boolfield_ji_bing_ming_cheng);
+        
+        // ******************************************
+        // 检测是否发生符合特定规则的表单事件
+        // ******************************************
+        // 表单事件规则
+        const content_conflict_rules = [{"boolfield_shi_fou_hui_zhen": ["是"], "form_event_action": "CREATE_NEXT_SERVICE", "detection_scope": "CURRENT_SERVICE", "form_class_scope": 0}]
+        // 接受一条来自表单事件规则列表的规则, 如果发生表单事件，执行规则配置表中指定的表单事件动作
+        const detect_form_event = (rule) => {
+            // 定义表单事件动作，接受一个选项，来自表单事件规则列表
+            const form_event_action = (action, conflict_items) => {
+                // 把冲突项目数组转换为字符串
+                const conflict_items_string = conflict_items.join('、');
+                if (action === 'WARN') {
+                    // 警告用户内容冲突
+                    alert(`表单内容冲突：${conflict_items_string}`);
+                } else if (action === 'PROHIBIT') {
+                    alert(`表单内容冲突：${conflict_items_string}`);
+                    // 禁止保存表单
+                    document.querySelector('input[name="_save"]').disabled = true;
+                }
+            }
+
+            if (!current_values.boolfield_yao_pin_ming) return;
+
+            // 构造冲突项列表
+            const conflict_items = [];
+
+            const events_context = {
+                event_0 : context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).length > 0,
+                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
+            }
+            // 检测是否发生上下文冲突
+            if (Object.values(events_context).every(value => value === true)) {
+                // 对于上下文冲突，添加产生冲突的具体疾病名称
+                if (events_context.event_0) {
+                    const conflictingDiseases = context_boolfield_ji_bing_ming_cheng.filter(item => rule.boolfield_ji_bing_ming_cheng.includes(item.value)).map(item => item.value);
+                    if (conflictingDiseases.length > 0) {
+                        conflict_items.push(conflictingDiseases.join(', '));
+                    }
+                }
+                form_event_action(rule.form_event_action, conflict_items)
+            }
+
+            const events_input = {
+                event_0 : new Set(rule.boolfield_ji_bing_ming_cheng).has(current_values.boolfield_ji_bing_ming_cheng),
+                event_1 : rule.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming),
+            }
+            // 相与所有输入事件结果，如果全部为真，返回真
+            if (Object.values(events_input).every(value => value === true)) {
+                for (const key in current_values) {
+                    const value = current_values[key];
+                    // 如果值是数组，找出冲突项
+                    if (Array.isArray(value)) {
+                        const conflictingItems = value.filter(item => rule.boolfield_yao_pin_ming.includes(item));
+                        if (conflictingItems.length > 0) {
+                            conflict_items.push(conflictingItems.join(', '));
+                        }
+                    } else {
+                        conflict_items.push(value);
+                    }
+                }
+                form_event_action(rule.form_event_action, conflict_items)
+            }
+        };
+
+        
+        
+        
+
+        // 创建观察器，接受一个回调函数为参数
+        function createObserver(callback) {
+            return new MutationObserver(function(mutationsList, observer) {
+                for (let mutation of mutationsList) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        callback(mutation.target);
+                    }
+                }
+            });
+        }
+        const mutationObserverConfig = { childList: true, subtree: true }
+
+        // 定义全局变量，用于存储被跟踪的字段当前值
+        const current_values = {
+            boolfield_ji_bing_ming_cheng: null,
+            boolfield_yao_pin_ming: null
+        }
+
+        // boolfield_ji_bing_ming_cheng变化处理
+        function boolfield_ji_bing_ming_chengHandleChanges(node) {
+            if (node.hasAttribute('title')) {
+                const title = node.getAttribute('title').trim();
+                if (title !== current_values.boolfield_ji_bing_ming_cheng) {
+                    current_values.boolfield_ji_bing_ming_cheng = title;
+                    document.querySelector('input[name="_save"]').disabled = false;
+                    
+                    // 检测是否发生符合特定规则的表单事件
+                    content_conflict_rules.find(item => {
+                        if (item.boolfield_ji_bing_ming_cheng.includes(current_values.boolfield_ji_bing_ming_cheng)) {
+                            detect_form_event(item);
+                        }
+                    });
+                    
+                }
+            }
+        }
+
+        // 为boolfield_ji_bing_ming_cheng <select>元素添加事件监听器
+        const boolfield_ji_bing_ming_cheng = document.querySelector('.form-row.field-boolfield_ji_bing_ming_cheng .related-widget-wrapper span.select2-selection__rendered');
+        const observer_boolfield_ji_bing_ming_cheng = createObserver(boolfield_ji_bing_ming_chengHandleChanges);
+        observer_boolfield_ji_bing_ming_cheng.observe(boolfield_ji_bing_ming_cheng, mutationObserverConfig)
+        showIcpcHint(boolfield_ji_bing_ming_cheng)
+
+        // boolfield_yao_pin_ming变化处理
+        function boolfield_yao_pin_mingHandleChanges(node) {
+            if (node.hasAttribute('title')) {
+                const title = node.getAttribute('title').trim();
+                if (title !== current_values.boolfield_yao_pin_ming) {
+                    current_values.boolfield_yao_pin_ming = title;
+                    document.querySelector('input[name="_save"]').disabled = false;
+                    
+                    // 检测是否发生符合特定规则的表单事件
+                    content_conflict_rules.find(item => {
+                        if (item.boolfield_yao_pin_ming.includes(current_values.boolfield_yao_pin_ming)) {
+                            detect_form_event(item);
+                        }
+                    });
+                    
+                }
+            }
+        }
+
+        // 先为已存在的第一个boolfield_yao_pin_ming <select>元素添加事件监听器
+        const existingSpanElement = document.querySelector('.form-row.dynamic-a6218_list_set .related-widget-wrapper span.select2-selection__rendered');
+        const observer_boolfield_yao_pin_ming = createObserver(boolfield_yao_pin_mingHandleChanges);
+        observer_boolfield_yao_pin_ming.observe(existingSpanElement, mutationObserverConfig);
+
+        // 需要观察的目标节点
+        const targetNode = document.querySelector('#a6218_form tbody');
+
+        // 当观察到变动时执行的回调函数
+        const trNodeCallback = function(mutationsList, observer) {
+            for(let mutation of mutationsList) {
+                // 检查是否有新节点被添加到DOM中
+                if(mutation.type === 'childList') {
+                    // 获得新的<tr>节点
+                    var addedNodes = mutation.addedNodes;
+                    for(let i = 0; i < addedNodes.length; i++) {
+                        // 判断节点类型是不是元素节点，且节点名字是不是'tr'
+                        if(addedNodes[i].nodeType === 1 && addedNodes[i].nodeName === 'TR') {
+                            var trNode = addedNodes[i];
+                            // 找到包含boolfield_yao_pin_ming名称的节点
+                            var yaoPinMingNode = trNode.querySelector('span.select2-selection__rendered');
+                            if(yaoPinMingNode) {
+                                // 为新tr创建观察器
+                                observer_boolfield_yao_pin_ming.observe(yaoPinMingNode, mutationObserverConfig);
+                            } else {
+                                console.log('No select node in new TR node');
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // 创建一个观察器实例并传入回调函数
+        const tableObserver = new MutationObserver(trNodeCallback);
+
+        // 以上述配置开始观察目标节点
+        tableObserver.observe(targetNode, mutationObserverConfig);
+
+    });
+</script>
+
+{% endblock %}

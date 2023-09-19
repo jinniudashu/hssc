@@ -425,10 +425,12 @@
             "name_icpc": "A6218",
             "description": "",
             "form_class": 1,
-            "api_fields": null,
+            "api_fields": {},
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
+                "76a004bc-5691-11ee-85c2-0242ac170002",
+                "82dfcf6e-5691-11ee-91a1-0242ac170002"
             ],
             "list_components": []
         },
@@ -1136,6 +1138,59 @@
                 "95314f1a-3a41-11ee-914d-0242ac170003"
             ],
             "list_components": []
+        },
+        {
+            "label": "会诊申请表",
+            "name": "hui_zhen_biao",
+            "hssc_id": "954762fe-5621-11ee-8d5c-0242ac170002",
+            "pym": "hzsqb",
+            "name_icpc": null,
+            "description": "",
+            "form_class": 2,
+            "api_fields": {
+                "hssc_operator": "boolfield_hui_zhen_ren"
+            },
+            "components": [
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
+                "d10f2cc2-5621-11ee-a441-0242ac170002"
+            ],
+            "list_components": []
+        },
+        {
+            "label": "会诊建议表",
+            "name": "hui_zhen_jian_yi_biao",
+            "hssc_id": "cf554c12-5622-11ee-ad57-0242ac170002",
+            "pym": "hzjyb",
+            "name_icpc": null,
+            "description": "",
+            "form_class": 2,
+            "api_fields": {},
+            "components": [
+                "d71033f4-5622-11ee-ad57-0242ac170002",
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
+            ],
+            "list_components": [
+                "b4edb5a4-5621-11ee-91a1-0242ac170002"
+            ]
+        },
+        {
+            "label": "会诊诊断表",
+            "name": "hui_zhen_zhen_duan_biao",
+            "hssc_id": "3a82b604-5624-11ee-85c2-0242ac170002",
+            "pym": "hzzdb",
+            "name_icpc": null,
+            "description": "",
+            "form_class": 2,
+            "api_fields": {},
+            "components": [
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
+                "4ed88f20-5624-11ee-a441-0242ac170002"
+            ],
+            "list_components": [
+                "d71033f4-5622-11ee-ad57-0242ac170002",
+                "b4edb5a4-5621-11ee-91a1-0242ac170002",
+                "4093f798-5696-11ee-b2e8-0242ac170002"
+            ]
         }
     ],
     "managedentity": [
@@ -2954,6 +3009,149 @@
                 "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
                 "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
             ]
+        },
+        {
+            "label": "用药回访服务",
+            "name": "yong_yao_hui_fang_fu_wu",
+            "hssc_id": "52685ad6-568c-11ee-91a1-0242ac170002",
+            "pym": "yyhffw",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "arrange_service_package": null,
+            "arrange_service": null,
+            "buessiness_forms": [],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
+                "de194c50-9aa1-11ec-bde1-8a6e55faf877",
+                "de1a6f7c-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ab716-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "会诊申请服务",
+            "name": "hui_zhen_shen_qing_fu_wu",
+            "hssc_id": "48e716b8-5692-11ee-85c2-0242ac170002",
+            "pym": "hzsqfw",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "arrange_service_package": null,
+            "arrange_service": null,
+            "buessiness_forms": [
+                "954762fe-5621-11ee-8d5c-0242ac170002"
+            ],
+            "role": [
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "会诊建议服务",
+            "name": "hui_zhen_jian_yi_fu_wu",
+            "hssc_id": "5c196cfe-5692-11ee-85c2-0242ac170002",
+            "pym": "hzjyfw",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "arrange_service_package": null,
+            "arrange_service": null,
+            "buessiness_forms": [
+                "cf554c12-5622-11ee-ad57-0242ac170002"
+            ],
+            "role": [
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "会诊诊断服务",
+            "name": "hui_zhen_zhen_duan_fu_wu",
+            "hssc_id": "6dcdd3cc-5692-11ee-a441-0242ac170002",
+            "pym": "hzzdfw",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "arrange_service_package": null,
+            "arrange_service": null,
+            "buessiness_forms": [
+                "3a82b604-5624-11ee-85c2-0242ac170002"
+            ],
+            "role": [
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
+            ]
         }
     ],
     "buessinessformssetting": [
@@ -3451,6 +3649,30 @@
             "hssc_id": "a23f5228-3a42-11ee-9518-0242ac170003",
             "service": "a23e54ae-3a42-11ee-9518-0242ac170003",
             "buessiness_form": "5ca1c7f0-3a42-11ee-8e31-0242ac170003",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "48e76c80-5692-11ee-85c2-0242ac170002",
+            "service": "48e716b8-5692-11ee-85c2-0242ac170002",
+            "buessiness_form": "954762fe-5621-11ee-8d5c-0242ac170002",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "5c19bfce-5692-11ee-85c2-0242ac170002",
+            "service": "5c196cfe-5692-11ee-85c2-0242ac170002",
+            "buessiness_form": "cf554c12-5622-11ee-ad57-0242ac170002",
+            "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "6dce3132-5692-11ee-a441-0242ac170002",
+            "service": "6dcdd3cc-5692-11ee-a441-0242ac170002",
+            "buessiness_form": "3a82b604-5624-11ee-85c2-0242ac170002",
             "is_list": false
         }
     ],

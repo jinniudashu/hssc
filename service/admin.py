@@ -216,6 +216,52 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 # Service表单Admin
 # **********************************************************************************************************************
 
+class Hui_zhen_zhen_duan_fu_wu_listInline(admin.TabularInline):
+    model = Hui_zhen_zhen_duan_fu_wu_list
+    extra = 1
+    autocomplete_fields = ["boolfield_hui_zhen_jian_yi", "boolfield_hui_zhen_ze_ren_ren", ]
+            
+class Hui_zhen_zhen_duan_fu_wuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("会诊诊断表", {"fields": ("boolfield_zheng_zhuang", "boolfield_hui_zhen_zhen_duan_jie_guo", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", "boolfield_hui_zhen_zhen_duan_jie_guo", ]
+    inlines = [Hui_zhen_zhen_duan_fu_wu_listInline, ]
+
+admin.site.register(Hui_zhen_zhen_duan_fu_wu, Hui_zhen_zhen_duan_fu_wuAdmin)
+clinic_site.register(Hui_zhen_zhen_duan_fu_wu, Hui_zhen_zhen_duan_fu_wuAdmin)
+
+class Hui_zhen_jian_yi_fu_wu_listInline(admin.TabularInline):
+    model = Hui_zhen_jian_yi_fu_wu_list
+    extra = 1
+    autocomplete_fields = ["boolfield_hui_zhen_jian_yi", ]
+            
+class Hui_zhen_jian_yi_fu_wuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("会诊建议表", {"fields": ("boolfield_zheng_zhuang", "boolfield_qi_ta", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", ]
+    inlines = [Hui_zhen_jian_yi_fu_wu_listInline, ]
+
+admin.site.register(Hui_zhen_jian_yi_fu_wu, Hui_zhen_jian_yi_fu_wuAdmin)
+clinic_site.register(Hui_zhen_jian_yi_fu_wu, Hui_zhen_jian_yi_fu_wuAdmin)
+
+class Hui_zhen_shen_qing_fu_wuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("会诊申请表", {"fields": ("boolfield_zheng_zhuang", "boolfield_hui_zhen_ren", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", "boolfield_hui_zhen_ren", ]
+
+admin.site.register(Hui_zhen_shen_qing_fu_wu, Hui_zhen_shen_qing_fu_wuAdmin)
+clinic_site.register(Hui_zhen_shen_qing_fu_wu, Hui_zhen_shen_qing_fu_wuAdmin)
+
+class Yong_yao_hui_fang_fu_wuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), ]
+
+admin.site.register(Yong_yao_hui_fang_fu_wu, Yong_yao_hui_fang_fu_wuAdmin)
+clinic_site.register(Yong_yao_hui_fang_fu_wu, Yong_yao_hui_fang_fu_wuAdmin)
+
 class Tang_niao_bing_jian_kang_jiao_yu_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -520,8 +566,10 @@ clinic_site.register(T6301, T6301Admin)
 class A6218Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("门诊医生问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", )}), ]
+        ("门诊医生问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", "boolfield_shi_fou_hui_zhen", "boolfield_shi_fou_zhuan_zhen", )}), ]
     autocomplete_fields = ["boolfield_zheng_zhuang", ]
+    radio_fields = {"boolfield_shi_fou_hui_zhen": admin.VERTICAL, "boolfield_shi_fou_zhuan_zhen": admin.VERTICAL, }
+    change_form_template = "a6218_change_form.html"
 
 admin.site.register(A6218, A6218Admin)
 clinic_site.register(A6218, A6218Admin)

@@ -80,6 +80,70 @@ class CustomerSchedule(HsscFormModel):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+class Hui_zhen_zhen_duan_fu_wu(HsscFormModel):
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_hui_zhen_zhen_duan_fu_wu', blank=True, verbose_name='症状')
+    boolfield_hui_zhen_zhen_duan_jie_guo = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_hui_zhen_zhen_duan_jie_guo_hui_zhen_zhen_duan_fu_wu', blank=True, verbose_name='会诊诊断结果')
+
+    class Meta:
+        verbose_name = '会诊诊断服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Hui_zhen_zhen_duan_fu_wu_list(models.Model):
+    hui_zhen_zhen_duan_fu_wu = models.ForeignKey(Hui_zhen_zhen_duan_fu_wu, on_delete=models.CASCADE, verbose_name='会诊诊断服务')
+    boolfield_hui_zhen_jian_yi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_hui_zhen_jian_yi_hui_zhen_zhen_duan_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='会诊建议')
+    boolfield_qi_ta = models.CharField(max_length=255, null=True, blank=True, verbose_name='其他')
+    boolfield_hui_zhen_ze_ren_ren = models.ForeignKey(VirtualStaff, related_name='virtualstaff_for_boolfield_hui_zhen_ze_ren_ren_hui_zhen_zhen_duan_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='会诊责任人')
+
+    class Meta:
+        verbose_name = '会诊诊断服务明细'
+        verbose_name_plural = verbose_name
+
+class Hui_zhen_jian_yi_fu_wu(HsscFormModel):
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_hui_zhen_jian_yi_fu_wu', blank=True, verbose_name='症状')
+    boolfield_qi_ta = models.CharField(max_length=255, null=True, blank=True, verbose_name='其他')
+
+    class Meta:
+        verbose_name = '会诊建议服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Hui_zhen_jian_yi_fu_wu_list(models.Model):
+    hui_zhen_jian_yi_fu_wu = models.ForeignKey(Hui_zhen_jian_yi_fu_wu, on_delete=models.CASCADE, verbose_name='会诊建议服务')
+    boolfield_hui_zhen_jian_yi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_hui_zhen_jian_yi_hui_zhen_jian_yi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='会诊建议')
+
+    class Meta:
+        verbose_name = '会诊建议服务明细'
+        verbose_name_plural = verbose_name
+
+class Hui_zhen_shen_qing_fu_wu(HsscFormModel):
+    boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_hui_zhen_shen_qing_fu_wu', blank=True, verbose_name='症状')
+    boolfield_hui_zhen_ren = models.ManyToManyField(VirtualStaff, related_name='virtualstaff_for_boolfield_hui_zhen_ren_hui_zhen_shen_qing_fu_wu', blank=True, verbose_name='会诊人')
+
+    class Meta:
+        verbose_name = '会诊申请服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Yong_yao_hui_fang_fu_wu(HsscFormModel):
+
+    class Meta:
+        verbose_name = '用药回访服务'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Tang_niao_bing_jian_kang_jiao_yu_fu_wu(HsscFormModel):
     boolfield_jian_kang_jiao_yu_chu_fang = models.CharField(max_length=255, default="糖尿病是一组以高血糖为特征的代谢性疾病.多饮,多食,多尿,体重下降是其典型症状,合称“三多一少”.", null=True, blank=False, verbose_name='健康教育处方')
 
@@ -678,6 +742,8 @@ class T6301(HsscFormModel):
 class A6218(HsscFormModel):
     boolfield_bing_qing_bu_chong_miao_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A6218', blank=True, verbose_name='症状')
+    boolfield_shi_fou_hui_zhen = models.ForeignKey(Shi_fou_hui_zhen, related_name='shi_fou_hui_zhen_for_boolfield_shi_fou_hui_zhen_A6218', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否会诊')
+    boolfield_shi_fou_zhuan_zhen = models.ForeignKey(Shi_fou_zhuan_zhen, related_name='shi_fou_zhuan_zhen_for_boolfield_shi_fou_zhuan_zhen_A6218', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否转诊')
 
     class Meta:
         verbose_name = '门诊医生问诊'

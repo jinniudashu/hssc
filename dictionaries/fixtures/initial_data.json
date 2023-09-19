@@ -2110,5 +2110,49 @@
             "value": "中药",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Shi_fou_zhuan_zhen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "572850c6-5691-11ee-b2e8-0242ac170002",
+            "pym": null,
+            "value": "是",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_zhuan_zhen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "5728bd7c-5691-11ee-b2e8-0242ac170002",
+            "pym": null,
+            "value": "否",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_hui_zhen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "63682f32-5691-11ee-91a1-0242ac170002",
+            "pym": null,
+            "value": "是",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Shi_fou_hui_zhen",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "636843a0-5691-11ee-91a1-0242ac170002",
+            "pym": null,
+            "value": "否",
+            "icpc": null
+        }
     }
 ]

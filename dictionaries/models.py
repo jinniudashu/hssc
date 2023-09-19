@@ -297,3 +297,15 @@ class Yao_ji_lei_xing(DictBase):
     class Meta:
         verbose_name = '药剂类型'
         verbose_name_plural = verbose_name
+
+
+class Shi_fou_zhuan_zhen(DictBase):
+    class Meta:
+        verbose_name = '是否转诊'
+        verbose_name_plural = verbose_name
+
+
+class Shi_fou_hui_zhen(DictBase):
+    class Meta:
+        verbose_name = '是否会诊'
+        verbose_name_plural = verbose_name

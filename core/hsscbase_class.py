@@ -289,6 +289,7 @@ class FieldsType(Enum):
     boolfield_chu_fang_ji_liang_dan_wei = "String"  # 处方计量单位
     boolfield_yong_yao_tu_jing = "String"  # 用药途径
     boolfield_jian_kang_jiao_yu_chu_fang = "String"  # 健康教育处方
+    boolfield_qi_ta = "String"  # 其他
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -388,3 +389,9 @@ class FieldsType(Enum):
     boolfield_yi_bao_bao_xiao_lei_bie = "dictionaries.Yi_bao_bao_xiao_lei_bie"  # 医保报销类别
     boolfield_yao_ji_lei_xing = "dictionaries.Yao_ji_lei_xing"  # 药剂类型
     boolfield_guo_min_yao_wu = "entities.Yao_pin_ji_ben_xin_xi_biao"  # 过敏药物
+    boolfield_hui_zhen_jian_yi = "icpc.Icpc5_evaluation_and_diagnoses"  # 会诊建议
+    boolfield_hui_zhen_ren = "core.VirtualStaff"  # 会诊人
+    boolfield_hui_zhen_zhen_duan_jie_guo = "icpc.Icpc5_evaluation_and_diagnoses"  # 会诊诊断结果
+    boolfield_shi_fou_hui_zhen = "dictionaries.Shi_fou_hui_zhen"  # 是否会诊
+    boolfield_shi_fou_zhuan_zhen = "dictionaries.Shi_fou_zhuan_zhen"  # 是否转诊
+    boolfield_hui_zhen_ze_ren_ren = "core.VirtualStaff"  # 会诊责任人
