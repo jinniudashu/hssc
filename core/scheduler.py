@@ -11,7 +11,7 @@ from registration.signals import user_registered, user_activated, user_approved
 from enum import Enum
 from collections import defaultdict
 
-from core.models import Service, ServiceRule, Staff, Customer, CustomerServiceLog, OperationProc, RecommendedService, Message, ChengBaoRenYuanQingDan
+from core.models import Service, ServiceRule, Staff, Customer, VirtualStaff, CustomerServiceLog, OperationProc, RecommendedService, Message, ChengBaoRenYuanQingDan
 from core.business_functions import field_name_replace, create_customer_schedule, manage_recommended_service
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
 
@@ -331,8 +331,8 @@ def operand_finished_handler(sender, **kwargs):
                 else:
                     form_item = form_data[0]
 
-                period_number = int(re.search(r'(\d+)', form_item.get(kwargs['duration_field'], '0')).group(1))
-                frequency = int(re.search(r'(\d+)', form_item.get(kwargs['frequency_field'], '0')).group(1))
+                period_number = int(re.search(r'(\d+)', form_item.get(kwargs['hssc_duration'], '0')).group(1))
+                frequency = int(re.search(r'(\d+)', form_item.get(kwargs['hssc_frequency'], '0')).group(1))
 
                 schedule_times = []
                 for day_x in range(period_number):
@@ -385,9 +385,15 @@ def operand_finished_handler(sender, **kwargs):
                     # 解析表单内容，生成计划时间列表
                     schedule_times = _get_schedule_times(kwargs['form_data'], **{'hssc_duration': hssc_duration, 'hssc_frequency': hssc_frequency})
 
+            # 如果有服务作业人员列表，按服务作业人员生成服务作业进程
             if operators:
                 for operator in operators:
-                    params['operator'] = operator.staff.customer
+                    if isinstance(operator, VirtualStaff):
+                        params['operator'] = operator.staff.customer
+                    elif isinstance(operator, Staff):
+                        params['operator'] = operator.customer
+                    elif isinstance(operator, Customer):
+                        params['operator'] = operator
                     if schedule_times:
                         for schedule_time in schedule_times:
                             # 估算计划执行时间
