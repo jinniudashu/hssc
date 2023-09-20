@@ -305,32 +305,7 @@ def operand_finished_handler(sender, **kwargs):
             return f'创建服务作业进程: {new_proc}'
         
         def _create_batch_services(**kwargs):
-            def _get_operators(form_data, api_fields):
-                operators = []
-                # 从api_fields字典中获取系统API字段的对应表单字段名称
-                _operator = api_fields.get('hssc_operator', None)
-                print('form_data:', form_data)
-                return operators
-
-            def _get_schedule_times(form_data, api_fields):
-                def _get_schedule_params(form_item, api_fields):
-                    '''
-                    返回计算时间计划的表达式：period_number, frequency
-                    '''
-                    # 从api_fields字典中获取系统API字段的对应表单字段名称
-                    duration_field = api_fields.get('hssc_duration', None)
-                    frequency_field = api_fields.get('hssc_frequency', None)
-
-                    # 从对应字段提取参数信息，生成计划时间列表
-                    if duration_field and frequency_field:
-                        duration = int(re.search(r'(\d+)', form_item.get(duration_field, '0')).group(1))
-                        frequency = int(re.search(r'(\d+)', form_item.get(frequency_field, '0')).group(1))
-                    else:
-                        duration = 0
-                        frequency = 0
-                    
-                    return duration, frequency
-                
+            def _get_schedule_times(form_data, **kwargs):
                 def _get_basetime():
                     '''
                     返回最近整点时间
@@ -346,16 +321,19 @@ def operand_finished_handler(sender, **kwargs):
                     # 使用replace()方法设置新的小时数，并重置分钟、秒和微秒为0
                     nearest_hour = now.replace(hour=next_hour, minute=0, second=0, microsecond=0)
                     return nearest_hour
+
+                # 获取基准时间
+                base_time = _get_basetime()
                 
+                # 从对应字段提取参数信息，生成计划时间列表
                 if type(form_data) == dict:
                     form_item = form_data
                 else:
                     form_item = form_data[0]
 
-                period_number, frequency = _get_schedule_params(form_item, api_fields)  # 获取计划时间计算参数
+                period_number = int(re.search(r'(\d+)', form_item.get(kwargs['duration_field'], '0')).group(1))
+                frequency = int(re.search(r'(\d+)', form_item.get(kwargs['frequency_field'], '0')).group(1))
 
-                # 获取基准时间
-                base_time = _get_basetime()
                 schedule_times = []
                 for day_x in range(period_number):
                     for batch in range(frequency):
@@ -388,24 +366,42 @@ def operand_finished_handler(sender, **kwargs):
 
             # 获取服务表单的API字段
             api_fields = proc.service.buessiness_forms.all()[0].api_fields
-
-            # 获取服务作业人员列表
-            operators = _get_operators(kwargs['form_data'], api_fields)
-
-            # 解析表单内容，生成计划时间列表
-            schedule_times = _get_schedule_times(kwargs['form_data'], api_fields)
+            if api_fields:
+                operators = []
+                hssc_operator = api_fields.get('hssc_operator', None)
+                if hssc_operator:
+                    # 获取服务作业人员列表
+                    _operators = kwargs['form_data'].get(hssc_operator, None)
+                    # 如果_operators不是列表，转化为列表
+                    if type(_operators) == list or isinstance(_operators, models.QuerySet):
+                        operators = _operators
+                    else:
+                        operators = [_operators]
+                
+                schedule_times = []
+                hssc_duration = api_fields.get('hssc_duration', None)
+                hssc_frequency = api_fields.get('hssc_frequency', None)
+                if hssc_duration and hssc_frequency:
+                    # 解析表单内容，生成计划时间列表
+                    schedule_times = _get_schedule_times(kwargs['form_data'], **{'hssc_duration': hssc_duration, 'hssc_frequency': hssc_frequency})
 
             if operators:
                 for operator in operators:
-                    params['operator'] = operator
-                    for schedule_time in schedule_times:
-                        # 估算计划执行时间
-                        params['scheduled_time'] = schedule_time            
-                        # 创建新的服务作业进程
+                    params['operator'] = operator.staff.customer
+                    if schedule_times:
+                        for schedule_time in schedule_times:
+                            # 估算计划执行时间
+                            params['scheduled_time'] = schedule_time            
+                            # 创建新的服务作业进程
+                            new_proc = create_service_proc(**params)
+                    else:
+                        # 估算计划执行时间为当前时间加1小时
+                        params['scheduled_time'] = timezone.now() + timedelta(hours=1)
                         new_proc = create_service_proc(**params)
-                    # 显示提示消息：开单成功
-                    messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
-                return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
+
+                # 显示提示消息：开单成功
+                messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(operators)}份')
+                return f'创建{len(operators)}个服务作业进程: {new_proc}'
             else:
                 for schedule_time in schedule_times:
                     # 估算计划执行时间
