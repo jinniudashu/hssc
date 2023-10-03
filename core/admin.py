@@ -338,6 +338,16 @@ class ServiceAdmin(admin.ModelAdmin):
     autocomplete_fields = ["name_icpc"]
 clinic_site.register(Service, ServiceAdmin)
 
+@admin.register(L1Service)
+class L1ServiceAdmin(admin.ModelAdmin):
+    list_display = ['label', 'name', 'id']
+    list_display_links = ['label', 'name',]
+    search_fields=['label', 'pym']
+    ordering = ['id']
+    readonly_fields = ['hssc_id']
+    filter_horizontal = ("role",)
+    autocomplete_fields = ["start_service", "end_service", "include_services", ]
+clinic_site.register(L1Service, L1ServiceAdmin)
 
 @admin.register(CycleUnit)
 class CycleUnitAdmin(admin.ModelAdmin):

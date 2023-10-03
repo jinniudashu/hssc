@@ -89,7 +89,7 @@ class Service(HsscPymBase):
     arrange_service = models.OneToOneField('self', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='安排服务')    
 
     class Meta:
-        verbose_name = "服务"
+        verbose_name = "服务作业"
         verbose_name_plural = verbose_name
         ordering = ['id']
 
@@ -114,6 +114,24 @@ class BuessinessFormsSetting(HsscBase):
         verbose_name = '作业表单设置'
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+
+# 基础作业信息表
+class L1Service(HsscPymBase):
+    start_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='start_service', verbose_name='起始作业')
+    end_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='end_service', verbose_name='结束作业')
+    include_services = models.ManyToManyField(Service, blank=True, related_name='include_services', verbose_name='包含作业')
+    role = models.ManyToManyField(Role, blank=True, verbose_name="服务岗位")
+
+    class Meta:
+        verbose_name = "服务任务"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def save(self, *args, **kwargs):
+        if self.name is None or self.name == '':
+            self.name = f'{"_".join(lazy_pinyin(self.label))}'
+        super().save(*args, **kwargs)
 
 
 # 服务包类型信息表

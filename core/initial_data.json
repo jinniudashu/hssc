@@ -3676,6 +3676,79 @@
             "is_list": false
         }
     ],
+    "l1service": [
+        {
+            "label": "诊前服务",
+            "name": "zhen_qian_fu_wu",
+            "hssc_id": "57426876-61dc-11ee-9d2b-4889e7cf38c9",
+            "pym": "zqfw",
+            "start_service": "e03e65ba-9aa1-11ec-bde1-8a6e55faf877",
+            "end_service": "e0371aa8-9aa1-11ec-bde1-8a6e55faf877",
+            "include_services": [
+                "e035d648-9aa1-11ec-bde1-8a6e55faf877",
+                "e0371aa8-9aa1-11ec-bde1-8a6e55faf877",
+                "e0385d3c-9aa1-11ec-bde1-8a6e55faf877",
+                "e03e65ba-9aa1-11ec-bde1-8a6e55faf877",
+                "1a3b2382-9b67-11ec-94eb-022c611b2490"
+            ],
+            "role": [
+                "de18f0fc-9aa1-11ec-bde1-8a6e55faf877",
+                "de194c50-9aa1-11ec-bde1-8a6e55faf877",
+                "de1992d2-9aa1-11ec-bde1-8a6e55faf877",
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877",
+                "de1a253a-9aa1-11ec-bde1-8a6e55faf877",
+                "de1a6f7c-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ab716-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b05cc-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b4cc6-9aa1-11ec-bde1-8a6e55faf877",
+                "de1b9046-9aa1-11ec-bde1-8a6e55faf877",
+                "de1bcda4-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c1052-9aa1-11ec-bde1-8a6e55faf877",
+                "de1c5a4e-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ca0c6-9aa1-11ec-bde1-8a6e55faf877",
+                "de1ce450-9aa1-11ec-bde1-8a6e55faf877",
+                "de1d24ec-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "问诊服务",
+            "name": "wen_zhen_fu_wu",
+            "hssc_id": "6db24094-61de-11ee-a581-4889e7cf38c9",
+            "pym": "wzfw",
+            "start_service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
+            "end_service": null,
+            "include_services": [
+                "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
+                "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
+                "43a1842e-b092-11ec-9cae-5ed0e34457d3",
+                "b6f4ecba-b6da-11ec-8121-0ebea05fc526",
+                "cb6fe794-b6da-11ec-8425-0ebea05fc526",
+                "dc931be0-b6da-11ec-8425-0ebea05fc526",
+                "9fb42996-b6dd-11ec-8425-0ebea05fc526",
+                "17c608fa-d119-11ec-ab0d-823d1f108281",
+                "50762b88-c972-11ed-a51e-0242ac120003",
+                "6494a7a2-c972-11ed-a51e-0242ac120003",
+                "9086ce2c-c976-11ed-a229-0242ac120003"
+            ],
+            "role": [
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
+            ]
+        },
+        {
+            "label": "会诊服务",
+            "name": "hui_zhen_fu_wu",
+            "hssc_id": "cdb26d3e-61de-11ee-8380-4889e7cf38c9",
+            "pym": "hzfw",
+            "start_service": "48e716b8-5692-11ee-85c2-0242ac170002",
+            "end_service": "6dcdd3cc-5692-11ee-a441-0242ac170002",
+            "include_services": [
+                "48e716b8-5692-11ee-85c2-0242ac170002",
+                "5c196cfe-5692-11ee-85c2-0242ac170002",
+                "6dcdd3cc-5692-11ee-a441-0242ac170002"
+            ],
+            "role": []
+        }
+    ],
     "servicepackage": [
         {
             "label": "糖尿病服务包_发病初期",

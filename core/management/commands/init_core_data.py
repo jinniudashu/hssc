@@ -25,6 +25,7 @@ class Command(BaseCommand):
             ServicePackage,
             Service,
             BuessinessFormsSetting,
+            L1Service,
             ServicePackageDetail,
             EventRule,
             ServiceRule,
