@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import copy
 import json
 
-from core.models import HsscFormModel, ServicePackageDetail, OperationProc, Service, RecommendedService, CustomerServiceLog, ManagedEntity, Customer
+from core.models import HsscFormModel, ServicePackageDetail, TaskProc, OperationProc, Service, L1Service, RecommendedService, CustomerServiceLog, ManagedEntity, Customer
 from core.hsscbase_class import FieldsType
 from service.models import *
 
@@ -215,6 +215,28 @@ def create_service_proc(**kwargs):
 
     new_proc = OperationProc.objects.create(**params)
 
+    # 解析服务任务进程
+    # 1. 如果当前服务作业是某服务任务的起始作业，创建新任务进程，作为新作业进程的任务进程
+    # 2. 否则，使用父作业进程的任务进程
+    try:
+        # try to get start_service from L1Service
+        l1_service = L1Service.objects.get(start_service=params['service'])
+        task_proc = TaskProc.objects.create(
+            label=l1_service.label+str(timezone.now()),
+            l1_service=l1_service,
+            state=params['service'],
+            operator=params['operator'],
+            customer=params['customer'],
+        )
+    except ObjectDoesNotExist:
+        task_proc = parent_proc.task_proc if parent_proc else None
+        if task_proc:
+            # 更新任务进程的状态
+            task_proc.state = params['service']
+            task_proc.save()
+    # 更新作业进程的任务进程
+    new_proc.task_proc = task_proc
+
     # Here postsave signal in service.models
     # 更新允许作业岗位
     role = kwargs['service'].role.all()
@@ -352,7 +374,7 @@ def get_customer_profile(customer):
 
 
 # 为新服务分配操作员，返回操作员(Customer类型)
-def dispatch_operator(customer, service, current_operator, scheduled_time):
+def dispatch_operator(customer, service, current_operator, scheduled_time, task_proc):
 
     # 1. 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
     charge_staff = customer.charge_staff
@@ -366,6 +388,10 @@ def dispatch_operator(customer, service, current_operator, scheduled_time):
         # 2. 如当前作业员具有新增服务岗位权限，且scheduled_time为当天，则开单给当前作业员
         if set(current_operator.staff.role.all()).intersection(set(service.role.all())) and scheduled_time.date()==timezone.now().date():
             return current_operator
+
+    # 3. 否则返回当前任务进程的操作员
+    if task_proc:
+        return task_proc.operator
 
     # 否则，操作员为空，进入共享队列
     return None

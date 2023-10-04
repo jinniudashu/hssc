@@ -130,7 +130,7 @@ class ClinicSite(admin.AdminSite):
         customer = Customer.objects.get(id=kwargs['customer_id'])
         current_operator = User.objects.get(username=request.user).customer
         service = Service.objects.get(id=kwargs['service_id'])
-        service_operator = dispatch_operator(customer, service, current_operator, timezone.now())
+        service_operator = dispatch_operator(customer, service, current_operator, timezone.now(), None)
 
         # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
         if service.service_type == 1:

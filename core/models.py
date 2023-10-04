@@ -238,6 +238,8 @@ class ServiceRule(HsscBase):
 
 
 class ContractService(HsscPymBase):
+    start_l1_service = models.ForeignKey(L1Service, on_delete=models.CASCADE, blank=True, null=True, related_name='start_l1_service', verbose_name='起始任务')
+    end_l1_service = models.ForeignKey(L1Service, on_delete=models.CASCADE, blank=True, null=True, related_name='end_l1_service', verbose_name='结束任务')
     is_active = models.BooleanField(default=True, verbose_name='启用')
     is_deleted = models.BooleanField(default=False, verbose_name='删除')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -270,14 +272,13 @@ class ExternalServiceMapping(HsscBase):
 # **********************************************************************************************************************
 # Service进程管理Model
 # **********************************************************************************************************************
+Operation_priority = [(1, '紧急'), (2, '优先'), (3, '一般')]
 
 # 服务进程表 ServiceProc
 class ContractServiceProc(HsscBase):
     contract_service = models.ForeignKey(ContractService, on_delete=models.CASCADE, verbose_name="合约服务")
-    customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='service_proc_customer', verbose_name="客户")  # 客户id: cid
-    creater = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='service_proc_creater', verbose_name="创建者")  # 创建者id: cid
-    current_service = models.ForeignKey(Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="作业状态")
-    Operation_priority = [(0, '0级'), (1, '紧急'), (2, '优先'), (3, '一般')]
+    customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="客户")  # 客户id: cid
+    state = models.ForeignKey(L1Service, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="当前任务")
     priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name="优先级")
 
     class Meta:
@@ -287,6 +288,28 @@ class ContractServiceProc(HsscBase):
 
     def __str__(self):
         return self.customer.name
+
+
+# 任务进程表
+class TaskProc(HsscBase):
+    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    l1_service = models.ForeignKey(L1Service, on_delete=models.CASCADE, null=True, verbose_name="任务")
+    state = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
+    operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='task_proc_operator', verbose_name="操作员")  # 作业员id: uid
+    customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='task_proc_customer', verbose_name="客户")  # 客户id: cid
+    parent_proc = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    completed_time = models.DateTimeField(editable=False, null=True, verbose_name="修改时间")
+    priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name="优先级")
+
+    class Meta:
+        verbose_name = "任务进程"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+		# 任务进程名称=任务名称 + '_' + id
+        return self.l1_service.label + '_' + str(self.id)
 
 
 class OperationProcManager(models.Manager):
@@ -324,7 +347,7 @@ class OperationProcManager(models.Manager):
 
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
-    # 作业进程id: pid
+    task_proc = models.ForeignKey(TaskProc, on_delete=models.CASCADE, blank=True, null=True, verbose_name="任务进程")
     label = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
     operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_operator', verbose_name="操作员")  # 作业员id: uid
@@ -335,7 +358,7 @@ class OperationProc(HsscBase):
 	# 作业状态: state
     Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束'), (5, '撤销'), (10, '等待超时')]
     state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
-    priority = models.PositiveSmallIntegerField(choices=[(0, '0级'), (1, '紧急'), (2, '优先'), (3, '一般')], default=3, verbose_name="优先级")
+    priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name="优先级")
     entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")  # 作业入口: /clinic/service/model_name/model_id/change
     parent_proc = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
     contract_service_proc = models.ForeignKey(ContractServiceProc, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="服务进程")  # 服务进程id: spid
@@ -424,27 +447,6 @@ class OperationProc(HsscBase):
             RTC = 4  # RUNNING TO COMPLETED
         self.state = OperationCode[ocode].value
         self.save()
-
-
-# 任务进程表
-class TaskProc(HsscBase):
-    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
-    l1_service = models.ForeignKey(L1Service, on_delete=models.CASCADE, null=True, verbose_name="任务")
-    state = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
-    operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='task_proc_operator', verbose_name="操作员")  # 作业员id: uid
-    customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='task_proc_customer', verbose_name="客户")  # 客户id: cid
-    parent_proc = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
-    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
-    completed_time = models.DateTimeField(editable=False, null=True, verbose_name="修改时间")
-
-    class Meta:
-        verbose_name = "任务进程"
-        verbose_name_plural = verbose_name
-        ordering = ['id']
-
-    def __str__(self):
-		# 任务进程名称=任务名称 + '_' + id
-        return self.l1_service.label + '_' + str(self.id)
 
 
 # 用户基本信息
