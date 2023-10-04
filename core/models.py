@@ -426,6 +426,27 @@ class OperationProc(HsscBase):
         self.save()
 
 
+# 任务进程表
+class TaskProc(HsscBase):
+    label = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
+    l1_service = models.ForeignKey(L1Service, on_delete=models.CASCADE, null=True, verbose_name="任务")
+    state = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
+    operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='task_proc_operator', verbose_name="操作员")  # 作业员id: uid
+    customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='task_proc_customer', verbose_name="客户")  # 客户id: cid
+    parent_proc = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="父进程")  # 父作业进程id: ppid
+    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
+    completed_time = models.DateTimeField(editable=False, null=True, verbose_name="修改时间")
+
+    class Meta:
+        verbose_name = "任务进程"
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+		# 任务进程名称=任务名称 + '_' + id
+        return self.l1_service.label + '_' + str(self.id)
+
+
 # 用户基本信息
 class Customer(HsscBase):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='客户')

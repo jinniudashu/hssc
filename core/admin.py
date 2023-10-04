@@ -415,6 +415,13 @@ class OperationProcAdmin(admin.ModelAdmin):
     ordering = ['id']
 clinic_site.register(OperationProc, OperationProcAdmin)
 
+@admin.register(TaskProc)
+class TaskProcAdmin(admin.ModelAdmin):
+    list_display = ['id', 'l1_service', 'state', 'operator', 'customer', 'parent_proc', 'created_time', 'completed_time',]
+    list_display_links = ['l1_service', 'state', 'operator', 'customer', 'parent_proc', 'created_time', 'completed_time',]
+    ordering = ['id']
+clinic_site.register(TaskProc, TaskProcAdmin)
+
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['name', 'phone']
