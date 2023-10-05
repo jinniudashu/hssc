@@ -311,6 +311,27 @@ class TaskProc(HsscBase):
 		# 任务进程名称=任务名称 + '_' + id
         return self.l1_service.label + '_' + str(self.id)
 
+# 作业协程表 OperationCoroutine
+class OperationCoroutine(HsscBase):
+    ctype = models.CharField(max_length=50, verbose_name="协程类型")  # 协程类型: ctype, 目前只有"completed_all"
+
+    class Meta:
+        verbose_name = "作业协程"
+        verbose_name_plural = "作业协程"
+        ordering = ['id']
+
+    def __str__(self):
+        return self.ctype+'_'+str(self.id)
+
+    # 返回协程状态
+    def get_states(self):
+        return [proc.state for proc in OperationProc.objects.filter(coroutine=self)]
+
+    # 返回协程表单数据
+    def combine_forms_data(self):
+        forms = [ proc.content_object for proc in OperationProc.objects.filter(coroutine=self)]
+        print('forms', forms)
+        return None
 
 class OperationProcManager(models.Manager):
     def get_service_queue_count(self, service):
@@ -347,9 +368,10 @@ class OperationProcManager(models.Manager):
 
 # 作业进程表 OperationProc
 class OperationProc(HsscBase):
-    task_proc = models.ForeignKey(TaskProc, on_delete=models.CASCADE, blank=True, null=True, verbose_name="任务进程")
+    task_proc = models.ForeignKey(TaskProc, on_delete=models.CASCADE, blank=True, null=True, verbose_name="服务任务")
+    coroutine = models.ForeignKey(OperationCoroutine, on_delete=models.CASCADE, blank=True, null=True, verbose_name="作业协程")
     label = models.CharField(max_length=255, blank=True, null=True, verbose_name="名称")
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务")  # 作业id: oid
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="服务作业")  # 作业id: oid
     operator = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_operator', verbose_name="操作员")  # 作业员id: uid
     customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_customer', verbose_name="客户")  # 客户id: cid
     creater = models.ForeignKey('Customer', on_delete=models.SET_NULL, blank=True, null=True, related_name='operation_proc_creater', verbose_name="创建者")  # 创建者id: cid

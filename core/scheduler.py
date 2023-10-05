@@ -11,7 +11,7 @@ from registration.signals import user_registered, user_activated, user_approved
 from enum import Enum
 from collections import defaultdict
 
-from core.models import Service, ServiceRule, Staff, Customer, VirtualStaff, CustomerServiceLog, OperationProc, RecommendedService, Message, ChengBaoRenYuanQingDan
+from core.models import Service, ServiceRule, EventRule, Staff, Customer, VirtualStaff, CustomerServiceLog, OperationProc, OperationCoroutine, RecommendedService, Message, ChengBaoRenYuanQingDan
 from core.business_functions import field_name_replace, create_customer_schedule, manage_recommended_service
 from core.signals import operand_started, operand_finished  # 自定义作业完成信号
 
@@ -364,6 +364,19 @@ def operand_finished_handler(sender, **kwargs):
             else:
                 params['content_type'] = ContentType.objects.get(app_label='service', model=kwargs['next_service'].name.lower())  # 表单类型
 
+
+            # 协程作业逻辑处理
+            # 判断待创建作业进程是否是协同作业进程，如果是，创建一个协程进程
+            cooperative_type = 'completed_all'
+            cooperative_event_rule = EventRule.objects.get(name=cooperative_type)
+            if ServiceRule.objects.filter(service=params['service'], event_rule=cooperative_event_rule).count() > 0:
+                # 生成协程进程
+                coroutine = OperationCoroutine.objects.create(
+                    label=cooperative_type + str(timezone.now().timestamp()),
+                    ctype=cooperative_type
+                )
+                params['coroutine'] = coroutine
+
             # 获取服务表单的API字段
             api_fields = proc.service.buessiness_forms.all()[0].api_fields
             if api_fields:
@@ -405,9 +418,7 @@ def operand_finished_handler(sender, **kwargs):
                         params['scheduled_time'] = timezone.now() + timedelta(hours=1)
                         new_proc = create_service_proc(**params)
 
-                # 显示提示消息：开单成功
-                messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(operators)}份')
-                return f'创建{len(operators)}个服务作业进程: {new_proc}'
+                count_proc = len(operators)
             else:
                 for schedule_time in schedule_times:
                     # 估算计划执行时间
@@ -415,9 +426,11 @@ def operand_finished_handler(sender, **kwargs):
                     # 创建新的服务作业进程
                     new_proc = create_service_proc(**params)
 
-                # 显示提示消息：开单成功
-                messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{len(schedule_times)}份')
-                return f'创建{len(schedule_times)}个服务作业进程: {new_proc}'
+                count_proc = len(schedule_times)
+
+            # 显示提示消息：开单成功
+            messages.add_message(kwargs['request'], messages.INFO, f'{service.label}已开单{count_proc}份')
+            return f'创建{count_proc}个服务作业进程: {new_proc}'
 
         def _recommend_next_service(**kwargs): 
             '''
@@ -510,9 +523,21 @@ def operand_finished_handler(sender, **kwargs):
         # 执行系统自动作业。传入：作业指令，作业参数；返回：String，描述执行结果
         # 执行前检查系统作业类型是否合法，只执行operand_type为"SCHEDULE_OPERAND"的系统作业
         if system_operand.operand_type == "SCHEDULE_OPERAND":
-            # 调用OperandFuncMixin中的系统自动作业函数
-            result = eval(f'SystemOperandFunc.{system_operand.func}')(**params)
-            return result
+            # 解析协程事件, 获取协程状态
+            coroutine_types = ['completed_all']
+            if service_rule.event_rule.expression in coroutine_types and kwargs['pid'].coroutine:
+                coroutine = kwargs['pid'].coroutine
+                print('协程类型', coroutine.ctype, '协程状态:', coroutine.get_states())
+                # 如果协程完成，调用系统自动作业函数
+                if all(state == 4 for state in coroutine.get_states()):
+                    # 准备协程作业参数
+                    params['form_data'] = coroutine.combine_forms_data()
+                    print('协程表单:', params['form_data'])
+                    result = eval(f'SystemOperandFunc.{system_operand.func}')(**params)
+                    return result
+            else:  # 普通作业进程，直接调用系统自动作业函数
+                result = eval(f'SystemOperandFunc.{system_operand.func}')(**params)
+                return result
         return None
 
     operation_proc = kwargs['pid']
@@ -534,7 +559,7 @@ def operand_finished_handler(sender, **kwargs):
         history_data = _get_history_data(event_rule, operation_proc.customer)  # 准备环境上下文数据：客户历史服务记录
         form_name = operation_proc.content_object.__class__.__name__.lower()  # 表单名称
 
-        if event_rule.expression == 'completed':  # 完成事件直接调度系统作业
+        if event_rule.expression in ['completed', 'completed_all'] :  # 完成事件直接调度系统作业
             result = _schedule(service_rule, **kwargs)
         # 判断是否发生其他业务事件
         else:

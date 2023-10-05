@@ -203,39 +203,18 @@ def create_service_proc(**kwargs):
         'priority_operator': kwargs['priority_operator'],
         'state': kwargs['state'],
         'scheduled_time': kwargs['scheduled_time'],
-        'contract_service_proc': kwargs.get('contract_service_proc'),
+        'contract_service_proc': kwargs.get('contract_service_proc', None),
         'content_type': kwargs['content_type'],
         'overtime': kwargs['service'].overtime,  # 超时时间
         'working_hours': kwargs['service'].working_hours,  # 工作时间
+        'coroutine': kwargs.get('coroutine', None),  # 协程进程
     }
 
-    parent_proc = kwargs.get('parent_proc')
+    parent_proc = kwargs.get('parent_proc', None)
     if parent_proc:
         params['parent_proc'] = parent_proc
 
     new_proc = OperationProc.objects.create(**params)
-
-    # 解析服务任务进程
-    # 1. 如果当前服务作业是某服务任务的起始作业，创建新任务进程，作为新作业进程的任务进程
-    # 2. 否则，使用父作业进程的任务进程
-    try:
-        # try to get start_service from L1Service
-        l1_service = L1Service.objects.get(start_service=params['service'])
-        task_proc = TaskProc.objects.create(
-            label=l1_service.label+str(timezone.now()),
-            l1_service=l1_service,
-            state=params['service'],
-            operator=params['operator'],
-            customer=params['customer'],
-        )
-    except ObjectDoesNotExist:
-        task_proc = parent_proc.task_proc if parent_proc else None
-        if task_proc:
-            # 更新任务进程的状态
-            task_proc.state = params['service']
-            task_proc.save()
-    # 更新作业进程的任务进程
-    new_proc.task_proc = task_proc
 
     # Here postsave signal in service.models
     # 更新允许作业岗位
@@ -253,6 +232,29 @@ def create_service_proc(**kwargs):
         new_proc.object_id = form.id
         new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
     
+    # 解析服务任务进程
+    # 1. 如果当前作业是某任务的起始作业，创建新任务进程，作为新作业进程的任务进程
+    # 2. 否则，使用父作业进程的任务进程
+    try:
+        # try to get start_service from L1Service
+        l1_service = L1Service.objects.get(start_service=params['service'])
+        task_proc = TaskProc.objects.create(
+            label=l1_service.label+str(timezone.now().timestamp()),
+            l1_service=l1_service,
+            state=params['service'],
+            operator=params['operator'],
+            customer=params['customer'],
+        )
+    except ObjectDoesNotExist:
+        task_proc = parent_proc.task_proc if parent_proc else None
+        if task_proc:
+            # 更新任务进程的状态
+            task_proc.state = params['service']
+            task_proc.save()
+    # 更新作业进程的任务进程
+    new_proc.task_proc = task_proc
+
+    # 保存作业进程
     new_proc.save()
 
     return new_proc
@@ -551,6 +553,7 @@ def update_customer_services_list(customer):
             'service_label': proc.service.label,
             'service_id': proc.service.id,
             'completion_timeout': proc.completion_timeout,
+            'operator_id': proc.operator.id if proc.operator else '0',
         } for proc in customer.get_scheduled_services('TODAY')
     ]
     scheduled_services_recent = [
@@ -559,6 +562,7 @@ def update_customer_services_list(customer):
             'service_label': proc.service.label,
             'service_id': proc.service.id,
             'completion_timeout': proc.completion_timeout,
+            'operator_id': proc.operator.id if proc.operator else '0',
         } for proc in customer.get_scheduled_services('RECENT')
     ]
 

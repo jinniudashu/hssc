@@ -73,6 +73,7 @@ class ClinicSite(admin.AdminSite):
 
         # 向sessionStorage写入customer_id
         response.set_cookie('customer_id', kwargs['customer_id'])
+        response.set_cookie('operator_id', operator.id)
         response.set_cookie('environment', settings.DJANGO_ENV)
         
         # # 获取操作员有操作权限的服务id列表, 写入cookie
@@ -410,8 +411,8 @@ clinic_site.register(ContractServiceProc)
 
 @admin.register(OperationProc)
 class OperationProcAdmin(admin.ModelAdmin):
-    list_display = ['id', 'service', 'operator', 'customer', 'state', 'scheduled_time', 'entry', 'parent_proc', 'contract_service_proc']
-    list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'parent_proc', 'contract_service_proc']
+    list_display = ['id', 'task_proc', 'service', 'operator', 'customer', 'state', 'scheduled_time', 'coroutine', 'entry', 'parent_proc']
+    list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'parent_proc']
     ordering = ['id']
 clinic_site.register(OperationProc, OperationProcAdmin)
 

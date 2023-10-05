@@ -41,7 +41,7 @@
     <div id="app">
         <h3>已安排服务</h3>
         <div v-for="service in servicesList.scheduled_services_today" :key="service.service_id">
-            <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null"
+            <a :href="permittedServicesId.includes(service.service_id) && service.operator_id==operatorId ? service.service_entry : null"
                 :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
             >
                 {{ service.service_label }}
@@ -79,7 +79,7 @@
             <a :href="permittedServicesId.includes(service.service_id) ? service.service_entry : null"
                 :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
             >
-                {{ service.service_label }}
+                {{ service.service_label }}{{service.operator_id}}
             </a>
             <br>
         </div>
@@ -104,6 +104,7 @@
                         'history_services': [],    // 历史服务
                     },
                     permittedServicesId: [],  // 当前操作员可以操作的服务id
+                    operatorId: null,
                 }
             },
 
@@ -111,7 +112,9 @@
                 let _this = this;
 
                 customerId = Cookies.get('customer_id');
+                this.operatorId = Number(Cookies.get('operator_id'));
                 console.log('客户ID：', customerId);
+                console.log('操作员ID：', this.operatorId);
 
                 permitted_services_id = Cookies.get('permitted_services_id').slice(1,-1).replace(/\\054 /g, ',').split(',')
                 this.permittedServicesId = permitted_services_id.map(id => parseInt(id))
