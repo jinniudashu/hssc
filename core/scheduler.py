@@ -531,8 +531,8 @@ def operand_finished_handler(sender, **kwargs):
                 # 如果协程完成，调用系统自动作业函数
                 if all(state == 4 for state in coroutine.get_states()):
                     # 准备协程作业参数
+                    print('传入表单:', params['form_data'])
                     params['form_data'] = coroutine.combine_forms_data()
-                    print('协程表单:', params['form_data'])
                     result = eval(f'SystemOperandFunc.{system_operand.func}')(**params)
                     return result
             else:  # 普通作业进程，直接调用系统自动作业函数
