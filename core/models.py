@@ -326,22 +326,13 @@ class OperationCoroutine(HsscBase):
     # 返回协程状态
     def get_states(self):
         return [proc.state for proc in OperationProc.objects.filter(coroutine=self)]
+    
+    # 获取协程表单数据
+    def get_form_objs(self):
+        if self.ctype == 'completed_all':
+            form_objs = [proc.content_object for proc in OperationProc.objects.filter(coroutine=self)]
+        return form_objs
 
-    # 返回协程表单数据
-    def combine_forms_data(self):
-        # forms = [ proc.content_object for proc in OperationProc.objects.filter(coroutine=self)]
-        # Convert each Hui_zhen_jian_yi_fu_wu object to a dictionary using __dict__, then filter out unwanted attributes
-        forms = [proc.content_object.__dict__ for proc in OperationProc.objects.filter(coroutine=self)]
-        print('forms', forms)
-
-        # Filter out attributes starting with "_" and other potential unwanted attributes like "id", "pk", etc.
-        forms_data = [
-            {k: v for k, v in form.items() if not k.startswith('_') and k not in ["id", "pk"]} 
-            for form in forms
-        ]
-        print('forms_data', forms_data)
-
-        return None
 
 class OperationProcManager(models.Manager):
     def get_service_queue_count(self, service):

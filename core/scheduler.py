@@ -295,6 +295,7 @@ def operand_finished_handler(sender, **kwargs):
             params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             params['form_data'] = kwargs['form_data']  # 表单数据
             params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
+            params['coroutine_result'] = kwargs.get('coroutine_result', None)  # 协程结果
 
             # 创建新的服务作业进程
             new_proc = create_service_proc(**params)
@@ -357,6 +358,7 @@ def operand_finished_handler(sender, **kwargs):
             params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
             params['form_data'] = kwargs['form_data']  # 表单数据
             params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
+            params['coroutine_result'] = kwargs.get('coroutine_result', None)  # 协程结果
 
             # 区分服务类型是"1 管理调度服务"还是"2 诊疗服务"，获取ContentType
             if service.service_type == 1:
@@ -527,12 +529,11 @@ def operand_finished_handler(sender, **kwargs):
             coroutine_types = ['completed_all']
             if service_rule.event_rule.expression in coroutine_types and kwargs['pid'].coroutine:
                 coroutine = kwargs['pid'].coroutine
-                print('协程类型', coroutine.ctype, '协程状态:', coroutine.get_states())
+                coroutine_states = coroutine.get_states()
+                print('协程状态:', coroutine_states)
                 # 如果协程完成，调用系统自动作业函数
-                if all(state == 4 for state in coroutine.get_states()):
-                    # 准备协程作业参数
-                    print('传入表单:', params['form_data'])
-                    params['form_data'] = coroutine.combine_forms_data()
+                if all(state == 4 for state in coroutine_states):
+                    params['coroutine_result'] = coroutine
                     result = eval(f'SystemOperandFunc.{system_operand.func}')(**params)
                     return result
             else:  # 普通作业进程，直接调用系统自动作业函数
@@ -559,12 +560,13 @@ def operand_finished_handler(sender, **kwargs):
         history_data = _get_history_data(event_rule, operation_proc.customer)  # 准备环境上下文数据：客户历史服务记录
         form_name = operation_proc.content_object.__class__.__name__.lower()  # 表单名称
 
+        # 数据预处理：整合表单数据的formset
+        form_data_list = _preprocess_data(**kwargs)  
         if event_rule.expression in ['completed', 'completed_all'] :  # 完成事件直接调度系统作业
+            kwargs['form_data'] = form_data_list[0]  # 传递表单数据
             result = _schedule(service_rule, **kwargs)
         # 判断是否发生其他业务事件
         else:
-            # 数据预处理：整合表单数据的formset
-            form_data_list = _preprocess_data(**kwargs)  
 
             if service_rule.apply_to_group:  # 按组检查调度
                 # 查找当前form中对应系统API字段“hssc_group_no”的表单分组字段名

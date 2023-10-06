@@ -1170,7 +1170,8 @@
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "list_components": [
-                "b4edb5a4-5621-11ee-91a1-0242ac170002"
+                "b4edb5a4-5621-11ee-91a1-0242ac170002",
+                "4093f798-5696-11ee-b2e8-0242ac170002"
             ]
         },
         {
@@ -4067,7 +4068,7 @@
             "description": "",
             "detection_scope": "CURRENT_SERVICE",
             "form_class_scope": 0,
-            "event_type": "FORM_EVENT",
+            "event_type": "SCHEDULE_EVENT",
             "weight": 1,
             "expression": "len({'是'}.intersection(boolfield_shi_fou_hui_zhen)) == 1",
             "expression_fields": "boolfield_shi_fou_hui_zhen"

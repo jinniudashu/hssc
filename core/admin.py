@@ -158,7 +158,8 @@ class ClinicSite(admin.AdminSite):
         proc_params['content_type'] = content_type
         proc_params['form_data'] = None
         proc_params['apply_to_group'] = False
-
+        proc_params['coroutine_result'] = None
+        
         # 如果是推荐服务，解析parent_proc和passing_data
         if kwargs['recommended_service_id']:
             recommended_service = RecommendedService.objects.get(id=kwargs['recommended_service_id'])

@@ -108,6 +108,7 @@ def check_proc_awaiting_timeout(self):
             
             proc_params['form_data'] = None  # 待复制表单数据不使用
             proc_params['apply_to_group'] = False
+            proc_params['coroutine_result'] = None  # 协程结果
 
             print('客户日程安排增加到服务进程队列:', proc_params)
 

@@ -14,7 +14,7 @@ from core.hsscbase_class import FieldsType
 from service.models import *
 
 # 从前道表单复制数据到后道表单
-def copy_previous_form_data(form, previous_form_data, apply_to_group):
+def copy_previous_form_data(form, previous_form_data, is_list):
     def _get_parent_form(form):
         """Get the parent form of the given form."""
         if form.pid.parent_proc:
@@ -96,7 +96,7 @@ def copy_previous_form_data(form, previous_form_data, apply_to_group):
                 _copy_fields_data(form_instance, item, copy_fields_name, copy_fields_name_m2m)
 
     # 根据“分组”标识分别处理copy previous_form_data
-    if apply_to_group:
+    if is_list:
         _copy_list_data(form, previous_form_data)
     else:
         _copy_dict_data(form, previous_form_data)
@@ -105,7 +105,7 @@ def copy_previous_form_data(form, previous_form_data, apply_to_group):
 
 
 # 创建服务表单实例
-def create_form_instance(operation_proc, passing_data, form_data, apply_to_group):
+def create_form_instance(operation_proc, passing_data, form_data, apply_to_group, coroutine_result):
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
@@ -116,18 +116,41 @@ def create_form_instance(operation_proc, passing_data, form_data, apply_to_group
     )
 
     # 2. 如果passing_data>0, copy父进程表单数据
-    if passing_data > 0:  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
-        # 父进程服务类型为诊疗服务（service_type=2）时，直接copy父进程表单数据
-        if operation_proc.service.service_type==2 and form_data:
-            copy_previous_form_data(form_instance, form_data, apply_to_group)
-        # 父进程服务类型为管理调度服务（service_type=1）时，且父进程content_object类型为CustomerSchedule时，
-        # 尝试从content_object.reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
-        elif operation_proc.service.service_type==1 and operation_proc.content_object.__class__.__name__=='CustomerSchedule':
-            for proc in operation_proc.content_object.reference_operation:
-                form_obj = proc.content_object
-                # form_obj转换为form_data类型
-                form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+    if passing_data > 0 :  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
+        if coroutine_result:
+            print('*********协程进程，复制协程表单数据*********')
+            form_objs = coroutine_result.get_form_objs()
+            forms_data = []
+            for form_obj in form_objs:
+                _form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+                form_list_data = []
+                # 判断是否存在明细表
+                if form_obj._meta.related_objects:
+                    related_name = form_obj._meta.related_objects[0].get_accessor_name()
+                    form_list_objs = getattr(form_obj, related_name).all()
+                    if form_list_objs.exists():
+                        for obj in form_list_objs:
+                            form_list_data.append({field.name: getattr(obj, field.name) for field in obj._meta.fields})
+                if form_list_data:
+                    form_data = [{**_form_data, **item} for item in form_list_data if item]
+                else:
+                    form_data = [_form_data]
+                forms_data.extend(form_data)
+            print('forms_data:', forms_data)
+            copy_previous_form_data(form_instance, forms_data, True)
+        else:
+            # 父进程服务类型为诊疗服务（service_type=2）时，直接copy父进程表单数据
+            if operation_proc.service.service_type==2 and form_data:
                 copy_previous_form_data(form_instance, form_data, apply_to_group)
+            # 父进程服务类型为管理调度服务（service_type=1）时，且父进程content_object类型为CustomerSchedule时，
+            # 尝试从content_object.reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
+            elif operation_proc.service.service_type==1 and operation_proc.content_object.__class__.__name__=='CustomerSchedule':
+                for proc in operation_proc.content_object.reference_operation:
+                    form_obj = proc.content_object
+                    # form_obj转换为form_data类型
+                    form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+                    copy_previous_form_data(form_instance, form_data, apply_to_group)
+
     return form_instance
 
 
@@ -227,7 +250,7 @@ def create_service_proc(**kwargs):
         new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
         
     else: # 创建诊疗服务表单进程
-        form = create_form_instance(new_proc, kwargs['passing_data'], form_data, kwargs['apply_to_group'])
+        form = create_form_instance(new_proc, kwargs['passing_data'], form_data, kwargs['apply_to_group'], kwargs['coroutine_result'])
         # 更新OperationProc服务进程的form实例信息
         new_proc.object_id = form.id
         new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'
@@ -378,6 +401,10 @@ def get_customer_profile(customer):
 # 为新服务分配操作员，返回操作员(Customer类型)
 def dispatch_operator(customer, service, current_operator, scheduled_time, task_proc):
 
+    # 0. 当前任务进程的操作员具有新增服务岗位权限, 返回当前任务进程的操作员
+    if task_proc and set(task_proc.operator.staff.role.all()).intersection(set(service.role.all())):
+        return task_proc.operator
+
     # 1. 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象
     charge_staff = customer.charge_staff
     if charge_staff:
@@ -390,10 +417,6 @@ def dispatch_operator(customer, service, current_operator, scheduled_time, task_
         # 2. 如当前作业员具有新增服务岗位权限，且scheduled_time为当天，则开单给当前作业员
         if set(current_operator.staff.role.all()).intersection(set(service.role.all())) and scheduled_time.date()==timezone.now().date():
             return current_operator
-
-    # 3. 否则返回当前任务进程的操作员
-    if task_proc:
-        return task_proc.operator
 
     # 否则，操作员为空，进入共享队列
     return None

@@ -234,7 +234,7 @@ clinic_site.register(Hui_zhen_zhen_duan_fu_wu, Hui_zhen_zhen_duan_fu_wuAdmin)
 class Hui_zhen_jian_yi_fu_wu_listInline(admin.TabularInline):
     model = Hui_zhen_jian_yi_fu_wu_list
     extra = 1
-    autocomplete_fields = ["boolfield_hui_zhen_jian_yi", ]
+    autocomplete_fields = ["boolfield_hui_zhen_jian_yi", "boolfield_hui_zhen_ze_ren_ren", ]
             
 class Hui_zhen_jian_yi_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
@@ -569,7 +569,6 @@ class A6218Admin(HsscFormAdmin):
         ("门诊医生问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", "boolfield_shi_fou_hui_zhen", "boolfield_shi_fou_zhuan_zhen", )}), ]
     autocomplete_fields = ["boolfield_zheng_zhuang", ]
     radio_fields = {"boolfield_shi_fou_hui_zhen": admin.VERTICAL, "boolfield_shi_fou_zhuan_zhen": admin.VERTICAL, }
-    change_form_template = "a6218_change_form.html"
 
 admin.site.register(A6218, A6218Admin)
 clinic_site.register(A6218, A6218Admin)
