@@ -1164,12 +1164,14 @@
             "name_icpc": null,
             "description": "",
             "form_class": 2,
-            "api_fields": {},
+            "api_fields": {
+                "hssc_operator": "boolfield_hui_zhen_ze_ren_ren"
+            },
             "components": [
-                "d71033f4-5622-11ee-ad57-0242ac170002",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "list_components": [
+                "d71033f4-5622-11ee-ad57-0242ac170002",
                 "b4edb5a4-5621-11ee-91a1-0242ac170002",
                 "4093f798-5696-11ee-b2e8-0242ac170002"
             ]

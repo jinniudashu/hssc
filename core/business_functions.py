@@ -122,7 +122,10 @@ def create_form_instance(operation_proc, passing_data, form_data, apply_to_group
             form_objs = coroutine_result.get_form_objs()
             forms_data = []
             for form_obj in form_objs:
-                _form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+                _fields_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+                _m2m_fields_data = {field.name: getattr(form_obj, field.name).all() for field in form_obj._meta.many_to_many}
+                _form_data = {**_fields_data, **_m2m_fields_data}
+
                 form_list_data = []
                 # 判断是否存在明细表
                 if form_obj._meta.related_objects:
@@ -130,7 +133,9 @@ def create_form_instance(operation_proc, passing_data, form_data, apply_to_group
                     form_list_objs = getattr(form_obj, related_name).all()
                     if form_list_objs.exists():
                         for obj in form_list_objs:
-                            form_list_data.append({field.name: getattr(obj, field.name) for field in obj._meta.fields})
+                            _fields_data = {field.name: getattr(obj, field.name) for field in obj._meta.fields}
+                            _m2m_fields_data = {field.name: getattr(obj, field.name).all() for field in obj._meta.many_to_many}
+                            form_list_data.append({**_fields_data, **_m2m_fields_data})
                 if form_list_data:
                     form_data = [{**_form_data, **item} for item in form_list_data if item]
                 else:

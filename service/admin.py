@@ -239,7 +239,7 @@ class Hui_zhen_jian_yi_fu_wu_listInline(admin.TabularInline):
 class Hui_zhen_jian_yi_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("会诊建议表", {"fields": ("boolfield_zheng_zhuang", "boolfield_qi_ta", )}), ]
+        ("会诊建议表", {"fields": ("boolfield_zheng_zhuang", )}), ]
     autocomplete_fields = ["boolfield_zheng_zhuang", ]
     inlines = [Hui_zhen_jian_yi_fu_wu_listInline, ]
 
