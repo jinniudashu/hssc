@@ -386,7 +386,7 @@ def operand_finished_handler(sender, **kwargs):
                 hssc_operator = api_fields.get('hssc_operator', None)
                 if hssc_operator:
                     # 获取服务作业人员列表
-                    _operators = kwargs['form_data'].get(hssc_operator, None)
+                    _operators = kwargs['form_data'].get(hssc_operator['field_name'], None)
                     # 如果_operators不是列表，转化为列表
                     if type(_operators) == list or isinstance(_operators, models.QuerySet):
                         operators = _operators

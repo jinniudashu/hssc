@@ -202,17 +202,17 @@ def create_service_proc(**kwargs):
             # 获取父进程表单的api_fields中的进程控制信息：作业人员，计划执行时间，责任人
             api_fields = kwargs['parent_proc'].service.buessiness_forms.all()[0].api_fields
             for system_field, form_field in api_fields.items():
-                field_value = form_item.get(form_field, None)
+                field_value = form_item.get(form_field['field_name'], None)
                 if field_value and system_field == 'hssc_operator':  # operator: 作业人员                    
-                    if isinstance(form_item.get(form_field), Staff):
-                        operator = form_item.get(form_field).customer
+                    if isinstance(form_item.get(form_field['field_name']), Staff):
+                        operator = form_item.get(form_field['field_name']).customer
                         kwargs['operator'] = operator
                 elif field_value and system_field == 'hssc_scheduled_time':  # scheduled_time: 计划执行时间
-                    scheduled_time = form_item.get(form_field)
+                    scheduled_time = form_item.get(form_field['field_name'])
                     kwargs['scheduled_time'] = scheduled_time
                 elif field_value and system_field=='hssc_charge_staff':  # charge_staff: 责任人
-                    kwargs['customer'].charge_staff = form_item.get(form_field)
-                    kwargs['customer'].save()                        
+                    kwargs['customer'].charge_staff = form_item.get(form_field['field_name'])
+                    kwargs['customer'].save()
                 else:
                     pass
     except KeyError as e:

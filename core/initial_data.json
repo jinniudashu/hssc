@@ -1148,7 +1148,10 @@
             "description": "",
             "form_class": 2,
             "api_fields": {
-                "hssc_operator": "boolfield_hui_zhen_ren"
+                "hssc_operator": {
+                    "field_name": "boolfield_hui_zhen_ren",
+                    "default_value": null
+                }
             },
             "components": [
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
@@ -1165,7 +1168,10 @@
             "description": "",
             "form_class": 2,
             "api_fields": {
-                "hssc_operator": "boolfield_hui_zhen_ze_ren_ren"
+                "hssc_operator": {
+                    "field_name": "boolfield_hui_zhen_ze_ren_ren",
+                    "default_value": "CurrentOperator"
+                }
             },
             "components": [
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877"

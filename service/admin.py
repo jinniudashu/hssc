@@ -231,11 +231,34 @@ class Hui_zhen_zhen_duan_fu_wuAdmin(HsscFormAdmin):
 admin.site.register(Hui_zhen_zhen_duan_fu_wu, Hui_zhen_zhen_duan_fu_wuAdmin)
 clinic_site.register(Hui_zhen_zhen_duan_fu_wu, Hui_zhen_zhen_duan_fu_wuAdmin)
 
+
+from django import forms
+class Hui_zhen_jian_yi_fu_wu_listForm(forms.ModelForm):
+    class Meta:
+        model = Hui_zhen_jian_yi_fu_wu_list
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        operator = Customer.objects.get(id=self.user.id)
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk:
+            self.fields['boolfield_hui_zhen_ze_ren_ren'].initial = operator
+
 class Hui_zhen_jian_yi_fu_wu_listInline(admin.TabularInline):
     model = Hui_zhen_jian_yi_fu_wu_list
     extra = 1
     autocomplete_fields = ["boolfield_hui_zhen_jian_yi", "boolfield_hui_zhen_ze_ren_ren", ]
-            
+
+    def get_formset(self, request, obj=None, **kwargs):
+        FormWithUser = type(
+            'FormWithUser',
+            (Hui_zhen_jian_yi_fu_wu_listForm,),
+            {'__init__': lambda self, *args, **kwargs: Hui_zhen_jian_yi_fu_wu_listForm.__init__(self, user=request.user, *args, **kwargs)}
+        )
+        kwargs['form'] = FormWithUser
+        return super().get_formset(request, obj, **kwargs)
+
 class Hui_zhen_jian_yi_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
