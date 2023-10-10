@@ -206,7 +206,9 @@ def create_service_proc(**kwargs):
                 if field_value and system_field == 'hssc_operator':  # operator: 作业人员                    
                     if isinstance(form_item.get(form_field['field_name']), Staff):
                         operator = form_item.get(form_field['field_name']).customer
+                        print('operator:', kwargs['operator'])
                         kwargs['operator'] = operator
+                        print('operator:', kwargs['operator'])
                 elif field_value and system_field == 'hssc_scheduled_time':  # scheduled_time: 计划执行时间
                     scheduled_time = form_item.get(form_field['field_name'])
                     kwargs['scheduled_time'] = scheduled_time

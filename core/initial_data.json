@@ -244,9 +244,18 @@
             "description": "",
             "form_class": 3,
             "api_fields": {
-                "hssc_frequency": "boolfield_yong_yao_pin_ci",
-                "hssc_duration": "boolfield_yong_yao_liao_cheng",
-                "hssc_group_no": "boolfield_zu_bie"
+                "hssc_frequency": {
+                    "field_name": "boolfield_yong_yao_pin_ci",
+                    "default_value": null
+                },
+                "hssc_duration": {
+                    "field_name": "boolfield_yong_yao_liao_cheng",
+                    "default_value": null
+                },
+                "hssc_group_no": {
+                    "field_name": "boolfield_zu_bie",
+                    "default_value": null
+                }
             },
             "components": [
                 "a6c0522e-bf7e-11ec-843b-6afc6c25d902",
@@ -305,8 +314,14 @@
             "description": "",
             "form_class": 1,
             "api_fields": {
-                "hssc_scheduled_time": "boolfield_yu_yue_shi_jian",
-                "hssc_charge_staff": "boolfield_ze_ren_ren"
+                "hssc_scheduled_time": {
+                    "field_name": "boolfield_yu_yue_shi_jian",
+                    "default_value": null
+                },
+                "hssc_charge_staff": {
+                    "field_name": "boolfield_ze_ren_ren",
+                    "default_value": null
+                }
             },
             "components": [
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
@@ -323,7 +338,12 @@
             "name_icpc": "A6502",
             "description": "",
             "form_class": 1,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_scheduled_time": {
+                    "field_name": "boolfield_yu_yue_shi_jian",
+                    "default_value": null
+                }
+            },
             "components": [
                 "deb85c6e-9aa1-11ec-bde1-8a6e55faf877",
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
@@ -442,7 +462,12 @@
             "name_icpc": "T6301",
             "description": null,
             "form_class": null,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_frequency": {
+                    "field_name": "boolfield_yong_yao_pin_ci",
+                    "default_value": null
+                }
+            },
             "components": [
                 "1bf942da-c5ce-11ec-b9d4-725badf7393d",
                 "decabc92-9aa1-11ec-bde1-8a6e55faf877",
@@ -796,8 +821,14 @@
             "description": "",
             "form_class": 3,
             "api_fields": {
-                "hssc_frequency": "boolfield_yong_yao_pin_ci",
-                "hssc_duration": "boolfield_yong_yao_liao_cheng"
+                "hssc_frequency": {
+                    "field_name": "boolfield_yong_yao_pin_ci",
+                    "default_value": null
+                },
+                "hssc_duration": {
+                    "field_name": "boolfield_yong_yao_liao_cheng",
+                    "default_value": null
+                }
             },
             "components": [
                 "e98d52f2-c9ef-11ec-b452-168d53e8234e",
@@ -882,7 +913,12 @@
             "name_icpc": null,
             "description": "",
             "form_class": 1,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_frequency": {
+                    "field_name": "boolfield_yong_yao_pin_ci",
+                    "default_value": null
+                }
+            },
             "components": [
                 "2c4ebf36-d5b7-11ec-a897-52d938fbdf73",
                 "18cfcb9a-d11a-11ec-ab0d-823d1f108281",
@@ -1190,7 +1226,12 @@
             "name_icpc": null,
             "description": "",
             "form_class": 2,
-            "api_fields": {},
+            "api_fields": {
+                "hssc_operator": {
+                    "field_name": "boolfield_hui_zhen_ze_ren_ren",
+                    "default_value": "CurrentOperator"
+                }
+            },
             "components": [
                 "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
                 "4ed88f20-5624-11ee-a441-0242ac170002"

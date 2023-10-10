@@ -116,8 +116,8 @@ class Hui_zhen_jian_yi_fu_wu(HsscFormModel):
 class Hui_zhen_jian_yi_fu_wu_list(models.Model):
     hui_zhen_jian_yi_fu_wu = models.ForeignKey(Hui_zhen_jian_yi_fu_wu, on_delete=models.CASCADE, verbose_name='会诊建议服务')
     boolfield_hui_zhen_jian_yi = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_hui_zhen_jian_yi_hui_zhen_jian_yi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='会诊建议')
-    boolfield_hui_zhen_ze_ren_ren = models.ForeignKey(VirtualStaff, related_name='virtualstaff_for_boolfield_hui_zhen_ze_ren_ren_hui_zhen_jian_yi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='会诊责任人')
     boolfield_qi_ta = models.CharField(max_length=255, null=True, blank=True, verbose_name='其他')
+    boolfield_hui_zhen_ze_ren_ren = models.ForeignKey(VirtualStaff, related_name='virtualstaff_for_boolfield_hui_zhen_ze_ren_ren_hui_zhen_jian_yi_fu_wu', on_delete=models.CASCADE, null=True, blank=True, verbose_name='会诊责任人')
 
     class Meta:
         verbose_name = '会诊建议服务明细'
