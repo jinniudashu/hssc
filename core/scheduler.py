@@ -465,7 +465,7 @@ def operand_finished_handler(sender, **kwargs):
             # 获取当前进程的父进程
             proc = kwargs['operation_proc']
             parent_proc = proc.parent_proc
-            if parent_proc.service == kwargs['next_service']:  # 如果父进程服务是规则指定的下一个服务，执行退单
+            if parent_proc and parent_proc.service == kwargs['next_service']:  # 如果父进程服务是规则指定的下一个服务，执行退单
                 parent_proc.return_form()
                 print('退回表单 至:', parent_proc)
 

@@ -44,7 +44,7 @@
             <a :href="permittedServicesId.includes(service.service_id) && service.operator_id==operatorId ? service.service_entry : null"
                 :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
             >
-                {{ service.service_label }}
+                {{ service.service_label }} {{ service.state=='6' ? '(退)' : ''}}
             </a>
             <br>
         </div>

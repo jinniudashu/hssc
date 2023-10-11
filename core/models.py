@@ -427,6 +427,10 @@ class OperationProc(HsscBase):
         self.operator = operator
         self.state = 1
         self.save()
+        # 如果某服务任务的开始作业，设置服务任务进程作业人员
+        if L1Service.objects.filter(start_service=self.service).count() > 0:
+            self.task_proc.operator = operator
+            self.task_proc.save()
 
     def rollback_task(self):
         # 作业进程回退

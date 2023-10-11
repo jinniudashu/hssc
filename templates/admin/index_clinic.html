@@ -77,7 +77,7 @@
                     <tr v-for="todo in item.todos" :key="todo.id">
                         <td>{{ todo.customer_number }}</td>
                         <td><a :href="todo.state == 3 ? null : 'customer_service/' + todo.customer_id">{{ todo.customer_name }}</a></td>
-                        <td :class="{'red': todo.completion_timeout}">{{ todo.service_label }}</td>
+                        <td :class="{'red': todo.completion_timeout}">{{ todo.service_label }} {{ todo.state=='6' ? '(退)' : '' }}</td>
                         <td v-if="item.title == '本周服务安排'">{{ todo.scheduled_time }}</td>
                         <td>{{ todo.customer_phone }}</td>
                         <td>{{ todo.customer_address }}</td>

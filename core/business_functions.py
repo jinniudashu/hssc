@@ -584,6 +584,7 @@ def update_customer_services_list(customer):
             'service_id': proc.service.id,
             'completion_timeout': proc.completion_timeout,
             'operator_id': proc.operator.id if proc.operator else '0',
+            'state': proc.state,
         } for proc in customer.get_scheduled_services('TODAY')
     ]
     scheduled_services_recent = [
@@ -593,6 +594,7 @@ def update_customer_services_list(customer):
             'service_id': proc.service.id,
             'completion_timeout': proc.completion_timeout,
             'operator_id': proc.operator.id if proc.operator else '0',
+            'state': proc.state,
         } for proc in customer.get_scheduled_services('RECENT')
     ]
 
