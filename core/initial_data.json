@@ -62,6 +62,15 @@
             "parameters": null,
             "description": null,
             "operand_type": "SCHEDULE_OPERAND"
+        },
+        {
+            "label": "退单",
+            "name": "return_form",
+            "hssc_id": "31722da3-6816-11ee-a0f4-4889e7cf38c9",
+            "func": "RETURN_FORM",
+            "parameters": null,
+            "description": "退回表单",
+            "operand_type": "SCHEDULE_OPERAND"
         }
     ],
     "cycleunit": [
@@ -1210,12 +1219,12 @@
                 }
             },
             "components": [
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
+                "4093f798-5696-11ee-b2e8-0242ac170002"
             ],
             "list_components": [
                 "d71033f4-5622-11ee-ad57-0242ac170002",
-                "b4edb5a4-5621-11ee-91a1-0242ac170002",
-                "4093f798-5696-11ee-b2e8-0242ac170002"
+                "b4edb5a4-5621-11ee-91a1-0242ac170002"
             ]
         },
         {

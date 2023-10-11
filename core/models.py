@@ -379,7 +379,7 @@ class OperationProc(HsscBase):
     priority_operator = models.ForeignKey('VirtualStaff', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="优先操作员")    
     role = models.ManyToManyField(Role, blank=True, verbose_name="作业岗位")
 	# 作业状态: state
-    Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束'), (5, '撤销'), (10, '等待超时')]
+    Operation_proc_state = [(0, '创建'), (1, '就绪'), (2, '运行'), (3, '挂起'), (4, '结束'), (5, '撤销'), (6, '退单'), (10, '等待超时')]
     state = models.PositiveSmallIntegerField(choices=Operation_proc_state, verbose_name="作业状态")
     priority = models.PositiveSmallIntegerField(choices=Operation_priority, default=3, verbose_name="优先级")
     entry = models.CharField(max_length=250, blank=True, null=True, db_index=True, verbose_name="作业入口")  # 作业入口: /clinic/service/model_name/model_id/change
@@ -459,6 +459,11 @@ class OperationProc(HsscBase):
         self.operator = operator
         self.save()
 
+    def return_form(self):
+        # 退单
+        self.state = 6
+        self.save()
+
     def update_state(self, ocode):
         #作业进程状态机操作码ocode
         class OperationCode(Enum):
@@ -508,11 +513,11 @@ class Customer(HsscBase):
         获取已安排服务列表
         '''
         if date == 'TODAY':
-            return self.operation_proc_customer.filter(scheduled_time__date=timezone.now().date(), state__in = [0, 1, 2, 3])
+            return self.operation_proc_customer.filter(scheduled_time__date=timezone.now().date(), state__in = [0, 1, 2, 3, 6])
         elif date == 'RECENT':  # 今天以后的服务
-            return self.operation_proc_customer.filter(scheduled_time__date__gt=timezone.now().date(), state__in = [0, 1, 3])
+            return self.operation_proc_customer.filter(scheduled_time__date__gt=timezone.now().date(), state__in = [0, 1, 3, 6])
         else:
-            return self.operation_proc_customer.filter(state__in = [0, 1, 2, 3])
+            return self.operation_proc_customer.filter(state__in = [0, 1, 2, 3, 6])
 
     def get_absolute_url(self):
         return reverse('customer_homepage', args=[self.id])

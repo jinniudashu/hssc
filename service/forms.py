@@ -24,10 +24,10 @@ class Hui_zhen_zhen_duan_fu_wu_listForm(ModelForm):
             elif model_name == 'Customer':
                 self.initial['boolfield_hui_zhen_ze_ren_ren'] = operator_customer
 
-from service.models import Hui_zhen_jian_yi_fu_wu_list
-class Hui_zhen_jian_yi_fu_wu_listForm(ModelForm):
+from service.models import Hui_zhen_jian_yi_fu_wu
+class Hui_zhen_jian_yi_fu_wuForm(ModelForm):
     class Meta:
-        model = Hui_zhen_jian_yi_fu_wu_list
+        model = Hui_zhen_jian_yi_fu_wu
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):

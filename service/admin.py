@@ -215,13 +215,17 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 # Service表单Admin
 # **********************************************************************************************************************
 
-
 class Hui_zhen_zhen_duan_fu_wu_listInline(admin.TabularInline):
     model = Hui_zhen_zhen_duan_fu_wu_list
     extra = 1
     autocomplete_fields = ["boolfield_hui_zhen_jian_yi", "boolfield_hui_zhen_ze_ren_ren", ]
-            
+
     def get_formset(self, request, obj=None, **kwargs):
+        # 获取数据库记录数
+        record_count = self.model.objects.filter(hui_zhen_zhen_duan_fu_wu=obj).count() if obj else 0
+        # 根据记录数设置extra的值
+        self.extra = 1 if record_count == 0 else 0
+        
         from service.forms import Hui_zhen_zhen_duan_fu_wu_listForm
         FormWithUser = type(
             "FormWithUser",
@@ -229,6 +233,7 @@ class Hui_zhen_zhen_duan_fu_wu_listInline(admin.TabularInline):
             {"__init__": lambda self, *args, **kwargs: Hui_zhen_zhen_duan_fu_wu_listForm.__init__(self, user=request.user, *args, **kwargs)}
         )
         kwargs["form"] = FormWithUser
+            
         return super().get_formset(request, obj, **kwargs)
 
 class Hui_zhen_zhen_duan_fu_wuAdmin(HsscFormAdmin):
@@ -244,23 +249,32 @@ clinic_site.register(Hui_zhen_zhen_duan_fu_wu, Hui_zhen_zhen_duan_fu_wuAdmin)
 class Hui_zhen_jian_yi_fu_wu_listInline(admin.TabularInline):
     model = Hui_zhen_jian_yi_fu_wu_list
     extra = 1
-    autocomplete_fields = ["boolfield_hui_zhen_jian_yi", "boolfield_hui_zhen_ze_ren_ren", ]
-            
+    autocomplete_fields = ["boolfield_hui_zhen_jian_yi", ]
+
     def get_formset(self, request, obj=None, **kwargs):
-        from service.forms import Hui_zhen_jian_yi_fu_wu_listForm
-        FormWithUser = type(
-            "FormWithUser",
-            (Hui_zhen_jian_yi_fu_wu_listForm,),
-            {"__init__": lambda self, *args, **kwargs: Hui_zhen_jian_yi_fu_wu_listForm.__init__(self, user=request.user, *args, **kwargs)}
-        )
-        kwargs["form"] = FormWithUser
+        # 获取数据库记录数
+        record_count = self.model.objects.filter(hui_zhen_jian_yi_fu_wu=obj).count() if obj else 0
+        # 根据记录数设置extra的值
+        self.extra = 1 if record_count == 0 else 0
+        
         return super().get_formset(request, obj, **kwargs)
 
 class Hui_zhen_jian_yi_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("会诊建议表", {"fields": ("boolfield_zheng_zhuang", )}), ]
-    autocomplete_fields = ["boolfield_zheng_zhuang", ]
+        ("会诊建议表", {"fields": ("boolfield_zheng_zhuang", "boolfield_hui_zhen_ze_ren_ren", )}), ]
+    autocomplete_fields = ["boolfield_zheng_zhuang", "boolfield_hui_zhen_ze_ren_ren", ]
+
+    def get_form(self, request, obj=None, **kwargs):
+        from service.forms import Hui_zhen_jian_yi_fu_wuForm
+        FormWithUser = type(
+            "FormWithUser",
+            (Hui_zhen_jian_yi_fu_wuForm,),
+            {"__init__": lambda self, *args, **kwargs: Hui_zhen_jian_yi_fu_wuForm.__init__(self, user=request.user, *args, **kwargs)}
+        )
+        kwargs["form"] = FormWithUser
+        return super().get_form(request, obj, **kwargs)
+            
     inlines = [Hui_zhen_jian_yi_fu_wu_listInline, ]
 
 admin.site.register(Hui_zhen_jian_yi_fu_wu, Hui_zhen_jian_yi_fu_wuAdmin)
@@ -304,7 +318,15 @@ class Zhu_she_fu_wu_listInline(admin.TabularInline):
     model = Zhu_she_fu_wu_list
     extra = 1
     autocomplete_fields = ["boolfield_yao_pin_ming", ]
-            
+
+    def get_formset(self, request, obj=None, **kwargs):
+        # 获取数据库记录数
+        record_count = self.model.objects.filter(zhu_she_fu_wu=obj).count() if obj else 0
+        # 根据记录数设置extra的值
+        self.extra = 1 if record_count == 0 else 0
+        
+        return super().get_formset(request, obj, **kwargs)
+
 class Zhu_she_fu_wuAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -458,7 +480,15 @@ class Shu_ye_zhu_she_listInline(admin.TabularInline):
     model = Shu_ye_zhu_she_list
     extra = 1
     autocomplete_fields = ["boolfield_yao_pin_ming", ]
-            
+
+    def get_formset(self, request, obj=None, **kwargs):
+        # 获取数据库记录数
+        record_count = self.model.objects.filter(shu_ye_zhu_she=obj).count() if obj else 0
+        # 根据记录数设置extra的值
+        self.extra = 1 if record_count == 0 else 0
+        
+        return super().get_formset(request, obj, **kwargs)
+
 class Shu_ye_zhu_sheAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
@@ -663,7 +693,15 @@ class Men_zhen_chu_fang_biao_listInline(admin.TabularInline):
     model = Men_zhen_chu_fang_biao_list
     extra = 1
     autocomplete_fields = ["boolfield_yao_pin_ming", ]
-            
+
+    def get_formset(self, request, obj=None, **kwargs):
+        # 获取数据库记录数
+        record_count = self.model.objects.filter(men_zhen_chu_fang_biao=obj).count() if obj else 0
+        # 根据记录数设置extra的值
+        self.extra = 1 if record_count == 0 else 0
+        
+        return super().get_formset(request, obj, **kwargs)
+
 class Men_zhen_chu_fang_biaoAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 

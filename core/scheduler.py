@@ -458,6 +458,17 @@ def operand_finished_handler(sender, **kwargs):
 
             return f'推荐服务作业: {obj}'
 
+        def _return_form(**kwargs):
+            '''
+            退单
+            '''
+            # 获取当前进程的父进程
+            proc = kwargs['operation_proc']
+            parent_proc = proc.parent_proc
+            if parent_proc.service == kwargs['next_service']:  # 如果父进程服务是规则指定的下一个服务，执行退单
+                parent_proc.return_form()
+                print('退回表单 至:', parent_proc)
+
         def _send_wechat_template_message(**kwargs):
             '''
             发送公众号模板消息
@@ -499,8 +510,9 @@ def operand_finished_handler(sender, **kwargs):
 
         class SystemOperandFunc(Enum):
             CREATE_NEXT_SERVICE = _create_next_service  # 生成后续服务
-            RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
             CREATE_BATCH_SERVICES = _create_batch_services # 生成批量服务
+            RECOMMEND_NEXT_SERVICE = _recommend_next_service  # 推荐后续服务
+            RETURN_FORM = _return_form  # 退回表单
             SEND_WECHART_TEMPLATE_MESSAGE = _send_wechat_template_message  # 发送公众号消息
             SEND_WECOM_MESSAGE = _send_wecom_message  # 发送企业微信消息
 
