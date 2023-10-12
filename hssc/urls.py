@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
 
+# from django.conf import settings
+# from django.conf.urls.static import static
+
 from core.admin import clinic_site
 from .views import index, check_signature
 
@@ -23,3 +26,8 @@ urlpatterns = [
 admin.site.site_header = '智益医养服务供应链管理系统'
 admin.site.site_title = 'HSSC'
 admin.site.index_title = '系统管理控制台'
+
+# print('settings.DEBUG:', settings.DEBUG)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#     print('urlpatterns:', urlpatterns)
