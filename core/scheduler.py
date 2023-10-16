@@ -332,8 +332,8 @@ def operand_finished_handler(sender, **kwargs):
                 else:
                     form_item = form_data[0]
 
-                period_number = int(re.search(r'(\d+)', form_item.get(kwargs['hssc_duration'], '0')).group(1))
-                frequency = int(re.search(r'(\d+)', form_item.get(kwargs['hssc_frequency'], '0')).group(1))
+                period_number = int(re.search(r'(\d+)', form_item.get(kwargs['hssc_duration']['field_name'], '0')).group(1))
+                frequency = int(re.search(r'(\d+)', form_item.get(kwargs['hssc_frequency']['field_name'], '0')).group(1))
 
                 schedule_times = []
                 for day_x in range(period_number):
@@ -588,7 +588,7 @@ def operand_finished_handler(sender, **kwargs):
                     # 1. 按分组字段的值对表单数据进行分组，构造检测数据集
                     grouped_form_list_dict = defaultdict(list)
                     for item in form_data_list:
-                        group_val = item[group_field]
+                        group_val = item[group_field['field_name']]
                         # 创建一个不包含分组字段的新字典
                         item_without_group_field = {key: value for key, value in item.items() if key != 'z'}
                         grouped_form_list_dict[group_val].append(item_without_group_field)
