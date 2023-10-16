@@ -348,7 +348,7 @@ class L1ServiceAdmin(admin.ModelAdmin):
     ordering = ['id']
     readonly_fields = ['hssc_id']
     filter_horizontal = ("role",)
-    autocomplete_fields = ["start_service", "end_service", "include_services", ]
+    autocomplete_fields = ["start_service", "end_service", ]
 clinic_site.register(L1Service, L1ServiceAdmin)
 
 @admin.register(CycleUnit)
