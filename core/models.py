@@ -421,6 +421,10 @@ class OperationProc(HsscBase):
         # 返回作业入口url
         return self.entry
     
+    def children(self):
+        # 返回子进程
+        return OperationProc.objects.filter(parent_proc=self)
+
     def receive_task(self, operator):
         # 接收作业进程
         self.operator = operator
