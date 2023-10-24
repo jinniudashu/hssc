@@ -3743,22 +3743,6 @@
             "pym": "wzfw",
             "start_service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
             "end_service": null,
-            "include_services": [
-                "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
-                "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
-                "43a1842e-b092-11ec-9cae-5ed0e34457d3",
-                "b6f4ecba-b6da-11ec-8121-0ebea05fc526",
-                "cb6fe794-b6da-11ec-8425-0ebea05fc526",
-                "dc931be0-b6da-11ec-8425-0ebea05fc526",
-                "9fb42996-b6dd-11ec-8425-0ebea05fc526",
-                "17c608fa-d119-11ec-ab0d-823d1f108281",
-                "50762b88-c972-11ed-a51e-0242ac120003",
-                "6494a7a2-c972-11ed-a51e-0242ac120003",
-                "9086ce2c-c976-11ed-a229-0242ac120003",
-                "48e716b8-5692-11ee-85c2-0242ac170002",
-                "5c196cfe-5692-11ee-85c2-0242ac170002",
-                "6dcdd3cc-5692-11ee-a441-0242ac170002"
-            ],
             "role": [
                 "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
             ]
@@ -4770,23 +4754,6 @@
             "apply_to_group": false,
             "complete_feedback": 0,
             "reminders": 0,
-            "message": null,
-            "interval_rule": null,
-            "interval_time": null,
-            "is_active": true
-        },
-        {
-            "label": "会诊后药物干预",
-            "name": null,
-            "hssc_id": "71aababe-6bff-11ee-9a15-0242ac170003",
-            "service": "6dcdd3cc-5692-11ee-a441-0242ac170002",
-            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
-            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
-            "next_service": "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
-            "passing_data": 1,
-            "apply_to_group": false,
-            "complete_feedback": 0,
-            "reminders": 1,
             "message": null,
             "interval_rule": null,
             "interval_time": null,

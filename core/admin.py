@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Q
 from django.conf import settings
+from django.forms import ModelForm, modelformset_factory
 
 from core.models import *
 
@@ -244,7 +245,6 @@ class ClinicSite(admin.AdminSite):
 
     # 更新客户服务日程
     def update_customer_schedules(self, request, **kwargs):
-        from django.forms import ModelForm, modelformset_factory
         from service.models import CustomerSchedulePackage, CustomerSchedule
         class CustomerSchedulePackageForm(ModelForm):
             class Meta:
@@ -415,7 +415,74 @@ class OperationProcAdmin(admin.ModelAdmin):
     list_display = ['id', 'task_proc', 'service', 'operator', 'customer', 'state', 'scheduled_time', 'coroutine', 'entry', 'parent_proc']
     list_display_links = ['service', 'operator', 'customer', 'state', 'entry', 'parent_proc']
     ordering = ['id']
-clinic_site.register(OperationProc, OperationProcAdmin)
+
+
+class CustomOperationProcForm(ModelForm):
+    class Meta:
+        model = OperationProc
+        fields = ['service', 'operator', 'scheduled_time']
+
+    # def __init__(self, *args, **kwargs):
+    #     print('****trace****')
+    #     super().__init__(*args, **kwargs)
+    #     # 如果这个表单的实例已经有一个选择的service
+    #     print(self.instance)
+    #     print(self.instance.service)
+    #     if self.instance and self.instance.service:
+    #         from core.models import Staff
+    #         # 获取所有该service关联的roles
+    #         roles = self.instance.service.role.all()
+    #         # 过滤选择Staff.role在roles里的员工
+    #         print(roles)
+    #         self.fields['operator'].queryset = Staff.objects.filter(role__in=roles).distinct()
+
+    # def get_form(self, request, obj=None, **kwargs):
+    #     # 使用你的自定义表单类
+    #     return CustomOperationProcForm
+
+class AssignOperatorAdmin(OperationProcAdmin):
+
+    form = CustomOperationProcForm
+    list_display = ['service', 'operator', 'scheduled_time']
+    list_editable = ('operator', 'scheduled_time')
+    list_display_links = None
+    actions = None
+
+    # 隐藏"Add"按钮
+    def has_add_permission(self, request):
+        return False
+    
+    def get_queryset(self, request):
+        # 获取原始的 QuerySet
+        queryset = super().get_queryset(request)
+        queryset = queryset.filter(operator__isnull=True)
+        return queryset
+    
+    def response_change(self, request, obj):
+        # 按照service.route_to的配置跳转
+        if obj.service.route_to == 'CUSTOMER_HOMEPAGE':
+            return redirect(obj.customer)
+        else:
+            return redirect('index')
+
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     from core.models import Staff
+    #     if db_field.name == "operator":
+    #         # 获取所有该service关联的roles
+    #         print('*****trace******')
+    #         print(request)
+    #         print(request.GET.get('service'))
+    #         print('formfield_for_foreignkey',self)
+            # roles = self.instance.service.role.all()
+            # # 过滤选择Staff.role在roles里的员工
+            # print(roles)
+            # kwargs["queryset"] = Staff.objects.filter(role__in=roles).distinct()
+            # self.fields['operator'].queryset = Staff.objects.filter(role__in=roles).distinct()
+
+        # return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+clinic_site.register(OperationProc, AssignOperatorAdmin)
 
 @admin.register(TaskProc)
 class TaskProcAdmin(admin.ModelAdmin):

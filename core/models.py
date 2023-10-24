@@ -404,7 +404,7 @@ class OperationProc(HsscBase):
 
     def __str__(self):
 		# return 作业名称
-        return self.service.label
+        return self.service.label if self.service else self.label
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
