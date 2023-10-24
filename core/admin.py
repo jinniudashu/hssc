@@ -28,6 +28,7 @@ class ClinicSite(admin.AdminSite):
             path('new_service/<int:customer_id>/<int:service_id>/<int:recommended_service_id>/', self.new_service, name='new_service'),
             path('new_service_schedule/<int:customer_id>/<int:service_id>/', self.new_service_schedule, name='new_service_schedule'),
             path('update_customer_schedules/<int:customer_schedule_package_id>/', self.update_customer_schedules, name='update_customer_schedules'),
+            path('assign_operator/<int:pid>/', self.assign_operator, name='assign_operator'),
         ]
         return my_urls + urls
 
@@ -268,6 +269,29 @@ class ClinicSite(admin.AdminSite):
             }
             return render(request, 'customerschedule_update.html', context)
 
+    # 指派操作员
+    def assign_operator(self, request, **kwargs):
+        AssignOperatorFormset = modelformset_factory(OperationProc, fields=('service', 'operator', 'scheduled_time',), extra=0, can_delete=False)
+        parent_pid = kwargs['pid']
+        parent_proc = OperationProc.objects.get(id=parent_pid)
+        queryset=OperationProc.objects.filter(parent_proc = parent_proc, operator__isnull = True)
+        if request.method == 'POST':
+            assign_operator_formset = AssignOperatorFormset(request.POST)
+            if assign_operator_formset.is_valid():
+                assign_operator_formset.save()        
+
+            # 按照service.route_to的配置跳转
+            if parent_proc.service.route_to == 'CUSTOMER_HOMEPAGE':
+                return redirect(parent_proc.customer)
+            else:
+                return redirect('index')
+
+        else:
+            assign_operator_formset = AssignOperatorFormset(queryset=queryset)
+            context = {'formset': assign_operator_formset}
+            # 如果有未分配操作员的进程，跳转到分配操作员的页面
+            return render(request, 'assign_operator.html', context)
+
 clinic_site = ClinicSite(name = 'ClinicSite')
 
 
@@ -417,53 +441,50 @@ class OperationProcAdmin(admin.ModelAdmin):
     ordering = ['id']
 
 
-class CustomOperationProcForm(ModelForm):
-    class Meta:
-        model = OperationProc
-        fields = ['service', 'operator', 'scheduled_time']
+# class CustomOperationProcForm(ModelForm):
+#     class Meta:
+#         model = OperationProc
+#         fields = ['service', 'operator', 'scheduled_time']
 
-    # def __init__(self, *args, **kwargs):
-    #     print('****trace****')
-    #     super().__init__(*args, **kwargs)
-    #     # 如果这个表单的实例已经有一个选择的service
-    #     print(self.instance)
-    #     print(self.instance.service)
-    #     if self.instance and self.instance.service:
-    #         from core.models import Staff
-    #         # 获取所有该service关联的roles
-    #         roles = self.instance.service.role.all()
-    #         # 过滤选择Staff.role在roles里的员工
-    #         print(roles)
-    #         self.fields['operator'].queryset = Staff.objects.filter(role__in=roles).distinct()
+#     def __init__(self, *args, **kwargs):
+#         print('****trace****')
+#         super().__init__(*args, **kwargs)
+#         # 如果这个表单的实例已经有一个选择的service
+#         print(self.instance)
+#         print(self.instance.service)
+#         if self.instance and self.instance.service:
+#             from core.models import Staff
+#             # 获取所有该service关联的roles
+#             roles = self.instance.service.role.all()
+#             # 过滤选择Staff.role在roles里的员工
+#             print(roles)
+#             self.fields['operator'].queryset = Staff.objects.filter(role__in=roles).distinct()
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     # 使用你的自定义表单类
-    #     return CustomOperationProcForm
 
-class AssignOperatorAdmin(OperationProcAdmin):
+# class AssignOperatorAdmin(OperationProcAdmin):
 
-    form = CustomOperationProcForm
-    list_display = ['service', 'operator', 'scheduled_time']
-    list_editable = ('operator', 'scheduled_time')
-    list_display_links = None
-    actions = None
+#     form = CustomOperationProcForm
+#     list_display = ['service', 'operator', 'scheduled_time']
+#     list_editable = ('operator', 'scheduled_time')
+#     list_display_links = None
+#     actions = None
 
-    # 隐藏"Add"按钮
-    def has_add_permission(self, request):
-        return False
+#     # 隐藏"Add"按钮
+#     def has_add_permission(self, request):
+#         return False
     
-    def get_queryset(self, request):
-        # 获取原始的 QuerySet
-        queryset = super().get_queryset(request)
-        queryset = queryset.filter(operator__isnull=True)
-        return queryset
+#     def get_queryset(self, request):
+#         # 获取原始的 QuerySet
+#         queryset = super().get_queryset(request)
+#         queryset = queryset.filter(operator__isnull=True)
+#         return queryset
     
-    def response_change(self, request, obj):
-        # 按照service.route_to的配置跳转
-        if obj.service.route_to == 'CUSTOMER_HOMEPAGE':
-            return redirect(obj.customer)
-        else:
-            return redirect('index')
+#     def response_change(self, request, obj):
+#         # 按照service.route_to的配置跳转
+#         if obj.service.route_to == 'CUSTOMER_HOMEPAGE':
+#             return redirect(obj.customer)
+#         else:
+#             return redirect('index')
 
 
     # def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -482,7 +503,7 @@ class AssignOperatorAdmin(OperationProcAdmin):
 
         # return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-clinic_site.register(OperationProc, AssignOperatorAdmin)
+# clinic_site.register(OperationProc, AssignOperatorAdmin)
 
 @admin.register(TaskProc)
 class TaskProcAdmin(admin.ModelAdmin):

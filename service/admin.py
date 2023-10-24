@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.shortcuts import redirect, render
-from django.forms import ModelForm, modelformset_factory
+from django.shortcuts import redirect
+from django.forms import ModelForm
 
-from core.admin import clinic_site, CustomOperationProcForm
-from core.models import OperationProc
+from core.admin import clinic_site
 from core.signals import operand_finished
 from core.business_functions import get_services_schedule, create_customer_service_log
 from service.models import *
@@ -70,23 +69,9 @@ class HsscFormAdmin(admin.ModelAdmin):
         children_procs = obj.pid.children()
         # 过滤出proc.operator为None的进程,构造列表
         none_operator_procs = [proc for proc in children_procs if proc.operator == None]
+        # 进入人工指派操作员页面
         if none_operator_procs:
-            print('none_operator_procs:', none_operator_procs)
-            AssignOperatorFormset = modelformset_factory(OperationProc, fields=('service', 'operator', 'scheduled_time',), extra=0, can_delete=False)
-            queryset=OperationProc.objects.filter(operator__isnull = True)
-            print('request.method:', request.method)
-            if request.method == 'POST' and obj.__class__.__name__ == 'OperationProc':
-                print('### request POST')
-                assign_operator_formset = AssignOperatorFormset(request.POST)
-                if assign_operator_formset.is_valid():
-                    assign_operator_formset.save()        
-                return redirect('index')
-            else:
-                print('### request GET')
-                assign_operator_formset = AssignOperatorFormset(queryset=queryset)
-                context = {'formset': assign_operator_formset}
-                # 如果有未分配操作员的进程，跳转到分配操作员的页面
-                return render(request, 'assign_operator.html', context)
+            return redirect('/clinic/assign_operator/' + str(obj.pid.id) + '/')
 
         # 按照service.route_to的配置跳转
         if obj.pid.service.route_to == 'CUSTOMER_HOMEPAGE':
