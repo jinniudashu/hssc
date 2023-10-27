@@ -1,16 +1,68 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/widgets.css' %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo; 
+        <a href="#">{% trans 'Assign Operator' %}</a>
+    </div>
+{% endblock %}
+
 {% block content %}
-    <h3>请指定操作员</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        {% for form in formset %}
-          {{ form }}
-          <br>
-          <br>
-      {% endfor %}
-        <button type="submit">保存</button>
-      </form>
+    <div id="content-main">
+        <h1>请指定操作员</h1>
+
+        <form method="post" id="assign_operator_form">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <table>
+                <!-- Table Header -->
+                <thead>
+                    <tr>
+                        {% for field in formset.forms.0.visible_fields %}
+                            <th>{{ field.label|capfirst }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody>
+                    {% for form in formset %}
+                        {{ form.id }}
+                        <tr class="{% cycle 'row1' 'row2' %}">
+                            {% for field in form.visible_fields %}
+                                <td>
+                                    {% if field.name == 'service' %}
+                                        {% with choices=field.field.choices %}
+                                            {% for value, display in choices %}
+                                                {% if value == field.value %}
+                                                    {{ display }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endwith %}
+                                        <input type="hidden" name="{{ field.html_name }}" value="{{ field.value|default:'' }}">
+                                    {% else %}
+                                        {{ field.errors }}
+                                        {{ field }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="submit-row">
+                <input type="submit" name="action_type" value="保存" class="default">
+                <input type="submit" name="action_type" value="忽略" class="default">
+            </div>
+        </form>
+    </div>
 {% endblock %}
