@@ -72,7 +72,7 @@ class HsscFormAdmin(admin.ModelAdmin):
         # 进入人工指派操作员页面
         if none_operator_procs:
             return redirect('/clinic/assign_operator/' + str(obj.pid.id) + '/')
-
+        
         # 按照service.route_to的配置跳转
         if obj.pid.service.route_to == 'CUSTOMER_HOMEPAGE':
             return redirect(obj.customer)
