@@ -42,7 +42,7 @@
         <h3>已安排服务</h3>
         <div v-for="service in servicesList.scheduled_services_today" :key="service.service_id">
             <a :href="permittedServicesId.includes(service.service_id) && service.operator_id==operatorId ? service.service_entry : null"
-                :style="{'color': (service.completion_timeout ? 'red' : '#447e9b')}"
+                :style="{'color': permittedServicesId.includes(service.service_id) && service.operator_id==operatorId ? (service.completion_timeout ? 'red' : '#447e9b') : 'gray'}"
             >
                 {{ service.service_label }} {{ service.state=='6' ? '(退)' : ''}}
             </a>
