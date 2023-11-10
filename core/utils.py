@@ -1,4 +1,4 @@
-from hssc.settings import env
+from hssc.settings import env, REDIS_HOST
 
 # 构造公众号模板消息data
 def get_wechat_template_message_data(open_id, message, form_data):
@@ -68,7 +68,7 @@ def send_wecom_message(uid, message):
     from wechatpy.session.redisstorage import RedisStorage
     from redis import Redis
 
-    redis_client = Redis.from_url(env('REDIS_URL'))
+    redis_client = Redis.from_url(REDIS_HOST)
     session_interface = RedisStorage(
         redis_client,
         prefix="wechatpy"
