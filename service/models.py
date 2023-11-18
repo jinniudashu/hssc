@@ -80,6 +80,25 @@ class CustomerSchedule(HsscFormModel):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+class Shuang_xiang_zhuan_zhen_zhuan_chu(HsscFormModel):
+    boolfield_zhuan_zhen_ji_gou_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='转诊机构名称')
+    boolfield_zhuan_zhen_shuo_ming = models.CharField(max_length=255, default="现有患者因病情需要，需转入贵单位，请予以接诊。", null=True, blank=True, verbose_name='转诊说明')
+    boolfield_chu_bu_yin_xiang = models.CharField(max_length=255, null=True, blank=True, verbose_name='初步印象')
+    boolfield_zhu_yao_xian_bing_shi = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhu_yao_xian_bing_shi_shuang_xiang_zhuan_zhen_zhuan_chu', blank=True, verbose_name='主要现病史')
+    boolfield_zhu_yao_ji_wang_shi = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_zhu_yao_ji_wang_shi_shuang_xiang_zhuan_zhen_zhuan_chu', blank=True, verbose_name='主要既往史')
+    boolfield_zhuan_zhen_yi_sheng_qian_zi = models.CharField(max_length=255, null=True, blank=True, verbose_name='转诊医生签字')
+    boolfield_ji_gou_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='机构名称')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
+    boolfield_zhuan_zhen_ri_qi = models.DateField(null=True, blank=True, verbose_name='转诊日期')
+
+    class Meta:
+        verbose_name = '双向转诊转出'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Hui_zhen_zhen_duan_fu_wu(HsscFormModel):
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_hui_zhen_zhen_duan_fu_wu', blank=True, verbose_name='症状')
     boolfield_hui_zhen_zhen_duan_jie_guo = models.ManyToManyField(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_hui_zhen_zhen_duan_jie_guo_hui_zhen_zhen_duan_fu_wu', blank=True, verbose_name='会诊诊断结果')
@@ -161,7 +180,9 @@ def get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance()
     return Icpc5_evaluation_and_diagnoses.objects.get(iname="胰岛素依赖型糖尿病")
 
 class Yi_xing_tang_niao_bing_zhen_duan(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, default=get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance, null=True, blank=False, verbose_name='疾病名称')
+    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, default=get_yi_xing_tang_niao_bing_zhen_duan_boolfield_ji_bing_ming_cheng_instance, null=True, blank=True, verbose_name='疾病名称')
+    boolfield_shi_fou_hui_zhen = models.ForeignKey(Shi_fou_hui_zhen, related_name='shi_fou_hui_zhen_for_boolfield_shi_fou_hui_zhen_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否会诊')
+    boolfield_shi_fou_zhuan_zhen = models.ForeignKey(Shi_fou_zhuan_zhen, related_name='shi_fou_zhuan_zhen_for_boolfield_shi_fou_zhuan_zhen_yi_xing_tang_niao_bing_zhen_duan', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否转诊')
 
     class Meta:
         verbose_name = '一型糖尿病诊断'
@@ -583,7 +604,9 @@ def get_T9001_boolfield_ji_bing_ming_cheng_instance():
     return Icpc5_evaluation_and_diagnoses.objects.get(iname="非胰岛素依赖型糖尿病")
 
 class T9001(HsscFormModel):
-    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T9001', on_delete=models.CASCADE, default=get_T9001_boolfield_ji_bing_ming_cheng_instance, null=True, blank=False, verbose_name='疾病名称')
+    boolfield_ji_bing_ming_cheng = models.ForeignKey(Icpc5_evaluation_and_diagnoses, related_name='icpc5_evaluation_and_diagnoses_for_boolfield_ji_bing_ming_cheng_T9001', on_delete=models.CASCADE, default=get_T9001_boolfield_ji_bing_ming_cheng_instance, null=True, blank=True, verbose_name='疾病名称')
+    boolfield_shi_fou_hui_zhen = models.ForeignKey(Shi_fou_hui_zhen, related_name='shi_fou_hui_zhen_for_boolfield_shi_fou_hui_zhen_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否会诊')
+    boolfield_shi_fou_zhuan_zhen = models.ForeignKey(Shi_fou_zhuan_zhen, related_name='shi_fou_zhuan_zhen_for_boolfield_shi_fou_zhuan_zhen_T9001', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否转诊')
 
     class Meta:
         verbose_name = '二型糖尿病诊断'
@@ -743,8 +766,6 @@ class T6301(HsscFormModel):
 class A6218(HsscFormModel):
     boolfield_bing_qing_bu_chong_miao_shu = models.CharField(max_length=255, null=True, blank=True, verbose_name='病情补充描述')
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A6218', blank=True, verbose_name='症状')
-    boolfield_shi_fou_hui_zhen = models.ForeignKey(Shi_fou_hui_zhen, related_name='shi_fou_hui_zhen_for_boolfield_shi_fou_hui_zhen_A6218', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否会诊')
-    boolfield_shi_fou_zhuan_zhen = models.ForeignKey(Shi_fou_zhuan_zhen, related_name='shi_fou_zhuan_zhen_for_boolfield_shi_fou_zhuan_zhen_A6218', on_delete=models.CASCADE, null=True, blank=True, verbose_name='是否转诊')
 
     class Meta:
         verbose_name = '门诊医生问诊'

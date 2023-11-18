@@ -290,6 +290,10 @@ class FieldsType(Enum):
     boolfield_yong_yao_tu_jing = "String"  # 用药途径
     boolfield_jian_kang_jiao_yu_chu_fang = "String"  # 健康教育处方
     boolfield_qi_ta = "String"  # 其他
+    boolfield_zhuan_zhen_shuo_ming = "String"  # 转诊说明
+    boolfield_chu_bu_yin_xiang = "String"  # 初步印象
+    boolfield_zhuan_zhen_yi_sheng_qian_zi = "String"  # 转诊医生签字
+    boolfield_zhuan_zhen_ji_gou_ming_cheng = "String"  # 转诊机构名称
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -316,6 +320,7 @@ class FieldsType(Enum):
     boolfield_yu_yue_shi_jian = "Datetime"  # 预约时间
     boolfield_zhu_she_ri_qi = "Datetime"  # 注射日期
     boolfield_shang_men_fu_wu_shi_jian = "Datetime"  # 上门服务时间
+    boolfield_zhuan_zhen_ri_qi = "Date"  # 转诊日期
     boolfield_xin_yu_ping_ji = "dictionaries.Xin_yu_ping_ji"  # 信誉评级
     boolfield_she_bei_shi_yong_fu_wu_gong_neng = "icpc.Icpc4_physical_examination_and_tests"  # 设备适用服务功能
     boolfield_suo_shu_ji_gou = "entities.Ji_gou_ji_ben_xin_xi_biao"  # 所属机构
@@ -395,3 +400,5 @@ class FieldsType(Enum):
     boolfield_shi_fou_hui_zhen = "dictionaries.Shi_fou_hui_zhen"  # 是否会诊
     boolfield_shi_fou_zhuan_zhen = "dictionaries.Shi_fou_zhuan_zhen"  # 是否转诊
     boolfield_hui_zhen_ze_ren_ren = "core.VirtualStaff"  # 会诊责任人
+    boolfield_zhu_yao_xian_bing_shi = "icpc.Icpc5_evaluation_and_diagnoses"  # 主要现病史
+    boolfield_zhu_yao_ji_wang_shi = "icpc.Icpc5_evaluation_and_diagnoses"  # 主要既往史

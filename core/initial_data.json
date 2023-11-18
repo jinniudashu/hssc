@@ -457,9 +457,7 @@
             "api_fields": {},
             "components": [
                 "de9ad1a8-9aa1-11ec-bde1-8a6e55faf877",
-                "deb93f26-9aa1-11ec-bde1-8a6e55faf877",
-                "76a004bc-5691-11ee-85c2-0242ac170002",
-                "82dfcf6e-5691-11ee-91a1-0242ac170002"
+                "deb93f26-9aa1-11ec-bde1-8a6e55faf877"
             ],
             "list_components": []
         },
@@ -802,7 +800,9 @@
             "form_class": 2,
             "api_fields": null,
             "components": [
-                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
+                "76a004bc-5691-11ee-85c2-0242ac170002",
+                "82dfcf6e-5691-11ee-91a1-0242ac170002"
             ],
             "list_components": []
         },
@@ -1166,7 +1166,9 @@
             "form_class": 2,
             "api_fields": null,
             "components": [
-                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877"
+                "ded4c1a6-9aa1-11ec-bde1-8a6e55faf877",
+                "76a004bc-5691-11ee-85c2-0242ac170002",
+                "82dfcf6e-5691-11ee-91a1-0242ac170002"
             ],
             "list_components": []
         },
@@ -1250,6 +1252,28 @@
                 "b4edb5a4-5621-11ee-91a1-0242ac170002",
                 "4093f798-5696-11ee-b2e8-0242ac170002"
             ]
+        },
+        {
+            "label": "双向转诊表转出",
+            "name": "shuang_xiang_zhuan_zhen_biao_zhuan_chu",
+            "hssc_id": "6dc54034-8600-11ee-a856-0242ac170003",
+            "pym": "sxzzbzc",
+            "name_icpc": null,
+            "description": "",
+            "form_class": 3,
+            "api_fields": null,
+            "components": [
+                "d31f31aa-c5c8-11ec-b819-725badf7393d",
+                "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
+                "8959adb2-8600-11ee-accf-0242ac170003",
+                "96b259be-8600-11ee-83cc-0242ac170003",
+                "48741b24-8601-11ee-83cc-0242ac170003",
+                "704c41b2-8601-11ee-a856-0242ac170003",
+                "8e4619e0-8601-11ee-accf-0242ac170003",
+                "271a6316-8601-11ee-a856-0242ac170003",
+                "3361164c-8601-11ee-accf-0242ac170003"
+            ],
+            "list_components": []
         }
     ],
     "managedentity": [
@@ -3211,6 +3235,41 @@
             "role": [
                 "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
             ]
+        },
+        {
+            "label": "双向转诊转出",
+            "name": "shuang_xiang_zhuan_zhen_zhuan_chu",
+            "hssc_id": "eaf65506-8601-11ee-9620-0242ac170003",
+            "pym": "sxzzzc",
+            "name_icpc": null,
+            "managed_entity": "de87e7d2-9aa1-11ec-bde1-8a6e55faf877",
+            "priority": 3,
+            "service_type": 2,
+            "history_services_display": 0,
+            "enable_queue_counter": true,
+            "route_to": "CUSTOMER_HOMEPAGE",
+            "follow_up_required": false,
+            "follow_up_interval": null,
+            "follow_up_service": null,
+            "suppliers": null,
+            "not_suitable": null,
+            "overtime": null,
+            "working_hours": null,
+            "frequency": null,
+            "cost": null,
+            "load_feedback": false,
+            "resource_materials": null,
+            "resource_devices": null,
+            "resource_knowledge": null,
+            "generate_script_order": 100,
+            "arrange_service_package": null,
+            "arrange_service": null,
+            "buessiness_forms": [
+                "6dc54034-8600-11ee-a856-0242ac170003"
+            ],
+            "role": [
+                "de19d6a2-9aa1-11ec-bde1-8a6e55faf877"
+            ]
         }
     ],
     "buessinessformssetting": [
@@ -3733,6 +3792,14 @@
             "service": "6dcdd3cc-5692-11ee-a441-0242ac170002",
             "buessiness_form": "3a82b604-5624-11ee-85c2-0242ac170002",
             "is_list": false
+        },
+        {
+            "label": null,
+            "name": null,
+            "hssc_id": "eaf72044-8601-11ee-9620-0242ac170003",
+            "service": "eaf65506-8601-11ee-9620-0242ac170003",
+            "buessiness_form": "6dc54034-8600-11ee-a856-0242ac170003",
+            "is_list": false
         }
     ],
     "l1service": [
@@ -4038,6 +4105,19 @@
             "expression_fields": "boolfield_tang_niao_bing_kong_zhi_xiao_guo_ping_gu"
         },
         {
+            "label": "自测血糖异常",
+            "name": "zi_ce_xue_tang_yi_chang",
+            "hssc_id": "50a77c66-c859-11ed-9a46-0242ac120003",
+            "pym": "zcxtyc",
+            "description": "",
+            "detection_scope": "CURRENT_SERVICE",
+            "form_class_scope": 1,
+            "event_type": "SCHEDULE_EVENT",
+            "weight": 1,
+            "expression": "boolfield_kong_fu_xue_tang >= 7.0 or boolfield_kong_fu_xue_tang < 3.4",
+            "expression_fields": "boolfield_kong_fu_xue_tang,boolfield_kong_fu_xue_tang"
+        },
+        {
             "label": "葡萄糖用药禁忌",
             "name": "biao_dan_ce_shi_shi_jian_tang_niao_bing_yong_yao_jin_ji",
             "hssc_id": "c4ab0a2b-f141-11ed-96f2-4889e7cf38c9",
@@ -4127,6 +4207,19 @@
             "weight": 1,
             "expression": "completed_all",
             "expression_fields": null
+        },
+        {
+            "label": "选择转诊服务",
+            "name": "xuan_ze_zhuan_zhen_fu_wu",
+            "hssc_id": "2387b4dc-8602-11ee-9620-0242ac170003",
+            "pym": "xzzzfw",
+            "description": "",
+            "detection_scope": "CURRENT_SERVICE",
+            "form_class_scope": 0,
+            "event_type": "SCHEDULE_EVENT",
+            "weight": 1,
+            "expression": "len({'是'}.intersection(boolfield_shi_fou_zhuan_zhen)) == 1",
+            "expression_fields": "boolfield_shi_fou_zhuan_zhen"
         }
     ],
     "servicerule": [
@@ -4751,6 +4844,57 @@
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "6dcdd3cc-5692-11ee-a441-0242ac170002",
             "passing_data": 1,
+            "apply_to_group": false,
+            "complete_feedback": 0,
+            "reminders": 0,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "会诊后药物干预",
+            "name": null,
+            "hssc_id": "71aababe-6bff-11ee-9a15-0242ac170003",
+            "service": "6dcdd3cc-5692-11ee-a441-0242ac170002",
+            "event_rule": "e04e6e6a-a46f-11ec-a15f-8eb5dc41bbac",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "e0305c18-9aa1-11ec-bde1-8a6e55faf877",
+            "passing_data": 1,
+            "apply_to_group": false,
+            "complete_feedback": 0,
+            "reminders": 1,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "院外监测空腹血糖异常",
+            "name": null,
+            "hssc_id": "4e203820-85ff-11ee-83cc-0242ac170003",
+            "service": "a1b9c424-c971-11ed-a51e-0242ac120003",
+            "event_rule": "50a77c66-c859-11ed-9a46-0242ac120003",
+            "system_operand": "e0ddd4ae-a42f-11ec-94e2-4889e7cf38c9",
+            "next_service": "e03e65ba-9aa1-11ec-bde1-8a6e55faf877",
+            "passing_data": 1,
+            "apply_to_group": false,
+            "complete_feedback": 0,
+            "reminders": 2,
+            "message": null,
+            "interval_rule": null,
+            "interval_time": null,
+            "is_active": true
+        },
+        {
+            "label": "转诊转出",
+            "name": null,
+            "hssc_id": "4fccd5fe-8602-11ee-a856-0242ac170003",
+            "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
+            "event_rule": "2387b4dc-8602-11ee-9620-0242ac170003",
+            "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
+            "next_service": "eaf65506-8601-11ee-9620-0242ac170003",
+            "passing_data": 2,
             "apply_to_group": false,
             "complete_feedback": 0,
             "reminders": 0,

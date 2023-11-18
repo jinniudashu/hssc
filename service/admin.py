@@ -224,6 +224,15 @@ admin.site.register(CustomerSchedulePackage, CustomerSchedulePackageAdmin)
 # Service表单Admin
 # **********************************************************************************************************************
 
+class Shuang_xiang_zhuan_zhen_zhuan_chuAdmin(HsscFormAdmin):
+    fieldssets = [
+        ("基本信息", {"fields": ((),)}), 
+        ("双向转诊表转出", {"fields": ("boolfield_zhuan_zhen_ji_gou_ming_cheng", "boolfield_zhuan_zhen_shuo_ming", "boolfield_chu_bu_yin_xiang", "boolfield_zhu_yao_xian_bing_shi", "boolfield_zhu_yao_ji_wang_shi", "boolfield_zhuan_zhen_yi_sheng_qian_zi", "boolfield_ji_gou_ming_cheng", "boolfield_lian_xi_dian_hua", "boolfield_zhuan_zhen_ri_qi", )}), ]
+    autocomplete_fields = ["boolfield_zhu_yao_xian_bing_shi", "boolfield_zhu_yao_ji_wang_shi", ]
+
+admin.site.register(Shuang_xiang_zhuan_zhen_zhuan_chu, Shuang_xiang_zhuan_zhen_zhuan_chuAdmin)
+clinic_site.register(Shuang_xiang_zhuan_zhen_zhuan_chu, Shuang_xiang_zhuan_zhen_zhuan_chuAdmin)
+
 class Hui_zhen_zhen_duan_fu_wu_listInline(admin.TabularInline):
     model = Hui_zhen_zhen_duan_fu_wu_list
     extra = 1
@@ -316,8 +325,9 @@ clinic_site.register(Tang_niao_bing_jian_kang_jiao_yu_fu_wu, Tang_niao_bing_jian
 class Yi_xing_tang_niao_bing_zhen_duanAdmin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", )}), ]
+        ("胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_shi_fou_hui_zhen", "boolfield_shi_fou_zhuan_zhen", )}), ]
     autocomplete_fields = ["boolfield_ji_bing_ming_cheng", ]
+    radio_fields = {"boolfield_shi_fou_hui_zhen": admin.VERTICAL, "boolfield_shi_fou_zhuan_zhen": admin.VERTICAL, }
     change_form_template = "yi_xing_tang_niao_bing_zhen_duan_change_form.html"
 
 admin.site.register(Yi_xing_tang_niao_bing_zhen_duan, Yi_xing_tang_niao_bing_zhen_duanAdmin)
@@ -520,8 +530,9 @@ clinic_site.register(Qian_yue_fu_wu, Qian_yue_fu_wuAdmin)
 class T9001Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", )}), ]
+        ("非胰岛素依赖性糖尿病诊断表", {"fields": ("boolfield_ji_bing_ming_cheng", "boolfield_shi_fou_hui_zhen", "boolfield_shi_fou_zhuan_zhen", )}), ]
     autocomplete_fields = ["boolfield_ji_bing_ming_cheng", ]
+    radio_fields = {"boolfield_shi_fou_hui_zhen": admin.VERTICAL, "boolfield_shi_fou_zhuan_zhen": admin.VERTICAL, }
     change_form_template = "t9001_change_form.html"
 
 admin.site.register(T9001, T9001Admin)
@@ -625,9 +636,8 @@ clinic_site.register(T6301, T6301Admin)
 class A6218Admin(HsscFormAdmin):
     fieldssets = [
         ("基本信息", {"fields": ((),)}), 
-        ("门诊医生问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", "boolfield_shi_fou_hui_zhen", "boolfield_shi_fou_zhuan_zhen", )}), ]
+        ("门诊医生问诊", {"fields": ("boolfield_bing_qing_bu_chong_miao_shu", "boolfield_zheng_zhuang", )}), ]
     autocomplete_fields = ["boolfield_zheng_zhuang", ]
-    radio_fields = {"boolfield_shi_fou_hui_zhen": admin.VERTICAL, "boolfield_shi_fou_zhuan_zhen": admin.VERTICAL, }
 
 admin.site.register(A6218, A6218Admin)
 clinic_site.register(A6218, A6218Admin)
