@@ -79,12 +79,22 @@
             "first_name": "小李",
             "last_name": "化验",
             "role": ["检验师"]
+        },
+        {
+            "username": "张三",
+            "password": "info1234",
+            "email": "test@test.com",
+            "is_superuser": false,
+            "is_staff": true,
+            "first_name": "三",
+            "last_name": "张",
+            "role": ["患者"]
         }
     ],
     "workgroup": [
         {
             "leader": "黄医生",
-            "members": ["黄医生", "林管家", "孙护士", "杨医生"]
+            "members": ["黄医生", "林管家", "孙护士", "杨医生", "张三"]
         },
         {
             "leader": "陈医生",

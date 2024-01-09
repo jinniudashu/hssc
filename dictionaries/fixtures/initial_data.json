@@ -2154,5 +2154,27 @@
             "value": "否",
             "icpc": null
         }
+    },
+    {
+        "model": "dictionaries.Jie_shou_tong_zhi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "1e66845c-ae92-11ee-84af-0242ac170002",
+            "pym": null,
+            "value": "接收",
+            "icpc": null
+        }
+    },
+    {
+        "model": "dictionaries.Jie_shou_tong_zhi",
+        "fields": {
+            "label": null,
+            "name": null,
+            "hssc_id": "1e669884-ae92-11ee-84af-0242ac170002",
+            "pym": null,
+            "value": "取消",
+            "icpc": null
+        }
     }
 ]

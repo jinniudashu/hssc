@@ -80,6 +80,45 @@ class CustomerSchedule(HsscFormModel):
 # **********************************************************************************************************************
 # Service基本信息表单Model
 # **********************************************************************************************************************
+class Fa_yao_tong_zhi(HsscFormModel):
+    boolfield_tong_zhi = models.CharField(max_length=255, default="您的处方药已发出，请及时到药房领取。", null=True, blank=True, verbose_name='通知')
+
+    class Meta:
+        verbose_name = '发药通知'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Kong_fu_xue_tang_jian_cha_jie_guo_tong_zhi(HsscFormModel):
+    boolfield_tong_zhi = models.CharField(max_length=255, default="您的检查结果已出，请及时查看。", null=True, blank=False, verbose_name='通知')
+
+    class Meta:
+        verbose_name = '空腹血糖检查结果通知'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
+class Yu_yue_tong_zhi(HsscFormModel):
+    boolfield_yu_yue_shi_jian = models.DateTimeField(null=True, blank=True, verbose_name='预约时间')
+    boolfield_ze_ren_ren = models.ForeignKey(VirtualStaff, related_name='virtualstaff_for_boolfield_ze_ren_ren_yu_yue_tong_zhi', on_delete=models.CASCADE, null=True, blank=True, verbose_name='责任人')
+    boolfield_yu_yue_xu_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='预约序号')
+    boolfield_ji_gou_ming_cheng = models.CharField(max_length=255, default="金盘第一社区卫生服务站", null=True, blank=False, verbose_name='机构名称')
+    boolfield_lian_xi_di_zhi = models.CharField(max_length=255, default="海口市龙华区金花路2号", null=True, blank=False, verbose_name='联系地址')
+    boolfield_lian_xi_dian_hua = models.CharField(max_length=255, default="66821120", null=True, blank=False, verbose_name='联系电话')
+    boolfield_tong_zhi_que_ren = models.ForeignKey(Jie_shou_tong_zhi, related_name='jie_shou_tong_zhi_for_boolfield_tong_zhi_que_ren_yu_yue_tong_zhi', on_delete=models.CASCADE, null=True, blank=False, verbose_name='通知确认')
+
+    class Meta:
+        verbose_name = '预约通知'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.customer.name
+
+        
 class Shuang_xiang_zhuan_zhen_zhuan_chu(HsscFormModel):
     boolfield_zhuan_zhen_ji_gou_ming_cheng = models.CharField(max_length=255, null=True, blank=True, verbose_name='转诊机构名称')
     boolfield_zhuan_zhen_shuo_ming = models.CharField(max_length=255, default="现有患者因病情需要，需转入贵单位，请予以接诊。", null=True, blank=True, verbose_name='转诊说明')
@@ -263,12 +302,6 @@ class Yuan_wai_jian_ce_kong_fu_xue_tang(HsscFormModel):
 
         
 class Man_yi_du_diao_cha(HsscFormModel):
-    boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='医疗服务技能项目评分')
-    boolfield_ping_tai_fu_wu_xiang_mu_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_ping_tai_fu_wu_xiang_mu_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='平台服务项目评分')
-    boolfield_fu_wu_liu_cheng_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_fu_wu_liu_cheng_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='服务流程评分')
-    boolfield_fu_wu_xiao_lv_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_fu_wu_xiao_lv_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='服务效率评分')
-    boolfield_xi_wang_zeng_jia_de_fu_wu_xiang_mu = models.CharField(max_length=255, null=True, blank=True, verbose_name='希望增加的服务项目')
-    boolfield_you_dai_gai_jin_de_fu_wu = models.CharField(max_length=255, null=True, blank=True, verbose_name='有待改进的服务')
     boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_yi_liao_fu_wu_ji_neng_xiang_mu_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='医疗服务技能项目评分')
     boolfield_ping_tai_fu_wu_xiang_mu_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_ping_tai_fu_wu_xiang_mu_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='平台服务项目评分')
     boolfield_fu_wu_liu_cheng_ping_fen = models.ForeignKey(Ping_fen, related_name='ping_fen_for_boolfield_fu_wu_liu_cheng_ping_fen_man_yi_du_diao_cha', on_delete=models.CASCADE, null=True, blank=False, verbose_name='服务流程评分')
@@ -865,7 +898,7 @@ class A6501(HsscFormModel):
     boolfield_zheng_zhuang = models.ManyToManyField(Icpc3_symptoms_and_problems, related_name='icpc3_symptoms_and_problems_for_boolfield_zheng_zhuang_A6501', blank=True, verbose_name='症状')
 
     class Meta:
-        verbose_name = '代人预约挂号'
+        verbose_name = '预约挂号'
         verbose_name_plural = verbose_name
 
     def __str__(self):

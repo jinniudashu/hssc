@@ -66,12 +66,13 @@ class Command(BaseCommand):
             user.groups.add(admin_group)
 
             # 为测试用户的职员表增加角色
-            staff = user.customer.staff
-            for role_name in user_data['role']:
-                print('role_name:', role_name)
-                role = Role.objects.get(label=role_name)
-                staff.role.add(role)
-            staff.save()
+            if user.is_staff:
+                staff = user.customer.staff
+                for role_name in user_data['role']:
+                    print('role_name:', role_name)
+                    role = Role.objects.get(label=role_name)
+                    staff.role.add(role)
+                staff.save()
 
         print('导入测试用户数据完成！')
 

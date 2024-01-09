@@ -277,6 +277,7 @@ class FieldsType(Enum):
     boolfield_lian_xi_dian_hua = "String"  # 联系电话
     boolfield_xing_ming = "String"  # 姓名
     boolfield_nian_ling = "String"  # 年龄
+    boolfield_yu_yue_xu_hao = "String"  # 预约序号
     boolfield_cun_zai_de_wen_ti = "String"  # 存在的问题
     boolfield_nin_de_dan_xin_he_gu_lv = "String"  # 您的担心和顾虑
     boolfield_you_dai_gai_jin_de_fu_wu = "String"  # 有待改进的服务
@@ -294,6 +295,7 @@ class FieldsType(Enum):
     boolfield_chu_bu_yin_xiang = "String"  # 初步印象
     boolfield_zhuan_zhen_yi_sheng_qian_zi = "String"  # 转诊医生签字
     boolfield_zhuan_zhen_ji_gou_ming_cheng = "String"  # 转诊机构名称
+    boolfield_tong_zhi = "String"  # 通知
     boolfield_ti_wen = "Numbers"  # 体温
     boolfield_mai_bo = "Numbers"  # 脉搏
     boolfield_hu_xi_pin_lv = "Numbers"  # 呼吸频率
@@ -402,3 +404,4 @@ class FieldsType(Enum):
     boolfield_hui_zhen_ze_ren_ren = "core.VirtualStaff"  # 会诊责任人
     boolfield_zhu_yao_xian_bing_shi = "icpc.Icpc5_evaluation_and_diagnoses"  # 主要现病史
     boolfield_zhu_yao_ji_wang_shi = "icpc.Icpc5_evaluation_and_diagnoses"  # 主要既往史
+    boolfield_tong_zhi_que_ren = "dictionaries.Jie_shou_tong_zhi"  # 通知确认

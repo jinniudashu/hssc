@@ -309,3 +309,9 @@ class Shi_fou_hui_zhen(DictBase):
     class Meta:
         verbose_name = '是否会诊'
         verbose_name_plural = verbose_name
+
+
+class Jie_shou_tong_zhi(DictBase):
+    class Meta:
+        verbose_name = '通知确认'
+        verbose_name_plural = verbose_name
