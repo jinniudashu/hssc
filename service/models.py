@@ -2,7 +2,7 @@ from django.db import models
 
 from icpc.models import *
 from dictionaries.models import *
-from core.models import HsscFormModel, OperationProc, VirtualStaff, Staff, Institution, Service, ServicePackage, Customer, CycleUnit, Medicine
+from core.models import HsscFormModel, ManagedEntity, OperationProc, VirtualStaff, Staff, Institution, Service, ServicePackage, Customer, CycleUnit, Medicine
 from core.hsscbase_class import HsscBase
 
 from django.db.models import Q, F
@@ -10,6 +10,20 @@ from django.utils import timezone
 from datetime import timedelta
 
 from pypinyin import lazy_pinyin
+
+def get_profile_name(customer):
+    # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name
+    customer_entity = ManagedEntity.objects.get(name='customer')
+    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
+    api_fields_map = customer_entity.base_form.api_fields
+    hssc_name_field = api_fields_map.get('hssc_name', None).get('field_name')
+    profile = eval(customer_profile_model).objects.filter(customer=customer).last()
+    if profile:
+        hssc_name = getattr(profile, hssc_name_field)
+        if hssc_name:
+            return hssc_name
+    return None
+
 
 class CustomerSchedulePackage(HsscFormModel):
     servicepackage = models.ForeignKey(ServicePackage, on_delete=models.CASCADE, verbose_name='服务包')
@@ -88,7 +102,8 @@ class Fa_yao_tong_zhi(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Kong_fu_xue_tang_jian_cha_jie_guo_tong_zhi(HsscFormModel):
@@ -99,7 +114,8 @@ class Kong_fu_xue_tang_jian_cha_jie_guo_tong_zhi(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Yu_yue_tong_zhi(HsscFormModel):
@@ -116,7 +132,8 @@ class Yu_yue_tong_zhi(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Shuang_xiang_zhuan_zhen_zhuan_chu(HsscFormModel):
@@ -135,7 +152,8 @@ class Shuang_xiang_zhuan_zhen_zhuan_chu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Hui_zhen_zhen_duan_fu_wu(HsscFormModel):
@@ -147,7 +165,8 @@ class Hui_zhen_zhen_duan_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Hui_zhen_zhen_duan_fu_wu_list(models.Model):
@@ -169,7 +188,8 @@ class Hui_zhen_jian_yi_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Hui_zhen_jian_yi_fu_wu_list(models.Model):
@@ -190,7 +210,8 @@ class Hui_zhen_shen_qing_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Yong_yao_hui_fang_fu_wu(HsscFormModel):
@@ -200,7 +221,8 @@ class Yong_yao_hui_fang_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Tang_niao_bing_jian_kang_jiao_yu_fu_wu(HsscFormModel):
@@ -211,7 +233,8 @@ class Tang_niao_bing_jian_kang_jiao_yu_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 
@@ -228,7 +251,8 @@ class Yi_xing_tang_niao_bing_zhen_duan(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Zhu_she_fu_wu(HsscFormModel):
@@ -241,7 +265,8 @@ class Zhu_she_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Zhu_she_fu_wu_list(models.Model):
@@ -264,7 +289,8 @@ class Yun_dong_chu_fang(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Ying_yang_chu_fang(HsscFormModel):
@@ -276,7 +302,8 @@ class Ying_yang_chu_fang(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang(HsscFormModel):
@@ -287,7 +314,8 @@ class Yuan_wai_jian_ce_can_hou_2_xiao_shi_xue_tang(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Yuan_wai_jian_ce_kong_fu_xue_tang(HsscFormModel):
@@ -298,7 +326,8 @@ class Yuan_wai_jian_ce_kong_fu_xue_tang(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Man_yi_du_diao_cha(HsscFormModel):
@@ -314,7 +343,8 @@ class Man_yi_du_diao_cha(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Zhen_hou_sui_fang(HsscFormModel):
@@ -340,7 +370,8 @@ class Zhen_hou_sui_fang(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Xue_ya_jian_ce_ping_gu(HsscFormModel):
@@ -351,7 +382,8 @@ class Xue_ya_jian_ce_ping_gu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Can_hou_2_xiao_shi_xue_tang(HsscFormModel):
@@ -362,7 +394,8 @@ class Can_hou_2_xiao_shi_xue_tang(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
@@ -384,7 +417,8 @@ class Ji_gou_ji_ben_xin_xi_biao(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
     def save(self, *args, **kwargs):
@@ -414,7 +448,8 @@ class Zhi_yuan_ji_ben_xin_xi_biao(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
     def save(self, *args, **kwargs):
@@ -441,7 +476,8 @@ class Fu_wu_fen_gong_ji_gou_ji_ben_xin_xi_diao_cha(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class She_bei_ji_ben_xin_xi_ji_lu(HsscFormModel):
@@ -461,7 +497,8 @@ class She_bei_ji_ben_xin_xi_ji_lu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
     def save(self, *args, **kwargs):
@@ -489,7 +526,8 @@ class Gong_ying_shang_ji_ben_xin_xi_diao_cha(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
     def save(self, *args, **kwargs):
@@ -529,7 +567,8 @@ class Yao_pin_ji_ben_xin_xi_biao(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
     def save(self, *args, **kwargs):
@@ -552,17 +591,18 @@ class Shen_qing_kong_fu_xue_tang_jian_cha_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Ju_min_ji_ben_xin_xi_diao_cha(HsscFormModel):
-    boolfield_xing_ming = models.CharField(max_length=255, null=True, blank=True, verbose_name='姓名')
+    boolfield_xing_ming = models.CharField(max_length=255, null=True, blank=False, verbose_name='姓名')
     boolfield_chu_sheng_ri_qi = models.DateField(null=True, blank=True, verbose_name='出生日期')
     boolfield_xing_bie = models.ForeignKey(Gender, related_name='gender_for_boolfield_xing_bie_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='性别')
     boolfield_jia_ting_di_zhi = models.CharField(max_length=255, null=True, blank=True, verbose_name='家庭地址')
     boolfield_lian_xi_dian_hua = models.CharField(max_length=255, null=True, blank=True, verbose_name='联系电话')
-    boolfield_shen_fen_zheng_hao_ma = models.CharField(max_length=255, null=True, blank=True, verbose_name='身份证号码')
-    boolfield_ju_min_dang_an_hao = models.CharField(max_length=255, null=True, blank=True, verbose_name='居民档案号')
+    boolfield_shen_fen_zheng_hao_ma = models.CharField(max_length=255, null=True, blank=False, verbose_name='身份证号码')
+    boolfield_ju_min_dang_an_hao = models.CharField(max_length=255, null=True, blank=False, verbose_name='居民档案号')
     boolfield_yi_liao_ic_ka_hao = models.CharField(max_length=255, null=True, blank=True, verbose_name='医疗ic卡号')
     boolfield_min_zu = models.ForeignKey(Nationality, related_name='nationality_for_boolfield_min_zu_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='民族')
     boolfield_hun_yin_zhuang_kuang = models.ForeignKey(Marital_status, related_name='marital_status_for_boolfield_hun_yin_zhuang_kuang_ju_min_ji_ben_xin_xi_diao_cha', on_delete=models.CASCADE, null=True, blank=True, verbose_name='婚姻状况')
@@ -581,7 +621,8 @@ class Ju_min_ji_ben_xin_xi_diao_cha(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
     def save(self, *args, **kwargs):
@@ -606,7 +647,8 @@ class Shu_ye_zhu_she(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Shu_ye_zhu_she_list(models.Model):
@@ -629,7 +671,8 @@ class Qian_yue_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 
@@ -646,7 +689,8 @@ class T9001(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Tang_hua_xue_hong_dan_bai_jian_cha_biao(HsscFormModel):
@@ -657,7 +701,8 @@ class Tang_hua_xue_hong_dan_bai_jian_cha_biao(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Kong_fu_xue_tang_jian_cha(HsscFormModel):
@@ -668,7 +713,8 @@ class Kong_fu_xue_tang_jian_cha(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Xue_ya_jian_ce(HsscFormModel):
@@ -680,7 +726,8 @@ class Xue_ya_jian_ce(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Tang_niao_bing_cha_ti(HsscFormModel):
@@ -693,7 +740,8 @@ class Tang_niao_bing_cha_ti(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A3502(HsscFormModel):
@@ -706,7 +754,8 @@ class A3502(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6299(HsscFormModel):
@@ -746,7 +795,8 @@ class A6299(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6220(HsscFormModel):
@@ -760,7 +810,8 @@ class A6220(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6202(HsscFormModel):
@@ -772,7 +823,8 @@ class A6202(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class T6301(HsscFormModel):
@@ -793,7 +845,8 @@ class T6301(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6218(HsscFormModel):
@@ -805,7 +858,8 @@ class A6218(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6201(HsscFormModel):
@@ -817,7 +871,8 @@ class A6201(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6217(HsscFormModel):
@@ -829,7 +884,8 @@ class A6217(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Yao_shi_fu_wu(HsscFormModel):
@@ -842,7 +898,8 @@ class Yao_shi_fu_wu(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Tang_niao_bing_zhuan_yong_wen_zhen(HsscFormModel):
@@ -854,7 +911,8 @@ class Tang_niao_bing_zhuan_yong_wen_zhen(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A3101(HsscFormModel):
@@ -876,7 +934,8 @@ class A3101(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6502(HsscFormModel):
@@ -889,7 +948,8 @@ class A6502(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class A6501(HsscFormModel):
@@ -902,7 +962,8 @@ class A6501(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Men_zhen_chu_fang_biao(HsscFormModel):
@@ -914,7 +975,8 @@ class Men_zhen_chu_fang_biao(HsscFormModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.customer.name
+        name = get_profile_name(self.customer)
+        return name if name else self.customer.user.username
 
         
 class Men_zhen_chu_fang_biao_list(models.Model):

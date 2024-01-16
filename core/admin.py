@@ -98,9 +98,8 @@ class ClinicSite(admin.AdminSite):
             context['customer_profiles'] = None
         else:
             # 获取客户基本信息
-            customer_profiles, customer_profile_fields_header = search_customer_profile_list(search_text)
-            context['customer_profiles'] = customer_profiles
-            context['customer_profile_fields_header'] = customer_profile_fields_header
+            context['customer_profiles'], context['customer_profile_fields_header'] = search_customer_profile_list(search_text)
+
         return render(request, 'customers_list.html', context)
 
     # 搜索服务，返回服务列表

@@ -142,7 +142,7 @@ def user_post_save_handler(sender, instance, created, **kwargs):
             print('创建客户信息', instance)
             Customer.objects.create(
                 user=instance,
-                name=instance.last_name+instance.first_name if instance.last_name+instance.first_name else instance.username,
+                name=instance.last_name+instance.first_name if instance.last_name+instance.first_name else None,
             )
     else:   # 更新用户
         # 管理员在admin中新增员工时，要先增加用户，会触发以下逻辑，但此时还没有职员信息，所以要判断
@@ -162,7 +162,7 @@ def user_post_save_handler(sender, instance, created, **kwargs):
         else:   # 客户
             print('更新客户信息', instance)
             customer = instance.customer
-            customer.name = instance.last_name+instance.first_name if instance.last_name+instance.first_name else instance.username
+            customer.name = instance.last_name+instance.first_name if instance.last_name+instance.first_name else None
             customer.save()
 
 

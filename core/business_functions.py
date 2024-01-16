@@ -439,35 +439,49 @@ def send_channel_message(group_name, message):
 
 # 搜索给定关键字的客户基本信息列表
 def search_customer_profile_list(search_text):
-    # 获取客户实体对象
+    # 获取客户基本信息表model，系统API字段和展示表头，用于后续查询
     customer_entity = ManagedEntity.objects.get(name='customer')
-
-    # 获取客户基本信息表model，用于后续查询
     customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
+    api_fields_map = customer_entity.base_form.api_fields
 
-    # 获取客户基本信息的展示表头
-    customer_profile_fields = json.loads(customer_entity.header_fields_json)
-    # 构造客户基本信息表头
-    customer_profile_fields_header = ['用户名']
-    for field in customer_profile_fields:
-        customer_profile_fields_header.append(field['label'])
+    # 使用姓名字段进行模糊查询
+    hssc_name_field = api_fields_map.get('hssc_name', None).get('field_name')
+    profiles = eval(f'{customer_profile_model}.objects.filter({hssc_name_field}__icontains="{search_text}")')
 
     customer_profiles = []
-    for customer in Customer.objects.filter(name__icontains=search_text):
-        # 获取客户最新基本信息
-        profile = eval(customer_profile_model).objects.filter(customer=customer).last()
-        if profile:
-            selected_profile = []
-            for field in customer_profile_fields:
-                selected_profile.append(getattr(profile, field['name']))
+    customer_profile_fields = json.loads(customer_entity.header_fields_json)
 
-            # 构造客户基本信息列表
-            customer_profile = {'id': customer.id, 'name': customer.name, 'selected_profile': selected_profile}
-            customer_profiles.append(customer_profile)
+    for profile in profiles:
+        selected_profile = []
+        for field in customer_profile_fields:
+            selected_profile.append(getattr(profile, field['name']))
+
+        # 构造客户基本信息列表
+        customer_profile = {'customer_id': profile.customer.id, 'selected_profile': selected_profile}
+        customer_profiles.append(customer_profile)
+
+    # 构造客户基本信息表头
+    customer_profile_fields_header = []
+    for field in customer_profile_fields:
+        customer_profile_fields_header.append(field['label'])
 
     # 返回客户基本信息列表和表头
     return customer_profiles, customer_profile_fields_header
 
+
+def get_customer_profile_field_value(customer, field_name):
+    # 获取客户基本信息表model和系统API字段，用于查询hssc_customer_number和hssc_name
+    customer_entity = ManagedEntity.objects.get(name='customer')
+    customer_profile_model = customer_entity.base_form.service_set.all()[0].name.capitalize()
+    api_fields_map = customer_entity.base_form.api_fields
+    hssc_field = api_fields_map.get(field_name, None).get('field_name')
+
+    profile = eval(customer_profile_model).objects.filter(customer=customer).last()
+
+    if profile:
+        return getattr(profile, hssc_field)
+    else:
+        return ''
 
 # 更新操作员可见的未分配的服务作业进程
 def update_unassigned_procs(operator):
@@ -508,11 +522,15 @@ def update_unassigned_procs(operator):
     for item in layout_items:
         unassigned_procs = []
         for proc in item['unassigned_procs']:
+            hssc_customer_number = get_customer_profile_field_value(proc.customer, 'hssc_customer_number')
+            hssc_name = get_customer_profile_field_value(proc.customer, 'hssc_name')
             unassigned_procs.append({
                 'id': proc.id,
                 'service_id': proc.service.id,
                 'service_label': proc.service.label,
-                'customer_name': proc.customer.name,
+                'username': proc.customer.user.username,
+                'customer_number': hssc_customer_number,
+                'customer_name': hssc_name,
                 'charge_staff': proc.customer.charge_staff.label if proc.customer.charge_staff else '',
                 'acceptance_timeout': proc.acceptance_timeout,
                 'scheduled_time': proc.scheduled_time.strftime("%y.%m.%d %H:%M"),
@@ -538,11 +556,14 @@ def update_staff_todo_list(operator):
     for item in layout_items:
         todos = []
         for todo in item['todos']:
+            hssc_customer_number = get_customer_profile_field_value(todo.customer, 'hssc_customer_number')
+            hssc_name = get_customer_profile_field_value(todo.customer, 'hssc_name')
             todos.append({
                 'id': todo.id,
                 'customer_id': todo.customer.id,
-                'customer_number': todo.customer.name,
-                'customer_name': todo.customer.name,
+                'username': todo.customer.user.username,
+                'customer_number': hssc_customer_number,
+                'customer_name': hssc_name,
                 'service_label': todo.service.label,
                 'service_id': todo.service.id,
                 'customer_phone': todo.customer.phone,
@@ -745,6 +766,7 @@ def create_customer_schedule(**kwargs):
     )
 
     # 创建客户服务日程对象
+    customer_name = get_customer_profile_field_value(customer, 'hssc_name')
     customer_schedule = CustomerSchedule(
         customer_schedule_list = schedule_list,
         customer=customer,
@@ -754,7 +776,7 @@ def create_customer_schedule(**kwargs):
         scheduled_time=scheduled_time,
         pid = pid,
         # reference_operation = reference_operation,
-        label = f"{service.label}-{customer.name}",
+        label = f"{service.label}-{customer_name}",
     )
     # 设置其他默认值
     customer_schedule.name = f"{type(customer_schedule).__name__}-{customer_schedule.hssc_id}"

@@ -8,13 +8,12 @@
     </tr>
     </thead>
     <tbody>
-        {% for customer in customer_profiles %} 
+        {% for profile in customer_profiles %} 
         <tr >
-            <td> {{ customer.name }} </td>
-            {% for value in customer.selected_profile %} 
-                <td> {{ value }} </td>
+            {% for value in profile.selected_profile %} 
+            <td> {{ value }} </td>
             {% endfor %}
-            <td> <a href="customer_service/{{ customer.id }}">查看</a> </td>
+            <td> <a href="customer_service/{{ profile.customer_id }}">查看</a> </td>
         </tr >
         {% endfor %}
     </tbody>

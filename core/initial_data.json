@@ -287,7 +287,12 @@
             "name_icpc": "Z6201",
             "description": "",
             "form_class": 1,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_name": {
+                    "field_name": "boolfield_xing_ming",
+                    "default_value": null
+                }
+            },
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
@@ -859,7 +864,12 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_address": {
+                    "field_name": "boolfield_jia_ting_di_zhi",
+                    "default_value": null
+                }
+            },
             "components": [
                 "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
                 "6ef43624-c975-11ed-9502-0242ac120003",
@@ -875,7 +885,24 @@
             "name_icpc": "A6203",
             "description": "",
             "form_class": 1,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_customer_number": {
+                    "field_name": "boolfield_ju_min_dang_an_hao",
+                    "default_value": null
+                },
+                "hssc_name": {
+                    "field_name": "boolfield_xing_ming",
+                    "default_value": null
+                },
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                },
+                "hssc_address": {
+                    "field_name": "boolfield_jia_ting_di_zhi",
+                    "default_value": null
+                }
+            },
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
                 "dea9f25a-9aa1-11ec-bde1-8a6e55faf877",
@@ -959,7 +986,12 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                }
+            },
             "components": [
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
                 "2bb30548-c5ca-11ec-b9d4-725badf7393d",
@@ -979,7 +1011,12 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                }
+            },
             "components": [
                 "6f02d90c-c5cc-11ec-b9d4-725badf7393d",
                 "761f6a66-c5cc-11ec-b819-725badf7393d",
@@ -1000,7 +1037,12 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                }
+            },
             "components": [
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
                 "d8aa48a8-c5c8-11ec-b9d4-725badf7393d",
@@ -1021,7 +1063,16 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_name": {
+                    "field_name": "boolfield_xing_ming",
+                    "default_value": null
+                },
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                }
+            },
             "components": [
                 "dea0045c-9aa1-11ec-bde1-8a6e55faf877",
                 "dea24708-9aa1-11ec-bde1-8a6e55faf877",
@@ -1043,7 +1094,12 @@
             "name_icpc": null,
             "description": null,
             "form_class": null,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                }
+            },
             "components": [
                 "dea1797c-9aa1-11ec-bde1-8a6e55faf877",
                 "b65a7d04-c5c8-11ec-b819-725badf7393d",
@@ -1261,7 +1317,12 @@
             "name_icpc": null,
             "description": "",
             "form_class": 3,
-            "api_fields": null,
+            "api_fields": {
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
+                    "default_value": null
+                }
+            },
             "components": [
                 "d31f31aa-c5c8-11ec-b819-725badf7393d",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
@@ -1290,6 +1351,10 @@
                 },
                 "hssc_scheduled_time": {
                     "field_name": "boolfield_yu_yue_shi_jian",
+                    "default_value": null
+                },
+                "hssc_phone_no": {
+                    "field_name": "boolfield_lian_xi_dian_hua",
                     "default_value": null
                 }
             },
@@ -1402,9 +1467,10 @@
             "app_name": "service",
             "model_name": "Customer",
             "base_form": "0c0f81b8-9e23-11ec-aa2c-fe35a7065cdd",
-            "header_fields_json": "[{\"name\": \"boolfield_xing_ming\", \"label\": \"\\u59d3\\u540d\"}, {\"name\": \"boolfield_chu_sheng_ri_qi\", \"label\": \"\\u51fa\\u751f\\u65e5\\u671f\"}, {\"name\": \"boolfield_xing_bie\", \"label\": \"\\u6027\\u522b\"}, {\"name\": \"boolfield_jia_ting_di_zhi\", \"label\": \"\\u5bb6\\u5ead\\u5730\\u5740\"}, {\"name\": \"boolfield_lian_xi_dian_hua\", \"label\": \"\\u8054\\u7cfb\\u7535\\u8bdd\"}]",
+            "header_fields_json": "[{\"name\": \"boolfield_xing_ming\", \"label\": \"\\u59d3\\u540d\"}, {\"name\": \"boolfield_chu_sheng_ri_qi\", \"label\": \"\\u51fa\\u751f\\u65e5\\u671f\"}, {\"name\": \"boolfield_xing_bie\", \"label\": \"\\u6027\\u522b\"}, {\"name\": \"boolfield_jia_ting_di_zhi\", \"label\": \"\\u5bb6\\u5ead\\u5730\\u5740\"}, {\"name\": \"boolfield_lian_xi_dian_hua\", \"label\": \"\\u8054\\u7cfb\\u7535\\u8bdd\"}, {\"name\": \"boolfield_ju_min_dang_an_hao\", \"label\": \"\\u5c45\\u6c11\\u6863\\u6848\\u53f7\"}]",
             "project": "bb81a37b-5765-11ed-82c3-4889e7cf38c9",
             "header_fields": [
+                "dea9f25a-9aa1-11ec-bde1-8a6e55faf877",
                 "deaaac2c-9aa1-11ec-bde1-8a6e55faf877",
                 "deab5d16-9aa1-11ec-bde1-8a6e55faf877",
                 "de9de26c-9aa1-11ec-bde1-8a6e55faf877",

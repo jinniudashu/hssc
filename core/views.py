@@ -73,15 +73,18 @@ class IcpcItemView(View):
 
 def index_customer(request):
     context = {}
-    customer = Customer.objects.get(user=request.user)
-    context ['customer'] = customer.name
+    context ['user'] = request.user.username
+
     # 获取当前用户所属的所有作业进程
+    customer = Customer.objects.get(user=request.user)
     procs = OperationProc.objects.exclude(state=4).filter(customer=customer)
+
     todos = []
     for proc in procs:
         todo = {}
         todo['service'] = proc.service.label
         todos.append(todo)
+    
     context['todos'] = todos
 
     return render(request, 'index_customer.html', context)

@@ -286,7 +286,7 @@ class ContractServiceProc(HsscBase):
         ordering = ['id']
 
     def __str__(self):
-        return self.customer.name
+        return self.customer.user.username
 
 
 # 任务进程表
@@ -487,7 +487,7 @@ class OperationProc(HsscBase):
 # 用户基本信息
 class Customer(HsscBase):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='客户')
-    name = models.CharField(max_length=50, verbose_name="姓名")
+    name = models.CharField(max_length=50, blank=True, null=True, verbose_name="姓名")
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="电话")
     address = models.CharField(max_length=255, blank=True, null=True, verbose_name="地址")
     charge_staff = models.ForeignKey('VirtualStaff', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='负责人')
@@ -499,7 +499,7 @@ class Customer(HsscBase):
         verbose_name_plural = "客户注册信息"
 
     def __str__(self):
-        return str(self.name)
+        return str(self.name) if self.name else self.user.username
 
     def natural_key(self):
         return self.name
@@ -802,9 +802,9 @@ class HsscFormModel(HsscBase):
             self.created_time = timezone.now()
         self.updated_time = timezone.now()
 
-        # 检查label字段，如果为空，则将label赋值为verbose_name和customer.name的组合，以'-'分隔
+        # 检查label字段，如果为空，则将label赋值为verbose_name和customer_name的组合，以'-'分隔
         if not self.label:
-            self.label = f"{self._meta.verbose_name}-{self.customer.name}"
+            self.label = f"{self._meta.verbose_name}-{self.customer.user.username}"
         if not self.name:
             self.name = f"{type(self).__name__}-{self.hssc_id}"
 
