@@ -409,7 +409,7 @@ def get_customer_profile(customer):
 def dispatch_operator(customer, service, current_operator, scheduled_time, task_proc):
 
     # 0. 当前任务进程的操作员具有新增服务岗位权限, 返回当前任务进程的操作员
-    if task_proc and set(task_proc.operator.staff.role.all()).intersection(set(service.role.all())):
+    if task_proc and task_proc.operator and set(task_proc.operator.staff.role.all()).intersection(set(service.role.all())):
         return task_proc.operator
 
     # 1. 当前客户如有责任人，且该责任人是具体职员而非工作小组，且该职员具有新增服务岗位权限，则返回该职员的Customer对象

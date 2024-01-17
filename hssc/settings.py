@@ -101,7 +101,7 @@ if DJANGO_ENV == 'dev':
     REDIS_HOST = 'redis://localhost:6379'
     # REDIS_HOST = 'redis://dental_redis:6379'
 else:
-    DEBUG = False
+    DEBUG = True
     ALLOWED_HOSTS = ["127.0.0.1", f'{SUBDOMAIN}.{DOMAIN}', SUBDOMAIN]
     DATABASES = {
         'default': {
