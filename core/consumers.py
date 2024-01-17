@@ -71,12 +71,14 @@ from core.business_functions import update_customer_services_list
 class CustomerServicesListConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         customer_id = self.scope['url_route']['kwargs']['customer_id']
+        history_days = self.scope['url_route']['kwargs']['history_days']
+        history_service_name = self.scope['url_route']['kwargs']['history_service_name']
         await self.channel_layer.group_add(f'customer_services_{customer_id}', self.channel_name)
         await self.accept()
 
         # 初始化更新客户可选服务列表
         customer = await sync_to_async(Customer.objects.get)(id=customer_id)
-        await sync_to_async(update_customer_services_list)(customer)
+        await sync_to_async(update_customer_services_list)(customer, history_days, history_service_name)
 
     async def disconnect(self, close_code):
         customer_id = self.scope['url_route']['kwargs']['customer_id']

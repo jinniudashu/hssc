@@ -10,7 +10,6 @@ urlpatterns = [
     path('api/get_medicine_item/', MedicineItemView.as_view(), name='medicine_item'),
     path('api/get_icpc_item/', IcpcItemView.as_view(), name='icpc_item'),
     path('api/get_employees/', get_employees, name='get_employees'),
-	# path('jinshuju_post/', jinshuju_post, name='jinshuju_post'),
     # url("message/$", Message.as_view(), name='message'),
     # url("access/token/$", AccessToken.as_view(), name='token'),
 ]

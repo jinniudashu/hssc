@@ -578,7 +578,7 @@ def update_staff_todo_list(operator):
 
 
 # 更新客户服务列表
-def update_customer_services_list(customer):
+def update_customer_services_list(customer, history_days=0, history_service_name=''):
     # 判断服务表单是否已经完成，已完成返回空字符串''，否则返回'*'
     def is_service_form_completed(proc):
         content_object = proc.content_object
@@ -621,8 +621,9 @@ def update_customer_services_list(customer):
 
     # 历史服务
     history_services = []
+
     # 如果service是安排服务包和安排服务，则获取所安排服务包或服务的label，并添加到service.label后面；否则获取service的label, 并获取服务表单完成标识
-    for proc in customer.get_history_services():
+    for proc in customer.get_history_services(history_days, history_service_name):
         service_label = proc.service.label
         is_completed = ''
 

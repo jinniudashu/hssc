@@ -390,8 +390,8 @@ class OperationProc(HsscBase):
     working_hours = models.DurationField(blank=True, null=True, verbose_name='工时')
     acceptance_timeout = models.BooleanField(default=False, blank=True, null=True, verbose_name="受理超时")
     completion_timeout = models.BooleanField(default=False, blank=True, null=True, verbose_name="完成超时")
-    created_time = models.DateTimeField(editable=False, null=True, verbose_name="创建时间")
-    updated_time = models.DateTimeField(editable=False, null=True, verbose_name="修改时间")
+    updated_time = models.DateTimeField(auto_now=True, null=True, verbose_name="更新时间")
+    created_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to=Q(app_label='service') , null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -509,11 +509,30 @@ class Customer(HsscBase):
             self.label = self.name
         super().save(*args, **kwargs)
 
-    def get_history_services(self) -> 'QuerySet[OperationProc]':
+    def get_history_services(self, history_days, history_service_name) -> 'QuerySet[OperationProc]':
         '''
         获取客户历史服务列表
         '''
-        return self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(service_type=0))
+        # 获取当前日期的午夜时刻
+        today_midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+        start_date = None
+        # 根据history_days计算开始日期
+        if history_days > 0:
+            start_date = today_midnight - timedelta(days=history_days)
+
+        # 修改下面的代码，获取历史服务列表时添加history_days过滤逻辑
+        history_services = self.operation_proc_customer.filter(state=4).exclude(service__in=Service.objects.filter(service_type=0))
+
+        # 如果有开始日期，则添加到过滤条件中
+        if start_date:
+            history_services = history_services.filter(updated_time__gte=start_date)
+
+        # 如果有服务名称，则添加到过滤条件中
+        if history_service_name != 'none':
+            history_services = history_services.filter(service__in=Service.objects.filter(label__icontains=history_service_name))
+
+        return history_services
 
     def get_scheduled_services(self, date) -> 'QuerySet[OperationProc]':
         '''
