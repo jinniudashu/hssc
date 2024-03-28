@@ -4482,7 +4482,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4499,7 +4500,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4516,7 +4518,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4533,7 +4536,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4550,7 +4554,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4567,7 +4572,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4584,7 +4590,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4601,7 +4608,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4618,7 +4626,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "二型糖尿病诊断",
@@ -4635,7 +4644,16 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": [
+                "e035d648-9aa1-11ec-bde1-8a6e55faf877",
+                "e0385d3c-9aa1-11ec-bde1-8a6e55faf877",
+                "e03abda2-9aa1-11ec-bde1-8a6e55faf877",
+                "e03e65ba-9aa1-11ec-bde1-8a6e55faf877",
+                "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
+                "1a3b2382-9b67-11ec-94eb-022c611b2490",
+                "9582b822-ab23-11ec-bf5e-1ac10aeebbc4"
+            ]
         },
         {
             "label": null,
@@ -4652,7 +4670,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4669,7 +4688,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4686,7 +4706,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": null,
@@ -4703,7 +4724,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "注射类药品治疗规则",
@@ -4720,7 +4742,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "空腹血糖超过正常值且有糖尿病症状",
@@ -4737,7 +4760,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "建档调查规则",
@@ -4754,7 +4778,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "二型糖尿病推荐诊断规则",
@@ -4771,7 +4796,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "申请空腹血糖检查服务",
@@ -4788,7 +4814,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": false
+            "is_active": false,
+            "receive_data_from": []
         },
         {
             "label": "糖尿病监测评估",
@@ -4805,7 +4832,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "糖尿病监测评估不稳定",
@@ -4822,7 +4850,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "二型糖尿病推荐运动处方",
@@ -4839,7 +4868,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "一型糖尿病诊断",
@@ -4856,7 +4886,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "评估糖尿病控制不稳定",
@@ -4873,7 +4904,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "血糖检查完成返回复诊",
@@ -4890,7 +4922,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "test",
@@ -4907,7 +4940,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "test1",
@@ -4924,7 +4958,8 @@
             "message": "无法开具处方",
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "test2",
@@ -4941,7 +4976,8 @@
             "message": "该药品使用有风险",
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "非胰岛素依赖糖尿病诊后回访规则",
@@ -4958,7 +4994,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "胰岛素依赖型糖尿病诊后回访规则",
@@ -4975,7 +5012,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "回访患者评价低",
@@ -4992,7 +5030,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "二型糖尿病初期推荐服务包",
@@ -5009,7 +5048,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "一型糖尿病初期推荐服务包",
@@ -5026,7 +5066,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "糖尿病遗传性判断",
@@ -5043,13 +5084,14 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "会诊申请",
             "name": null,
             "hssc_id": "b37067f0-5692-11ee-ad57-0242ac170002",
-            "service": "9fb42996-b6dd-11ec-8425-0ebea05fc526",
+            "service": "e03f9d54-9aa1-11ec-bde1-8a6e55faf877",
             "event_rule": "0180c9d6-5692-11ee-b25d-0242ac170002",
             "system_operand": "e0dee611-a42f-11ec-8e78-4889e7cf38c9",
             "next_service": "48e716b8-5692-11ee-85c2-0242ac170002",
@@ -5060,7 +5102,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "分发会诊建议",
@@ -5077,7 +5120,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "形成会诊结果",
@@ -5094,7 +5138,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "会诊后药物干预",
@@ -5111,7 +5156,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "院外监测空腹血糖异常",
@@ -5128,7 +5174,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "转诊转出",
@@ -5145,7 +5192,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "预约通知",
@@ -5162,7 +5210,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "空腹血糖检查结果通知",
@@ -5179,7 +5228,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         },
         {
             "label": "门诊发药通知",
@@ -5196,7 +5246,8 @@
             "message": null,
             "interval_rule": null,
             "interval_time": null,
-            "is_active": true
+            "is_active": true,
+            "receive_data_from": []
         }
     ],
     "externalservicemapping": [],

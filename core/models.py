@@ -214,6 +214,7 @@ class ServiceRule(HsscBase):
     system_operand = models.ForeignKey(SystemOperand, on_delete=models.CASCADE, blank=True, null=True, verbose_name='系统作业')
     next_service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, null=True, related_name='next_service', verbose_name='后续服务')
     priority_operator = models.ForeignKey('VirtualStaff', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="优先操作员")    
+    receive_data_from = models.ManyToManyField(Service, blank=True, related_name='receive_data_from', verbose_name='接收数据')
     Receive_form = [(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')]  # 接收表单数据
     passing_data = models.PositiveSmallIntegerField(choices=Receive_form, default=0,  blank=True, null=True, verbose_name='接收表单')
     apply_to_group = models.BooleanField(choices=[(False, '否'), (True, '是')], default=False, verbose_name='应用于分组')
