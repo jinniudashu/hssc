@@ -103,6 +103,15 @@ def copy_previous_form_data(form, previous_form_data, is_list):
 
     return form
 
+def procs_to_forms(procs):  # What is the return type should be? <REFACT-TAG 10> 
+    # 1. 获取所有服务进程的表单数据
+    forms_data = []
+    for proc in procs:
+        form_obj = proc.content_object
+        # form_obj转换为form_data类型
+        form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
+        forms_data.append(form_data)
+    return forms_data
 
 # 创建服务表单实例
 def create_form_instance(operation_proc, passing_data, form_data, apply_to_group, coroutine_result):
@@ -115,8 +124,16 @@ def create_form_instance(operation_proc, passing_data, form_data, apply_to_group
         cpid=operation_proc.contract_service_proc,
     )
 
-    # 2. 如果passing_data>0, copy父进程表单数据
-    if passing_data > 0 :  # passing_data: 传递表单数据：(0, '否'), (1, '接收，不可编辑', 复制父进程表单控制信息), (2, '接收，可以编辑', 复制父进程表单控制信息), (3, 复制form_data)
+    # 2. 如果QuerySet passing_data不为空, 获取相应的服务表单实例列表 history_forms
+    history_forms = []  # <REFACT-TAG 00>
+    if passing_data:
+        pass
+        # history_forms = get_history_forms(operation_proc, passing_data)
+
+
+
+    # 3. 如果QuerySet passing_data不为空, copy父进程表单数据
+    if passing_data :  # <REFACTED 4>
         if coroutine_result:
             print('*********协程进程，复制协程表单数据*********')
             form_objs = coroutine_result.get_form_objs()
@@ -198,7 +215,8 @@ def create_service_proc(**kwargs):
             form_item = form_data
         else:
             form_item = form_data[0]
-        if kwargs['parent_proc'] and kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data'] in [1, 2]:
+        # if kwargs['parent_proc'] and kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data'] in [1, 2]:
+        if kwargs['parent_proc'] and kwargs['parent_proc'].service.service_type==2 and kwargs['passing_data']:  # <REFACTED 2>
             # 获取父进程表单的api_fields中的进程控制信息：作业人员，计划执行时间，责任人
             api_fields = kwargs['parent_proc'].service.buessiness_forms.all()[0].api_fields
             for system_field, form_field in api_fields.items():
@@ -257,7 +275,7 @@ def create_service_proc(**kwargs):
         new_proc.entry = f'/clinic/service/customerschedulepackage/{customerschedulepackage.id}/change'
         
     else: # 创建诊疗服务表单进程
-        form = create_form_instance(new_proc, kwargs['passing_data'], form_data, kwargs['apply_to_group'], kwargs['coroutine_result'])
+        form = create_form_instance(new_proc, kwargs['passing_data'], form_data, kwargs['apply_to_group'], kwargs['coroutine_result'])  # <REFACTED 3> -> 不需修改
         # 更新OperationProc服务进程的form实例信息
         new_proc.object_id = form.id
         new_proc.entry = f'/clinic/service/{new_proc.service.name.lower()}/{form.id}/change'

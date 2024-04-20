@@ -165,7 +165,8 @@ class ClinicSite(admin.AdminSite):
         if kwargs['recommended_service_id']:
             recommended_service = RecommendedService.objects.get(id=kwargs['recommended_service_id'])
             proc_params['parent_proc'] = recommended_service.pid
-            proc_params['passing_data'] = recommended_service.passing_data
+            # proc_params['passing_data'] = recommended_service.passing_data
+            proc_params['passing_data'] = recommended_service.receive_data_from.all()  # <REFACTING>
 
             # 获取父进程的表单数据
             field_names = [field.name for field in recommended_service.pid.content_object._meta.get_fields()][12:]
@@ -175,14 +176,15 @@ class ClinicSite(admin.AdminSite):
                 # 如果字段是多对多字段，则获取QuerySet
                 if isinstance(field_value, models.Manager):
                     field_value = field_value.all()
-                form_data[field_name] = field_value                
+                form_data[field_name] = field_value
             proc_params['form_data'] = form_data
 
         else:
             # 人工创建服务，没有父进程
             proc_params['parent_proc'] = None
             # 人工创建服务，没有传递数据
-            proc_params['passing_data'] = 0
+            # proc_params['passing_data'] = 0
+            proc_params['passing_data'] = []  # <REFACTED 6>
 
         # 创建新的OperationProc服务作业进程实例
         new_proc = create_service_proc(**proc_params)
@@ -444,7 +446,7 @@ class ServiceRuleAdmin(admin.ModelAdmin):
     list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'apply_to_group','complete_feedback', 'is_active']
     list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'apply_to_group','complete_feedback', 'is_active']
     list_display_links = ['label', ]
-    filter_horizontal = ('receive_data_from',)
+    filter_horizontal = ('receive_data_from',)  # <REFACTING>
     readonly_fields = ['name', 'hssc_id']
     autocomplete_fields = ['service', 'next_service', 'event_rule']
     ordering = ['id']

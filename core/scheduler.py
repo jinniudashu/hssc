@@ -292,7 +292,7 @@ def operand_finished_handler(sender, **kwargs):
             params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
             params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
             params['content_type'] = content_type
-            params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+            params['passing_data'] = kwargs['passing_data']  # <REFACTED 7> -> 不需修改
             params['form_data'] = kwargs['form_data']  # 表单数据
             params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
             params['coroutine_result'] = kwargs.get('coroutine_result', None)  # 协程结果
@@ -355,7 +355,7 @@ def operand_finished_handler(sender, **kwargs):
             params['state'] = 0  # or 根据服务作业权限判断
             params['parent_proc'] = proc  # 当前进程是被创建进程的父进程
             params['contract_service_proc'] = proc.contract_service_proc  # 所属合约服务进程
-            params['passing_data'] = kwargs['passing_data']  # 传递表单数据：(0, '否'), (1, '接收，不可编辑'), (2, '接收，可以编辑')
+            params['passing_data'] = kwargs['passing_data']  # <REFACTED 8> -> 不需修改
             params['form_data'] = kwargs['form_data']  # 表单数据
             params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
             params['coroutine_result'] = kwargs.get('coroutine_result', None)  # 协程结果
@@ -452,8 +452,10 @@ def operand_finished_handler(sender, **kwargs):
                 pid=operation_proc,  # 当前进程是被推荐服务的父进程
                 age=0,  # 年龄
                 cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-                passing_data=kwargs['passing_data']
+                # passing_data=kwargs['passing_data']
             )
+            # 写入多对多字段
+            obj.receive_data_from.set(kwargs['passing_data'])  # <REFACTING>
             obj.save()
 
             return f'推荐服务作业: {obj}'
@@ -524,7 +526,8 @@ def operand_finished_handler(sender, **kwargs):
             'priority_operator': service_rule.priority_operator,
             'service': service_rule.service,
             'next_service': service_rule.next_service,
-            'passing_data': service_rule.passing_data,
+            # 'passing_data': service_rule.passing_data,
+            'passing_data': service_rule.receive_data_from.all(),    # <REFACTING>
             'complete_feedback': service_rule.complete_feedback,
             'reminders': service_rule.reminders,
             'message': service_rule.message,
@@ -615,7 +618,7 @@ def operand_finished_handler(sender, **kwargs):
                     scan_dict = trans_form_to_dict(form_item, form_name)  # 转换数据格式以适配field_name_replace的格式要求
                     scan_data = {**history_data, **scan_dict}
                     
-                    # 2) 检测是否满足规则
+                    # 2) 检测是否发生业务事件
                     if _detect_business_events(event_rule, scan_data):
                         # 调度系统作业
                         kwargs['form_data'] = form_item  # 传递表单数据
