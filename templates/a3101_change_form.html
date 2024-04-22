@@ -18,9 +18,9 @@
         };
 
         const update_boolfield_ti_zhi_zhi_shu = () => {
-            const shen_gao = parseFloat(id_boolfield_shen_gao.value);
-            const ti_zhong = parseFloat(id_boolfield_ti_zhong.value);
-            id_boolfield_ti_zhi_zhi_shu.value = calculateBmi(shen_gao, ti_zhong);
+            const shenGao = parseFloat(id_boolfield_shen_gao.value);
+            const tiZhong = parseFloat(id_boolfield_ti_zhong.value);
+            id_boolfield_ti_zhi_zhi_shu.value = calculateBmi(shenGao, tiZhong);
         };
 
         id_boolfield_shen_gao.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);

@@ -15,10 +15,10 @@
 1. 生成镜像：docker-compose -f docker-compose-build.yml build
 2. push: docker push jinniudashu/clinic_app:v1
 ### 生产环境，使用SSH连接到服务器
-1. docker-compose down
-2. docker pull jinniudashu/clinic_app:v1
+1. docker pull jinniudashu/clinic_app:v1
+2. docker-compose down
 3. docker-compose up
-4. docker rmi $(docker images -f "dangling=true" -q)
-5. 进入clinic容器创建管理员：
+4. 进入clinic容器创建管理员：
 docker exec -it clinic /bin/sh
 python manage.py createsuperuser
+5. docker rmi $(docker images -f "dangling=true" -q)

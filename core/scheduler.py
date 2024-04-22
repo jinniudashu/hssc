@@ -452,10 +452,8 @@ def operand_finished_handler(sender, **kwargs):
                 pid=operation_proc,  # 当前进程是被推荐服务的父进程
                 age=0,  # 年龄
                 cpid=operation_proc.contract_service_proc,  # 所属合约服务进程
-                # passing_data=kwargs['passing_data']
+                passing_data=kwargs['passing_data']
             )
-            # 写入多对多字段
-            obj.receive_data_from.set(kwargs['passing_data'])  # <REFACTING>
             obj.save()
 
             return f'推荐服务作业: {obj}'
@@ -526,8 +524,7 @@ def operand_finished_handler(sender, **kwargs):
             'priority_operator': service_rule.priority_operator,
             'service': service_rule.service,
             'next_service': service_rule.next_service,
-            # 'passing_data': service_rule.passing_data,
-            'passing_data': service_rule.receive_data_from.all(),    # <REFACTING>
+            'passing_data': service_rule.passing_data,
             'complete_feedback': service_rule.complete_feedback,
             'reminders': service_rule.reminders,
             'message': service_rule.message,

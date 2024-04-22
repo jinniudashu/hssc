@@ -165,8 +165,7 @@ class ClinicSite(admin.AdminSite):
         if kwargs['recommended_service_id']:
             recommended_service = RecommendedService.objects.get(id=kwargs['recommended_service_id'])
             proc_params['parent_proc'] = recommended_service.pid
-            # proc_params['passing_data'] = recommended_service.passing_data
-            proc_params['passing_data'] = recommended_service.receive_data_from.all()  # <REFACTING>
+            proc_params['passing_data'] = recommended_service.passing_data
 
             # 获取父进程的表单数据
             field_names = [field.name for field in recommended_service.pid.content_object._meta.get_fields()][12:]
@@ -342,7 +341,7 @@ class BuessinessFormAdmin(admin.ModelAdmin):
     list_display_links = ['label', 'name',]
     fieldsets = (
         (None, {
-            'fields': (('label', 'name_icpc'), 'description', ('api_fields', 'name', 'hssc_id'), )
+            'fields': (('label', 'name_icpc'), 'description', 'form_fields', ('api_fields', 'name', 'hssc_id'), )
         }),
     )
     search_fields = ['name', 'label', 'pym']
@@ -446,7 +445,6 @@ class ServiceRuleAdmin(admin.ModelAdmin):
     list_display = ['label', 'service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'apply_to_group','complete_feedback', 'is_active']
     list_editable = ['service', 'event_rule', 'system_operand', 'next_service', 'passing_data', 'apply_to_group','complete_feedback', 'is_active']
     list_display_links = ['label', ]
-    filter_horizontal = ('receive_data_from',)  # <REFACTING>
     readonly_fields = ['name', 'hssc_id']
     autocomplete_fields = ['service', 'next_service', 'event_rule']
     ordering = ['id']
