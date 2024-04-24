@@ -182,8 +182,7 @@ class ClinicSite(admin.AdminSite):
             # 人工创建服务，没有父进程
             proc_params['parent_proc'] = None
             # 人工创建服务，没有传递数据
-            # proc_params['passing_data'] = 0
-            proc_params['passing_data'] = []  # <REFACTED 6>
+            proc_params['passing_data'] = 0
 
         # 创建新的OperationProc服务作业进程实例
         new_proc = create_service_proc(**proc_params)

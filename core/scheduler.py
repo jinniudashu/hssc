@@ -292,7 +292,7 @@ def operand_finished_handler(sender, **kwargs):
             params['parent_proc'] = operation_proc  # 当前进程是被创建进程的父进程
             params['contract_service_proc'] = operation_proc.contract_service_proc  # 所属合约服务进程
             params['content_type'] = content_type
-            params['passing_data'] = kwargs['passing_data']  # <REFACTED 7> -> 不需修改
+            params['passing_data'] = kwargs['passing_data']
             params['form_data'] = kwargs['form_data']  # 表单数据
             params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
             params['coroutine_result'] = kwargs.get('coroutine_result', None)  # 协程结果
@@ -355,7 +355,7 @@ def operand_finished_handler(sender, **kwargs):
             params['state'] = 0  # or 根据服务作业权限判断
             params['parent_proc'] = proc  # 当前进程是被创建进程的父进程
             params['contract_service_proc'] = proc.contract_service_proc  # 所属合约服务进程
-            params['passing_data'] = kwargs['passing_data']  # <REFACTED 8> -> 不需修改
+            params['passing_data'] = kwargs['passing_data']
             params['form_data'] = kwargs['form_data']  # 表单数据
             params['apply_to_group'] = kwargs.get('apply_to_group')  # 分组标识
             params['coroutine_result'] = kwargs.get('coroutine_result', None)  # 协程结果

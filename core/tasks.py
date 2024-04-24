@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from core.models import OperationProc
 from service.models import CustomerSchedule
-from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time, procs_to_forms
+from core.business_functions import create_service_proc, dispatch_operator, eval_scheduled_time
 
 @shared_task(bind=True)
 def test_task(self):
@@ -101,11 +101,10 @@ def check_proc_awaiting_timeout(self):
             proc_params['content_type'] = content_type
 
             # 检查是否有引用表单
-            reference_operations = schedule.reference_operation.all()
-            if reference_operations:
-                proc_params['passing_data'] = procs_to_forms(reference_operations)  # <REFACTED 11>
+            if schedule.reference_operation:
+                proc_params['passing_data'] = 1  # 传递表单数据：(0, '否'), (1, '接收')
             else:
-                proc_params['passing_data'] = []  # <REFACTED 12>
+                proc_params['passing_data'] = 0
             
             proc_params['form_data'] = None  # 待复制表单数据不使用
             proc_params['apply_to_group'] = False
