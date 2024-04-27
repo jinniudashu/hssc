@@ -14,7 +14,7 @@ from core.hsscbase_class import FieldsType
 from service.models import *
 
 # 从前道表单复制数据到后道表单
-def copy_previous_form_data(form, previous_form_data, is_list):
+def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict):
     def _get_parent_form(form):
         """Get the parent form of the given form."""
         if form.pid.parent_proc:
@@ -35,7 +35,50 @@ def copy_previous_form_data(form, previous_form_data, is_list):
             if m2m_objs and isinstance(m2m_objs, QuerySet):
                 getattr(new_form, field_name).add(*m2m_objs)
 
+    def _inherit_fields_data(form):
+        # 向当前表单写入可继承字段历史数据
+
+        # 从form_fields_dict['form_fields']中筛选出'inherit_value'为True的字段list
+        form_field_names_inherit = [field['component__name'] for field in form_fields_dict['form_fields'] if field['inherit_value']]
+
+        # 获取客户历史数据
+        history_data = {}
+        # 取客户健康档案记录
+        logs = CustomerServiceLog.logs.get_customer_service_log(form.customer, 'LAST_WEEK_SERVICES', 0)
+        for log in logs:
+            history_data = {**history_data, **log.data}
+
+        # 从history_data中筛选出key name等于form_fields_inherit['omponent__name']中的字段
+        history_fields_value = [{field_name: history_data.get(field_name, '')} for field_name in form_field_names_inherit]
+
+        # 获取表单可拷贝的字段名
+        form_fields_name = {field.name for field in form._meta.fields}
+        form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
+
+        # 从history_fields_value中筛选出非多对多字段的字段list???
+        history_fields_value_inherit = [field for field in history_fields_value if field['component__name'] in form_fields_name]
+        # 从history_fields_value中筛选出多对多字段的字段list???
+        history_fields_value_inherit_m2m = [field for field in history_fields_value if field['component__name'] in form_fields_name_m2m]
+
+        # 向当前表单写入可继承字段历史数据
+        for field in history_fields_value_inherit:
+            field_name = field['component__name']
+            field_value = field[field_name]
+            if field_value:
+                setattr(form, field_name, field_value)
+        form.save()
+
+        # 向当前表单写入可继承多对多字段历史数据
+        for field in history_fields_value_inherit_m2m:
+            field_name = field['component__name']
+            field_value = field[field_name]
+            if field_value:
+                getattr(form, field_name).add(*field_value)
+
     def _copy_dict_data(form, previous_form_data):
+        # 先继承字段历史数据
+        _inherit_fields_data(form) 
+
         # 获取父进程表单
         previous_form = _get_parent_form(form)
 
@@ -106,6 +149,9 @@ def copy_previous_form_data(form, previous_form_data, is_list):
 
 # 创建服务表单实例
 def create_form_instance(operation_proc, passing_data, form_data, apply_to_group, coroutine_result):
+    # 获取表单字段字典
+    form_fields_dict = operation_proc.service.buessiness_forms.all()[0].form_fields
+
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
     form_instance = eval(model_name).objects.create(
@@ -142,11 +188,11 @@ def create_form_instance(operation_proc, passing_data, form_data, apply_to_group
                     form_data = [_form_data]
                 forms_data.extend(form_data)
             print('forms_data:', forms_data)
-            copy_previous_form_data(form_instance, forms_data, True)
+            copy_previous_form_data(form_instance, forms_data, True, form_fields_dict)
         else:
             # 父进程服务类型为诊疗服务（service_type=2）时，直接copy父进程表单数据
             if operation_proc.service.service_type==2 and form_data:
-                copy_previous_form_data(form_instance, form_data, apply_to_group)
+                copy_previous_form_data(form_instance, form_data, apply_to_group, form_fields_dict)
             # 父进程服务类型为管理调度服务（service_type=1）时，且父进程content_object类型为CustomerSchedule时，
             # 尝试从content_object.reference_operation中逐一拷贝父进程的引用进程表单对象的字段内容
             elif operation_proc.service.service_type==1 and operation_proc.content_object.__class__.__name__=='CustomerSchedule':
@@ -154,7 +200,7 @@ def create_form_instance(operation_proc, passing_data, form_data, apply_to_group
                     form_obj = proc.content_object
                     # form_obj转换为form_data类型
                     form_data = {field.name: getattr(form_obj, field.name) for field in form_obj._meta.fields}
-                    copy_previous_form_data(form_instance, form_data, apply_to_group)
+                    copy_previous_form_data(form_instance, form_data, apply_to_group, form_fields_dict)
 
     return form_instance
 
