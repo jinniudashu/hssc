@@ -36,8 +36,10 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
                 getattr(new_form, field_name).add(*m2m_objs)
 
     def _inherit_fields_data(form):
-        # 向当前表单写入可继承字段历史数据
-
+        '''
+        向当前表单写入可继承字段历史数据
+        form: Model实例
+        '''
         # 从form_fields_dict['form_fields']中筛选出'inherit_value'为True的字段list
         form_field_names_inherit = [field['component__name'] for field in form_fields_dict['form_fields'] if field['inherit_value']]
 
@@ -55,25 +57,33 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
         form_fields_name = {field.name for field in form._meta.fields}
         form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
 
-        # 从history_fields_value中筛选出非多对多字段的字段list???
-        history_fields_value_inherit = [field for field in history_fields_value if field['component__name'] in form_fields_name]
-        # 从history_fields_value中筛选出多对多字段的字段list???
-        history_fields_value_inherit_m2m = [field for field in history_fields_value if field['component__name'] in form_fields_name_m2m]
+        # 从history_fields_value中筛选出非多对多字段的字段list
+        history_fields_value_inherit = [field for field in history_fields_value if set(field.keys()).intersection(form_fields_name)]
+        print("history_fields_value_inherit:", history_fields_value_inherit)
+        # 从history_fields_value中筛选出多对多字段的字段list
+        history_fields_value_inherit_m2m = [field for field in history_fields_value if set(field.keys()).intersection(form_fields_name_m2m)]
+        print("history_fields_value_inherit_m2m:", history_fields_value_inherit_m2m)
 
         # 向当前表单写入可继承字段历史数据
-        for field in history_fields_value_inherit:
-            field_name = field['component__name']
-            field_value = field[field_name]
-            if field_value:
-                setattr(form, field_name, field_value)
-        form.save()
+        for field_dict in history_fields_value_inherit:
+            for field_name, field_value in field_dict.items():
+                if field_value:  # 确保只写入有值的字段
+                    setattr(form, field_name, field_value)
+        form.save()  # 保存表单
 
         # 向当前表单写入可继承多对多字段历史数据
-        for field in history_fields_value_inherit_m2m:
-            field_name = field['component__name']
-            field_value = field[field_name]
-            if field_value:
-                getattr(form, field_name).add(*field_value)
+        for field_dict in history_fields_value_inherit_m2m:
+            for field_name, field_value in field_dict.items():
+                if field_value:  # 确保只写入有值的字段
+                    # 处理字段值，确保它是可迭代的
+                    if isinstance(field_value, str):
+                        # 如果field_value是字符串形式的集合，如"{'全身疼痛'}"，可能需要转换为Python集合或列表
+                        field_value = eval(field_value)
+                    print("field_value_m2m:", field_value)
+                    # if isinstance(field_value, (set, list, tuple)):
+                        # getattr(form, field_name).add(*field_value)  # 展开列表或集合并添加
+                    # else:
+                        # getattr(form, field_name).add(field_value)  # 添加单个值
 
     def _copy_dict_data(form, previous_form_data):
         # 先继承字段历史数据
@@ -150,7 +160,7 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
 # 创建服务表单实例
 def create_form_instance(operation_proc, passing_data, form_data, apply_to_group, coroutine_result):
     # 获取表单字段字典
-    form_fields_dict = operation_proc.service.buessiness_forms.all()[0].form_fields
+    form_fields_dict = json.loads(operation_proc.service.buessiness_forms.all()[0].form_fields)
 
     # 1. 创建空表单
     model_name = operation_proc.service.name.capitalize()
