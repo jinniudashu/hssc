@@ -1,5 +1,5 @@
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.db.models.signals import post_save, post_delete
@@ -8,10 +8,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import copy
 import json
+import ast
 
 from core.models import HsscFormModel, ServicePackageDetail, TaskProc, OperationProc, Service, L1Service, RecommendedService, CustomerServiceLog, ManagedEntity, Customer
 from core.hsscbase_class import FieldsType
 from service.models import *
+from icpc.models import *
+from dictionaries.models import *
 
 # 从前道表单复制数据到后道表单
 def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict):
@@ -40,6 +43,7 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
         向当前表单写入可继承字段历史数据
         form: Model实例
         '''
+
         # 从form_fields_dict['form_fields']中筛选出'inherit_value'为True的字段list
         form_field_names_inherit = [field['component__name'] for field in form_fields_dict['form_fields'] if field['inherit_value']]
 
@@ -52,38 +56,84 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
 
         # 从history_data中筛选出key name等于form_fields_inherit['omponent__name']中的字段
         history_fields_value = [{field_name: history_data.get(field_name, '')} for field_name in form_field_names_inherit]
+        history_fields_obj = []
+        
+        # 转换history_fields_value中的字段值为对象
+        for field_data in history_fields_value:  # field_data是字典
+            for field_name, field_val in field_data.items():  # 现在可以正确地使用.items()
+                field_type = eval(f'FieldsType.{field_name}').value
+
+                field_val_obj = None
+
+                if field_type in ['Datetime', 'Date']:  # 日期和时间类型，从字符串转换为 datetime 对象
+                    if field_val:  # 非空字符串才处理
+                        date_format = "%Y-%m-%dT%H:%M:%S" if field_type == 'Datetime' else "%Y-%m-%d"
+                        field_val_obj = datetime.strptime(field_val, date_format)
+                elif field_type == 'Boolean':  # 布尔类型，从字符串转换为布尔值
+                    field_val_obj = True if field_val == 'True' else False
+                elif field_type in ['Numbers', 'Decimal']:  # 数字类型，从字符串转换为 float 或 int
+                    if field_val == 'None':
+                        field_val_obj = None
+                    elif '.' in field_val:
+                        field_val_obj = float(field_val)
+                    else :
+                        field_val_obj = int(field_val)
+                elif field_type == 'String':  # 字符串集合，从集合字符串转换回原始字符串
+                    # 字符串保存为 "{'value'}"或"{}"
+                    field_val_obj = field_val.strip("{''}")
+                else:  # 关联字段类型
+                    app_label = field_type.split('.')[0]  # 分割模型名称field_type: app_label.model_name，获得应用名称
+                    model_name = field_type.split('.')[1]
+
+                    field_val_obj = []
+                    if app_label == 'icpc':
+                        field_val_obj = eval(model_name).objects.filter(iname__in=eval(field_val)).distinct()
+                        # field_val_obj = [id_list.iname]
+                    elif app_label == 'dictionaries':
+                        field_val_obj = eval(model_name).objects.filter(value__in=eval(field_val))
+                        # field_val_obj = [id_list.value]
+                    elif app_label == 'core':
+                        field_val_obj = Service.objects.filter(label__in=eval(field_val))
+                        # field_val_obj = [id_list.label]  # 适配core.Service
+                    elif app_label == 'entities':
+                        field_val_obj = Medicine.objects.filter(label__in=eval(field_val))
+                        # field_val_obj = [id_list.label]  # 适配core.Medicine
+                    else:
+                        field_val_obj = Staff.objects.filter(name__in=eval(field_val))
+                        # field_val_obj = [id_list.name]  # 适配entities.Stuff
+
+                history_fields_obj.append({field_name: field_val_obj})
 
         # 获取表单可拷贝的字段名
         form_fields_name = {field.name for field in form._meta.fields}
         form_fields_name_m2m = {field.name for field in form._meta.many_to_many}
 
         # 从history_fields_value中筛选出非多对多字段的字段list
-        history_fields_value_inherit = [field for field in history_fields_value if set(field.keys()).intersection(form_fields_name)]
+        history_fields_value_inherit = [field for field in history_fields_obj if set(field.keys()).intersection(form_fields_name)]
         print("history_fields_value_inherit:", history_fields_value_inherit)
         # 从history_fields_value中筛选出多对多字段的字段list
-        history_fields_value_inherit_m2m = [field for field in history_fields_value if set(field.keys()).intersection(form_fields_name_m2m)]
+        history_fields_value_inherit_m2m = [field for field in history_fields_obj if set(field.keys()).intersection(form_fields_name_m2m)]
         print("history_fields_value_inherit_m2m:", history_fields_value_inherit_m2m)
 
         # 向当前表单写入可继承字段历史数据
         for field_dict in history_fields_value_inherit:
             for field_name, field_value in field_dict.items():
                 if field_value:  # 确保只写入有值的字段
+                    if isinstance(field_value, QuerySet):
+                        field_value = field_value.first()  # 取第一个对象
                     setattr(form, field_name, field_value)
-        form.save()  # 保存表单
+        form.save()
 
         # 向当前表单写入可继承多对多字段历史数据
         for field_dict in history_fields_value_inherit_m2m:
             for field_name, field_value in field_dict.items():
                 if field_value:  # 确保只写入有值的字段
                     # 处理字段值，确保它是可迭代的
-                    if isinstance(field_value, str):
-                        # 如果field_value是字符串形式的集合，如"{'全身疼痛'}"，可能需要转换为Python集合或列表
-                        field_value = eval(field_value)
                     print("field_value_m2m:", field_value)
-                    # if isinstance(field_value, (set, list, tuple)):
-                        # getattr(form, field_name).add(*field_value)  # 展开列表或集合并添加
-                    # else:
-                        # getattr(form, field_name).add(field_value)  # 添加单个值
+                    if isinstance(field_value, (set, list, QuerySet)):
+                        getattr(form, field_name).add(*field_value)  # 展开列表或集合并添加
+                    else:
+                        getattr(form, field_name).add(field_value)  # 添加单个值
 
     def _copy_dict_data(form, previous_form_data):
         # 先继承字段历史数据
