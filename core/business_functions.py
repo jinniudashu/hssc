@@ -67,7 +67,7 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
 
                 if field_type in ['Datetime', 'Date']:  # 日期和时间类型，从字符串转换为 datetime 对象
                     if field_val:  # 非空字符串才处理
-                        date_format = "%Y-%m-%dT%H:%M:%S" if field_type == 'Datetime' else "%Y-%m-%d"
+                        date_format = "%Y-%m-%d %H:%M:%S%z" if field_type == 'Datetime' else "%Y-%m-%d"
                         field_val_obj = datetime.strptime(field_val, date_format)
                 elif field_type == 'Boolean':  # 布尔类型，从字符串转换为布尔值
                     field_val_obj = True if field_val == 'True' else False
@@ -90,7 +90,10 @@ def copy_previous_form_data(form, previous_form_data, is_list, form_fields_dict)
                         field_val_obj = eval(model_name).objects.filter(iname__in=eval(field_val)).distinct()
                         # field_val_obj = [id_list.iname]
                     elif app_label == 'dictionaries':
-                        field_val_obj = eval(model_name).objects.filter(value__in=eval(field_val))
+                        if field_val:  # 检查field_val是否非空
+                            field_val_obj = eval(model_name).objects.filter(value__in=eval(field_val))
+                        else:
+                            field_val_obj = []  # 如果field_val为空，直接赋予空列表
                         # field_val_obj = [id_list.value]
                     elif app_label == 'core':
                         field_val_obj = Service.objects.filter(label__in=eval(field_val))
