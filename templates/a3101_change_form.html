@@ -5,9 +5,9 @@
 ```javascript
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const id_shen_gao = document.getElementById("id_boolfield_shen_gao");
-        const id_ti_zhong = document.getElementById("id_boolfield_ti_zhong");
-        const id_ti_zhi_zhi_shu = document.getElementById("id_boolfield_ti_zhi_zhi_shu");
+        const id_boolfield_shen_gao = document.getElementById("id_boolfield_shen_gao");
+        const id_boolfield_ti_zhong = document.getElementById("id_boolfield_ti_zhong");
+        const id_boolfield_ti_zhi_zhi_shu = document.getElementById("id_boolfield_ti_zhi_zhi_shu");
 
         const calculateBmi = (shenGao, tiZhong) => {
             if (shenGao > 0 && tiZhong > 0) {
@@ -17,14 +17,14 @@
             return null;
         };
 
-        const updateTiZhiZhiShu = () => {
-            const shenGao = parseFloat(id_shen_gao.value);
-            const tiZhong = parseFloat(id_ti_zhong.value);
-            id_ti_zhi_zhi_shu.value = calculateBmi(shenGao, tiZhong);
+        const update_boolfield_ti_zhi_zhi_shu = () => {
+            const shenGao = parseFloat(id_boolfield_shen_gao.value);
+            const tiZhong = parseFloat(id_boolfield_ti_zhong.value);
+            id_boolfield_ti_zhi_zhi_shu.value = calculateBmi(shenGao, tiZhong);
         };
 
-        id_shen_gao.addEventListener("input", updateTiZhiZhiShu);
-        id_ti_zhong.addEventListener("input", updateTiZhiZhiShu);
+        id_boolfield_shen_gao.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);
+        id_boolfield_ti_zhong.addEventListener("input", update_boolfield_ti_zhi_zhi_shu);
     });
 </script>
 ```
