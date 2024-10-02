@@ -76,7 +76,6 @@ class ClinicSite(admin.AdminSite):
         # 向sessionStorage写入customer_id
         response.set_cookie('customer_id', kwargs['customer_id'])
         response.set_cookie('operator_id', operator.id)
-        response.set_cookie('environment', settings.DJANGO_ENV)
         
         # # 获取操作员有操作权限的服务id列表, 写入cookie
         permitted_services_id = [
